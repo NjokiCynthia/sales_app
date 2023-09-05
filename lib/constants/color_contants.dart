@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-const Color primaryDarkColor = Color.fromRGBO(1, 47, 109, 1.0);
+const Color primaryDarkColor = Color.fromRGBO(1, 47, 107, 1.0);
 
 //Color.fromRGBO(13, 201, 150, 1);
 
 const Color textColor = Colors.black;
 const Color secondaryDarkColor = Color.fromRGBO(255, 154, 0, 1.0);
-const Color redDarkColor = Color.fromARGB(255, 223, 85, 108);
+
 const Color dark2Color = Color.fromARGB(255, 46, 19, 24);
 const Color texformfieldColor = Colors.white;
 const Color backColor = Colors.white;
@@ -19,18 +19,11 @@ const Color greyColor = Color.fromARGB(255, 201, 196, 197);
 const Color greenColor = Color.fromRGBO(43, 141, 87, 1);
 const Color containerBg = Color.fromARGB(255, 7, 0, 1);
 
-//App colors
-const Color codoWhite = Color.fromRGBO(247, 247, 247, 1);
-
 final List<Color> grediantColor1 = [
   secondaryDarkColor,
   secondaryDarkColor.withOpacity(0.0)
 ];
 const List<Color> grediantColor2 = [secondaryDarkColor, Color(0xff0E5944)];
-final List<Color> grediantColor3 = [
-  redDarkColor,
-  redDarkColor.withOpacity(0.3)
-];
 
 const Map<int, Color> primaryColorMap = {
   50: Color.fromARGB(255, 140, 68, 68),

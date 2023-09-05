@@ -26,7 +26,7 @@ TextStyle displaySmallThinWhite = GoogleFonts.getFont(
 
 TextStyle bodyText = GoogleFonts.getFont(
   Strings.fontName,
-  fontSize: 12,
+  fontSize: 16,
   fontWeight: FontWeight.w500,
   color: Colors.black,
 );
