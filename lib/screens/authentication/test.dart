@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: unused_import, unnecessary_import, deprecated_member_use, unused_fielimport 'package:country_code_picker/country_code_picker.dart';
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
-import 'package:petropal/constants/theme.dart';
-import 'package:petropal/screens/dashboard/dashboard.dart';
 
 class Login extends StatefulWidget {
   static const namedRoute = "/login-screen";
@@ -13,11 +13,22 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey();
+  // final GlobalKey<CountryCodePickerState> _countryKey = GlobalKey(
+  CountryCode _countryCode = CountryCode.fromCode("KE");
   final _countryCodeController = TextEditingController(text: "+254");
   final _phoneController = TextEditingController();
   bool _isLoading = false;
   bool _isFormInputEnabled = true;
   bool _isPhoneNumber = false;
+  bool _setStateCalled = false;
+  String appSignature = "{{app signature}}";
+  final termsandConditionsUrl = 'https://chamasoft.com/terms-and-conditions/';
+  Map<String, String> _authData = {
+    'identity': '',
+  };
+
+  late FocusNode focusNode;
+  bool _focused = false;
   bool _isValid = true;
   BorderSide _custInputBorderSide = BorderSide(
     color: Colors.blueGrey,
@@ -26,46 +37,33 @@ class _LoginState extends State<Login> {
 
   _printLatestValues() {
     final text = _phoneController.text;
-    bool containsDigit = text.contains(RegExp(r'[0-9]'));
+    if (text.length >= 2) {
+      //CustomHelper.isNumeric(text)
 
-    if (containsDigit) {
-      // Check if the first character is a digit
-      if (text.isNotEmpty && !text[0].contains(RegExp(r'[0-9]'))) {
-        setState(() {
-          _isPhoneNumber = false;
-          _isValid = true;
-        });
-      } else {
+      if (!_setStateCalled) {
+        _setStateCalled = true;
         setState(() {
           _isPhoneNumber = true;
         });
       }
     } else {
-      setState(() {
-        _isPhoneNumber = false;
-        _isValid = true;
-      });
+      if (_isPhoneNumber) {
+        _setStateCalled = false;
+        setState(() {
+          _isPhoneNumber = false;
+          _isValid = true;
+        });
+      }
     }
   }
 
   @override
-  void initState() {
-    super.initState();
-    _phoneController.addListener(_printLatestValues);
-  }
-
-  @override
-  void dispose() {
-    _phoneController.removeListener(_printLatestValues);
-    _phoneController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    //FirebaseCrashlytics.instance.crash();
+
     return Scaffold(
-      body: Builder(
-        builder: (BuildContext context) {
+        backgroundColor: Colors.transparent,
+        body: Builder(builder: (BuildContext context) {
           return Form(
             key: _formKey,
             child: Container(
@@ -73,29 +71,15 @@ class _LoginState extends State<Login> {
               child: SingleChildScrollView(
                 padding: EdgeInsets.all(40.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  //mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Center(
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0),
                       child: Image(
-                        image:
-                            AssetImage('assets/images/icons/petropal_logo.png'),
-                        width: 100,
+                        image: AssetImage('assets/images/petropal_logo.png'),
                       ),
                     ),
-                    Center(
-                      child: Text(
-                        "Let's get you started",
-                        style: displayTitle,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'Please enter your phone number or email address to proceed',
-                      style: bodyText,
-                    ),
+                    SizedBox(),
                     SizedBox(
                       height: 10,
                     ),
@@ -117,23 +101,36 @@ class _LoginState extends State<Login> {
                                   child: Row(
                                     children: <Widget>[
                                       CountryCodePicker(
+                                        // key: _countryKey,
                                         initialSelection: 'KE',
                                         favorite: ['KE', 'UG', 'TZ', 'RW'],
                                         showCountryOnly: false,
+
                                         showOnlyCountryWhenClosed: false,
                                         alignLeft: false,
                                         flagWidth: 28.0,
                                         enabled: _isFormInputEnabled,
-                                        searchStyle: bodyText,
-                                        textStyle: bodyText,
+                                        textStyle: TextStyle(
+                                          fontFamily:
+                                              'SegoeUI', /*fontSize: 16,color: Theme.of(context).textSelectionHandleColor*/
+                                        ),
+                                        searchStyle: TextStyle(
+                                            fontFamily: 'SegoeUI',
+                                            fontSize: 16,
+                                            color: Theme.of(context)
+                                                .textSelectionTheme
+                                                .selectionHandleColor),
                                         onChanged: (countryCode) {
                                           setState(() {
+                                            _countryCode = countryCode;
                                             _countryCodeController.text =
                                                 countryCode.dialCode!;
+                                            print(
+                                                "Code: ${countryCode.dialCode}");
                                           });
                                         },
                                       ),
-                                      const SizedBox(
+                                      SizedBox(
                                         width: 10,
                                       ),
                                     ],
@@ -144,15 +141,16 @@ class _LoginState extends State<Login> {
                                     controller: _phoneController,
                                     cursorColor: primaryDarkColor,
                                     decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        focusedBorder: InputBorder.none,
-                                        enabledBorder: InputBorder.none,
-                                        errorBorder: InputBorder.none,
-                                        disabledBorder: InputBorder.none,
-                                        hintText: 'Phone Number/Email',
-                                        hintStyle: bodyText),
-                                    style: bodyText,
+                                      border: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      errorBorder: InputBorder.none,
+                                      disabledBorder: InputBorder.none,
+                                      hintText: 'Phone Number/Email',
+                                    ),
                                     enabled: _isFormInputEnabled,
+                                    //focusNode: _focusNode,
+                                    style: TextStyle(fontFamily: 'SegoeUI'),
                                     onSaved: (value) {
                                       // _identity = value.trim();
                                     },
@@ -190,19 +188,15 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     SizedBox(
+                      height: 16,
+                    ),
+                    SizedBox(
                       height: 24,
                     ),
                     _isLoading
                         ? CircularProgressIndicator()
                         : ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: ((context) => Dashboard())));
-                            },
-                            child: Text('Confirm'),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: primaryDarkColor),
-                          ),
+                            onPressed: () {}, child: Text('Login')),
                     SizedBox(
                       height: 24,
                     ),
@@ -211,8 +205,6 @@ class _LoginState extends State<Login> {
               ),
             ),
           );
-        },
-      ),
-    );
+        }));
   }
 }

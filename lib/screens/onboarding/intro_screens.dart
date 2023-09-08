@@ -21,25 +21,28 @@ class _HomePageState extends State<HomePage> {
           title: "Welcome to Petropal",
           body:
               "Welcome to Petropal Oil Management System. Streamline your oil operations with our user-friendly platform. Let's get started!",
-          image: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(right: 10),
-                child: Image.asset(
-                  'assets/images/icons/petropal_logo.png',
-                  width: 40,
-                ),
-              ),
-              Text(
-                'Petropal',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(color: Colors.black),
-              )
-            ],
+          image: Image.asset(
+            'assets/images/icons/petropal_logo.png',
           ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [
+          //     Container(
+          //       margin: const EdgeInsets.only(right: 10),
+          //       child: Image.asset(
+          //         'assets/images/icons/petropal_logo.png',
+          //         width: 40,
+          //       ),
+          //     ),
+          //     Text(
+          //       'Petropal',
+          //       style: Theme.of(context)
+          //           .textTheme
+          //           .titleLarge!
+          //           .copyWith(color: Colors.black),
+          //     )
+          //   ],
+          // ),
           decoration: pageDecoration(),
         ),
         PageViewModel(
@@ -48,7 +51,7 @@ class _HomePageState extends State<HomePage> {
               "Effortlessly manage your oil inventory, pricing, and deliveries from anywhere. Discover the power of efficient oil management.",
           image: Align(
             alignment: Alignment.bottomCenter,
-            child: Image.asset('assets/illustrations/organize.png'),
+            child: Image.asset('assets/images/icons/invest.png'),
           ),
           decoration: pageDecoration(),
         ),
@@ -58,7 +61,7 @@ class _HomePageState extends State<HomePage> {
               "Join thousands of satisfied users who trust Petropal for their oil management needs. Sign in or create an account to experience it for yourself.",
           image: Padding(
             padding: EdgeInsets.only(top: 40),
-            child: Image.asset('assets/illustrations/invoice.png'),
+            child: Image.asset('assets/images/icons/manage.png'),
           ),
           decoration: pageDecoration(),
         ),
@@ -94,7 +97,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SignUp(),
+                  builder: (context) => Login(),
                 ),
               );
             },

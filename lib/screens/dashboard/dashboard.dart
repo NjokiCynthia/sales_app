@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/color_contants.dart';
-import 'package:petropal/screens/dashboard/commission.dart';
+import 'package:petropal/screens/dashboard/line_chart.dart';
+import 'package:petropal/screens/dashboard/users.dart';
 import 'package:petropal/screens/dashboard/depot_product_screen.dart';
 import 'package:petropal/screens/dashboard/profile.dart';
-import 'package:petropal/screens/dashboard/user_manage.dart';
+import 'package:petropal/screens/dashboard/home.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -24,9 +25,10 @@ class _DashboardState extends State<Dashboard> {
 
   List<Widget> _buildScreens() {
     return [
-      UserManagementScreen(),
-      DepotProductScreen(),
-      CommissionRateScreen(),
+      DashboardScreen(),
+      // DepotProductScreen(),
+      LineChartWidget(),
+      UsersScreen(),
       Profile(),
     ];
   }
@@ -46,8 +48,8 @@ class _DashboardState extends State<Dashboard> {
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.attach_money),
-        title: ("Commission"),
+        icon: const Icon(Icons.people),
+        title: ("Users"),
         activeColorPrimary: primaryDarkColor,
         inactiveColorPrimary: Colors.grey,
       ),

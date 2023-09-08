@@ -48,12 +48,6 @@ TextStyle displaySmallWhite = GoogleFonts.getFont(
   fontWeight: FontWeight.w500,
   color: Colors.white,
 );
-TextStyle displaySmallBoldWhite = GoogleFonts.getFont(
-  Strings.fontName,
-  fontSize: 14,
-  fontWeight: FontWeight.bold,
-  color: Colors.white,
-);
 TextStyle displaySmallBoldLightGrey = GoogleFonts.getFont(
   Strings.fontName,
   fontSize: 10,
