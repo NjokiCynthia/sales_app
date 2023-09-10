@@ -30,6 +30,12 @@ TextStyle bodyText = GoogleFonts.getFont(
   fontWeight: FontWeight.w500,
   color: Colors.black,
 );
+TextStyle bodyTextSmall = GoogleFonts.getFont(
+  Strings.fontName,
+  fontSize: 14,
+  fontWeight: FontWeight.w300,
+  color: Colors.black,
+);
 TextStyle displayTitle = GoogleFonts.getFont(
   Strings.fontName,
   fontSize: 20,

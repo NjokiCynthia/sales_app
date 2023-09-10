@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/screens/dashboard/line_chart.dart';
-import 'package:petropal/screens/dashboard/users.dart';
-import 'package:petropal/screens/dashboard/depot_product_screen.dart';
+import 'package:petropal/screens/dashboard/add_users/users.dart';
+import 'package:petropal/screens/dashboard/invoices.dart';
 import 'package:petropal/screens/dashboard/profile.dart';
 import 'package:petropal/screens/dashboard/home.dart';
 
@@ -26,8 +26,8 @@ class _DashboardState extends State<Dashboard> {
   List<Widget> _buildScreens() {
     return [
       DashboardScreen(),
-      // DepotProductScreen(),
-      LineChartWidget(),
+      Invoices(),
+      //LineChartWidget(),
       UsersScreen(),
       Profile(),
     ];
@@ -49,7 +49,7 @@ class _DashboardState extends State<Dashboard> {
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.people),
-        title: ("Users"),
+        title: ("Invoices"),
         activeColorPrimary: primaryDarkColor,
         inactiveColorPrimary: Colors.grey,
       ),

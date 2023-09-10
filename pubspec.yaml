@@ -43,6 +43,7 @@ dependencies:
   country_code_picker: ^3.0.0
   charts_flutter: ^0.12.0
   fl_chart: ^0.63.0
+  page_view_dot_indicator: ^2.3.0
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +75,13 @@ flutter:
     - assets/images/icons/avatar.png
     - assets/images/icons/invest.png
     - assets/images/icons/manage.png
+    - assets/images/rubis.png
+    - assets/images/libya_oil.png
+    - assets/images/national_oil.png
+    - assets/images/shell_global.png
+    - assets/images/total-logo.png
+    - assets/images/reseller.png
+    - assets/images/customer.png
     
 
   # An image asset can refer to one or more resolution-specific "variants", see
