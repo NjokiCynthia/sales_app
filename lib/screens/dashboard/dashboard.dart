@@ -42,14 +42,14 @@ class _DashboardState extends State<Dashboard> {
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.store),
-        title: ("Depots"),
+        icon: const Icon(Icons.assignment),
+        title: ("Invoices"),
         activeColorPrimary: primaryDarkColor,
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.people),
-        title: ("Invoices"),
+        title: ("Users"),
         activeColorPrimary: primaryDarkColor,
         inactiveColorPrimary: Colors.grey,
       ),

@@ -22,21 +22,22 @@ class CustomerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(5),
       child: Card(
         color: Colors.white,
-        margin: EdgeInsets.all(8.0),
+
         //elevation: 4.0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
           side: BorderSide(
-            color: primaryDarkColor.withOpacity(0.2),
+            color: primaryDarkColor.withOpacity(0.1),
+            width: 1,
           ),
         ),
         child: Row(
           children: [
             Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(10.0),
               child: Image.asset(
                 'assets/images/customer.png', // Use the same image for all cards
                 width: 48,

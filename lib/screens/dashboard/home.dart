@@ -23,43 +23,40 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Commission rates'),
+        backgroundColor: Colors.white,
+        title: Text(
+          'Dashboard',
+          style: displayBigBoldBlack,
+        ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 10,
-            ),
-            // Animated Cards
             Container(
-              height: 200,
+              height: 220,
               color: Colors.white,
               child: PageView(
                 controller: _pageController,
                 children: [
                   AnimatedCard(
-                    borderColor: primaryDarkColor,
-                    title: 'OMC',
+                    borderColor: primaryDarkColor.withOpacity(0.1),
+                    title: 'Oil Marketing Companies',
                     capitalRaised: '\KES 100,000,000',
                     currentCommission: '\KES 10,000',
-                    imagePath: 'assets/images/rubis.png',
                   ),
                   AnimatedCard(
-                    borderColor: primaryDarkColor,
+                    borderColor: primaryDarkColor.withOpacity(0.1),
                     title: 'Reseller',
                     capitalRaised: '\KES 50,000,000',
                     currentCommission: '\KES 5,000',
-                    imagePath: 'assets/images/reseller.png',
                   ),
                   AnimatedCard(
-                    borderColor: primaryDarkColor,
+                    borderColor: primaryDarkColor.withOpacity(0.1),
                     title: 'Customers',
                     capitalRaised: '\KES 200,000,000',
                     currentCommission: '\KES 20,000',
-                    imagePath: 'assets/images/customer.png',
                   ),
                 ],
               ),
@@ -70,7 +67,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             // Transactions list
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Text(
-                'Transactions',
+                'Proforma Invoices',
                 style: displayTitle,
               ),
               GestureDetector(
@@ -79,11 +76,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         MaterialPageRoute(builder: (context) => Invoices()));
                   },
                   child:
-                      Text('view more', style: TextStyle(color: Colors.blue)))
+                      Text('View more', style: TextStyle(color: Colors.blue)))
             ]),
             Expanded(
-              child: ListView.builder(
-                itemCount: 5, // Number of transaction items
+              child: ListView.separated(
+                separatorBuilder: (context, index) => Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Divider(
+                    color: Colors.grey, // Customize the divider color
+                    thickness: 1.0, // Customize the divider thickness
+                  ),
+                ), // Number of transaction items
                 itemBuilder: (context, index) {
                   return CustomTransactionCard(
                     userName: 'Customer $index',
@@ -93,6 +96,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     volume: '100000 litres',
                   );
                 },
+                itemCount: 5,
               ),
             ),
           ],
@@ -107,39 +111,28 @@ class AnimatedCard extends StatelessWidget {
   final String title;
   final String capitalRaised;
   final String currentCommission;
-  final String imagePath;
 
   AnimatedCard({
     required this.borderColor,
     required this.title,
     required this.capitalRaised,
     required this.currentCommission,
-    required this.imagePath,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 4.0,
-      color: Colors.white,
+      color: Colors.grey.withOpacity(0.1),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
-        side: BorderSide(color: borderColor, width: 2.0),
+        side: BorderSide(color: borderColor, width: 1.0),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Image.asset(
-              imagePath,
-              width: 100,
-              height: 100,
-            ),
-          ),
-          Expanded(
+            padding: EdgeInsets.all(10),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
@@ -151,21 +144,106 @@ class AnimatedCard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 10),
-                Text(
-                  'Capital Raised: $capitalRaised',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
+                Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: primaryDarkColor.withOpacity(0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      padding: const EdgeInsets.all(8),
+                      child: const Icon(
+                        Icons.money,
+                        color: primaryDarkColor,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      'Income Raised: ',
+                      style: displayTitle,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      'Kes 50000',
+                      style: bodyText,
+                    )
+                  ],
                 ),
+                // Text(
+                //   'Capital Raised: $capitalRaised',
+                //   style: TextStyle(
+                //     color: Colors.black,
+                //     fontSize: 16,
+                //   ),
+                // ),
                 SizedBox(height: 10),
-                Text(
-                  'Current Commission: $currentCommission',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
+                Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: primaryDarkColor.withOpacity(0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      padding: const EdgeInsets.all(8),
+                      child: const Icon(
+                        Icons.attach_money,
+                        color: primaryDarkColor,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      'Current Commission:',
+                      style: displayTitle,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      'Kes 1',
+                      style: bodyText,
+                    )
+                  ],
                 ),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    children: [
+                      Column(
+                        children: [
+                          Text(
+                            'Active OMCs',
+                            style: displayTitle,
+                          ),
+                          Text(
+                            '5000',
+                            style: bodyText,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            'Inactive OMCs',
+                            style: displayTitle,
+                          ),
+                          Text(
+                            '500',
+                            style: bodyText,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
