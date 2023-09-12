@@ -24,11 +24,11 @@ class _AddResellerState extends State<AddReseller> {
       children: [
         Row(
           children: [
-            Icon(
+            const Icon(
               Icons.perm_identity,
               color: primaryDarkColor,
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Text(
@@ -37,7 +37,7 @@ class _AddResellerState extends State<AddReseller> {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         TextFormField(
@@ -75,11 +75,11 @@ class _AddResellerState extends State<AddReseller> {
         const SizedBox(height: 20),
         Row(
           children: [
-            Icon(
+            const Icon(
               Icons.phone,
               color: primaryDarkColor,
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Text(
@@ -88,7 +88,7 @@ class _AddResellerState extends State<AddReseller> {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         InternationalPhoneNumberInput(
@@ -156,11 +156,11 @@ class _AddResellerState extends State<AddReseller> {
         const SizedBox(height: 20),
         Row(
           children: [
-            Icon(
+            const Icon(
               Icons.email,
               color: primaryDarkColor,
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Text(
@@ -169,7 +169,7 @@ class _AddResellerState extends State<AddReseller> {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         TextFormField(
@@ -207,11 +207,11 @@ class _AddResellerState extends State<AddReseller> {
         const SizedBox(height: 20),
         Row(
           children: [
-            Icon(
+            const Icon(
               Icons.edit_document,
               color: primaryDarkColor,
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Text(
@@ -220,12 +220,12 @@ class _AddResellerState extends State<AddReseller> {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         Container(
           width: 150, // Set the desired width
-          padding: EdgeInsets.all(10), // Adjust the padding as needed
+          padding: const EdgeInsets.all(10), // Adjust the padding as needed
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey),
             borderRadius: BorderRadius.circular(10), // Grey border
@@ -240,11 +240,11 @@ class _AddResellerState extends State<AddReseller> {
         const SizedBox(height: 20),
         Row(
           children: [
-            Icon(
+            const Icon(
               Icons.document_scanner_sharp,
               color: primaryDarkColor,
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Text(
@@ -253,12 +253,12 @@ class _AddResellerState extends State<AddReseller> {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         Container(
           width: 150, // Set the desired width
-          padding: EdgeInsets.all(10), // Adjust the padding as needed
+          padding: const EdgeInsets.all(10), // Adjust the padding as needed
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey),
             borderRadius: BorderRadius.circular(10), // Grey border
@@ -273,11 +273,11 @@ class _AddResellerState extends State<AddReseller> {
         const SizedBox(height: 20),
         Row(
           children: [
-            Icon(
+            const Icon(
               Icons.location_pin,
               color: primaryDarkColor,
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Text(
@@ -286,7 +286,7 @@ class _AddResellerState extends State<AddReseller> {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         TextFormField(
@@ -330,9 +330,9 @@ class _AddResellerState extends State<AddReseller> {
                   ElevatedButton.styleFrom(backgroundColor: primaryDarkColor),
               onPressed: () {
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => UsersScreen()));
+                    MaterialPageRoute(builder: (context) => const UsersScreen()));
               },
-              child: Text(
+              child: const Text(
                 'Confirm',
               )),
         )

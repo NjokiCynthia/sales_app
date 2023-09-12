@@ -3,7 +3,7 @@ import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 
 class Customer extends StatelessWidget {
-  const Customer({Key? key});
+  const Customer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,18 +11,25 @@ class Customer extends StatelessWidget {
       body: ListView.builder(
         itemCount: 5,
         itemBuilder: (BuildContext context, int index) {
-          return CustomerCard();
+          return const CustomerCard();
         },
       ),
     );
   }
 }
 
-class CustomerCard extends StatelessWidget {
+class CustomerCard extends StatefulWidget {
+  const CustomerCard({super.key});
+
+  @override
+  State<CustomerCard> createState() => _CustomerCardState();
+}
+
+class _CustomerCardState extends State<CustomerCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
       child: Card(
         color: Colors.white,
 
@@ -37,7 +44,7 @@ class CustomerCard extends StatelessWidget {
         child: Row(
           children: [
             Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: Image.asset(
                 'assets/images/customer.png', // Use the same image for all cards
                 width: 48,
@@ -49,25 +56,25 @@ class CustomerCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ListTile(
-                    title: Text('Customer Name', style: displayTitle),
+                    title: Text('Oscar Limited', style: displayTitle),
                     subtitle: Text(
                       'customer@example.com',
                       style: bodyText,
                     ),
-                    trailing: Icon(
+                    trailing: const Icon(
                       Icons.edit,
                       color: primaryDarkColor,
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Row(
                       children: [
                         Icon(
                           Icons.location_on,
                           color: primaryDarkColor.withOpacity(0.7),
                         ),
-                        SizedBox(width: 8.0),
+                        const SizedBox(width: 8.0),
                         Text(
                           'Location',
                           style: TextStyle(

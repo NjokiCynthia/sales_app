@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
@@ -5,7 +7,6 @@ import 'package:petropal/screens/dashboard/add_users/add_users.dart';
 import 'package:petropal/screens/dashboard/view_users/customer.dart';
 import 'package:petropal/screens/dashboard/view_users/omc.dart';
 import 'package:petropal/screens/dashboard/view_users/reseller.dart';
-import 'package:petropal/widgets/widget.dart';
 
 class User {
   final String name;
@@ -30,7 +31,7 @@ class _UsersScreenState extends State<UsersScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(
+          title: const Text(
             "Add new user",
             style: TextStyle(
               color: primaryDarkColor, // Set text color to primaryDarkColor
@@ -41,15 +42,15 @@ class _UsersScreenState extends State<UsersScreen> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
+              const Text(
                 "Select the type of user you want to create:",
                 style: TextStyle(
                   color: primaryDarkColor, // Set text color to primaryDarkColor
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               DropdownButton<String>(
-                items: [
+                items: const [
                   DropdownMenuItem<String>(
                     value: 'Oil Marketing Company',
                     child: Text(
@@ -93,13 +94,13 @@ class _UsersScreenState extends State<UsersScreen> {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text("Cancel", style: TextStyle(color: primaryDarkColor)),
+              child: const Text("Cancel", style: TextStyle(color: primaryDarkColor)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text(
+              child: const Text(
                 "Confirm",
                 style: TextStyle(color: primaryDarkColor),
               ),
@@ -143,7 +144,7 @@ class _UsersScreenState extends State<UsersScreen> {
                 padding: const EdgeInsets.all(8),
                 child: GestureDetector(
                   onTap: showAddUserDialog,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add,
                     color: primaryDarkColor,
                   ),
@@ -151,7 +152,7 @@ class _UsersScreenState extends State<UsersScreen> {
               ),
             ],
           ),
-          bottom: TabBar(
+          bottom: const TabBar(
             labelColor: Colors.black,
             indicatorColor: primaryDarkColor,
             tabs: [
@@ -164,8 +165,8 @@ class _UsersScreenState extends State<UsersScreen> {
         body: TabBarView(
           children: [
             Omcs(),
-            Resellers(),
-            Customer(),
+            const Resellers(),
+            const Customer(),
           ],
         ),
       ),

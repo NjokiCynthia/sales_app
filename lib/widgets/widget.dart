@@ -9,7 +9,7 @@ class CustomTransactionCard extends StatelessWidget {
   final String date;
   final String volume;
 
-  CustomTransactionCard({
+  const CustomTransactionCard({super.key, 
     required this.userName,
     required this.amount,
     required this.paymentMethod,
@@ -20,69 +20,58 @@ class CustomTransactionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(8),
-      child: Container(
-        // decoration: BoxDecoration(
-        //   color: Colors.grey.withOpacity(0.1),
-        //   borderRadius: BorderRadius.circular(8),
-        //   // border: Border.all(
-        //   //   color: primaryDarkColor.withOpacity(0.2),
-        //   //   width: 1,
-        //   // ),
-        // ),
-
-        child: Row(
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: primaryDarkColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              // Replace with your icon or image widget
-              child: Icon(Icons.attach_money, color: primaryDarkColor),
+      padding: const EdgeInsets.all(8),
+      child: Row(
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: primaryDarkColor.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(30),
             ),
-            SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('National Oil', style: bodyText),
-                  Text('#2342 | 2/10/2023', style: bodyText),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text('Ngong Road', style: bodyText),
-                ],
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+            // Replace with your icon or image widget
+            child: const Icon(Icons.attach_money, color: primaryDarkColor),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Kes 500,000',
-                  style: bodyText,
-                  // TextStyle(fontSize: 16, color: Colors.black),
+                Text('National Oil', style: bodyText),
+                Text('#2342 | 2/10/2023', style: bodyText),
+                const SizedBox(
+                  height: 10,
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(5),
-                    color: Colors.greenAccent.withOpacity(0.1),
-                  ),
-                  child: Text(
-                    'Pending',
-                    style: bodyText.copyWith(color: Colors.greenAccent),
-                  ),
-                ),
+                Text('Ngong Road', style: bodyText),
               ],
             ),
-          ],
-        ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                'Kes 500,000',
+                style: bodyText,
+                // TextStyle(fontSize: 16, color: Colors.black),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.greenAccent.withOpacity(0.1),
+                ),
+                child: Text(
+                  'Pending',
+                  style: bodyText.copyWith(color: Colors.greenAccent),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

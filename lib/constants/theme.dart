@@ -42,7 +42,7 @@ TextStyle displayTitle = GoogleFonts.getFont(
   fontWeight: FontWeight.bold,
   color: Colors.black,
 );
-TextStyle Title = GoogleFonts.getFont(
+TextStyle title = GoogleFonts.getFont(
   Strings.fontName,
   fontSize: 20,
   fontWeight: FontWeight.bold,

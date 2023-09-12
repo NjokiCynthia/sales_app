@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
-import 'package:petropal/constants/theme.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -27,7 +26,7 @@ class _ProfileState extends State<Profile> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(width: 30),
-                      Text(
+                      const Text(
                         'Super Admin Profile',
                         style: TextStyle(
                           fontSize: 24, // Adjust the font size
@@ -35,7 +34,7 @@ class _ProfileState extends State<Profile> {
                           color: Colors.black, // Text color
                         ),
                       ),
-                      Icon(Icons.person)
+                      const Icon(Icons.person)
                     ],
                   ),
                 ),
@@ -57,7 +56,7 @@ class _ProfileState extends State<Profile> {
                         children: [
                           Transform.translate(
                             offset: const Offset(0, -40),
-                            child: Column(
+                            child: const Column(
                               children: [
                                 CircleAvatar(
                                   backgroundColor: Colors.white,

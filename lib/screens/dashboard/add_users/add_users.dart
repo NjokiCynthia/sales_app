@@ -22,12 +22,12 @@ class _AddUsersState extends State<AddUsers> {
     return Scaffold(
         body: SafeArea(
             child: Padding(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: SingleChildScrollView(
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Text(
                       widget.selectedUserType == 'Oil Marketing Company'
                           ? 'Add Oil Marketing Company'
@@ -36,15 +36,15 @@ class _AddUsersState extends State<AddUsers> {
                               : 'Add New Customers',
                       style: displayBigBoldBlack,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     if (widget.selectedUserType == 'Oil Marketing Company')
-                      AddOMC()
+                      const AddOMC()
                     else if (widget.selectedUserType == 'Resellers')
-                      AddReseller()
+                      const AddReseller()
                     else if (widget.selectedUserType == 'Customers')
-                      AddCustomer()
+                      const AddCustomer()
                   ],
                 )))));
   }

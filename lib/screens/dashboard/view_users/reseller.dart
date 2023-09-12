@@ -3,7 +3,7 @@ import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 
 class Resellers extends StatelessWidget {
-  const Resellers({Key? key});
+  const Resellers({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +11,7 @@ class Resellers extends StatelessWidget {
       body: ListView.builder(
         itemCount: 5,
         itemBuilder: (BuildContext context, int index) {
-          return ResellerCard();
+          return const ResellerCard();
         },
       ),
     );
@@ -19,10 +19,12 @@ class Resellers extends StatelessWidget {
 }
 
 class ResellerCard extends StatelessWidget {
+  const ResellerCard({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
       child: Card(
         color: Colors.white,
 
@@ -36,7 +38,7 @@ class ResellerCard extends StatelessWidget {
         child: Row(
           children: [
             Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Image.asset(
                 'assets/images/reseller.png', // Use the same image for all cards
                 width: 48,
@@ -49,27 +51,27 @@ class ResellerCard extends StatelessWidget {
                 children: [
                   ListTile(
                     title: Text(
-                      'Reseller Name',
+                      'Muthoni and Company',
                       style: displayTitle,
                     ),
                     subtitle: Text(
                       'reseller@example.com',
                       style: bodyText,
                     ),
-                    trailing: Icon(
+                    trailing: const Icon(
                       Icons.edit,
                       color: primaryDarkColor,
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Row(
                       children: [
                         Icon(
                           Icons.location_on,
                           color: primaryDarkColor.withOpacity(0.7),
                         ),
-                        SizedBox(width: 8.0),
+                        const SizedBox(width: 8.0),
                         Text(
                           'Location',
                           style: TextStyle(

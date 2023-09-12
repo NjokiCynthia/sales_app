@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/color_contants.dart';
-import 'package:petropal/screens/dashboard/line_chart.dart';
 import 'package:petropal/screens/dashboard/add_users/users.dart';
 import 'package:petropal/screens/dashboard/invoices.dart';
 import 'package:petropal/screens/dashboard/profile.dart';
@@ -25,11 +24,11 @@ class _DashboardState extends State<Dashboard> {
 
   List<Widget> _buildScreens() {
     return [
-      DashboardScreen(),
-      Invoices(),
+      const DashboardScreen(),
+      const Invoices(),
       //LineChartWidget(),
-      UsersScreen(),
-      Profile(),
+      const UsersScreen(),
+      const Profile(),
     ];
   }
 

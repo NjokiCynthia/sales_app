@@ -44,6 +44,8 @@ class Omcs extends StatelessWidget {
         imagePath: 'assets/images/total-logo.png'),
   ];
 
+  Omcs({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,12 +62,12 @@ class Omcs extends StatelessWidget {
 class UserCard extends StatelessWidget {
   final User user;
 
-  UserCard({required this.user});
+  const UserCard({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
       child: Card(
         color: Colors.white,
         shape: RoundedRectangleBorder(
@@ -77,7 +79,7 @@ class UserCard extends StatelessWidget {
         child: Row(
           children: [
             Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: Image.asset(
                 user.imagePath,
                 width: 48,
@@ -94,20 +96,20 @@ class UserCard extends StatelessWidget {
                       style: displayTitle,
                     ),
                     subtitle: Text(user.email, style: bodyText),
-                    trailing: Icon(
+                    trailing: const Icon(
                       Icons.edit,
                       color: primaryDarkColor,
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Row(
                       children: [
                         Icon(
                           Icons.location_on,
                           color: primaryDarkColor.withOpacity(0.7),
                         ),
-                        SizedBox(width: 8.0),
+                        const SizedBox(width: 8.0),
                         Text(
                           user.location,
                           style: TextStyle(

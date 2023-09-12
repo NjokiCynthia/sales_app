@@ -22,7 +22,7 @@ class _InvoicesState extends State<Invoices> {
       ),
       body: ListView.separated(
         itemCount: 10, // Change this to the number of items you want
-        separatorBuilder: (context, index) => Padding(
+        separatorBuilder: (context, index) => const Padding(
           padding: EdgeInsets.all(5),
           child: Divider(
             color: Colors.grey, // Customize the divider color

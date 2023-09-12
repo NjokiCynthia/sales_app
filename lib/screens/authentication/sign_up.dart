@@ -52,7 +52,7 @@ class _LoginState extends State<Login> {
                     //   'Enter email address',
                     //   style: bodyText.copyWith(color: Colors.grey),
                     // ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     SizedBox(
@@ -90,14 +90,14 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     // Text(
                     //   'Enter password',
                     //   style: bodyText.copyWith(color: Colors.grey),
                     // ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     SizedBox(
@@ -127,7 +127,7 @@ class _LoginState extends State<Login> {
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: primaryDarkColor,
                               width: 1.0,
                             ),
@@ -149,7 +149,7 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     SizedBox(
@@ -160,9 +160,9 @@ class _LoginState extends State<Login> {
                             backgroundColor: primaryDarkColor),
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: ((context) => Dashboard())));
+                              builder: ((context) => const Dashboard())));
                         },
-                        child: Text('Login'),
+                        child: const Text('Login'),
                       ),
                     ),
                   ],

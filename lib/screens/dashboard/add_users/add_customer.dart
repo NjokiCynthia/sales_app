@@ -24,11 +24,11 @@ class _AddCustomerState extends State<AddCustomer> {
       children: [
         Row(
           children: [
-            Icon(
+            const Icon(
               Icons.perm_identity,
               color: primaryDarkColor,
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Text(
@@ -37,7 +37,7 @@ class _AddCustomerState extends State<AddCustomer> {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         TextFormField(
@@ -75,11 +75,11 @@ class _AddCustomerState extends State<AddCustomer> {
         const SizedBox(height: 20),
         Row(
           children: [
-            Icon(
+            const Icon(
               Icons.phone,
               color: primaryDarkColor,
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Text(
@@ -88,7 +88,7 @@ class _AddCustomerState extends State<AddCustomer> {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         InternationalPhoneNumberInput(
@@ -156,11 +156,11 @@ class _AddCustomerState extends State<AddCustomer> {
         const SizedBox(height: 20),
         Row(
           children: [
-            Icon(
+            const Icon(
               Icons.email,
               color: primaryDarkColor,
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Text(
@@ -169,7 +169,7 @@ class _AddCustomerState extends State<AddCustomer> {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         TextFormField(
@@ -207,11 +207,11 @@ class _AddCustomerState extends State<AddCustomer> {
         const SizedBox(height: 20),
         Row(
           children: [
-            Icon(
+            const Icon(
               Icons.location_pin,
               color: primaryDarkColor,
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Text(
@@ -220,7 +220,7 @@ class _AddCustomerState extends State<AddCustomer> {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         TextFormField(
@@ -264,9 +264,9 @@ class _AddCustomerState extends State<AddCustomer> {
                   ElevatedButton.styleFrom(backgroundColor: primaryDarkColor),
               onPressed: () {
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => UsersScreen()));
+                    MaterialPageRoute(builder: (context) => const UsersScreen()));
               },
-              child: Text(
+              child: const Text(
                 'Confirm',
               )),
         )

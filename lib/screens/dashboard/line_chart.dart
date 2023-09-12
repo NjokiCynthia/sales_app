@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'dart:math';
 
-class LineChartWidget extends StatelessWidget {
+class LineChartWidget extends StatefulWidget {
+  const LineChartWidget({super.key});
+
+  @override
+  State<LineChartWidget> createState() => _LineChartWidgetState();
+}
+
+class _LineChartWidgetState extends State<LineChartWidget> {
   // Generate random data for the chart
   final List<List<FlSpot>> data = [
     List.generate(
@@ -19,8 +26,8 @@ class LineChartWidget extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: LineChart(
         LineChartData(
-          gridData: FlGridData(show: false),
-          titlesData: FlTitlesData(show: false),
+          gridData: const FlGridData(show: false),
+          titlesData: const FlTitlesData(show: false),
           borderData: FlBorderData(
             show: true,
             border: Border.all(
@@ -36,21 +43,21 @@ class LineChartWidget extends StatelessWidget {
             LineChartBarData(
               spots: data[0],
               isCurved: true,
-              dotData: FlDotData(show: false),
+              dotData: const FlDotData(show: false),
               belowBarData: BarAreaData(show: false),
               color: Colors.blue, // Set the color for this line
             ),
             LineChartBarData(
               spots: data[1],
               isCurved: true,
-              dotData: FlDotData(show: false),
+              dotData: const FlDotData(show: false),
               belowBarData: BarAreaData(show: false),
               color: Colors.red, // Set the color for this line
             ),
             LineChartBarData(
               spots: data[2],
               isCurved: true,
-              dotData: FlDotData(show: false),
+              dotData: const FlDotData(show: false),
               belowBarData: BarAreaData(show: false),
               color: Colors.black, // Set the color for this line
             ),

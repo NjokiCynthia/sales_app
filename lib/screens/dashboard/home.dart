@@ -5,13 +5,14 @@ import 'package:petropal/screens/dashboard/invoices.dart';
 import 'package:petropal/widgets/widget.dart';
 
 class DashboardScreen extends StatefulWidget {
+  const DashboardScreen({super.key});
+
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  PageController _pageController = PageController(initialPage: 0);
-  int _currentPage = 0;
+  final PageController _pageController = PageController(initialPage: 0);
 
   @override
   void dispose() {
@@ -30,7 +31,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(5),
+        padding: const EdgeInsets.all(5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -43,25 +44,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   AnimatedCard(
                     borderColor: primaryDarkColor.withOpacity(0.1),
                     title: 'Oil Marketing Companies',
-                    capitalRaised: '\KES 100,000,000',
-                    currentCommission: '\KES 10,000',
+                    capitalRaised: 'KES 100,000,000',
+                    currentCommission: 'KES 10,000',
                   ),
                   AnimatedCard(
                     borderColor: primaryDarkColor.withOpacity(0.1),
                     title: 'Reseller',
-                    capitalRaised: '\KES 50,000,000',
-                    currentCommission: '\KES 5,000',
+                    capitalRaised: 'KES 50,000,000',
+                    currentCommission: 'KES 5,000',
                   ),
                   AnimatedCard(
                     borderColor: primaryDarkColor.withOpacity(0.1),
                     title: 'Customers',
-                    capitalRaised: '\KES 200,000,000',
-                    currentCommission: '\KES 20,000',
+                    capitalRaised: 'KES 200,000,000',
+                    currentCommission: 'KES 20,000',
                   ),
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             // Transactions list
@@ -73,14 +74,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
               GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => Invoices()));
+                        MaterialPageRoute(builder: (context) => const Invoices()));
                   },
                   child:
-                      Text('View more', style: TextStyle(color: Colors.blue)))
+                      const Text('View more', style: TextStyle(color: Colors.blue)))
             ]),
             Expanded(
               child: ListView.separated(
-                separatorBuilder: (context, index) => Padding(
+                separatorBuilder: (context, index) => const Padding(
                   padding: EdgeInsets.all(5),
                   child: Divider(
                     color: Colors.grey, // Customize the divider color
@@ -90,7 +91,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 itemBuilder: (context, index) {
                   return CustomTransactionCard(
                     userName: 'Customer $index',
-                    amount: '\KES 100.00',
+                    amount: 'KES 100.00',
                     paymentMethod: 'Payment Method',
                     date: '2023-09-06',
                     volume: '100000 litres',
@@ -112,7 +113,7 @@ class AnimatedCard extends StatelessWidget {
   final String capitalRaised;
   final String currentCommission;
 
-  AnimatedCard({
+  const AnimatedCard({super.key, 
     required this.borderColor,
     required this.title,
     required this.capitalRaised,
@@ -131,19 +132,19 @@ class AnimatedCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   children: [
                     Container(
@@ -157,14 +158,14 @@ class AnimatedCard extends StatelessWidget {
                         color: primaryDarkColor,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 5,
                     ),
                     Text(
-                      'Income Raised: ',
+                      'Revenue: ',
                       style: displayTitle,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 5,
                     ),
                     Text(
@@ -180,7 +181,7 @@ class AnimatedCard extends StatelessWidget {
                 //     fontSize: 16,
                 //   ),
                 // ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   children: [
                     Container(
@@ -194,14 +195,14 @@ class AnimatedCard extends StatelessWidget {
                         color: primaryDarkColor,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 5,
                     ),
                     Text(
                       'Current Commission:',
                       style: displayTitle,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 5,
                     ),
                     Text(
@@ -211,7 +212,7 @@ class AnimatedCard extends StatelessWidget {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Row(
                     children: [
                       Column(
@@ -226,7 +227,7 @@ class AnimatedCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 20,
                       ),
                       Column(
