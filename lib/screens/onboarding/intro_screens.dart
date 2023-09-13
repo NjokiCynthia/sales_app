@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/screens/authentication/sign_up.dart';
+import 'package:petropal/screens/authentication/login.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage> {
     return IntroductionScreen(
       pages: [
         PageViewModel(
-          title: "Welcome to Petropal",
+          title: "Petropal: Energizing Strong Connections",
           body:
               "Welcome to Petropal Oil Management System. Streamline your oil operations with our user-friendly platform. Let's get started!",
           image: Image.asset(
@@ -129,7 +129,7 @@ class _HomePageState extends State<HomePage> {
 
   PageDecoration pageDecoration() {
     return PageDecoration(
-      titleTextStyle: displayTitle,
+      titleTextStyle: m_title,
       // Theme.of(context)
       //     .textTheme
       //     .headlineSmall!

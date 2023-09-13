@@ -1,8 +1,9 @@
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/screens/dashboard/invoices.dart';
-import 'package:petropal/widgets/widget.dart';
+
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -12,244 +13,217 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final PageController _pageController = PageController(initialPage: 0);
+  final List<Color> cardColors = [
+    const Color(0xFF012F6D), // #012F6D
+    const Color(0xFFFF9A00), // #FF9A00
+    const Color(0xFFAABBCC), // Another color of your choice
+  ];
 
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
+  // Initial Selected Value
+  String dropdownvalue = 'Weekly';
+
+  // List of items in our dropdown menu
+  var items = [
+    'Weekly',
+    'Monthly',
+  ];
+  final SwiperController _swiperController = SwiperController();
+  int _currentIndex = 0;
+
+  List<String> titles = ['Petrol', 'Diesel', 'Petrol'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
-          'Dashboard',
-          style: displayBigBoldBlack,
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 220,
-              color: Colors.white,
-              child: PageView(
-                controller: _pageController,
+      body: SafeArea(
+        child: Padding(
+            padding: const EdgeInsets.all(5),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  AnimatedCard(
-                    borderColor: primaryDarkColor.withOpacity(0.1),
-                    title: 'Oil Marketing Companies',
-                    capitalRaised: 'KES 100,000,000',
-                    currentCommission: 'KES 10,000',
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'assets/images/icons/petropal_logo.png',
+                          width: 50,
+                          height: 50,
+                        ),
+                        Text(
+                          'Petropal',
+                          style: m_title, // You can define your own style here
+                        ),
+                      ],
+                    ),
                   ),
-                  AnimatedCard(
-                    borderColor: primaryDarkColor.withOpacity(0.1),
-                    title: 'Reseller',
-                    capitalRaised: 'KES 50,000,000',
-                    currentCommission: 'KES 5,000',
+                  SizedBox(
+                    height: 250,
+                    child: Swiper(
+                      controller: _swiperController,
+                      onIndexChanged: (index) {
+                        setState(() {
+                          _currentIndex = index;
+                        });
+                      },
+                      itemBuilder: (BuildContext context, int index) {
+                        return Card(
+                            color: Colors.white,
+
+                            // color: cardColors[index % cardColors.length],
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Text(
+                                            'Current price for ${titles[index]}',
+                                            style:
+                                                const TextStyle(color: Colors.black),
+                                          ),
+                                          Text(
+                                            'Kes 91.30',
+                                            style: m_title,
+                                          ),
+                                        ],
+                                      ),
+                                      DropdownButton<String>(
+                                        value: dropdownvalue,
+                                        icon: const Icon(
+                                          Icons.keyboard_arrow_down,
+                                          color: primaryDarkColor,
+                                        ),
+                                        items: items.map((String item) {
+                                          return DropdownMenuItem<String>(
+                                            value: item,
+                                            child: Text(
+                                              item,
+                                              style: const TextStyle(
+                                                  color: primaryDarkColor),
+                                            ),
+                                          );
+                                        }).toList(),
+                                        onChanged: (String? newValue) {
+                                          setState(() {
+                                            dropdownvalue = newValue!;
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 150,
+                                    child: SfCartesianChart(
+                                        primaryXAxis: CategoryAxis(
+                                          // Customize the appearance of the X-axis labels here
+                                          majorGridLines: const MajorGridLines(
+                                              color: Colors
+                                                  .black), // Gridlines color
+                                          labelStyle: const TextStyle(
+                                              color:
+                                                  primaryDarkColor), // X-axis labels color (set to red)
+                                          axisLine: const AxisLine(
+                                              color: Colors
+                                                  .black), // X-axis line color
+                                        ),
+                                        primaryYAxis: NumericAxis(
+                                          // Customize the appearance of the Y-axis here
+                                          majorGridLines: const MajorGridLines(
+                                              color: Colors
+                                                  .black), // Gridlines color
+                                          labelStyle: const TextStyle(
+                                              color:
+                                                  primaryDarkColor), // Y-axis labels color
+                                          axisLine:
+                                              const AxisLine(color: Colors.black),
+                                        ),
+                                        series: <LineSeries<SalesData, String>>[
+                                          LineSeries<SalesData, String>(
+                                            // Bind data source
+                                            dataSource: <SalesData>[
+                                              SalesData('Mon', 5),
+                                              SalesData('Tue', 18),
+                                              SalesData('Wed', 7),
+                                              SalesData('Thur', 11),
+                                              SalesData('Fri', 6),
+                                              SalesData('Sat', 16),
+                                              SalesData('Sun', 10)
+                                            ],
+                                            xValueMapper:
+                                                (SalesData sales, _) =>
+                                                    sales.year,
+                                            yValueMapper:
+                                                (SalesData sales, _) =>
+                                                    sales.sales,
+                                          )
+                                        ]),
+                                  ),
+                                ]));
+                      },
+                      itemCount: 3,
+                      viewportFraction: 1.0,
+                      scale: 0.8,
+                    ),
                   ),
-                  AnimatedCard(
-                    borderColor: primaryDarkColor.withOpacity(0.1),
-                    title: 'Customers',
-                    capitalRaised: 'KES 200,000,000',
-                    currentCommission: 'KES 20,000',
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      3,
+                      (index) => Container(
+                        width: 10,
+                        height: 10,
+                        margin: const EdgeInsets.symmetric(horizontal: 5),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: _currentIndex == index
+                                ? primaryDarkColor // Active dot color
+                                : primaryDarkColor
+                                    .withOpacity(0.1) // Inactive dot color
+                            ),
+                      ),
+                    ),
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            // Transactions list
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text(
-                'Proforma Invoices',
-                style: displayTitle,
-              ),
-              GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => const Invoices()));
-                  },
-                  child:
-                      const Text('View more', style: TextStyle(color: Colors.blue)))
-            ]),
-            Expanded(
-              child: ListView.separated(
-                separatorBuilder: (context, index) => const Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Divider(
-                    color: Colors.grey, // Customize the divider color
-                    thickness: 1.0, // Customize the divider thickness
+                  Text(
+                    'Transactions',
+                    style: m_title,
                   ),
-                ), // Number of transaction items
-                itemBuilder: (context, index) {
-                  return CustomTransactionCard(
-                    userName: 'Customer $index',
-                    amount: 'KES 100.00',
-                    paymentMethod: 'Payment Method',
-                    date: '2023-09-06',
-                    volume: '100000 litres',
-                  );
-                },
-                itemCount: 5,
-              ),
-            ),
-          ],
-        ),
+                  Container(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 200,
+                            child: ListView.builder(
+                                itemCount: 5,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: ((context, index) => Container(
+                                      height: 100,
+                                      width: 100,
+                                      margin: const EdgeInsets.all(10),
+                                      color: Colors.green[700],
+                                      child: Center(
+                                        child: Text('Card $index'),
+                                      ),
+                                    ))),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ])),
       ),
     );
   }
 }
 
-class AnimatedCard extends StatelessWidget {
-  final Color borderColor;
-  final String title;
-  final String capitalRaised;
-  final String currentCommission;
-
-  const AnimatedCard({super.key, 
-    required this.borderColor,
-    required this.title,
-    required this.capitalRaised,
-    required this.currentCommission,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: Colors.grey.withOpacity(0.1),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
-        side: BorderSide(color: borderColor, width: 1.0),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: primaryDarkColor.withOpacity(0.1),
-                        shape: BoxShape.circle,
-                      ),
-                      padding: const EdgeInsets.all(8),
-                      child: const Icon(
-                        Icons.money,
-                        color: primaryDarkColor,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      'Revenue: ',
-                      style: displayTitle,
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      'Kes 50000',
-                      style: bodyText,
-                    )
-                  ],
-                ),
-                // Text(
-                //   'Capital Raised: $capitalRaised',
-                //   style: TextStyle(
-                //     color: Colors.black,
-                //     fontSize: 16,
-                //   ),
-                // ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: primaryDarkColor.withOpacity(0.1),
-                        shape: BoxShape.circle,
-                      ),
-                      padding: const EdgeInsets.all(8),
-                      child: const Icon(
-                        Icons.attach_money,
-                        color: primaryDarkColor,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      'Current Commission:',
-                      style: displayTitle,
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      'Kes 1',
-                      style: bodyText,
-                    )
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          Text(
-                            'Active OMCs',
-                            style: displayTitle,
-                          ),
-                          Text(
-                            '5000',
-                            style: bodyText,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            'Inactive OMCs',
-                            style: displayTitle,
-                          ),
-                          Text(
-                            '500',
-                            style: bodyText,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+class SalesData {
+  SalesData(this.year, this.sales);
+  final String year;
+  final double sales;
 }

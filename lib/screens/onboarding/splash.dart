@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:petropal/constants/theme.dart';
 import 'package:petropal/screens/onboarding/intro_screens.dart';
 
 class AnimatedScaleImage extends StatefulWidget {
@@ -44,16 +45,10 @@ class _AnimatedScaleImageState extends State<AnimatedScaleImage>
                   margin: const EdgeInsets.only(right: 10),
                   child: Image.asset(
                     'assets/images/icons/petropal_logo.png',
-                    width: 40,
+                    width: 60,
                   ),
                 ),
-                Text(
-                  'Petropal',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(color: Colors.black),
-                )
+                Text('Petropal', style: m_title)
               ],
             ),
           ),
