@@ -2,6 +2,7 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/widgets/widget.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -31,6 +32,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _currentIndex = 0;
 
   List<String> titles = ['Petrol', 'Diesel', 'Petrol'];
+  List<String> card_titles = [
+    'Transactions',
+    'Resellers',
+    'Customers',
+    'Omcs',
+    'Orders'
+  ];
+
+  int selectedCardIndex = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -189,48 +199,64 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           child: ListView.builder(
                             itemCount: 5,
                             scrollDirection: Axis.horizontal,
-                            itemBuilder: ((context, index) => Container(
-                                  height: 100,
-                                  width: 200,
-                                  margin: const EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: primaryDarkColor),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Resellers',
-                                          style: bodyText,
+                            itemBuilder: ((context, index) => GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      selectedCardIndex = index;
+                                    });
+                                  },
+                                  child: Container(
+                                    height: 100,
+                                    width: 200,
+                                    margin: const EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                      border:
+                                          Border.all(color: primaryDarkColor),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Card(
+                                      color: _currentIndex == index
+                                          ? Colors.blue
+                                          : Colors.white,
+                                      child: Padding(
+                                        padding: EdgeInsets.all(10),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              card_titles[index],
+                                              style: bodyText,
+                                            ),
+                                            RichText(
+                                              text: TextSpan(children: [
+                                                TextSpan(
+                                                    text: '1000',
+                                                    style: m_title),
+                                                TextSpan(
+                                                    text: 'total',
+                                                    style: displaySmall),
+                                              ]),
+                                            ),
+                                            Row(children: [
+                                              Text(
+                                                'active: 700',
+                                                style: bodyText,
+                                              ),
+                                            ]),
+                                            Row(children: [
+                                              Text(
+                                                'inactive',
+                                                style: bodyText,
+                                              ),
+                                              Text(
+                                                '300',
+                                                style: bodyText,
+                                              )
+                                            ]),
+                                          ],
                                         ),
-                                        RichText(
-                                          text: TextSpan(children: [
-                                            TextSpan(
-                                                text: '1000', style: m_title),
-                                            TextSpan(
-                                                text: 'total',
-                                                style: displaySmall),
-                                          ]),
-                                        ),
-                                        Row(children: [
-                                          Text(
-                                            'active: 700',
-                                            style: bodyText,
-                                          ),
-                                        ]),
-                                        Row(children: [
-                                          Text('inactive', style: bodyText),
-                                          Text(
-                                            '300',
-                                            style: normalText.copyWith(
-                                                color: Colors.red.shade300),
-                                          )
-                                        ]),
-                                      ],
+                                      ),
                                     ),
                                   ),
                                 )),
@@ -240,34 +266,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
                   Text(
-                    'Transactions',
+                    'Orders',
                     style: m_title,
                   ),
-                  Container(
-                    height: 50,
-                    child: ListTile(
-                      leading: Container(
-                        decoration: BoxDecoration(
-                          color: primaryDarkColor.withOpacity(0.1),
-                          shape: BoxShape.circle,
-                        ),
-                        padding: const EdgeInsets.all(8),
-                        child: const Icon(
-                          Icons.money_off,
-                          color: primaryDarkColor,
-                        ),
-                      ),
-                      title: Text(
-                        'Shell Limited',
-                        //textScaleFactor: 1.5,
-                        style: displayTitle,
-                      ),
-                      subtitle: Text('Payment for kerosene', style: bodyTextSmall,),
-                    ),
-                  )
+                  //  if (selectedCardIndex == widget.index)
+                  //                           getWidgetForCard(index),
+                  if (selectedCardIndex == _currentIndex)
+                    getWidgetForCard(_currentIndex),
                 ])),
       ),
     );
+  }
+
+  Widget getWidgetForCard(int index) {
+    switch (index) {
+      case 0:
+        return Transactions();
+      case 1:
+        return Resellers();
+      case 2:
+        return Omcs();
+      case 3:
+        return Orders();
+      case 4:
+        return Customers();
+      default:
+        return Container(); // Return an empty container by default
+    }
   }
 }
 

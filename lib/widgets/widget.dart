@@ -9,7 +9,8 @@ class CustomTransactionCard extends StatelessWidget {
   final String date;
   final String volume;
 
-  const CustomTransactionCard({super.key, 
+  const CustomTransactionCard({
+    super.key,
     required this.userName,
     required this.amount,
     required this.paymentMethod,
@@ -76,6 +77,149 @@ class CustomTransactionCard extends StatelessWidget {
     );
   }
 }
+
+class Omcs extends StatelessWidget {
+  const Omcs({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+class Resellers extends StatelessWidget {
+  const Resellers({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 50,
+      child: Card(
+        elevation: 4,
+        // Add elevation
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+
+          side: BorderSide(color: Colors.grey[300]!), // Add a BorderSide
+        ),
+        child: ListTile(
+          leading: Container(
+            decoration: BoxDecoration(
+              color: primaryDarkColor.withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            padding: const EdgeInsets.all(8),
+            child: const Icon(
+              Icons.email,
+              color: primaryDarkColor,
+            ),
+          ),
+          title: Text(
+            '',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black, // Text color
+            ),
+          ),
+          subtitle: const Text(
+            'superadmin@example.com',
+            style: TextStyle(
+              color: Colors.black, // Text color
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class Customers extends StatelessWidget {
+  const Customers({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+class Pfis extends StatelessWidget {
+  const Pfis({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+class Transactions extends StatelessWidget {
+  const Transactions({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ListView.separated(
+          itemBuilder: (context, index) => Padding(
+                padding: EdgeInsets.all(5),
+                child: Divider(
+                  color: Colors.black,
+                ),
+              ),
+          separatorBuilder: ((context, index) => Container(
+                height: 50,
+                child: ListTile(
+                    leading: Container(
+                      decoration: BoxDecoration(
+                        color: primaryDarkColor.withOpacity(0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      padding: const EdgeInsets.all(8),
+                      child: const Icon(
+                        Icons.money_off,
+                        color: primaryDarkColor,
+                      ),
+                    ),
+                    title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Shell Limited',
+                            //textScaleFactor: 1.5,
+                            style: displayTitle,
+                          ),
+                          Text(
+                            'Kes 5000',
+                            style: displayTitle,
+                          )
+                        ]),
+                    subtitle: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Payment for kerosene',
+                          style: bodyTextSmall,
+                        ),
+                        Text(
+                          '12 Sept 2023',
+                          style: displaySmallerLightGrey,
+                        )
+                      ],
+                    )),
+              )),
+          itemCount: 5),
+    );
+  }
+}
+
+class Orders extends StatelessWidget {
+  const Orders({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
 
 
  
