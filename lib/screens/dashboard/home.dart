@@ -83,8 +83,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         children: [
                                           Text(
                                             'Current price for ${titles[index]}',
-                                            style:
-                                                const TextStyle(color: Colors.black),
+                                            style: const TextStyle(
+                                                color: Colors.black),
                                           ),
                                           Text(
                                             'Kes 91.30',
@@ -139,8 +139,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           labelStyle: const TextStyle(
                                               color:
                                                   primaryDarkColor), // Y-axis labels color
-                                          axisLine:
-                                              const AxisLine(color: Colors.black),
+                                          axisLine: const AxisLine(
+                                              color: Colors.black),
                                         ),
                                         series: <LineSeries<SalesData, String>>[
                                           LineSeries<SalesData, String>(
@@ -193,27 +193,48 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     'Transactions',
                     style: m_title,
                   ),
-                  Container(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 200,
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                            height: 150,
                             child: ListView.builder(
                                 itemCount: 5,
                                 scrollDirection: Axis.horizontal,
                                 itemBuilder: ((context, index) => Container(
                                       height: 100,
-                                      width: 100,
-                                      margin: const EdgeInsets.all(10),
-                                      color: Colors.green[700],
-                                      child: Center(
-                                        child: Text('Card $index'),
+                                      width: 200,
+                                      margin: const EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                        border:
+                                            Border.all(color: primaryDarkColor),
+                                        borderRadius: BorderRadius.circular(8),
                                       ),
-                                    ))),
-                          )
-                        ],
-                      ),
+                                      child: Column(children: [
+                                        Text(
+                                          'Resellers',
+                                          style: displayTitle,
+                                        ),
+                                        Text(
+                                          '1000',
+                                          style: m_title,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'active: 700',
+                                              style: bodyText,
+                                            ),
+                                            Text(
+                                              'Inactive: 300',
+                                              style: bodyText.copyWith(
+                                                  color: Colors.greenAccent),
+                                            )
+                                          ],
+                                        )
+                                      ]),
+                                    ))))
+                      ],
                     ),
                   ),
                 ])),

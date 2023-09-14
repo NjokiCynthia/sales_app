@@ -48,6 +48,11 @@ TextStyle displayTitle = GoogleFonts.getFont(
 //   fontWeight: FontWeight.bold,
 //   color: Colors.black,
 // );
+TextStyle normalText = GoogleFonts.getFont(
+  Strings.fontName,
+  fontSize: 12,
+  color: Colors.black,
+);
 TextStyle m_title = GoogleFonts.getFont(
   Strings.fontName,
   fontSize: 20,
