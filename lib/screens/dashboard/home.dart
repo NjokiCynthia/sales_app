@@ -243,6 +243,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     'Transactions',
                     style: m_title,
                   ),
+                  Container(
+                    height: 50,
+                    child: ListTile(
+                      leading: Container(
+                        decoration: BoxDecoration(
+                          color: primaryDarkColor.withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        padding: const EdgeInsets.all(8),
+                        child: const Icon(
+                          Icons.money_off,
+                          color: primaryDarkColor,
+                        ),
+                      ),
+                      title: Text(
+                        'Shell Limited',
+                        //textScaleFactor: 1.5,
+                        style: displayTitle,
+                      ),
+                      subtitle: Text('Payment for kerosene', style: bodyTextSmall,),
+                    ),
+                  )
                 ])),
       ),
     );
