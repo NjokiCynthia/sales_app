@@ -120,22 +120,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     height: 150,
                                     child: SfCartesianChart(
                                         primaryXAxis: CategoryAxis(
-                                          // Customize the appearance of the X-axis labels here
-                                          majorGridLines: const MajorGridLines(
-                                              color: Colors
-                                                  .black), // Gridlines color
                                           labelStyle: const TextStyle(
-                                              color:
-                                                  primaryDarkColor), // X-axis labels color (set to red)
-                                          axisLine: const AxisLine(
-                                              color: Colors
-                                                  .black), // X-axis line color
+                                              color: primaryDarkColor),
                                         ),
                                         primaryYAxis: NumericAxis(
-                                          // Customize the appearance of the Y-axis here
-                                          majorGridLines: const MajorGridLines(
-                                              color: Colors
-                                                  .black), // Gridlines color
                                           labelStyle: const TextStyle(
                                               color:
                                                   primaryDarkColor), // Y-axis labels color
@@ -197,45 +185,63 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     child: Column(
                       children: [
                         SizedBox(
-                            height: 150,
-                            child: ListView.builder(
-                                itemCount: 5,
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: ((context, index) => Container(
-                                      height: 100,
-                                      width: 200,
-                                      margin: const EdgeInsets.all(5),
-                                      decoration: BoxDecoration(
-                                        border:
-                                            Border.all(color: primaryDarkColor),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: Column(children: [
+                          height: 150,
+                          child: ListView.builder(
+                            itemCount: 5,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: ((context, index) => Container(
+                                  height: 100,
+                                  width: 200,
+                                  margin: const EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: primaryDarkColor),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
                                         Text(
                                           'Resellers',
-                                          style: displayTitle,
+                                          style: bodyText,
                                         ),
-                                        Text(
-                                          '1000',
-                                          style: m_title,
+                                        RichText(
+                                          text: TextSpan(children: [
+                                            TextSpan(
+                                                text: '1000', style: m_title),
+                                            TextSpan(
+                                                text: 'total',
+                                                style: displaySmall),
+                                          ]),
                                         ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'active: 700',
-                                              style: bodyText,
-                                            ),
-                                            Text(
-                                              'Inactive: 300',
-                                              style: bodyText.copyWith(
-                                                  color: Colors.greenAccent),
-                                            )
-                                          ],
-                                        )
-                                      ]),
-                                    ))))
+                                        Row(children: [
+                                          Text(
+                                            'active: 700',
+                                            style: bodyText,
+                                          ),
+                                        ]),
+                                        Row(children: [
+                                          Text('inactive', style: bodyText),
+                                          Text(
+                                            '300',
+                                            style: normalText.copyWith(
+                                                color: Colors.red.shade300),
+                                          )
+                                        ]),
+                                      ],
+                                    ),
+                                  ),
+                                )),
+                          ),
+                        )
                       ],
                     ),
+                  ),
+                  Text(
+                    'Transactions',
+                    style: m_title,
                   ),
                 ])),
       ),

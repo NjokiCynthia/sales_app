@@ -77,6 +77,12 @@ TextStyle displaySmallBoldLightGrey = GoogleFonts.getFont(
   fontWeight: FontWeight.bold,
   color: Colors.black.withOpacity(0.4),
 );
+TextStyle displaySmall = GoogleFonts.getFont(
+  Strings.fontName,
+  fontSize: 10,
+  fontWeight: FontWeight.normal,
+  color: Colors.black.withOpacity(0.4),
+);
 TextStyle displaySmallerLightGrey = GoogleFonts.getFont(
   Strings.fontName,
   fontSize: 13,
