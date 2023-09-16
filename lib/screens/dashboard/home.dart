@@ -29,18 +29,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
     'Monthly',
   ];
   final SwiperController _swiperController = SwiperController();
-  int _currentIndex = 0;
 
-  List<String> titles = ['Petrol', 'Diesel', 'Petrol'];
+  int _currentgraph = 0;
+
+  List<String> titles = ['Petrol', 'Diesel', 'Kerosene'];
   List<String> card_titles = [
     'Transactions',
     'Resellers',
     'Customers',
-    'Omcs',
+    'Oil Marketing Companies',
     'Orders'
   ];
 
-  int selectedCardIndex = -1;
+  int selectedCardIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -52,29 +53,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          'assets/images/icons/petropal_logo.png',
-                          width: 50,
-                          height: 50,
-                        ),
-                        Text(
-                          'Petropal',
-                          style: m_title, // You can define your own style here
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(10),
+                  //   child: Row(
+                  //     children: [
+                  //       Image.asset(
+                  //         'assets/images/icons/petropal_logo.png',
+                  //         width: 50,
+                  //         height: 50,
+                  //       ),
+                  //       Text(
+                  //         'Petropal',
+                  //         style: m_title, // You can define your own style here
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   SizedBox(
-                    height: 250,
+                    height: 210,
                     child: Swiper(
                       controller: _swiperController,
                       onIndexChanged: (index) {
                         setState(() {
-                          _currentIndex = index;
+                          _currentgraph = index;
                         });
                       },
                       itemBuilder: (BuildContext context, int index) {
@@ -179,7 +180,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         margin: const EdgeInsets.symmetric(horizontal: 5),
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: _currentIndex == index
+                            color: _currentgraph == index
                                 ? primaryDarkColor // Active dot color
                                 : primaryDarkColor
                                     .withOpacity(0.1) // Inactive dot color
@@ -191,16 +192,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     'Transactions',
                     style: m_title,
                   ),
+                  SizedBox(
+                    height: 5,
+                  ),
                   SingleChildScrollView(
                     child: Column(
                       children: [
                         SizedBox(
-                          height: 150,
+                          height: 140,
                           child: ListView.builder(
                             itemCount: 5,
                             scrollDirection: Axis.horizontal,
                             itemBuilder: ((context, index) => GestureDetector(
                                   onTap: () {
+                                    print('tapped');
                                     setState(() {
                                       selectedCardIndex = index;
                                     });
@@ -215,9 +220,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: Card(
-                                      color: _currentIndex == index
-                                          ? Colors.blue
-                                          : Colors.white,
+                                      color: Colors.white,
                                       child: Padding(
                                         padding: EdgeInsets.all(10),
                                         child: Column(
@@ -238,22 +241,49 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                     style: displaySmall),
                                               ]),
                                             ),
-                                            Row(children: [
-                                              Text(
-                                                'active: 700',
-                                                style: bodyText,
-                                              ),
-                                            ]),
-                                            Row(children: [
-                                              Text(
-                                                'inactive',
-                                                style: bodyText,
-                                              ),
-                                              Text(
-                                                '300',
-                                                style: bodyText,
-                                              )
-                                            ]),
+                                            Row(
+                                              children: [
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Revenue:',
+                                                      style: bodyText,
+                                                    ),
+                                                    Text(
+                                                      'Active:',
+                                                      style: bodyText,
+                                                    ),
+                                                    Text(
+                                                      'Inactive:',
+                                                      style: bodyText,
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  children: [
+                                                    Text(
+                                                      'Kes 5000',
+                                                      style: bodyTextSmall,
+                                                    ),
+                                                    Text(
+                                                      '700',
+                                                      style: bodyTextSmall,
+                                                    ),
+                                                    Text(
+                                                      '300',
+                                                      style: bodyTextSmall,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -265,31 +295,36 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Text(
                     'Orders',
                     style: m_title,
                   ),
-                  //  if (selectedCardIndex == widget.index)
-                  //                           getWidgetForCard(index),
-                  if (selectedCardIndex == _currentIndex)
-                    getWidgetForCard(_currentIndex),
+                  getWidgetForCard(selectedCardIndex),
                 ])),
       ),
     );
   }
 
   Widget getWidgetForCard(int index) {
+    print('<<<<<<<<<<<<<<<<<<<<<<<<<< called >>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+    print(index);
     switch (index) {
       case 0:
         return Transactions();
       case 1:
         return Resellers();
       case 2:
-        return Omcs();
-      case 3:
-        return Orders();
-      case 4:
         return Customers();
+
+      case 3:
+        return Omcs();
+
+      case 4:
+        return Orders();
+
       default:
         return Container(); // Return an empty container by default
     }

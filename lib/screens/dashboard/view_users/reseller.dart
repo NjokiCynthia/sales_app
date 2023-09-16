@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 
-class Resellers extends StatelessWidget {
-  const Resellers({super.key});
+class Reseller extends StatelessWidget {
+  const Reseller({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class ResellerCard extends StatelessWidget {
       child: Card(
         color: Colors.white,
 
-        //elevation: 4.0,
+      
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
           side: BorderSide(

@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/screens/onboarding/splash.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<UserProvider>.value(value: UserProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -14,7 +23,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Petropal',
-      
       theme: MyTheme.darkTheme,
       home: const SplashScreen(),
       debugShowCheckedModeBanner: false,

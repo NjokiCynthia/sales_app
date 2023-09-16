@@ -12,7 +12,6 @@ class AddOMC extends StatefulWidget {
 }
 
 class _AddOMCState extends State<AddOMC> {
-
   String initialCountry = 'KE';
 
   PhoneNumber number = PhoneNumber(isoCode: 'KE');
@@ -241,7 +240,7 @@ class _AddOMCState extends State<AddOMC> {
         Row(
           children: [
             const Icon(
-              Icons.document_scanner_sharp,
+              Icons.edit_document,
               color: primaryDarkColor,
             ),
             const SizedBox(
@@ -249,6 +248,72 @@ class _AddOMCState extends State<AddOMC> {
             ),
             Text(
               'Upload Certificate of Incoporation',
+              style: bodyText,
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          width: 150, // Set the desired width
+          padding: const EdgeInsets.all(10), // Adjust the padding as needed
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(10), // Grey border
+          ),
+          child: Center(
+            child: Text(
+              'Upload',
+              style: bodyText,
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+        Row(
+          children: [
+            const Icon(
+              Icons.document_scanner_sharp,
+              color: primaryDarkColor,
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Text(
+              'Upload Business Permit Document',
+              style: bodyText,
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          width: 150, // Set the desired width
+          padding: const EdgeInsets.all(10), // Adjust the padding as needed
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(10), // Grey border
+          ),
+          child: Center(
+            child: Text(
+              'Upload',
+              style: bodyText,
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+        Row(
+          children: [
+            const Icon(
+              Icons.document_scanner_sharp,
+              color: primaryDarkColor,
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Text(
+              'Upload KRA Pin Certifcate',
               style: bodyText,
             ),
           ],
@@ -329,8 +394,8 @@ class _AddOMCState extends State<AddOMC> {
               style:
                   ElevatedButton.styleFrom(backgroundColor: primaryDarkColor),
               onPressed: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const UsersScreen()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const UsersScreen()));
               },
               child: const Text(
                 'Confirm',

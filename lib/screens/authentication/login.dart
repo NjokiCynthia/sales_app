@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/screens/dashboard/dashboard.dart';
+import 'package:petropal/widgets/buttons.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -13,8 +17,12 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   bool _isObscured = true;
 
+  TextEditingController password = TextEditingController();
+  TextEditingController emailAddress = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       body: Column(
         children: [
@@ -58,6 +66,7 @@ class _LoginState extends State<Login> {
                     SizedBox(
                       height: 48,
                       child: TextFormField(
+                        controller: emailAddress,
                         style: bodyText,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
@@ -105,6 +114,7 @@ class _LoginState extends State<Login> {
                     SizedBox(
                       height: 48,
                       child: TextFormField(
+                        controller: password,
                         style: bodyText,
                         keyboardType: TextInputType.text,
                         obscureText: _isObscured,
@@ -156,19 +166,63 @@ class _LoginState extends State<Login> {
                     const SizedBox(
                       height: 20,
                     ),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 48,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: primaryDarkColor),
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: ((context) => const Dashboard())));
-                        },
-                        child: const Text('Login'),
-                      ),
-                    ),
+                    CustomRequestButton(
+                      url: '/user/login',
+                      method: 'POST',
+                      buttonText: 'Login',
+                      body: {
+                        'email': emailAddress.text,
+                        'password': password.text,
+                      },
+                      onSuccess: (res) {
+                        print('This is my response');
+                        print(res);
+
+                        final isSuccessful = res['isSuccessful'] as bool;
+                        final data = res['data'] as Map<String, dynamic>?;
+
+                        if (isSuccessful && data != null) {
+                          final userData = data['user'] as Map<String, dynamic>;
+                          final token = data['api_token'] as String;
+
+                          final user = User(
+                            email: userData['email'].replaceAll(' ', ''),
+                            token: token,
+                            password: userData['password'],
+                          );
+
+                          userProvider.setUser(user);
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const Dashboard(),
+                            ),
+                          );
+                        } else {
+                          final error = res['error'] as String;
+                          showToast(
+                            context,
+                            'Error!',
+                            error,
+                            Colors.red,
+                          );
+                        }
+                      },
+                    )
+                    // SizedBox(
+                    //   width: double.infinity,
+                    //   height: 48,
+                    //   child: ElevatedButton(
+                    //     style: ElevatedButton.styleFrom(
+                    //         backgroundColor: primaryDarkColor),
+                    //     onPressed: () {
+                    //       Navigator.of(context).push(MaterialPageRoute(
+                    //           builder: ((context) => const Dashboard())));
+                    //     },
+                    //     child: const Text('Login'),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

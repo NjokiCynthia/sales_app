@@ -26,6 +26,12 @@ class UsersScreen extends StatefulWidget {
 class _UsersScreenState extends State<UsersScreen> {
   String? selectedusertype;
 
+  // Initial Selected Value
+  String dropdownvalue = 'Resellers';
+
+  // List of items in our dropdown menu
+  var items = ['Oil Marketing Companies', 'Resellers', 'Customers'];
+
   void showAddUserDialog() {
     showDialog(
       context: context,
@@ -50,51 +56,32 @@ class _UsersScreenState extends State<UsersScreen> {
               ),
               const SizedBox(height: 10),
               DropdownButton<String>(
-                items: const [
-                  DropdownMenuItem<String>(
-                    value: 'Oil Marketing Company',
+                value: dropdownvalue,
+                icon: const Icon(
+                  Icons.keyboard_arrow_down,
+                  color: primaryDarkColor,
+                ),
+                items: items.map((String item) {
+                  return DropdownMenuItem<String>(
+                    value: item,
                     child: Text(
-                      'Oil Marketing Company',
-                      style: TextStyle(
-                        color: primaryDarkColor,
-                      ),
+                      item,
+                      style: const TextStyle(color: primaryDarkColor),
                     ),
-                  ),
-                  DropdownMenuItem<String>(
-                    value: 'Resellers',
-                    child: Text(
-                      'Resellers',
-                      style: TextStyle(
-                        color: primaryDarkColor,
-                      ),
-                    ),
-                  ),
-                  DropdownMenuItem<String>(
-                    value: 'Customers',
-                    child: Text(
-                      'Customers',
-                      style: TextStyle(
-                        color: primaryDarkColor,
-                      ),
-                    ),
-                  ),
-                ],
-                onChanged: (newValue) {
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
                   setState(() {
-                    selectedusertype = newValue;
-                    print('this is my selected user $selectedusertype');
+                    dropdownvalue = newValue!;
                   });
                 },
-                value: selectedusertype ??
-                    'Resellers', // Set initial value to 'Resellers'
-                isExpanded: true,
-                dropdownColor: Colors.white,
-              )
+              ),
             ],
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text("Cancel", style: TextStyle(color: primaryDarkColor)),
+              child: const Text("Cancel",
+                  style: TextStyle(color: primaryDarkColor)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -165,7 +152,7 @@ class _UsersScreenState extends State<UsersScreen> {
         body: TabBarView(
           children: [
             Omcs(),
-            const Resellers(),
+            const Reseller(),
             const Customer(),
           ],
         ),
