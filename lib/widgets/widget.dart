@@ -214,81 +214,80 @@ class Resellers extends StatelessWidget {
   }
 }
 
-class Customers extends StatelessWidget {
-  const Customers({super.key});
+class Users extends StatelessWidget {
+  const Users({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: ListView.separated(
-      itemBuilder: (context, index) => Padding(
-        padding: EdgeInsets.all(5),
-        child: Divider(
-          color: Colors.grey,
-        ),
-      ),
-      separatorBuilder: ((context, index) => Card(
-            elevation: 4,
-            // Add elevation
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
+      child: ListView.builder(
+        itemBuilder: (BuildContext context, int index) => Card(
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
 
-              side: BorderSide(color: Colors.grey[300]!), // Add a BorderSide
-            ),
-            child: ListTile(
-                leading: Container(
-                  decoration: BoxDecoration(
-                    color: primaryDarkColor.withOpacity(0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  padding: const EdgeInsets.all(8),
-                  child: Image.asset(
-                    'assets/images/tanker.png',
-                    width: 25,
-                    height: 25,
-                  ),
+            side: BorderSide(color: Colors.grey[300]!), // Add a BorderSide
+          ),
+          child: ListTile(
+              leading: Container(
+                decoration: BoxDecoration(
+                  color: primaryDarkColor.withOpacity(0.1),
+                  shape: BoxShape.circle,
                 ),
-                title: Text(
-                  'Lucy and Company',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+                padding: const EdgeInsets.all(8),
+                child: Image.asset(
+                  'assets/images/tanker.png',
+                  width: 25,
+                  height: 25,
                 ),
-                subtitle: Padding(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'lucy@example.com',
-                        style: TextStyle(
-                          color: Colors.black, // Text color
+              ),
+              title: Text(
+                'Lucy and Company',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              subtitle: Padding(
+                padding: EdgeInsets.only(top: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'lucy@example.com',
+                      style: TextStyle(
+                        color: Colors.black, // Text color
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Today's price: Kes 100",
+                          style: bodyText,
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "Today's price: Kes 100",
-                        style: bodyText,
-                      )
-                    ],
-                  ),
-                )),
-          )),
-      itemCount: 6,
-    ));
-  }
-}
-
-class Pfis extends StatelessWidget {
-  const Pfis({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
+                        Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(color: primaryDarkColor),
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Padding(
+                                padding: EdgeInsets.all(5),
+                                child: Text(
+                                  'View details',
+                                  style: bodyText,
+                                )))
+                      ],
+                    )
+                  ],
+                ),
+              )),
+        ),
+        itemCount: 6,
+      ),
+    );
   }
 }
 
@@ -444,6 +443,221 @@ class Orders extends StatelessWidget {
     );
   }
 }
+
+void showCustomBottomSheet(BuildContext context) {
+  showModalBottomSheet(
+    backgroundColor: Colors.white,
+    context: context,
+    builder: (context) {
+      return SingleChildScrollView(
+        // Wrap the Column with SingleChildScrollView
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          // Remove the height property to allow the modal to take the height of its content
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Set Commison Rates for users',
+                style: m_title,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.perm_identity,
+                    color: primaryDarkColor,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Oil Marketing Companies to Resellers',
+                    style: bodyText,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                height: 48,
+                child: TextFormField(
+                  style: bodyText,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.lock),
+                    prefixIconColor: primaryDarkColor.withOpacity(0.1),
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'Enter value',
+                    labelStyle: bodyTextSmall.copyWith(color: Colors.grey),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: primaryDarkColor.withOpacity(0.1),
+                        width: 0.5,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: primaryDarkColor.withOpacity(0.1),
+                        width: 2.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: primaryDarkColor,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.perm_identity,
+                    color: primaryDarkColor,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Resellers to Customers',
+                    style: bodyText,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                height: 48,
+                child: TextFormField(
+                  style: bodyText,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.lock),
+                    prefixIconColor: primaryDarkColor.withOpacity(0.1),
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'Enter value',
+                    labelStyle: bodyTextSmall.copyWith(color: Colors.grey),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: primaryDarkColor.withOpacity(0.1),
+                        width: 0.5,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: primaryDarkColor.withOpacity(0.1),
+                        width: 2.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: primaryDarkColor,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.perm_identity,
+                    color: primaryDarkColor,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Oil Marketing Companies to Customers',
+                    style: bodyText,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                height: 48,
+                child: TextFormField(
+                  style: bodyText,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Icons.lock),
+                    prefixIconColor: primaryDarkColor.withOpacity(0.1),
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'Enter value',
+                    labelStyle: bodyTextSmall.copyWith(color: Colors.grey),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: primaryDarkColor.withOpacity(0.1),
+                        width: 0.5,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: primaryDarkColor.withOpacity(0.1),
+                        width: 2.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: primaryDarkColor,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                  height: 48,
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Confirm'),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryDarkColor),
+                  )),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
 
 
 

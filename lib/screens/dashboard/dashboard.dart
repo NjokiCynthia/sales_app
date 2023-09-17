@@ -7,6 +7,7 @@ import 'package:petropal/screens/dashboard/add_users/users.dart';
 import 'package:petropal/screens/dashboard/invoices.dart';
 import 'package:petropal/screens/dashboard/profile.dart';
 import 'package:petropal/screens/dashboard/home.dart';
+import 'package:petropal/widgets/widget.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -95,6 +96,9 @@ class _DashboardState extends State<Dashboard> {
                   ),
                   SpeedDialChild(
                     backgroundColor: Colors.white,
+                    onTap: () {
+                      showCustomBottomSheet(context);
+                    },
                     child: Icon(
                       Icons.money_off_csred_sharp,
                       color: primaryDarkColor,

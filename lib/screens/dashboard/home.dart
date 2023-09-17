@@ -2,6 +2,7 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/screens/dashboard/view_users/customer.dart';
 import 'package:petropal/widgets/widget.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -35,10 +36,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   List<String> titles = ['Petrol', 'Diesel', 'Kerosene'];
   List<String> card_titles = [
     'Transactions',
-    'Resellers',
-    'Customers',
-    'Oil Marketing Companies',
-    'Orders'
+    'Products',
+    'Orders',
+    'Users',
   ];
 
   int selectedCardIndex = 0;
@@ -201,7 +201,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         SizedBox(
                           height: 140,
                           child: ListView.builder(
-                            itemCount: 5,
+                            itemCount: 4,
                             scrollDirection: Axis.horizontal,
                             itemBuilder: ((context, index) => GestureDetector(
                                   onTap: () {
@@ -315,15 +315,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
       case 0:
         return Transactions();
       case 1:
+        //return Products();
         return Resellers();
       case 2:
-        return Customers();
+        return Orders();
 
       case 3:
-        return Omcs();
-
-      case 4:
-        return Orders();
+        return Users();
 
       default:
         return Container(); // Return an empty container by default
