@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/color_contants.dart';
+import 'package:petropal/constants/theme.dart';
 import 'package:petropal/screens/dashboard/add_users/users.dart';
 import 'package:petropal/screens/dashboard/invoices.dart';
 import 'package:petropal/screens/dashboard/profile.dart';
@@ -15,6 +17,7 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   PersistentTabController? _bottomNavigationController;
+
   @override
   void initState() {
     super.initState();
@@ -26,7 +29,6 @@ class _DashboardState extends State<Dashboard> {
     return [
       const DashboardScreen(),
       const Invoices(),
-      //LineChartWidget(),
       const UsersScreen(),
       const Profile(),
     ];
@@ -42,19 +44,19 @@ class _DashboardState extends State<Dashboard> {
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.assignment),
-        title: ("Invoices"),
+        title: ("Products"),
         activeColorPrimary: primaryDarkColor,
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.people),
-        title: ("Users"),
+        title: ("Orders"),
         activeColorPrimary: primaryDarkColor,
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.person),
-        title: ("Profile"),
+        title: ("Settings"),
         activeColorPrimary: primaryDarkColor,
         inactiveColorPrimary: Colors.grey,
       ),
@@ -64,32 +66,48 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PersistentTabView(
-        context,
-        controller: _bottomNavigationController,
-        screens: _buildScreens(),
-        items: _navBarsItems(),
-        confineInSafeArea: true,
-        backgroundColor: Colors.white,
-        handleAndroidBackButtonPress: true,
-        resizeToAvoidBottomInset: true,
-        stateManagement: true,
-        hideNavigationBarWhenKeyboardShows: true,
-        decoration: const NavBarDecoration(
-          colorBehindNavBar: Colors.white,
-        ),
-        popAllScreensOnTapOfSelectedTab: true,
-        popActionScreens: PopActionScreensType.all,
-        itemAnimationProperties: const ItemAnimationProperties(
-          duration: Duration(milliseconds: 200),
-          curve: Curves.ease,
-        ),
-        screenTransitionAnimation: const ScreenTransitionAnimation(
-          animateTabTransition: true,
-          curve: Curves.ease,
-          duration: Duration(milliseconds: 200),
-        ),
-        navBarStyle: NavBarStyle.style1,
+      body: Stack(
+        children: [
+          PersistentTabView(
+            context,
+            controller: _bottomNavigationController,
+            screens: _buildScreens(),
+            items: _navBarsItems(),
+            // ... other properties for PersistentTabView
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 40.0, right: 16.0),
+              child: SpeedDial(
+                backgroundColor: primaryDarkColor.withOpacity(0.6),
+                animatedIcon: AnimatedIcons.menu_close,
+                children: [
+                  SpeedDialChild(
+                    backgroundColor: Colors.white,
+                    child: Icon(
+                      Icons.people,
+                      color: primaryDarkColor,
+                    ),
+                    label: 'Users',
+                    labelBackgroundColor: Colors.white,
+                    labelStyle: bodyText.copyWith(color: primaryDarkColor),
+                  ),
+                  SpeedDialChild(
+                    backgroundColor: Colors.white,
+                    child: Icon(
+                      Icons.money_off_csred_sharp,
+                      color: primaryDarkColor,
+                    ),
+                    label: 'Commission rates',
+                    labelBackgroundColor: Colors.white,
+                    labelStyle: bodyText.copyWith(color: primaryDarkColor),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

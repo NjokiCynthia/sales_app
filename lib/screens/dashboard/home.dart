@@ -189,7 +189,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
                   Text(
-                    'Transactions',
+                    'Summary',
                     style: m_title,
                   ),
                   SizedBox(

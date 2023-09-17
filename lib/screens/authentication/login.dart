@@ -166,63 +166,63 @@ class _LoginState extends State<Login> {
                     const SizedBox(
                       height: 20,
                     ),
-                    CustomRequestButton(
-                      url: '/user/login',
-                      method: 'POST',
-                      buttonText: 'Login',
-                      body: {
-                        'email': emailAddress.text,
-                        'password': password.text,
-                      },
-                      onSuccess: (res) {
-                        print('This is my response');
-                        print(res);
+                    // CustomRequestButton(
+                    //   url: '/user/login',
+                    //   method: 'POST',
+                    //   buttonText: 'Login',
+                    //   body: {
+                    //     'email': emailAddress.text,
+                    //     'password': password.text,
+                    //   },
+                    //   onSuccess: (res) {
+                    //     print('This is my response');
+                    //     print(res);
 
-                        final isSuccessful = res['isSuccessful'] as bool;
-                        final data = res['data'] as Map<String, dynamic>?;
+                    //     final isSuccessful = res['isSuccessful'] as bool;
+                    //     final data = res['data'] as Map<String, dynamic>?;
 
-                        if (isSuccessful && data != null) {
-                          final userData = data['user'] as Map<String, dynamic>;
-                          final token = data['api_token'] as String;
+                    //     if (isSuccessful && data != null) {
+                    //       final userData = data['user'] as Map<String, dynamic>;
+                    //       final token = data['api_token'] as String;
 
-                          final user = User(
-                            email: userData['email'].replaceAll(' ', ''),
-                            token: token,
-                            password: userData['password'],
-                          );
+                    //       final user = User(
+                    //         email: userData['email'].replaceAll(' ', ''),
+                    //         token: token,
+                    //         password: userData['password'],
+                    //       );
 
-                          userProvider.setUser(user);
+                    //       userProvider.setUser(user);
 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const Dashboard(),
-                            ),
-                          );
-                        } else {
-                          final error = res['error'] as String;
-                          showToast(
-                            context,
-                            'Error!',
-                            error,
-                            Colors.red,
-                          );
-                        }
-                      },
-                    )
-                    // SizedBox(
-                    //   width: double.infinity,
-                    //   height: 48,
-                    //   child: ElevatedButton(
-                    //     style: ElevatedButton.styleFrom(
-                    //         backgroundColor: primaryDarkColor),
-                    //     onPressed: () {
-                    //       Navigator.of(context).push(MaterialPageRoute(
-                    //           builder: ((context) => const Dashboard())));
-                    //     },
-                    //     child: const Text('Login'),
-                    //   ),
-                    // ),
+                    //       Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //           builder: (context) => const Dashboard(),
+                    //         ),
+                    //       );
+                    //     } else {
+                    //       final error = res['error'] as String;
+                    //       showToast(
+                    //         context,
+                    //         'Error!',
+                    //         error,
+                    //         Colors.red,
+                    //       );
+                    //     }
+                    //   },
+                    // )
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: primaryDarkColor),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: ((context) => const Dashboard())));
+                        },
+                        child: const Text('Login'),
+                      ),
+                    ),
                   ],
                 ),
               ),
