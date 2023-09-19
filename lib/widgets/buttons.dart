@@ -176,7 +176,7 @@ class _CustomRequestButtonState extends State<CustomRequestButton> {
           alignment: Alignment.center,
           padding: const EdgeInsets.all(15),
           child: isLoading
-              ? SpinKitThreeBounce(
+              ? const SpinKitThreeBounce(
                   color: Colors.white,
                 )
               : Text(

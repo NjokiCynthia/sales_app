@@ -105,6 +105,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       ),
                                       DropdownButton<String>(
                                         value: dropdownvalue,
+                                        dropdownColor: Colors.white,
                                         icon: const Icon(
                                           Icons.keyboard_arrow_down,
                                           color: primaryDarkColor,
@@ -131,10 +132,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     height: 150,
                                     child: SfCartesianChart(
                                         primaryXAxis: CategoryAxis(
+                                          // isVisible: false,
                                           labelStyle: const TextStyle(
                                               color: primaryDarkColor),
                                         ),
                                         primaryYAxis: NumericAxis(
+                                          // isVisible: false,
                                           labelStyle: const TextStyle(
                                               color:
                                                   primaryDarkColor), // Y-axis labels color
@@ -192,7 +195,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     'Summary',
                     style: m_title,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   SingleChildScrollView(
@@ -215,33 +218,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     width: 200,
                                     margin: const EdgeInsets.all(5),
                                     decoration: BoxDecoration(
-                                      border:
-                                          Border.all(color: primaryDarkColor),
+                                      // border:
+                                      //     Border.all(color: primaryDarkColor),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: Card(
+                                      elevation: 4,
                                       color: Colors.white,
                                       child: Padding(
-                                        padding: EdgeInsets.all(10),
+                                        padding: const EdgeInsets.all(10),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              card_titles[index],
+                                              'Total ${card_titles[index]}',
                                               style: bodyText,
                                             ),
-                                            RichText(
-                                              text: TextSpan(children: [
-                                                TextSpan(
-                                                    text: '1000',
-                                                    style: m_title),
-                                                TextSpan(
-                                                    text: 'total',
-                                                    style: displaySmall),
-                                              ]),
+                                            Text(
+                                              '1000',
+                                              style: m_title,
+                                            ),
+                                            // RichText(
+                                            //   text: TextSpan(children: [
+                                            //     TextSpan(
+                                            //         text: '1000',
+                                            //         style: m_title),
+                                            //     TextSpan(
+                                            //         text: 'total',
+                                            //         style: displaySmall),
+                                            //   ]),
+                                            // ),
+                                            SizedBox(
+                                              height: 10,
                                             ),
                                             Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Column(
                                                   crossAxisAlignment:
@@ -261,24 +275,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                     ),
                                                   ],
                                                 ),
-                                                SizedBox(
+                                                const SizedBox(
                                                   width: 10,
                                                 ),
                                                 Column(
                                                   crossAxisAlignment:
-                                                      CrossAxisAlignment.end,
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      'Kes 5000',
-                                                      style: bodyTextSmall,
+                                                      'Kes 5,000',
+                                                      style: displayTitle,
                                                     ),
                                                     Text(
                                                       '700',
-                                                      style: bodyTextSmall,
+                                                      style: displayTitle,
                                                     ),
                                                     Text(
                                                       '300',
-                                                      style: bodyTextSmall,
+                                                      style: displayTitle,
                                                     ),
                                                   ],
                                                 ),
@@ -295,13 +309,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Text(
-                    'Orders',
+                    card_titles[selectedCardIndex],
                     style: m_title,
                   ),
+
                   getWidgetForCard(selectedCardIndex),
                 ])),
       ),
@@ -313,18 +328,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
     print(index);
     switch (index) {
       case 0:
-        return Transactions();
+        return const Transactions();
       case 1:
-        //return Products();
-        return Resellers();
+        return const Products();
+      // return const Resellers();
       case 2:
-        return Orders();
+        return const Orders();
 
       case 3:
-        return Users();
+        return const Users();
 
       default:
-        return Container(); // Return an empty container by default
+        return Container();
     }
   }
 }

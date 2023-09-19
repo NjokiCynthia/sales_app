@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:petropal/constants/color_contants.dart';
@@ -15,6 +16,19 @@ class _AddOMCState extends State<AddOMC> {
   String initialCountry = 'KE';
 
   PhoneNumber number = PhoneNumber(isoCode: 'KE');
+  Future<void> openFilePicker() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      // Handle the selected file here
+      PlatformFile file = result.files.first;
+      print('File Name: ${file.name}');
+      print('File Size: ${file.size}');
+      // You can upload the file to your server or perform other actions.
+    } else {
+      // User canceled the file picker
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -222,17 +236,20 @@ class _AddOMCState extends State<AddOMC> {
         const SizedBox(
           height: 10,
         ),
-        Container(
-          width: 150, // Set the desired width
-          padding: const EdgeInsets.all(10), // Adjust the padding as needed
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(10), // Grey border
-          ),
-          child: Center(
-            child: Text(
-              'Upload',
-              style: bodyText,
+        GestureDetector(
+          onTap: openFilePicker,
+          child: Container(
+            width: 150, // Set the desired width
+            padding: const EdgeInsets.all(10), // Adjust the padding as needed
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(10), // Grey border
+            ),
+            child: Center(
+              child: Text(
+                'Upload',
+                style: bodyText,
+              ),
             ),
           ),
         ),

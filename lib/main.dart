@@ -10,7 +10,7 @@ void main() {
       providers: [
         ChangeNotifierProvider<UserProvider>.value(value: UserProvider()),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }

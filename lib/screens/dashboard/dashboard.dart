@@ -4,6 +4,8 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/screens/dashboard/add_users/users.dart';
+
+import 'package:petropal/screens/dashboard/all_orders.dart';
 import 'package:petropal/screens/dashboard/invoices.dart';
 import 'package:petropal/screens/dashboard/profile.dart';
 import 'package:petropal/screens/dashboard/home.dart';
@@ -30,7 +32,7 @@ class _DashboardState extends State<Dashboard> {
     return [
       const DashboardScreen(),
       const Invoices(),
-      const UsersScreen(),
+      const AllOrders(),
       const Profile(),
     ];
   }
@@ -50,13 +52,13 @@ class _DashboardState extends State<Dashboard> {
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.people),
+        icon: const Icon(Icons.online_prediction_rounded),
         title: ("Orders"),
         activeColorPrimary: primaryDarkColor,
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.person),
+        icon: const Icon(Icons.settings),
         title: ("Settings"),
         activeColorPrimary: primaryDarkColor,
         inactiveColorPrimary: Colors.grey,
@@ -86,7 +88,13 @@ class _DashboardState extends State<Dashboard> {
                 children: [
                   SpeedDialChild(
                     backgroundColor: Colors.white,
-                    child: Icon(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: ((context) => const UsersScreen())));
+                    },
+                    child: const Icon(
                       Icons.people,
                       color: primaryDarkColor,
                     ),
@@ -99,7 +107,7 @@ class _DashboardState extends State<Dashboard> {
                     onTap: () {
                       showCustomBottomSheet(context);
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.money_off_csred_sharp,
                       color: primaryDarkColor,
                     ),

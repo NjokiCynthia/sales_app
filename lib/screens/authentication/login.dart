@@ -36,25 +36,29 @@ class _LoginState extends State<Login> {
                   children: [
                     Container(
                       margin: const EdgeInsets.only(bottom: 40),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(right: 10),
-                            child: Image.asset(
-                              'assets/images/icons/petropal_logo.png',
-                              width: 40,
-                            ),
-                          ),
-                          Text(
-                            'Petropal',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .copyWith(color: Colors.black),
-                          )
-                        ],
+                      child: Image.asset(
+                        'assets/images/icons/petropal_logo.png',
+                        width: 200,
                       ),
+                      // child: Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     Container(
+                      //       margin: const EdgeInsets.only(right: 10),
+                      //       child: Image.asset(
+                      //         'assets/images/icons/petropal_logo.png',
+                      //         width: 40,
+                      //       ),
+                      //     ),
+                      //     // Text(
+                      //     //   'Petropal',
+                      //     //   style: Theme.of(context)
+                      //     //       .textTheme
+                      //     //       .titleLarge!
+                      //     //       .copyWith(color: Colors.black),
+                      //     // )
+                      //   ],
+                      // ),
                     ),
                     // Text(
                     //   'Enter email address',

@@ -29,8 +29,8 @@ class _AddUsersState extends State<AddUsers> {
                   children: [
                     const SizedBox(height: 20),
                     Text(
-                      widget.selectedUserType == 'Oil Marketing Company'
-                          ? 'Add Oil Marketing Company'
+                      widget.selectedUserType == 'Oil Marketing Companies'
+                          ? 'Add Oil Marketing Companies'
                           : widget.selectedUserType == 'Resellers'
                               ? 'Add New Resellers'
                               : 'Add New Customers',
@@ -39,7 +39,7 @@ class _AddUsersState extends State<AddUsers> {
                     const SizedBox(
                       height: 20,
                     ),
-                    if (widget.selectedUserType == 'Oil Marketing Company')
+                    if (widget.selectedUserType == 'Oil Marketing Companies')
                       const AddOMC()
                     else if (widget.selectedUserType == 'Resellers')
                       const AddReseller()

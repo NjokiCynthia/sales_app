@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/screens/dashboard/approve_prices.dart';
 
 class CustomTransactionCard extends StatelessWidget {
-  final String userName;
-  final String amount;
-  final String paymentMethod;
-  final String date;
-  final String volume;
+  // final String userName;
+  // final String amount;
+  // final String paymentMethod;
+  // final String date;
+  // final String volume;
 
-  const CustomTransactionCard({
-    super.key,
-    required this.userName,
-    required this.amount,
-    required this.paymentMethod,
-    required this.date,
-    required this.volume,
-  });
+  // const CustomTransactionCard({
+  //   super.key,
+  //   required this.userName,
+  //   required this.amount,
+  //   required this.paymentMethod,
+  //   required this.date,
+  //   required this.volume,
+  // });
 
   @override
   Widget build(BuildContext context) {
@@ -34,41 +35,53 @@ class CustomTransactionCard extends StatelessWidget {
             // Replace with your icon or image widget
             child: const Icon(Icons.attach_money, color: primaryDarkColor),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('National Oil', style: bodyText),
-                Text('#2342 | 2/10/2023', style: bodyText),
-                const SizedBox(
-                  height: 10,
+                Text('National Oil', style: m_title),
+
+                //Text('Ngong Road', style: bodyText),
+                Text(
+                  'Diesel',
+                  style: bodyText,
                 ),
-                Text('Ngong Road', style: bodyText),
+                Text(
+                  'Petrol',
+                  style: bodyText,
+                ),
+                Text(
+                  'Kerosene',
+                  style: bodyText,
+                ),
               ],
             ),
           ),
           Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Kes 500,000',
+                '2/10/2023',
+                style: m_title,
+              ),
+              Text(
+                'Kes 200',
+                style: bodyText,
+                // TextStyle(fontSize: 16, color: Colors.black),
+              ),
+              Text(
+                'Kes 211',
+                style: bodyText,
+                // TextStyle(fontSize: 16, color: Colors.black),
+              ),
+              Text(
+                'Kes 193',
                 style: bodyText,
                 // TextStyle(fontSize: 16, color: Colors.black),
               ),
               const SizedBox(
                 height: 20,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(5),
-                  color: Colors.greenAccent.withOpacity(0.1),
-                ),
-                child: Text(
-                  'Pending',
-                  style: bodyText.copyWith(color: Colors.greenAccent),
-                ),
               ),
             ],
           ),
@@ -78,150 +91,15 @@ class CustomTransactionCard extends StatelessWidget {
   }
 }
 
-class Omcs extends StatelessWidget {
-  const Omcs({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-        child: ListView.separated(
-      itemBuilder: (context, index) => Padding(
-        padding: EdgeInsets.all(5),
-        child: Divider(
-          color: Colors.grey,
-        ),
-      ),
-      separatorBuilder: ((context, index) => Card(
-            elevation: 4,
-            // Add elevation
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-
-              side: BorderSide(color: Colors.grey[300]!), // Add a BorderSide
-            ),
-            child: ListTile(
-                leading: Container(
-                  decoration: BoxDecoration(
-                    color: primaryDarkColor.withOpacity(0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  padding: const EdgeInsets.all(8),
-                  child: Image.asset(
-                    'assets/images/fuel-station.png',
-                    width: 20,
-                    height: 20,
-                  ),
-                ),
-                title: Text(
-                  'Lucy and Company',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                subtitle: Padding(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'lucy@example.com',
-                        style: TextStyle(
-                          color: Colors.black, // Text color
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "Today's price: Kes 100",
-                        style: bodyText,
-                      )
-                    ],
-                  ),
-                )),
-          )),
-      itemCount: 6,
-    ));
-  }
-}
-
 class Resellers extends StatelessWidget {
   const Resellers({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: ListView.separated(
-      itemBuilder: (context, index) => Padding(
-        padding: EdgeInsets.all(5),
-        child: Divider(
-          color: Colors.grey,
-        ),
-      ),
-      separatorBuilder: ((context, index) => Card(
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-
-              side: BorderSide(color: Colors.grey[300]!), // Add a BorderSide
-            ),
-            child: ListTile(
-                leading: Container(
-                  decoration: BoxDecoration(
-                    color: primaryDarkColor.withOpacity(0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  padding: const EdgeInsets.all(8),
-                  child: Image.asset(
-                    'assets/images/reseller.png',
-                    width: 20,
-                    height: 20,
-                  ),
-                ),
-                title: Text(
-                  'Lucy and Company',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                subtitle: Padding(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'lucy@example.com',
-                        style: TextStyle(
-                          color: Colors.black, // Text color
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "Today's price: Kes 100",
-                        style: bodyText,
-                      )
-                    ],
-                  ),
-                )),
-          )),
-      itemCount: 6,
-    ));
-  }
-}
-
-class Users extends StatelessWidget {
-  const Users({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.builder(
-        itemBuilder: (BuildContext context, int index) => Card(
+    return ListView.builder(
+      itemBuilder: (BuildContext context, int index) => Padding(
+        padding: const EdgeInsets.all(5),
+        child: Card(
           color: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
@@ -241,7 +119,7 @@ class Users extends StatelessWidget {
                   height: 25,
                 ),
               ),
-              title: Text(
+              title: const Text(
                 'Lucy and Company',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -249,17 +127,17 @@ class Users extends StatelessWidget {
                 ),
               ),
               subtitle: Padding(
-                padding: EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.only(top: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'lucy@example.com',
                       style: TextStyle(
                         color: Colors.black, // Text color
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Row(
@@ -269,24 +147,292 @@ class Users extends StatelessWidget {
                           "Today's price: Kes 100",
                           style: bodyText,
                         ),
-                        Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(color: primaryDarkColor),
-                                borderRadius: BorderRadius.circular(5)),
-                            child: Padding(
-                                padding: EdgeInsets.all(5),
-                                child: Text(
-                                  'View details',
-                                  style: bodyText,
-                                )))
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: Text('View details'),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  primaryDarkColor.withOpacity(0.6)),
+                        )
+                        // Container(
+                        //     decoration: BoxDecoration(
+                        //         border: Border.all(color: primaryDarkColor),
+                        //         borderRadius: BorderRadius.circular(5)),
+                        //     child: Padding(
+                        //         padding: const EdgeInsets.all(5),
+                        //         child: Text(
+                        //           'View details',
+                        //           style: bodyText,
+                        //         )))
                       ],
                     )
                   ],
                 ),
               )),
         ),
-        itemCount: 6,
       ),
+      itemCount: 6,
+    );
+  }
+}
+
+class Customers extends StatelessWidget {
+  const Customers({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemBuilder: (BuildContext context, int index) => Padding(
+        padding: const EdgeInsets.all(5),
+        child: Card(
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+
+            side: BorderSide(color: Colors.grey[300]!), // Add a BorderSide
+          ),
+          child: ListTile(
+              leading: Container(
+                decoration: BoxDecoration(
+                  color: primaryDarkColor.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                padding: const EdgeInsets.all(8),
+                child: Image.asset(
+                  'assets/images/customer.png',
+                  width: 25,
+                  height: 25,
+                ),
+              ),
+              title: const Text(
+                'Lucy and Company',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              subtitle: Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'lucy@example.com',
+                      style: TextStyle(
+                        color: Colors.black, // Text color
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Today's price: Kes 100",
+                          style: bodyText,
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: Text('View details'),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  primaryDarkColor.withOpacity(0.6)),
+                        )
+                        // Container(
+                        //     decoration: BoxDecoration(
+                        //         border: Border.all(color: primaryDarkColor),
+                        //         borderRadius: BorderRadius.circular(5)),
+                        //     child: Padding(
+                        //         padding: const EdgeInsets.all(5),
+                        //         child: Text(
+                        //           'View details',
+                        //           style: bodyText,
+                        //         )))
+                      ],
+                    )
+                  ],
+                ),
+              )),
+        ),
+      ),
+      itemCount: 6,
+    );
+  }
+}
+
+class Users extends StatelessWidget {
+  const Users({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        child: ListView.builder(
+          itemBuilder: (BuildContext context, int index) => Card(
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+
+              side: BorderSide(color: Colors.grey[300]!), // Add a BorderSide
+            ),
+            child: ListTile(
+                leading: Container(
+                  decoration: BoxDecoration(
+                    color: primaryDarkColor.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  padding: const EdgeInsets.all(8),
+                  child: Image.asset(
+                    'assets/images/tanker.png',
+                    width: 25,
+                    height: 25,
+                  ),
+                ),
+                title: const Text(
+                  'Lucy and Company',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                subtitle: Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'lucy@example.com',
+                        style: TextStyle(
+                          color: Colors.black, // Text color
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Today's price: Kes 100",
+                            style: bodyText,
+                          ),
+                          ElevatedButton(
+                            onPressed: () {},
+                            child: Text('View details'),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    primaryDarkColor.withOpacity(0.6)),
+                          )
+                          // Container(
+                          //     decoration: BoxDecoration(
+                          //         border: Border.all(color: primaryDarkColor),
+                          //         borderRadius: BorderRadius.circular(5)),
+                          //     child: Padding(
+                          //         padding: const EdgeInsets.all(5),
+                          //         child: Text(
+                          //           'View details',
+                          //           style: bodyText,
+                          //         )))
+                        ],
+                      )
+                    ],
+                  ),
+                )),
+          ),
+          itemCount: 6,
+        ),
+      ),
+    );
+  }
+}
+
+class Omcs extends StatelessWidget {
+  const Omcs({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemBuilder: (BuildContext context, int index) => Padding(
+        padding: const EdgeInsets.all(5),
+        child: Card(
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+
+            side: BorderSide(color: Colors.grey[300]!), // Add a BorderSide
+          ),
+          child: ListTile(
+              leading: Container(
+                decoration: BoxDecoration(
+                  color: primaryDarkColor.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                padding: const EdgeInsets.all(8),
+                child: Image.asset(
+                  'assets/images/fuel-station.png',
+                  width: 25,
+                  height: 25,
+                ),
+              ),
+              title: const Text(
+                'Lucy and Company',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              subtitle: Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'lucy@example.com',
+                      style: TextStyle(
+                        color: Colors.black, // Text color
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Today's price: Kes 100",
+                          style: bodyText,
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ApprovePricing()));
+                          },
+                          child: Text('View details'),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  primaryDarkColor.withOpacity(0.6)),
+                        )
+                        // Container(
+                        //     decoration: BoxDecoration(
+                        //         border: Border.all(color: primaryDarkColor),
+                        //         borderRadius: BorderRadius.circular(5)),
+                        //     child: Padding(
+                        //         padding: const EdgeInsets.all(5),
+                        //         child: Text(
+                        //           'View details',
+                        //           style: bodyText,
+                        //         )))
+                      ],
+                    )
+                  ],
+                ),
+              )),
+        ),
+      ),
+      itemCount: 6,
     );
   }
 }
@@ -298,7 +444,7 @@ class Transactions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: ListView.separated(
-          itemBuilder: (context, index) => Padding(
+          itemBuilder: (context, index) => const Padding(
                 padding: EdgeInsets.all(0),
                 child: Divider(
                   color: Colors.grey,
@@ -317,35 +463,31 @@ class Transactions extends StatelessWidget {
                         color: primaryDarkColor,
                       ),
                     ),
-                    title: Container(
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Shell Limited',
-                              //textScaleFactor: 1.5,
-                              style: displayTitle,
-                            ),
-                            Text(
-                              'Kes 5000',
-                              style: displayTitle,
-                            )
-                          ]),
-                    ),
-                    subtitle: Container(
-                      child: Row(
+                    title: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Payment for kerosene',
-                            style: bodyTextSmall,
+                            'Shell Limited',
+                            //textScaleFactor: 1.5,
+                            style: displayTitle,
                           ),
                           Text(
-                            '12 Sept 2023',
-                            style: displaySmallerLightGrey,
+                            'Kes 5000',
+                            style: displayTitle,
                           )
-                        ],
-                      ),
+                        ]),
+                    subtitle: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Payment for kerosene',
+                          style: bodyTextSmall,
+                        ),
+                        Text(
+                          '12 Sept 2023',
+                          style: displaySmallerLightGrey,
+                        )
+                      ],
                     )),
               )),
           itemCount: 6),
@@ -360,13 +502,13 @@ class Orders extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: ListView.separated(
-          itemBuilder: (context, index) => Padding(
+          itemBuilder: (context, index) => const Padding(
                 padding: EdgeInsets.all(5),
                 child: Divider(
                   color: Colors.grey,
                 ),
               ),
-          separatorBuilder: ((context, index) => Container(
+          separatorBuilder: ((context, index) => SizedBox(
                 height: 50,
                 child: ListTile(
                     leading: Container(
@@ -394,8 +536,8 @@ class Orders extends StatelessWidget {
                                 color: Colors.greenAccent.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(8)),
                             child: Padding(
-                              padding:
-                                  EdgeInsets.only(left: 4, right: 4, bottom: 4),
+                              padding: const EdgeInsets.only(
+                                  left: 4, right: 4, bottom: 4),
                               child: Text(
                                 'Pending',
                                 style: bodySmall.copyWith(color: Colors.green),
@@ -444,6 +586,104 @@ class Orders extends StatelessWidget {
   }
 }
 
+class Products extends StatelessWidget {
+  const Products({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final List<String> productTitles = [
+      'Petrol',
+      'Kerosene',
+      'Diesel',
+      'Diesel'
+    ];
+
+    return Expanded(
+      child: ListView.separated(
+        itemBuilder: (context, index) {
+          final productTitle = productTitles[index]; // Get the product title
+          return Padding(
+            padding: const EdgeInsets.all(5),
+            child: Divider(
+              color: Colors.grey,
+            ),
+          );
+        },
+        separatorBuilder: ((context, index) => SizedBox(
+              child: ListTile(
+                leading: Container(
+                    decoration: BoxDecoration(
+                      color: primaryDarkColor.withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    child: Image.asset('assets/images/petrol.png')
+                    //  const Icon(
+                    //   Icons.money_off,
+                    //   color: primaryDarkColor,
+                    // ),
+                    ),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      productTitles[index], // Use the product title here
+                      style: displayTitle,
+                    ),
+                    Text(
+                      'Kes 50,000',
+                      style: displayTitle,
+                    )
+                  ],
+                ),
+                subtitle: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Current price:',
+                          style: bodyText,
+                        ),
+                        Text(
+                          '1000 litres ${productTitles[index].toLowerCase()}', // Use the product title here
+                          style: bodyTextSmall,
+                        ),
+                        Text(
+                          'Commission generated',
+                          style: bodyTextSmall,
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Kes 200',
+                          style: bodyText,
+                        ),
+                        Text(
+                          '12 Sept 2023',
+                          style: displaySmallerLightGrey,
+                        ),
+                        Text(
+                          'Kes 5000',
+                          style: displaySmallerLightGrey,
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            )),
+        itemCount:
+            productTitles.length, // Use the length of the productTitles list
+      ),
+    );
+  }
+}
+
 void showCustomBottomSheet(BuildContext context) {
   showModalBottomSheet(
     backgroundColor: Colors.white,
@@ -465,14 +705,21 @@ void showCustomBottomSheet(BuildContext context) {
                 'Set Commison Rates for users',
                 style: m_title,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(
                 children: [
-                  const Icon(
-                    Icons.perm_identity,
-                    color: primaryDarkColor,
+                  Container(
+                    decoration: BoxDecoration(
+                      color: primaryDarkColor.withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    child: const Icon(
+                      Icons.monetization_on,
+                      color: primaryDarkColor,
+                    ),
                   ),
                   const SizedBox(
                     width: 10,
@@ -483,7 +730,7 @@ void showCustomBottomSheet(BuildContext context) {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               SizedBox(
@@ -492,8 +739,6 @@ void showCustomBottomSheet(BuildContext context) {
                   style: bodyText,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.lock),
-                    prefixIconColor: primaryDarkColor.withOpacity(0.1),
                     filled: true,
                     fillColor: Colors.white,
                     labelText: 'Enter value',
@@ -522,14 +767,21 @@ void showCustomBottomSheet(BuildContext context) {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(
                 children: [
-                  const Icon(
-                    Icons.perm_identity,
-                    color: primaryDarkColor,
+                  Container(
+                    decoration: BoxDecoration(
+                      color: primaryDarkColor.withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    child: const Icon(
+                      Icons.monetization_on,
+                      color: primaryDarkColor,
+                    ),
                   ),
                   const SizedBox(
                     width: 10,
@@ -540,7 +792,7 @@ void showCustomBottomSheet(BuildContext context) {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               SizedBox(
@@ -549,8 +801,6 @@ void showCustomBottomSheet(BuildContext context) {
                   style: bodyText,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.lock),
-                    prefixIconColor: primaryDarkColor.withOpacity(0.1),
                     filled: true,
                     fillColor: Colors.white,
                     labelText: 'Enter value',
@@ -579,14 +829,21 @@ void showCustomBottomSheet(BuildContext context) {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(
                 children: [
-                  const Icon(
-                    Icons.perm_identity,
-                    color: primaryDarkColor,
+                  Container(
+                    decoration: BoxDecoration(
+                      color: primaryDarkColor.withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    child: const Icon(
+                      Icons.monetization_on,
+                      color: primaryDarkColor,
+                    ),
                   ),
                   const SizedBox(
                     width: 10,
@@ -597,7 +854,7 @@ void showCustomBottomSheet(BuildContext context) {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               SizedBox(
@@ -606,8 +863,6 @@ void showCustomBottomSheet(BuildContext context) {
                   style: bodyText,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.lock),
-                    prefixIconColor: primaryDarkColor.withOpacity(0.1),
                     filled: true,
                     fillColor: Colors.white,
                     labelText: 'Enter value',
@@ -636,7 +891,7 @@ void showCustomBottomSheet(BuildContext context) {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               SizedBox(
@@ -646,9 +901,9 @@ void showCustomBottomSheet(BuildContext context) {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('Confirm'),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: primaryDarkColor),
+                    child: const Text('Confirm'),
                   )),
             ],
           ),

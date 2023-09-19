@@ -15,7 +15,7 @@ class _InvoicesState extends State<Invoices> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Proforma Invoices',
+          'Product prices',
           style: displayBigBoldBlack,
         ),
         backgroundColor: Colors.white,
@@ -32,12 +32,12 @@ class _InvoicesState extends State<Invoices> {
         itemBuilder: (context, index) {
           // Customize the data for each item here
           return CustomTransactionCard(
-            userName: 'User $index',
-            amount: '\$100',
-            paymentMethod: 'Payment Method $index',
-            date: '5th September 2023',
-            volume: 'Volume $index',
-          );
+              // userName: 'User $index',
+              // amount: '\$100',
+              // paymentMethod: 'Payment Method $index',
+              // date: '5th September 2023',
+              // volume: 'Volume $index',
+              );
         },
       ),
     );

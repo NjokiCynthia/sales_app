@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/screens/dashboard/add_users/add_users.dart';
-import 'package:petropal/screens/dashboard/view_users/customer.dart';
-import 'package:petropal/screens/dashboard/view_users/omc.dart';
-import 'package:petropal/screens/dashboard/view_users/reseller.dart';
+import 'package:petropal/screens/dashboard/approve_users.dart';
+import 'package:petropal/widgets/widget.dart';
 
 class User {
   final String name;
@@ -24,10 +23,7 @@ class UsersScreen extends StatefulWidget {
 }
 
 class _UsersScreenState extends State<UsersScreen> {
-  String? selectedusertype;
-
-  // Initial Selected Value
-  String dropdownvalue = 'Resellers';
+  String selectedusertype = 'Resellers';
 
   // List of items in our dropdown menu
   var items = ['Oil Marketing Companies', 'Resellers', 'Customers'];
@@ -56,7 +52,9 @@ class _UsersScreenState extends State<UsersScreen> {
               ),
               const SizedBox(height: 10),
               DropdownButton<String>(
-                value: dropdownvalue,
+                focusColor: Colors.white,
+                dropdownColor: Colors.white,
+                value: selectedusertype, // Use selectedusertype as the value
                 icon: const Icon(
                   Icons.keyboard_arrow_down,
                   color: primaryDarkColor,
@@ -72,7 +70,7 @@ class _UsersScreenState extends State<UsersScreen> {
                 }).toList(),
                 onChanged: (String? newValue) {
                   setState(() {
-                    dropdownvalue = newValue!;
+                    selectedusertype = newValue ?? 'Resellers';
                   });
                 },
               ),
@@ -92,14 +90,14 @@ class _UsersScreenState extends State<UsersScreen> {
                 style: TextStyle(color: primaryDarkColor),
               ),
               onPressed: () {
-                // Perform the action when the "Add" button is pressed
-
-                print("Selected User Type: $selectedusertype");
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: ((context) =>
-                          AddUsers(selectedUserType: selectedusertype))),
-                );
+                if (selectedusertype != null) {
+                  print("Selected User Type: $selectedusertype");
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: ((context) =>
+                            AddUsers(selectedUserType: selectedusertype))),
+                  );
+                }
                 // Close the dialog
               },
             ),
@@ -107,6 +105,119 @@ class _UsersScreenState extends State<UsersScreen> {
         );
       },
     );
+  }
+
+  void showBottomSheet() {
+    showModalBottomSheet(
+        backgroundColor: Colors.white,
+        context: context,
+        builder: ((context) {
+          return Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  'Choose your preferred actions',
+                  style: m_title,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    GestureDetector(
+                      onTap: showAddUserDialog,
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: primaryDarkColor.withOpacity(0.1)),
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Column(children: [
+                            Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Text(
+                                'Add new user',
+                                style: displayTitle,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: primaryDarkColor.withOpacity(0.1),
+                                  shape: BoxShape.circle,
+                                ),
+                                padding: const EdgeInsets.all(8),
+                                child: GestureDetector(
+                                  child: const Icon(
+                                    Icons.add,
+                                    color: primaryDarkColor,
+                                    size: 30,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ]),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ApproveUsers()));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: primaryDarkColor.withOpacity(0.1)),
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Column(children: [
+                            Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Text(
+                                'Approve users',
+                                style: displayTitle,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: primaryDarkColor.withOpacity(0.1),
+                                  shape: BoxShape.circle,
+                                ),
+                                padding: const EdgeInsets.all(8),
+                                child: GestureDetector(
+                                  child: const Icon(
+                                    Icons.check,
+                                    color: primaryDarkColor,
+                                    size: 30,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ]),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          );
+        }));
   }
 
   @override
@@ -130,7 +241,7 @@ class _UsersScreenState extends State<UsersScreen> {
                 ),
                 padding: const EdgeInsets.all(8),
                 child: GestureDetector(
-                  onTap: showAddUserDialog,
+                  onTap: showBottomSheet,
                   child: const Icon(
                     Icons.add,
                     color: primaryDarkColor,
@@ -149,11 +260,11 @@ class _UsersScreenState extends State<UsersScreen> {
             ],
           ),
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: [
             Omcs(),
-            const Reseller(),
-            const Customer(),
+            Resellers(),
+            Customers(),
           ],
         ),
       ),
