@@ -30,7 +30,7 @@ class _AllOrdersState extends State<AllOrders> {
                     color: Colors.grey,
                   ),
                 ),
-            separatorBuilder: ((context, index) => Container(
+            separatorBuilder: ((context, index) => SizedBox(
                   height: 50,
                   child: ListTile(
                       leading: Container(
@@ -49,12 +49,10 @@ class _AllOrdersState extends State<AllOrders> {
                           children: [
                             Text(
                               'Shell Limited',
-                              //textScaleFactor: 1.5,
                               style: displayTitle,
                             ),
                             Container(
                               decoration: BoxDecoration(
-                                  //border: Border.all(color: Colors.greenAccent),
                                   color: Colors.greenAccent.withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(8)),
                               child: Padding(

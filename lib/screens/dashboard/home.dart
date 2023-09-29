@@ -2,7 +2,7 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/screens/dashboard/view_users/customer.dart';
+
 import 'package:petropal/widgets/widget.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -53,22 +53,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Padding(
-                  //   padding: const EdgeInsets.all(10),
-                  //   child: Row(
-                  //     children: [
-                  //       Image.asset(
-                  //         'assets/images/icons/petropal_logo.png',
-                  //         width: 50,
-                  //         height: 50,
-                  //       ),
-                  //       Text(
-                  //         'Petropal',
-                  //         style: m_title, // You can define your own style here
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                   SizedBox(
                     height: 210,
                     child: Swiper(
@@ -200,111 +184,130 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   SingleChildScrollView(
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        SizedBox(
-                          height: 140,
+                        Container(
+                          height: 150,
                           child: ListView.builder(
-                            itemCount: 4,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: ((context, index) => GestureDetector(
+                              itemCount: card_titles.length,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: ((context, index) {
+                                String cardTitle = card_titles[index];
+                                String activeLabel;
+                                String inactiveLabel;
+                                String titleLabel;
+
+                                switch (cardTitle) {
+                                  case 'Transactions':
+                                    titleLabel = 'Revenue';
+                                    activeLabel = 'Active:';
+                                    inactiveLabel = 'Inactive:';
+                                    break;
+                                  case 'Orders':
+                                    titleLabel = 'Revenue';
+                                    activeLabel = 'Pending:';
+                                    inactiveLabel = 'Completed:';
+                                    break;
+                                  case 'Users':
+                                    titleLabel = 'Total:';
+                                    activeLabel = 'Approved:';
+                                    inactiveLabel = 'Pending Approval:';
+                                    break;
+                                  case 'Products':
+                                    titleLabel = 'Revenue';
+                                    activeLabel = 'Sold:';
+                                    inactiveLabel = 'Available:';
+                                    break;
+                                  default:
+                                    titleLabel = '';
+                                    activeLabel = '';
+                                    inactiveLabel = '';
+                                    break;
+                                }
+
+                                return GestureDetector(
                                   onTap: () {
-                                    print('tapped');
                                     setState(() {
                                       selectedCardIndex = index;
                                     });
                                   },
-                                  child: Container(
-                                    height: 100,
-                                    width: 200,
-                                    margin: const EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      // border:
-                                      //     Border.all(color: primaryDarkColor),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Card(
-                                      elevation: 4,
-                                      color: Colors.white,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(10),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Total ${card_titles[index]}',
-                                              style: bodyText,
-                                            ),
-                                            Text(
-                                              '1000',
-                                              style: m_title,
-                                            ),
-                                            // RichText(
-                                            //   text: TextSpan(children: [
-                                            //     TextSpan(
-                                            //         text: '1000',
-                                            //         style: m_title),
-                                            //     TextSpan(
-                                            //         text: 'total',
-                                            //         style: displaySmall),
-                                            //   ]),
-                                            // ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      'Revenue:',
-                                                      style: bodyText,
-                                                    ),
-                                                    Text(
-                                                      'Active:',
-                                                      style: bodyText,
-                                                    ),
-                                                    Text(
-                                                      'Inactive:',
-                                                      style: bodyText,
-                                                    ),
-                                                  ],
-                                                ),
-                                                const SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      'Kes 5,000',
-                                                      style: displayTitle,
-                                                    ),
-                                                    Text(
-                                                      '700',
-                                                      style: displayTitle,
-                                                    ),
-                                                    Text(
-                                                      '300',
-                                                      style: displayTitle,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
+
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        side: BorderSide(
+                                            color: primaryDarkColor
+                                                .withOpacity(0.1))),
+                                    color: Colors.white,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            card_titles[index],
+                                            style: bodyText,
+                                          ),
+                                          Text(
+                                            '1000',
+                                            style: m_title,
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    titleLabel,
+                                                    style: bodyText,
+                                                  ),
+                                                  Text(
+                                                    activeLabel,
+                                                    style: bodyText,
+                                                  ),
+                                                  Text(
+                                                    inactiveLabel,
+                                                    style: bodyText,
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    'Kes 5,000',
+                                                    style: displayTitle,
+                                                  ),
+                                                  Text(
+                                                    '700',
+                                                    style: displayTitle,
+                                                  ),
+                                                  Text(
+                                                    '300',
+                                                    style: displayTitle,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
-                                )),
-                          ),
+                                  //),
+                                );
+                              })),
                         )
                       ],
                     ),
@@ -316,7 +319,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     card_titles[selectedCardIndex],
                     style: m_title,
                   ),
-
                   getWidgetForCard(selectedCardIndex),
                 ])),
       ),

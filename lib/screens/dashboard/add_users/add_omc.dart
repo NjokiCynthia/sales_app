@@ -15,7 +15,200 @@ class AddOMC extends StatefulWidget {
 class _AddOMCState extends State<AddOMC> {
   String initialCountry = 'KE';
 
+  String enteredDate = ''; // Store the entered date
+  String enteredNumber = ''; // Store the entered number
+
+  void _openBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      builder: (BuildContext context) {
+        return ListView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          children: [
+            GestureDetector(
+              onTap: () {
+                FocusScope.of(context).requestFocus(FocusNode());
+              },
+              child: SingleChildScrollView(
+                child: Column(
+                  //crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text('Enter the EPRA license expiry date',
+                              style: bodyText),
+                          SizedBox(height: 10),
+                          TextFormField(
+                            style: bodyText,
+                            keyboardType: TextInputType.number,
+                            onChanged: (value) {
+                              setState(() {
+                                enteredDate = value;
+                              });
+                            },
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              labelText: 'Enter date',
+                              labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
+                                  .copyWith(color: Colors.grey),
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Colors.grey,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.grey.shade300,
+                                  width: 2.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Colors.grey,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Text('Enter your EPRA license number',
+                              style: bodyText),
+                          SizedBox(height: 10),
+                          TextFormField(
+                            style: bodyText,
+                            keyboardType: TextInputType.number,
+                            onChanged: (value) {
+                              setState(() {
+                                enteredNumber = value;
+                              });
+                            },
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              labelText: 'Enter number',
+                              labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
+                                  .copyWith(color: Colors.grey),
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Colors.grey,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.grey.shade300,
+                                  width: 2.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Colors.grey,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          SizedBox(
+                            height: 48,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: primaryDarkColor),
+                              onPressed: () {
+                                Navigator.of(context)
+                                    .pop(); // Close the bottom sheet
+                                _showConfirmation(); // Display the confirmation dialog
+                              },
+                              child: Text('Confirm'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showConfirmation() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: Text(
+            'Please confirm the details',
+            style: displayTitle,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Entered Date: $enteredDate',
+                style: bodyText,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Entered Number: $enteredNumber',
+                style: bodyText,
+              ),
+            ],
+          ),
+          actions: [
+            Row(
+              children: [
+                OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                        foregroundColor: primaryDarkColor),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      'Cancel',
+                      style: bodyText,
+                    )),
+                ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryDarkColor),
+                    child: Text(
+                      'Confirm',
+                      style: bodyText,
+                    ))
+              ],
+            )
+          ],
+        );
+      },
+    );
+  }
+
   PhoneNumber number = PhoneNumber(isoCode: 'KE');
+  String? selectedDocumentTitle; // To store the selected document title
+
   Future<void> openFilePicker() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
@@ -25,6 +218,10 @@ class _AddOMCState extends State<AddOMC> {
       print('File Name: ${file.name}');
       print('File Size: ${file.size}');
       // You can upload the file to your server or perform other actions.
+
+      setState(() {
+        selectedDocumentTitle = file.name; // Update the selectedDocumentTitle
+      });
     } else {
       // User canceled the file picker
     }
@@ -236,22 +433,56 @@ class _AddOMCState extends State<AddOMC> {
         const SizedBox(
           height: 10,
         ),
-        GestureDetector(
-          onTap: openFilePicker,
-          child: Container(
-            width: 150, // Set the desired width
-            padding: const EdgeInsets.all(10), // Adjust the padding as needed
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.circular(10), // Grey border
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                GestureDetector(
+                  onTap: openFilePicker,
+                  child: Container(
+                    width: 150, // Set the desired width
+                    padding: const EdgeInsets.all(
+                        10), // Adjust the padding as needed
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10), // Grey border
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Upload',
+                        style: bodyText,
+                      ),
+                    ),
+                  ),
+                ),
+                if (selectedDocumentTitle != null)
+                  Text(
+                    '$selectedDocumentTitle',
+                    style: bodyText,
+                  ),
+              ],
             ),
-            child: Center(
-              child: Text(
-                'Upload',
-                style: bodyText,
+            GestureDetector(
+              onTap: () {
+                _openBottomSheet(context);
+              },
+              child: Container(
+                width: 150,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(
+                  child: Text(
+                    'EPRA no. and date',
+                    style: bodyText,
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
         ),
         const SizedBox(height: 20),
         Row(

@@ -19,15 +19,15 @@ class _ApprovePricingState extends State<ApprovePricing> {
     super.initState();
     data = [
       ChartData(17, 200),
-      ChartData(18, 211),
+      ChartData(18, 205),
       ChartData(19, 190),
       ChartData(20, 201),
       ChartData(21, 196),
       ChartData(22, 206),
       ChartData(23, 209),
-      ChartData(24, 188),
+      ChartData(24, 202),
       ChartData(25, 191),
-      ChartData(26, 210),
+      ChartData(26, 195),
     ];
   }
 
@@ -43,7 +43,7 @@ class _ApprovePricingState extends State<ApprovePricing> {
           backgroundColor: Colors.white,
         ),
         body: Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -52,7 +52,7 @@ class _ApprovePricingState extends State<ApprovePricing> {
                 'Shell Limited',
                 style: displayBigBoldBlack,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               // CircleAvatar(
@@ -60,28 +60,29 @@ class _ApprovePricingState extends State<ApprovePricing> {
               //   //child: Image.asset('assets/images/tanker.png'),
               //   radius: 50,
               // ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Center(
                 child: SfCartesianChart(
-                  margin: EdgeInsets.all(0),
+                  margin: const EdgeInsets.all(0),
                   borderWidth: 0,
                   borderColor: Colors.transparent,
                   plotAreaBorderWidth: 0,
                   primaryXAxis: NumericAxis(
-                      minimum: 17,
-                      maximum: 26,
-                      borderColor: Colors.transparent,
-                      borderWidth: 0,
-                      labelStyle: const TextStyle(color: primaryDarkColor),
-                      isVisible: false),
+                    minimum: 17,
+                    maximum: 26,
+                    borderColor: primaryDarkColor,
+                    borderWidth: 0,
+                    labelStyle: const TextStyle(color: primaryDarkColor),
+                    //isVisible: false
+                  ),
                   primaryYAxis: NumericAxis(
                       minimum: 188,
                       maximum: 211,
-                      interval: 5,
+                      //interval: 1,
                       borderWidth: 0,
-                      borderColor: Colors.transparent,
+                      //borderColor: primaryDarkColor,
                       labelStyle: const TextStyle(color: primaryDarkColor),
                       isVisible: false),
                   series: <ChartSeries<ChartData, int>>[
@@ -92,26 +93,26 @@ class _ApprovePricingState extends State<ApprovePricing> {
                         splineType: SplineType.natural,
                         gradient: LinearGradient(
                             colors: [
-                              primaryDarkColor,
-                              secondaryDarkColor.withOpacity(0.1)
+                              primaryDarkColor.withOpacity(0.1),
+                              Colors.white,
                             ],
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter)),
                     SplineSeries(
                       dataSource: data,
                       color: primaryDarkColor,
-                      markerSettings: MarkerSettings(
-                          color: primaryDarkColor,
-                          borderWidth: 3,
-                          shape: DataMarkerType.circle,
-                          isVisible: true),
+                      // markerSettings: const MarkerSettings(
+                      //     color: primaryDarkColor,
+                      //     borderWidth: 3,
+                      //     shape: DataMarkerType.circle,
+                      //     isVisible: true),
                       xValueMapper: (ChartData data, _) => data.day,
                       yValueMapper: (ChartData data, _) => data.price,
                     )
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 40,
               ),
               Row(
@@ -126,7 +127,7 @@ class _ApprovePricingState extends State<ApprovePricing> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Column(
@@ -176,11 +177,11 @@ class _ApprovePricingState extends State<ApprovePricing> {
                         borderRadius: BorderRadius.circular(5)),
                     child: OutlinedButton.icon(
                       onPressed: () {},
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.close,
                         color: primaryDarkColor,
                       ),
-                      label: Text(
+                      label: const Text(
                         'Cancel',
                         style: TextStyle(color: primaryDarkColor),
                       ),
@@ -190,11 +191,11 @@ class _ApprovePricingState extends State<ApprovePricing> {
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
                         backgroundColor: primaryDarkColor),
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.check,
                       size: 24.0,
                     ),
-                    label: Text('Approve'), // <-- Text
+                    label: const Text('Approve'), // <-- Text
                   ),
                 ],
               )

@@ -6,7 +6,7 @@ import 'package:petropal/constants/theme.dart';
 import 'package:petropal/screens/dashboard/add_users/users.dart';
 
 import 'package:petropal/screens/dashboard/all_orders.dart';
-import 'package:petropal/screens/dashboard/invoices.dart';
+import 'package:petropal/screens/dashboard/products.dart';
 import 'package:petropal/screens/dashboard/profile.dart';
 import 'package:petropal/screens/dashboard/home.dart';
 import 'package:petropal/widgets/widget.dart';
@@ -31,7 +31,7 @@ class _DashboardState extends State<Dashboard> {
   List<Widget> _buildScreens() {
     return [
       const DashboardScreen(),
-      const Invoices(),
+      const ProductsScreen(),
       const AllOrders(),
       const Profile(),
     ];

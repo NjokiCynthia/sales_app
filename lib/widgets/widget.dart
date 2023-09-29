@@ -1,91 +1,88 @@
 import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/screens/dashboard/approve_prices.dart';
+import 'package:petropal/screens/dashboard/approval/approve_prices.dart';
 
 class CustomTransactionCard extends StatelessWidget {
-  // final String userName;
-  // final String amount;
-  // final String paymentMethod;
-  // final String date;
-  // final String volume;
-
-  // const CustomTransactionCard({
-  //   super.key,
-  //   required this.userName,
-  //   required this.amount,
-  //   required this.paymentMethod,
-  //   required this.date,
-  //   required this.volume,
-  // });
-
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Row(
-        children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: primaryDarkColor.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(30),
-            ),
-            // Replace with your icon or image widget
-            child: const Icon(Icons.attach_money, color: primaryDarkColor),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
+    return ListView.builder(
+      itemCount: 3,
+      itemBuilder: (BuildContext context, int index) => Padding(
+        padding: EdgeInsets.all(10),
+        child: Card(
+          color: Colors.white,
+          
+          child: Padding(
+            padding: EdgeInsets.all(20),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('National Oil', style: m_title),
-
-                //Text('Ngong Road', style: bodyText),
-                Text(
-                  'Diesel',
-                  style: bodyText,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: primaryDarkColor.withOpacity(0.1)),
+                        child: Image.asset(
+                          'assets/images/fuel-station.png',
+                          width: 30,
+                          height: 30,
+                        )),
+                    Text(
+                      'Kerosene',
+                      style: m_title,
+                    ),
+                  ],
                 ),
-                Text(
-                  'Petrol',
-                  style: bodyText,
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          'Average Price',
+                          style: bodyText,
+                        ),
+                        Text(
+                          'Kes 90',
+                          style: displayTitle,
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          "Today's average",
+                          style: bodyText,
+                        ),
+                        Text(
+                          'Kes 92',
+                          style: displayTitle,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                Text(
-                  'Kerosene',
-                  style: bodyText,
+                SizedBox(
+                  height: 20,
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                          side: BorderSide(color: primaryDarkColor)),
+                      onPressed: () {},
+                      child: Text(
+                        'Approve prices',
+                        style: bodyText,
+                      )),
                 ),
               ],
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '2/10/2023',
-                style: m_title,
-              ),
-              Text(
-                'Kes 200',
-                style: bodyText,
-                // TextStyle(fontSize: 16, color: Colors.black),
-              ),
-              Text(
-                'Kes 211',
-                style: bodyText,
-                // TextStyle(fontSize: 16, color: Colors.black),
-              ),
-              Text(
-                'Kes 193',
-                style: bodyText,
-                // TextStyle(fontSize: 16, color: Colors.black),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-            ],
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -149,7 +146,7 @@ class Resellers extends StatelessWidget {
                         ),
                         ElevatedButton(
                           onPressed: () {},
-                          child: Text('View details'),
+                          child: const Text('View details'),
                           style: ElevatedButton.styleFrom(
                               backgroundColor:
                                   primaryDarkColor.withOpacity(0.6)),
@@ -234,7 +231,7 @@ class Customers extends StatelessWidget {
                         ),
                         ElevatedButton(
                           onPressed: () {},
-                          child: Text('View details'),
+                          child: const Text('View details'),
                           style: ElevatedButton.styleFrom(
                               backgroundColor:
                                   primaryDarkColor.withOpacity(0.6)),
@@ -319,7 +316,7 @@ class Users extends StatelessWidget {
                           ),
                           ElevatedButton(
                             onPressed: () {},
-                            child: Text('View details'),
+                            child: const Text('View details'),
                             style: ElevatedButton.styleFrom(
                                 backgroundColor:
                                     primaryDarkColor.withOpacity(0.6)),
@@ -408,9 +405,10 @@ class Omcs extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ApprovePricing()));
+                                    builder: (context) =>
+                                        const ApprovePricing()));
                           },
-                          child: Text('View details'),
+                          child: const Text('View details'),
                           style: ElevatedButton.styleFrom(
                               backgroundColor:
                                   primaryDarkColor.withOpacity(0.6)),
@@ -602,8 +600,8 @@ class Products extends StatelessWidget {
       child: ListView.separated(
         itemBuilder: (context, index) {
           final productTitle = productTitles[index]; // Get the product title
-          return Padding(
-            padding: const EdgeInsets.all(5),
+          return const Padding(
+            padding: EdgeInsets.all(5),
             child: Divider(
               color: Colors.grey,
             ),

@@ -49,10 +49,10 @@ class _HomePageState extends State<HomePage> {
           title: "Efficient Oil Inventory and Pricing Control",
           body:
               "Effortlessly manage your oil inventory, pricing, and deliveries from anywhere. Discover the power of efficient oil management.",
-          image: Align(
-            alignment: Alignment.bottomCenter,
+          image: Padding(
+            padding: EdgeInsets.only(top: 80),
             child: Image.asset(
-              'assets/images/petrol.png',
+              'assets/images/icons/invest.png',
               height: 200,
             ),
           ),
@@ -63,8 +63,8 @@ class _HomePageState extends State<HomePage> {
           body:
               "Join thousands of satisfied users who trust Petropal for their oil management needs. Sign in or create an account to experience it for yourself.",
           image: Padding(
-            padding: EdgeInsets.only(top: 40),
-            child: Image.asset('assets/images/tanker.png'),
+            padding: EdgeInsets.only(top: 80),
+            child: Image.asset('assets/images/icons/manage.png'),
           ),
           decoration: pageDecoration(),
         ),

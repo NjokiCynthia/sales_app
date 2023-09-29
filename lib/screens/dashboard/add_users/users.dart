@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/screens/dashboard/add_users/add_users.dart';
-import 'package:petropal/screens/dashboard/approve_users.dart';
+import 'package:petropal/screens/dashboard/approval/approve_users.dart';
 import 'package:petropal/widgets/widget.dart';
 
 class User {
@@ -52,28 +52,27 @@ class _UsersScreenState extends State<UsersScreen> {
               ),
               const SizedBox(height: 10),
               DropdownButton<String>(
-                focusColor: Colors.white,
-                dropdownColor: Colors.white,
-                value: selectedusertype, // Use selectedusertype as the value
-                icon: const Icon(
-                  Icons.keyboard_arrow_down,
-                  color: primaryDarkColor,
-                ),
-                items: items.map((String item) {
-                  return DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(
-                      item,
-                      style: const TextStyle(color: primaryDarkColor),
-                    ),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedusertype = newValue ?? 'Resellers';
-                  });
-                },
-              ),
+                  focusColor: Colors.white,
+                  dropdownColor: Colors.white,
+                  value: selectedusertype,
+                  icon: const Icon(
+                    Icons.keyboard_arrow_down,
+                    color: primaryDarkColor,
+                  ),
+                  items: items.map((String item) {
+                    return DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(
+                        item,
+                        style: const TextStyle(color: primaryDarkColor),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedusertype = newValue!;
+                    });
+                  }),
             ],
           ),
           actions: <Widget>[
@@ -90,15 +89,12 @@ class _UsersScreenState extends State<UsersScreen> {
                 style: TextStyle(color: primaryDarkColor),
               ),
               onPressed: () {
-                if (selectedusertype != null) {
-                  print("Selected User Type: $selectedusertype");
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: ((context) =>
-                            AddUsers(selectedUserType: selectedusertype))),
-                  );
-                }
-                // Close the dialog
+                print("Selected User Type: $selectedusertype");
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: ((context) =>
+                          AddUsers(selectedUserType: selectedusertype))),
+                );
               },
             ),
           ],
