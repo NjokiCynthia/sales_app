@@ -108,6 +108,10 @@ flutter:
     - assets/images/tanker.png
     - assets/images/fuel-station.png
     - assets/images/petrol.png
+    - assets/images/products.png
+    - assets/images/orders.png
+    - assets/images/home.png
+    - assets/images/settings.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

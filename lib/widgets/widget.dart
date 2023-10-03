@@ -12,7 +12,9 @@ class CustomTransactionCard extends StatelessWidget {
         padding: EdgeInsets.all(10),
         child: Card(
           color: Colors.white,
-          
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+              side: BorderSide(color: primaryDarkColor)),
           child: Padding(
             padding: EdgeInsets.all(20),
             child: Column(
@@ -21,13 +23,14 @@ class CustomTransactionCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: primaryDarkColor.withOpacity(0.1)),
                         child: Image.asset(
                           'assets/images/fuel-station.png',
-                          width: 30,
-                          height: 30,
+                          width: 20,
+                          height: 20,
                         )),
                     Text(
                       'Kerosene',

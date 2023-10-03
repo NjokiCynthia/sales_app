@@ -40,28 +40,40 @@ class _DashboardState extends State<Dashboard> {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.home),
+        icon: Image.asset(
+          'assets/images/home.png',
+          color: primaryDarkColor,
+        ),
         title: ("Home"),
         activeColorPrimary: primaryDarkColor,
-        inactiveColorPrimary: Colors.grey,
+        inactiveColorPrimary: primaryDarkColor.withOpacity(0.1),
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.assignment),
+        icon: Image.asset(
+          'assets/images/products.png',
+          color: primaryDarkColor,
+        ),
         title: ("Products"),
         activeColorPrimary: primaryDarkColor,
-        inactiveColorPrimary: Colors.grey,
+        inactiveColorPrimary: primaryDarkColor.withOpacity(0.1),
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.online_prediction_rounded),
+        icon: Image.asset(
+          'assets/images/orders.png',
+          color: primaryDarkColor,
+        ),
         title: ("Orders"),
         activeColorPrimary: primaryDarkColor,
-        inactiveColorPrimary: Colors.grey,
+        inactiveColorPrimary: primaryDarkColor.withOpacity(0.1),
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.settings),
+        icon: Image.asset(
+          'assets/images/settings.png',
+          color: primaryDarkColor,
+        ),
         title: ("Settings"),
         activeColorPrimary: primaryDarkColor,
-        inactiveColorPrimary: Colors.grey,
+        inactiveColorPrimary: primaryDarkColor.withOpacity(0.1),
       ),
     ];
   }
