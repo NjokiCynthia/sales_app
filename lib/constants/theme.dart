@@ -36,6 +36,12 @@ TextStyle bodyTextSmall = GoogleFonts.getFont(
   fontWeight: FontWeight.w300,
   color: Colors.black,
 );
+TextStyle bodyTextSmaller = GoogleFonts.getFont(
+  Strings.fontName,
+  fontSize: 12,
+  fontWeight: FontWeight.w300,
+  color: Colors.black,
+);
 TextStyle bodySmall = GoogleFonts.getFont(
   Strings.fontName,
   fontSize: 12,
@@ -48,12 +54,7 @@ TextStyle displayTitle = GoogleFonts.getFont(
   fontWeight: FontWeight.bold,
   color: Colors.black,
 );
-// TextStyle title = GoogleFonts.getFont(
-//   Strings.fontName,
-//   fontSize: 20,
-//   fontWeight: FontWeight.bold,
-//   color: Colors.black,
-// );
+
 TextStyle normalText = GoogleFonts.getFont(
   Strings.fontName,
   fontSize: 12,
@@ -71,12 +72,7 @@ TextStyle buttonText = GoogleFonts.getFont(
   fontWeight: FontWeight.bold,
   color: primaryDarkColor,
 );
-TextStyle displaySmallWhite = GoogleFonts.getFont(
-  Strings.fontName,
-  fontSize: 12,
-  fontWeight: FontWeight.w500,
-  color: Colors.white,
-);
+
 TextStyle displaySmallBoldLightGrey = GoogleFonts.getFont(
   Strings.fontName,
   fontSize: 10,
@@ -95,33 +91,10 @@ TextStyle displaySmallerLightGrey = GoogleFonts.getFont(
   fontWeight: FontWeight.w500,
   color: Colors.black.withOpacity(0.4),
 );
-TextStyle displayBigBoldWhite = GoogleFonts.getFont(
-  Strings.fontName,
-  fontSize: 25,
-  fontWeight: FontWeight.bold,
-  color: Colors.white,
-);
+
 TextStyle displayBigBoldBlack = GoogleFonts.getFont(
   Strings.fontName,
   fontSize: 25,
   fontWeight: FontWeight.bold,
   color: Colors.black,
-);
-TextStyle displayNormalWhite = GoogleFonts.getFont(
-  Strings.fontName,
-  fontSize: 15,
-  fontWeight: FontWeight.w300,
-  color: Colors.white,
-);
-TextStyle displayNormalWhiteBold = GoogleFonts.getFont(
-  Strings.fontName,
-  fontSize: 15,
-  fontWeight: FontWeight.w500,
-  color: Colors.white,
-);
-TextStyle displayGrey = GoogleFonts.getFont(
-  Strings.fontName,
-  fontSize: 15,
-  fontWeight: FontWeight.w500,
-  color: Colors.grey,
 );

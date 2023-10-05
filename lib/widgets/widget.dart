@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/screens/dashboard/approval/approve_prices.dart';
 
 class CustomTransactionCard extends StatelessWidget {
+  const CustomTransactionCard({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: 3,
       itemBuilder: (BuildContext context, int index) => Padding(
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(5),
         child: Card(
-          color: Colors.white,
+          color: Colors.grey[200],
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
               side: BorderSide(color: primaryDarkColor)),
           child: Padding(
-            padding: EdgeInsets.all(20),
+            padding: EdgeInsets.all(10),
             child: Column(
               children: [
                 Row(
@@ -91,22 +92,24 @@ class CustomTransactionCard extends StatelessWidget {
   }
 }
 
-class Resellers extends StatelessWidget {
-  const Resellers({super.key});
+class Users extends StatelessWidget {
+  const Users({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemBuilder: (BuildContext context, int index) => Padding(
-        padding: const EdgeInsets.all(5),
-        child: Card(
-          color: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+    bool isGreyBackground = true; // Track the background color
 
-            side: BorderSide(color: Colors.grey[300]!), // Add a BorderSide
-          ),
-          child: ListTile(
+    return Expanded(
+      child: ListView.builder(
+        itemBuilder: (BuildContext context, int index) {
+          // Toggle background color
+          isGreyBackground = !isGreyBackground;
+          final backgroundColor =
+              isGreyBackground ? Colors.grey[100] : Colors.white;
+
+          return Container(
+            color: backgroundColor, // Set the background color
+            child: ListTile(
               leading: Container(
                 decoration: BoxDecoration(
                   color: primaryDarkColor.withOpacity(0.1),
@@ -115,12 +118,12 @@ class Resellers extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 child: Image.asset(
                   'assets/images/tanker.png',
-                  width: 25,
-                  height: 25,
+                  width: 20,
+                  height: 20,
                 ),
               ),
               title: const Text(
-                'Lucy and Company',
+                'Rubis Kenya',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -132,7 +135,7 @@ class Resellers extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'lucy@example.com',
+                      'rubis@example.com',
                       style: TextStyle(
                         color: Colors.black, // Text color
                       ),
@@ -151,444 +154,189 @@ class Resellers extends StatelessWidget {
                           onPressed: () {},
                           child: const Text('View details'),
                           style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  primaryDarkColor.withOpacity(0.6)),
-                        )
-                        // Container(
-                        //     decoration: BoxDecoration(
-                        //         border: Border.all(color: primaryDarkColor),
-                        //         borderRadius: BorderRadius.circular(5)),
-                        //     child: Padding(
-                        //         padding: const EdgeInsets.all(5),
-                        //         child: Text(
-                        //           'View details',
-                        //           style: bodyText,
-                        //         )))
-                      ],
-                    )
-                  ],
-                ),
-              )),
-        ),
-      ),
-      itemCount: 6,
-    );
-  }
-}
-
-class Customers extends StatelessWidget {
-  const Customers({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemBuilder: (BuildContext context, int index) => Padding(
-        padding: const EdgeInsets.all(5),
-        child: Card(
-          color: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-
-            side: BorderSide(color: Colors.grey[300]!), // Add a BorderSide
-          ),
-          child: ListTile(
-              leading: Container(
-                decoration: BoxDecoration(
-                  color: primaryDarkColor.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                padding: const EdgeInsets.all(8),
-                child: Image.asset(
-                  'assets/images/customer.png',
-                  width: 25,
-                  height: 25,
-                ),
-              ),
-              title: const Text(
-                'Lucy and Company',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              subtitle: Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'lucy@example.com',
-                      style: TextStyle(
-                        color: Colors.black, // Text color
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Today's price: Kes 100",
-                          style: bodyText,
-                        ),
-                        ElevatedButton(
-                          onPressed: () {},
-                          child: const Text('View details'),
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  primaryDarkColor.withOpacity(0.6)),
-                        )
-                        // Container(
-                        //     decoration: BoxDecoration(
-                        //         border: Border.all(color: primaryDarkColor),
-                        //         borderRadius: BorderRadius.circular(5)),
-                        //     child: Padding(
-                        //         padding: const EdgeInsets.all(5),
-                        //         child: Text(
-                        //           'View details',
-                        //           style: bodyText,
-                        //         )))
-                      ],
-                    )
-                  ],
-                ),
-              )),
-        ),
-      ),
-      itemCount: 6,
-    );
-  }
-}
-
-class Users extends StatelessWidget {
-  const Users({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        child: ListView.builder(
-          itemBuilder: (BuildContext context, int index) => Card(
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-
-              side: BorderSide(color: Colors.grey[300]!), // Add a BorderSide
-            ),
-            child: ListTile(
-                leading: Container(
-                  decoration: BoxDecoration(
-                    color: primaryDarkColor.withOpacity(0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  padding: const EdgeInsets.all(8),
-                  child: Image.asset(
-                    'assets/images/tanker.png',
-                    width: 25,
-                    height: 25,
-                  ),
-                ),
-                title: const Text(
-                  'Lucy and Company',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                subtitle: Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'lucy@example.com',
-                        style: TextStyle(
-                          color: Colors.black, // Text color
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Today's price: Kes 100",
-                            style: bodyText,
+                            backgroundColor: primaryDarkColor.withOpacity(0.6),
                           ),
-                          ElevatedButton(
-                            onPressed: () {},
-                            child: const Text('View details'),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    primaryDarkColor.withOpacity(0.6)),
-                          )
-                          // Container(
-                          //     decoration: BoxDecoration(
-                          //         border: Border.all(color: primaryDarkColor),
-                          //         borderRadius: BorderRadius.circular(5)),
-                          //     child: Padding(
-                          //         padding: const EdgeInsets.all(5),
-                          //         child: Text(
-                          //           'View details',
-                          //           style: bodyText,
-                          //         )))
-                        ],
-                      )
-                    ],
-                  ),
-                )),
-          ),
-          itemCount: 6,
-        ),
-      ),
-    );
-  }
-}
-
-class Omcs extends StatelessWidget {
-  const Omcs({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemBuilder: (BuildContext context, int index) => Padding(
-        padding: const EdgeInsets.all(5),
-        child: Card(
-          color: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-
-            side: BorderSide(color: Colors.grey[300]!), // Add a BorderSide
-          ),
-          child: ListTile(
-              leading: Container(
-                decoration: BoxDecoration(
-                  color: primaryDarkColor.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                padding: const EdgeInsets.all(8),
-                child: Image.asset(
-                  'assets/images/fuel-station.png',
-                  width: 25,
-                  height: 25,
-                ),
-              ),
-              title: const Text(
-                'Lucy and Company',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              subtitle: Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'lucy@example.com',
-                      style: TextStyle(
-                        color: Colors.black, // Text color
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Today's price: Kes 100",
-                          style: bodyText,
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ApprovePricing()));
-                          },
-                          child: const Text('View details'),
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  primaryDarkColor.withOpacity(0.6)),
                         )
-                        // Container(
-                        //     decoration: BoxDecoration(
-                        //         border: Border.all(color: primaryDarkColor),
-                        //         borderRadius: BorderRadius.circular(5)),
-                        //     child: Padding(
-                        //         padding: const EdgeInsets.all(5),
-                        //         child: Text(
-                        //           'View details',
-                        //           style: bodyText,
-                        //         )))
                       ],
                     )
                   ],
                 ),
-              )),
-        ),
+              ),
+            ),
+          );
+        },
+        itemCount: 6,
       ),
-      itemCount: 6,
     );
   }
 }
 
 class Transactions extends StatelessWidget {
-  const Transactions({super.key});
+  const Transactions({Key? key});
 
   @override
   Widget build(BuildContext context) {
+    bool isGreyBackground = true; // Track the background color
+
     return Expanded(
-      child: ListView.separated(
-          itemBuilder: (context, index) => const Padding(
-                padding: EdgeInsets.all(0),
-                child: Divider(
-                  color: Colors.grey,
+      child: ListView.builder(
+        itemBuilder: (context, index) {
+          // Toggle background color
+          isGreyBackground = !isGreyBackground;
+          final backgroundColor =
+              isGreyBackground ? Colors.grey[200] : Colors.white;
+
+          return Container(
+            color: backgroundColor, // Set the background color
+            child: ListTile(
+              leading: Container(
+                decoration: BoxDecoration(
+                  color: primaryDarkColor.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                padding: const EdgeInsets.all(8),
+                child: const Icon(
+                  Icons.arrow_outward,
+                  color: primaryDarkColor,
+                  size: 15,
                 ),
               ),
-          separatorBuilder: ((context, index) => Container(
-                child: ListTile(
-                    leading: Container(
-                      decoration: BoxDecoration(
-                        color: primaryDarkColor.withOpacity(0.1),
-                        shape: BoxShape.circle,
-                      ),
-                      padding: const EdgeInsets.all(8),
-                      child: const Icon(
-                        Icons.arrow_outward,
-                        color: primaryDarkColor,
-                      ),
-                    ),
-                    title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Shell Limited',
-                            //textScaleFactor: 1.5,
-                            style: displayTitle,
-                          ),
-                          Text(
-                            'Kes 5000',
-                            style: displayTitle,
-                          )
-                        ]),
-                    subtitle: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Payment for kerosene',
-                          style: bodyTextSmall,
-                        ),
-                        Text(
-                          '12 Sept 2023',
-                          style: displaySmallerLightGrey,
-                        )
-                      ],
-                    )),
-              )),
-          itemCount: 6),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Shell Limited',
+                    textScaleFactor: 1,
+                    style: displayTitle,
+                  ),
+                  Text(
+                    'Kes 5000',
+                    style: displayTitle,
+                  )
+                ],
+              ),
+              subtitle: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Payment for kerosene',
+                    style: bodyTextSmall,
+                  ),
+                  Text(
+                    '12 Sept 2023',
+                    style: displaySmallerLightGrey,
+                  )
+                ],
+              ),
+            ),
+          );
+        },
+        itemCount: 6,
+      ),
     );
   }
 }
 
 class Orders extends StatelessWidget {
-  const Orders({super.key});
+  const Orders({Key? key});
 
   @override
   Widget build(BuildContext context) {
+    bool isGreyBackground = true; // Track the background color
+
     return Expanded(
-      child: ListView.separated(
-          itemBuilder: (context, index) => const Padding(
-                padding: EdgeInsets.all(5),
-                child: Divider(
-                  color: Colors.grey,
+      child: ListView.builder(
+        itemBuilder: (context, index) {
+          // Toggle background color
+          isGreyBackground = !isGreyBackground;
+          final backgroundColor =
+              isGreyBackground ? Colors.grey[200] : Colors.white;
+
+          return Container(
+            color: backgroundColor, // Set the background color
+            child: ListTile(
+              leading: Container(
+                decoration: BoxDecoration(
+                  color: primaryDarkColor.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                padding: const EdgeInsets.all(8),
+                child: const Icon(
+                  Icons.money_off,
+                  color: primaryDarkColor,
+                  size: 15,
                 ),
               ),
-          separatorBuilder: ((context, index) => SizedBox(
-                height: 50,
-                child: ListTile(
-                    leading: Container(
-                      decoration: BoxDecoration(
-                        color: primaryDarkColor.withOpacity(0.1),
-                        shape: BoxShape.circle,
-                      ),
-                      padding: const EdgeInsets.all(8),
-                      child: const Icon(
-                        Icons.money_off,
-                        color: primaryDarkColor,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Shell Limited',
+                    // textScaleFactor: 1.5,
+                    style: displayTitle,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.greenAccent.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(left: 4, right: 4, bottom: 4),
+                      child: Text(
+                        'Pending',
+                        style: bodySmall.copyWith(color: Colors.green),
                       ),
                     ),
-                    title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Shell Limited',
-                            //textScaleFactor: 1.5,
-                            style: displayTitle,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                                //border: Border.all(color: Colors.greenAccent),
-                                color: Colors.greenAccent.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(8)),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 4, right: 4, bottom: 4),
-                              child: Text(
-                                'Pending',
-                                style: bodySmall.copyWith(color: Colors.green),
-                              ),
-                            ),
-                          ),
-                          Text(
-                            'Kes 5000',
-                            style: displayTitle,
-                          )
-                        ]),
-                    subtitle: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '1000 litres petrol',
-                              style: bodyTextSmall,
-                            ),
-                            Text(
-                              'Commission',
-                              style: bodyTextSmall,
-                            )
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '12 Sept 2023',
-                              style: displaySmallerLightGrey,
-                            ),
-                            Text(
-                              'Kes 5000',
-                              style: displaySmallerLightGrey,
-                            )
-                          ],
-                        ),
-                      ],
-                    )),
-              )),
-          itemCount: 5),
+                  ),
+                  Text(
+                    'Kes 5000',
+                    style: displayTitle,
+                  )
+                ],
+              ),
+              subtitle: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '1000 litres petrol',
+                        style: bodyTextSmall,
+                      ),
+                      Text(
+                        'Commission',
+                        style: bodyTextSmall,
+                      )
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '12 Sept 2023',
+                        style: displaySmallerLightGrey,
+                      ),
+                      Text(
+                        'Kes 5000',
+                        style: displaySmallerLightGrey,
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+        itemCount: 5,
+      ),
     );
   }
 }
 
 class Products extends StatelessWidget {
-  const Products({super.key});
+  const Products({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -596,88 +344,90 @@ class Products extends StatelessWidget {
       'Petrol',
       'Kerosene',
       'Diesel',
-      'Diesel'
     ];
 
+    bool isGreyBackground = true; // Track the background color
+
     return Expanded(
-      child: ListView.separated(
+      child: ListView.builder(
         itemBuilder: (context, index) {
           final productTitle = productTitles[index]; // Get the product title
-          return const Padding(
-            padding: EdgeInsets.all(5),
-            child: Divider(
-              color: Colors.grey,
+
+          // Toggle background color
+          isGreyBackground = !isGreyBackground;
+          final backgroundColor =
+              isGreyBackground ? Colors.grey[200] : Colors.white;
+
+          return Container(
+            color: backgroundColor, // Set the background color
+            child: ListTile(
+              leading: Container(
+                decoration: BoxDecoration(
+                  color: primaryDarkColor.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                padding: const EdgeInsets.all(8),
+                child: Image.asset(
+                  'assets/images/petrol.png',
+                  width: 15,
+                  height: 15,
+                ),
+              ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    productTitle, // Use the product title here
+                    style: displayTitle,
+                  ),
+                  Text(
+                    'Kes 50,000',
+                    style: displayTitle,
+                  )
+                ],
+              ),
+              subtitle: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Current price:',
+                        style: bodyText,
+                      ),
+                      Text(
+                        '1000 litres ${productTitle.toLowerCase()}', // Use the product title here
+                        style: bodyTextSmaller,
+                      ),
+                      Text(
+                        'Commission generated',
+                        style: bodyTextSmaller,
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Kes 200',
+                        style: bodyText,
+                      ),
+                      Text(
+                        '12 Sept 2023',
+                        style: displaySmallerLightGrey,
+                      ),
+                      Text(
+                        'Kes 5000',
+                        style: displaySmallerLightGrey,
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         },
-        separatorBuilder: ((context, index) => SizedBox(
-              child: ListTile(
-                leading: Container(
-                    decoration: BoxDecoration(
-                      color: primaryDarkColor.withOpacity(0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    padding: const EdgeInsets.all(8),
-                    child: Image.asset('assets/images/petrol.png')
-                    //  const Icon(
-                    //   Icons.money_off,
-                    //   color: primaryDarkColor,
-                    // ),
-                    ),
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      productTitles[index], // Use the product title here
-                      style: displayTitle,
-                    ),
-                    Text(
-                      'Kes 50,000',
-                      style: displayTitle,
-                    )
-                  ],
-                ),
-                subtitle: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Current price:',
-                          style: bodyText,
-                        ),
-                        Text(
-                          '1000 litres ${productTitles[index].toLowerCase()}', // Use the product title here
-                          style: bodyTextSmall,
-                        ),
-                        Text(
-                          'Commission generated',
-                          style: bodyTextSmall,
-                        ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Kes 200',
-                          style: bodyText,
-                        ),
-                        Text(
-                          '12 Sept 2023',
-                          style: displaySmallerLightGrey,
-                        ),
-                        Text(
-                          'Kes 5000',
-                          style: displaySmallerLightGrey,
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            )),
         itemCount:
             productTitles.length, // Use the length of the productTitles list
       ),

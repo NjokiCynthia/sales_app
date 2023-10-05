@@ -222,7 +222,7 @@ class _LoginState extends State<Login> {
                             backgroundColor: primaryDarkColor),
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: ((context) => const Dashboard())));
+                              builder: ((context) => Dashboard())));
                         },
                         child: const Text('Login'),
                       ),

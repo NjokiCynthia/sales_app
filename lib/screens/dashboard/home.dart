@@ -7,14 +7,14 @@ import 'package:petropal/widgets/widget.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   final List<Color> cardColors = [
     const Color(0xFF012F6D), // #012F6D
     const Color(0xFFFF9A00), // #FF9A00
@@ -112,25 +112,42 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: <Color>[
+                                          primaryDarkColor
+                                              .withOpacity(0.5), // Start color
+                                          Colors.white, // End color
+                                        ],
+                                        stops: <double>[
+                                          0.0,
+                                          1.0
+                                        ], // Gradient stops
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                      ),
+                                    ),
                                     height: 150,
                                     child: SfCartesianChart(
                                         primaryXAxis: CategoryAxis(
-                                          // isVisible: false,
+                                          borderColor: primaryDarkColor,
+                                          isVisible: true,
                                           labelStyle: const TextStyle(
                                               color: primaryDarkColor),
                                         ),
                                         primaryYAxis: NumericAxis(
-                                          // isVisible: false,
+                                          borderColor: primaryDarkColor,
+                                          isVisible: true,
+
                                           labelStyle: const TextStyle(
                                               color:
                                                   primaryDarkColor), // Y-axis labels color
                                           axisLine: const AxisLine(
-                                              color: Colors.black),
+                                              color: primaryDarkColor),
                                         ),
                                         series: <LineSeries<SalesData, String>>[
                                           LineSeries<SalesData, String>(
-                                            // Bind data source
                                             dataSource: <SalesData>[
                                               SalesData('Mon', 5),
                                               SalesData('Tue', 18),
@@ -146,7 +163,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             yValueMapper:
                                                 (SalesData sales, _) =>
                                                     sales.sales,
-                                          )
+                                          ),
                                         ]),
                                   ),
                                 ]));
@@ -238,7 +255,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         side: BorderSide(
                                             color: primaryDarkColor
                                                 .withOpacity(0.1))),
-                                    color: Colors.white,
+                                    color: Colors.grey[100],
                                     child: Padding(
                                       padding: const EdgeInsets.all(10),
                                       child: Column(

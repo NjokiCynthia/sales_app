@@ -55,11 +55,6 @@ class _ApprovePricingState extends State<ApprovePricing> {
               const SizedBox(
                 height: 10,
               ),
-              // CircleAvatar(
-              //   backgroundColor: Colors.white,
-              //   //child: Image.asset('assets/images/tanker.png'),
-              //   radius: 50,
-              // ),
               const SizedBox(
                 height: 10,
               ),
@@ -70,13 +65,12 @@ class _ApprovePricingState extends State<ApprovePricing> {
                   borderColor: Colors.transparent,
                   plotAreaBorderWidth: 0,
                   primaryXAxis: NumericAxis(
-                    minimum: 17,
-                    maximum: 26,
-                    borderColor: primaryDarkColor,
-                    borderWidth: 0,
-                    labelStyle: const TextStyle(color: primaryDarkColor),
-                    //isVisible: false
-                  ),
+                      minimum: 17,
+                      maximum: 26,
+                      borderColor: primaryDarkColor,
+                      borderWidth: 0,
+                      labelStyle: const TextStyle(color: primaryDarkColor),
+                      isVisible: false),
                   primaryYAxis: NumericAxis(
                       minimum: 188,
                       maximum: 211,
@@ -84,7 +78,7 @@ class _ApprovePricingState extends State<ApprovePricing> {
                       borderWidth: 0,
                       //borderColor: primaryDarkColor,
                       labelStyle: const TextStyle(color: primaryDarkColor),
-                      isVisible: false),
+                      isVisible: true),
                   series: <ChartSeries<ChartData, int>>[
                     SplineAreaSeries(
                         dataSource: data,

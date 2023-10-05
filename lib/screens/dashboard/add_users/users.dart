@@ -5,7 +5,8 @@ import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/screens/dashboard/add_users/add_users.dart';
 import 'package:petropal/screens/dashboard/approval/approve_users.dart';
-import 'package:petropal/widgets/widget.dart';
+import 'package:petropal/screens/dashboard/view_users/omc.dart';
+import 'package:petropal/screens/dashboard/view_users/reseller.dart';
 
 class User {
   final String name;
@@ -170,7 +171,7 @@ class _UsersScreenState extends State<UsersScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ApproveUsers()));
+                                builder: (context) => const ApproveUsers()));
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(20),
@@ -219,7 +220,7 @@ class _UsersScreenState extends State<UsersScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -252,7 +253,7 @@ class _UsersScreenState extends State<UsersScreen> {
             tabs: [
               Tab(text: 'Oil Marketing Companies'),
               Tab(text: 'Resellers'),
-              Tab(text: 'Customers'),
+              //Tab(text: 'Customers'),
             ],
           ),
         ),
@@ -260,7 +261,7 @@ class _UsersScreenState extends State<UsersScreen> {
           children: [
             Omcs(),
             Resellers(),
-            Customers(),
+            // Customers(),
           ],
         ),
       ),
