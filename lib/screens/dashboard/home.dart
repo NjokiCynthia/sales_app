@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               .withOpacity(0.5), // Start color
                                           Colors.white, // End color
                                         ],
-                                        stops: <double>[
+                                        stops: const <double>[
                                           0.0,
                                           1.0
                                         ], // Gradient stops
@@ -203,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Container(
+                        SizedBox(
                           height: 150,
                           child: ListView.builder(
                               itemCount: card_titles.length,
@@ -270,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             '1000',
                                             style: m_title,
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 10,
                                           ),
                                           Row(

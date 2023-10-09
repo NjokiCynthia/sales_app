@@ -10,14 +10,11 @@ class CustomTransactionCard extends StatelessWidget {
     return ListView.builder(
       itemCount: 3,
       itemBuilder: (BuildContext context, int index) => Padding(
-        padding: EdgeInsets.all(5),
+        padding: const EdgeInsets.all(1),
         child: Card(
-          color: Colors.grey[200],
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-              side: BorderSide(color: primaryDarkColor)),
+          color: Colors.white,
           child: Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(5),
             child: Column(
               children: [
                 Row(
@@ -39,7 +36,7 @@ class CustomTransactionCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -69,14 +66,14 @@ class CustomTransactionCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Align(
                   alignment: Alignment.bottomRight,
                   child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: primaryDarkColor)),
+                          side: const BorderSide(color: primaryDarkColor)),
                       onPressed: () {},
                       child: Text(
                         'Approve prices',
@@ -152,10 +149,10 @@ class Users extends StatelessWidget {
                         ),
                         ElevatedButton(
                           onPressed: () {},
-                          child: const Text('View details'),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: primaryDarkColor.withOpacity(0.6),
                           ),
+                          child: const Text('View details'),
                         )
                       ],
                     )

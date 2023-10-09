@@ -58,24 +58,22 @@ class _DashboardState extends State<Dashboard> {
     showModalBottomSheet(
       context: context,
       builder: (context) {
-        return Container(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                title: const Text('Name 1'),
-                onTap: () {},
-              ),
-              ListTile(
-                title: const Text('Name 2'),
-                onTap: () {},
-              ),
-              ListTile(
-                title: const Text('Name 3'),
-                onTap: () {},
-              ),
-            ],
-          ),
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              title: const Text('Name 1'),
+              onTap: () {},
+            ),
+            ListTile(
+              title: const Text('Name 2'),
+              onTap: () {},
+            ),
+            ListTile(
+              title: const Text('Name 3'),
+              onTap: () {},
+            ),
+          ],
         );
       },
     );

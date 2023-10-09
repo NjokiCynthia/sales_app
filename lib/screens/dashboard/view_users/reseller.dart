@@ -53,7 +53,7 @@ class Resellers extends StatelessWidget {
                         height: 10,
                       ),
                       Padding(
-                        padding: EdgeInsets.only(top: 10, bottom: 10),
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -65,10 +65,10 @@ class Resellers extends StatelessWidget {
                               height: 28,
                               child: ElevatedButton(
                                 onPressed: () {},
-                                child: const Text('View details'),
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor:
                                         primaryDarkColor.withOpacity(0.6)),
+                                child: const Text('View details'),
                               ),
                             ),
                           ],

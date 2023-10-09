@@ -61,10 +61,10 @@ class Customers extends StatelessWidget {
                           ),
                           ElevatedButton(
                             onPressed: () {},
-                            child: const Text('View details'),
                             style: ElevatedButton.styleFrom(
                                 backgroundColor:
                                     primaryDarkColor.withOpacity(0.6)),
+                            child: const Text('View details'),
                           )
                           // Container(
                           //     decoration: BoxDecoration(
