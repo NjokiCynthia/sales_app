@@ -67,7 +67,7 @@ class _ApproveUsersState extends State<ApproveUsers> {
                           //   height: 10,
                           // ),
                           Padding(
-                            padding: EdgeInsets.only(top: 10, bottom: 10),
+                            padding: const EdgeInsets.only(top: 10, bottom: 10),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -83,7 +83,7 @@ class _ApproveUsersState extends State<ApproveUsers> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  OmcDetails()));
+                                                  const OmcDetails()));
                                     },
                                     style: ElevatedButton.styleFrom(
                                         backgroundColor:

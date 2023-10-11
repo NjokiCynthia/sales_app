@@ -41,7 +41,7 @@ class _PriceApprovalState extends State<PriceApproval> {
             'Product List',
             style: m_title,
           ),
-          bottom: TabBar(
+          bottom: const TabBar(
             labelColor: primaryDarkColor,
             indicatorColor: primaryDarkColor,
             tabs: [
@@ -68,7 +68,7 @@ class _PriceApprovalState extends State<PriceApproval> {
 class ApprovedPricesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text('List of Approved Prices'),
     );
   }
@@ -95,7 +95,7 @@ class _UnapprovedPricesScreenState extends State<UnapprovedPricesScreen> {
   void initState() {
     super.initState();
     _generateRandomProducts();
-    _filteredProducts = List.of(_products); // Initialize with all products.
+    _filteredProducts = List.of(_products);
   }
 
   void _generateRandomProducts() {
@@ -103,39 +103,48 @@ class _UnapprovedPricesScreenState extends State<UnapprovedPricesScreen> {
     for (int i = 1; i <= 20; i++) {
       final product = Product(
         name: 'OLA Energy',
-        amount: 80 +
-            random.nextDouble() *
-                20, // Generates random values between 80 and 100.
+        amount: 80 + random.nextDouble() * 20,
         description: 'Aug 24, 4.38pm',
       );
       _products.add(product);
     }
   }
 
-  void _filterProducts(String query) {
+  void _filterByName(String query) {
     setState(() {
       _filteredProducts = _products.where((product) {
-        if (widget.selectedSearchOption == SearchOption.Name) {
-          return product.name.toLowerCase().contains(query.toLowerCase());
-        } else {
-          final amountString = product.amount.toStringAsFixed(2);
-          return amountString.contains(query);
-        }
+        return product.name.toLowerCase().contains(query.toLowerCase());
       }).toList();
 
-      _showApproveButton = true;
+      _updateShowApproveButton();
     });
   }
 
-  void _resetFilter() {
+  void _filterByAmount(String query) {
     setState(() {
-      _generateRandomProducts();
-      _searchController.clear();
-      _minAmount = 0;
-      _maxAmount = 100;
-      _showApproveButton = false;
-      _filteredProducts = List.of(_products); // Reset to all products.
+      try {
+        final double queryAmount = double.parse(query);
+        _filteredProducts = _products.where((product) {
+          return product.amount >= queryAmount && product.amount <= _maxAmount;
+        }).toList();
+
+        _updateShowApproveButton();
+      } catch (e) {}
     });
+  }
+
+  void _updateShowApproveButton() {
+    setState(() {
+      _showApproveButton = _filteredProducts.isNotEmpty;
+    });
+  }
+
+  void _filterProducts(String query) {
+    if (widget.selectedSearchOption == SearchOption.Name) {
+      _filterByName(query);
+    } else {
+      _filterByAmount(query);
+    }
   }
 
   void _showApprovalDialog() {
@@ -157,7 +166,7 @@ class _UnapprovedPricesScreenState extends State<UnapprovedPricesScreen> {
                 Navigator.of(context).pop();
                 _showDisapprovalDialog();
               },
-              child: Text(
+              child: const Text(
                 'Yes',
                 style: TextStyle(color: primaryDarkColor),
               ),
@@ -166,7 +175,7 @@ class _UnapprovedPricesScreenState extends State<UnapprovedPricesScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text(
+              child: const Text(
                 'No',
                 style: TextStyle(color: primaryDarkColor),
               ),
@@ -182,8 +191,8 @@ class _UnapprovedPricesScreenState extends State<UnapprovedPricesScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirm Disapproval'),
-          content: Text('Do you want to disapprove all other products?'),
+          title: const Text('Confirm Disapproval'),
+          content: const Text('Do you want to disapprove all other products?'),
           actions: [
             TextButton(
               onPressed: () {
@@ -191,13 +200,13 @@ class _UnapprovedPricesScreenState extends State<UnapprovedPricesScreen> {
                 DefaultTabController.of(context)
                     ?.animateTo(0); // Switch to the first tab.
               },
-              child: Text('Yes'),
+              child: const Text('Yes'),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('No'),
+              child: const Text('No'),
             ),
           ],
         );
@@ -247,7 +256,7 @@ class _UnapprovedPricesScreenState extends State<UnapprovedPricesScreen> {
                       }).toList(),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Expanded(
@@ -322,7 +331,7 @@ class _UnapprovedPricesScreenState extends State<UnapprovedPricesScreen> {
                                     product.name,
                                     style: displayTitle,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 20,
                                   ),
                                   Text(
@@ -338,7 +347,7 @@ class _UnapprovedPricesScreenState extends State<UnapprovedPricesScreen> {
                                     'Kes ${product.amount.toStringAsFixed(2)}',
                                     style: displayTitle,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 20,
                                   ),
                                   Row(
@@ -352,7 +361,7 @@ class _UnapprovedPricesScreenState extends State<UnapprovedPricesScreen> {
                                         color: Colors.redAccent,
                                       ),
                                       Padding(
-                                        padding: EdgeInsets.only(left: 20),
+                                        padding: const EdgeInsets.only(left: 20),
                                         child: Image.asset(
                                           'assets/images/cancel.png',
                                           width: 15,
@@ -367,7 +376,7 @@ class _UnapprovedPricesScreenState extends State<UnapprovedPricesScreen> {
                             ]),
                       ),
                       Padding(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         child: Divider(
                           color: Colors.grey[200],
                           thickness: 1.0,
@@ -391,7 +400,7 @@ class _UnapprovedPricesScreenState extends State<UnapprovedPricesScreen> {
               onPressed: () {
                 _showApprovalDialog();
               },
-              child: Text('Approve Price'),
+              child: const Text('Approve Price'),
             ),
           ),
       ],

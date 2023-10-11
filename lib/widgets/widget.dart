@@ -90,7 +90,7 @@ class CustomTransactionCard extends StatelessWidget {
 }
 
 class Users extends StatelessWidget {
-  const Users({Key? key});
+  const Users({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +169,7 @@ class Users extends StatelessWidget {
 }
 
 class Transactions extends StatelessWidget {
-  const Transactions({Key? key});
+  const Transactions({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -235,7 +235,7 @@ class Transactions extends StatelessWidget {
 }
 
 class Orders extends StatelessWidget {
-  const Orders({Key? key});
+  const Orders({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -333,7 +333,7 @@ class Orders extends StatelessWidget {
 }
 
 class Products extends StatelessWidget {
-  const Products({Key? key});
+  const Products({super.key});
 
   @override
   Widget build(BuildContext context) {

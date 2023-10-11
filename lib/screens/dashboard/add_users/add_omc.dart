@@ -35,16 +35,16 @@ class _AddOMCState extends State<AddOMC> {
                   //crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Text('Enter the EPRA license expiry date',
                               style: bodyText),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           TextFormField(
                             style: bodyText,
                             keyboardType: TextInputType.number,
@@ -82,10 +82,10 @@ class _AddOMCState extends State<AddOMC> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           Text('Enter your EPRA license number',
                               style: bodyText),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           TextFormField(
                             style: bodyText,
                             keyboardType: TextInputType.number,
@@ -123,7 +123,7 @@ class _AddOMCState extends State<AddOMC> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           SizedBox(
                             height: 48,
                             child: ElevatedButton(
@@ -134,7 +134,7 @@ class _AddOMCState extends State<AddOMC> {
                                     .pop(); // Close the bottom sheet
                                 _showConfirmation(); // Display the confirmation dialog
                               },
-                              child: Text('Confirm'),
+                              child: const Text('Confirm'),
                             ),
                           ),
                         ],
@@ -168,7 +168,7 @@ class _AddOMCState extends State<AddOMC> {
                 'Entered Date: $enteredDate',
                 style: bodyText,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Text(
