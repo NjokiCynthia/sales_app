@@ -14,15 +14,12 @@ class MyTheme {
         const BottomSheetThemeData(backgroundColor: primaryDarkColor),
     appBarTheme:
         const AppBarTheme(backgroundColor: primaryDarkColor, elevation: 0),
+    textTheme: const TextTheme(
+      bodyLarge: TextStyle(
+          color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),
+    ),
   );
 }
-
-TextStyle displaySmallThinWhite = GoogleFonts.getFont(
-  Strings.fontName, // Use the Strings class to get the font family
-  fontSize: 12,
-  fontWeight: FontWeight.w300,
-  color: Colors.white,
-);
 
 TextStyle bodyText = GoogleFonts.getFont(
   Strings.fontName,
@@ -52,6 +49,12 @@ TextStyle displayTitle = GoogleFonts.getFont(
   Strings.fontName,
   fontSize: 16,
   fontWeight: FontWeight.bold,
+  color: Colors.black,
+);
+TextStyle textBold = GoogleFonts.getFont(
+  Strings.fontName,
+  fontSize: 14,
+  fontWeight: FontWeight.w700,
   color: Colors.black,
 );
 
@@ -89,6 +92,18 @@ TextStyle displaySmallerLightGrey = GoogleFonts.getFont(
   Strings.fontName,
   fontSize: 13,
   fontWeight: FontWeight.w500,
+  color: Colors.black.withOpacity(0.4),
+);
+TextStyle displayGrey = GoogleFonts.getFont(
+  Strings.fontName,
+  fontSize: 14,
+  fontWeight: FontWeight.w500,
+  color: Colors.black.withOpacity(0.4),
+);
+TextStyle greyText = GoogleFonts.getFont(
+  Strings.fontName,
+  fontSize: 14,
+  fontWeight: FontWeight.bold,
   color: Colors.black.withOpacity(0.4),
 );
 

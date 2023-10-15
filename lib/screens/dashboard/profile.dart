@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:petropal/constants/color_contants.dart';
 
 class Profile extends StatefulWidget {
@@ -11,6 +12,9 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.grey[50], // Set the desired color
+    ));
     return Scaffold(
       backgroundColor: Colors.grey[50], // Very light shade of grey
       body: SafeArea(

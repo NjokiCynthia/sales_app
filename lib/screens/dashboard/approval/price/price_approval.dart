@@ -332,11 +332,12 @@ class _UnapprovedPricesScreenState extends State<UnapprovedPricesScreen> {
                                     style: displayTitle,
                                   ),
                                   const SizedBox(
-                                    height: 20,
+                                    height: 10,
                                   ),
                                   Text(
                                     '${product.description}',
-                                    style: bodyText,
+                                    style:
+                                        bodyText.copyWith(color: Colors.grey),
                                   ),
                                 ],
                               ),
@@ -348,7 +349,7 @@ class _UnapprovedPricesScreenState extends State<UnapprovedPricesScreen> {
                                     style: displayTitle,
                                   ),
                                   const SizedBox(
-                                    height: 20,
+                                    height: 10,
                                   ),
                                   Row(
                                     mainAxisAlignment:
@@ -361,7 +362,8 @@ class _UnapprovedPricesScreenState extends State<UnapprovedPricesScreen> {
                                         color: Colors.redAccent,
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(left: 20),
+                                        padding:
+                                            const EdgeInsets.only(left: 20),
                                         child: Image.asset(
                                           'assets/images/cancel.png',
                                           width: 15,

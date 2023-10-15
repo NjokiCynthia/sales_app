@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/screens/onboarding/splash.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(statusBarColor: Color.fromRGBO(238, 239, 240, 1)));
   runApp(
     MultiProvider(
       providers: [

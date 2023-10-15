@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/screens/dashboard/add_users/users.dart';
+import 'package:petropal/screens/dashboard/view_users/users.dart';
 
 class AddReseller extends StatefulWidget {
   const AddReseller({super.key});

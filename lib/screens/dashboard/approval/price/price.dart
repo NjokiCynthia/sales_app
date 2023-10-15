@@ -78,7 +78,7 @@ class _ApprovePricingState extends State<ApprovePricing> {
                       borderWidth: 0,
                       //borderColor: primaryDarkColor,
                       labelStyle: const TextStyle(color: primaryDarkColor),
-                      isVisible: true),
+                      isVisible: false),
                   series: <ChartSeries<ChartData, int>>[
                     SplineAreaSeries(
                         dataSource: data,

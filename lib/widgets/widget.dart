@@ -222,7 +222,7 @@ class Transactions extends StatelessWidget {
                   Text(
                     '12 Sept 2023',
                     style: displaySmallerLightGrey,
-                  )
+                  ),
                 ],
               ),
             ),
