@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/screens/dashboard/chart_data.dart';
+import 'package:petropal/screens/superadmin_dashboard/chart_data.dart';
 
 import 'package:petropal/widgets/widget.dart';
 

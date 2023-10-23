@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/screens/dashboard/approval/details/omc_details.dart';
+import 'package:petropal/screens/superadmin_dashboard/approval/details/omc_details.dart';
 
 class ApproveUsers extends StatefulWidget {
   const ApproveUsers({super.key});

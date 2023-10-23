@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/screens/dashboard/view_users/users.dart';
+import 'package:petropal/screens/superadmin_dashboard/view_users/users.dart';
 
-class AddCustomer extends StatefulWidget {
-  const AddCustomer({super.key});
+class AddReseller extends StatefulWidget {
+  const AddReseller({super.key});
 
   @override
-  State<AddCustomer> createState() => _AddCustomerState();
+  State<AddReseller> createState() => _AddResellerState();
 }
 
-class _AddCustomerState extends State<AddCustomer> {
+class _AddResellerState extends State<AddReseller> {
   String phone_number_inpt = '';
 
   String initialCountry = 'KE';
@@ -32,7 +32,7 @@ class _AddCustomerState extends State<AddCustomer> {
               width: 10,
             ),
             Text(
-              'Name of the customer',
+              'Name of the reseller',
               style: bodyText,
             ),
           ],
@@ -46,7 +46,7 @@ class _AddCustomerState extends State<AddCustomer> {
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
-            labelText: 'Enter the customer name',
+            labelText: 'Enter the name',
             labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
                 .copyWith(color: Colors.grey),
             border: OutlineInputBorder(
@@ -201,6 +201,72 @@ class _AddCustomerState extends State<AddCustomer> {
                 width: 1.0,
               ),
               borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+        Row(
+          children: [
+            const Icon(
+              Icons.edit_document,
+              color: primaryDarkColor,
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Text(
+              'Upload Single Business document',
+              style: bodyText,
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          width: 150, // Set the desired width
+          padding: const EdgeInsets.all(10), // Adjust the padding as needed
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(10), // Grey border
+          ),
+          child: Center(
+            child: Text(
+              'Upload',
+              style: bodyText,
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+        Row(
+          children: [
+            const Icon(
+              Icons.document_scanner_sharp,
+              color: primaryDarkColor,
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Text(
+              'Upload Certificate of Incoporation',
+              style: bodyText,
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          width: 150, // Set the desired width
+          padding: const EdgeInsets.all(10), // Adjust the padding as needed
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(10), // Grey border
+          ),
+          child: Center(
+            child: Text(
+              'Upload',
+              style: bodyText,
             ),
           ),
         ),

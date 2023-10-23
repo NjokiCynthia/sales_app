@@ -3,10 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/screens/dashboard/add_users/add_users.dart';
-import 'package:petropal/screens/dashboard/approval/approve_users.dart';
-import 'package:petropal/screens/dashboard/view_users/omc.dart';
-import 'package:petropal/screens/dashboard/view_users/reseller.dart';
+import 'package:petropal/screens/superadmin_dashboard/add_users/add_users.dart';
+import 'package:petropal/screens/superadmin_dashboard/approval/approve_users.dart';
+import 'package:petropal/screens/superadmin_dashboard/view_users/omc.dart';
+import 'package:petropal/screens/superadmin_dashboard/view_users/reseller.dart';
 
 class User {
   final String name;

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/screens/dashboard/add_users/add_customer.dart';
-import 'package:petropal/screens/dashboard/add_users/add_omc.dart';
-import 'package:petropal/screens/dashboard/add_users/add_reseller.dart';
+import 'package:petropal/screens/superadmin_dashboard/add_users/add_customer.dart';
+import 'package:petropal/screens/superadmin_dashboard/add_users/add_omc.dart';
+import 'package:petropal/screens/superadmin_dashboard/add_users/add_reseller.dart';
 
 class AddUsers extends StatefulWidget {
   final String? selectedUserType;

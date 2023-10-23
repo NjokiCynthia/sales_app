@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
-import 'package:petropal/screens/dashboard/home.dart';
-import 'package:petropal/screens/dashboard/orders.dart';
-import 'package:petropal/screens/dashboard/products.dart';
-import 'package:petropal/screens/dashboard/profile.dart';
-import 'package:petropal/screens/dashboard/view_users/users.dart';
+import 'package:petropal/screens/superadmin_dashboard/home.dart';
+import 'package:petropal/screens/superadmin_dashboard/orders.dart';
+import 'package:petropal/screens/superadmin_dashboard/products.dart';
+import 'package:petropal/screens/superadmin_dashboard/profile.dart';
+import 'package:petropal/screens/superadmin_dashboard/view_users/users.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);

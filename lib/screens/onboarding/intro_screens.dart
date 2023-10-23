@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/reseller/authentication/signup.dart';
 import 'package:petropal/screens/authentication/login.dart';
 
 class HomePage extends StatefulWidget {
@@ -75,7 +76,7 @@ class _HomePageState extends State<HomePage> {
       showSkipButton: true,
       dotsFlex: 0,
       nextFlex: 0,
-// skipOrBackFlex: 0,
+      // skipOrBackFlex: 0,
       skip: Align(
         alignment: Alignment.bottomLeft,
         child: Container(
@@ -100,8 +101,8 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Login(),
-                ),
+                    // builder: (context) => Login(),
+                    builder: (context) => Signup()),
               );
             },
             style: ElevatedButton.styleFrom(
@@ -121,6 +122,7 @@ class _HomePageState extends State<HomePage> {
         size: const Size.square(10.0),
         activeSize: const Size(20.0, 10.0),
         activeColor: primaryDarkColor,
+
         color: primaryDarkColor.withOpacity(0.5), // Color of inactive dots
         spacing: const EdgeInsets.symmetric(horizontal: 3),
         activeShape: RoundedRectangleBorder(
@@ -133,12 +135,14 @@ class _HomePageState extends State<HomePage> {
   PageDecoration pageDecoration() {
     return PageDecoration(
       titleTextStyle: m_title,
+
       // Theme.of(context)
       //     .textTheme
       //     .headlineSmall!
       //     .copyWith(color: Colors.black),
       //Theme.of(context).textTheme.displayLarge!,
       bodyTextStyle: bodyText,
+
       //  Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.black),
       imagePadding: EdgeInsets.fromLTRB(0, 60, 0, 60),
       contentMargin: EdgeInsets.symmetric(horizontal: 16.0),

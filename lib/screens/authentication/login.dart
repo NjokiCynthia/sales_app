@@ -3,7 +3,7 @@ import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/providers/user_provider.dart';
-import 'package:petropal/screens/dashboard/dashboard.dart';
+import 'package:petropal/screens/superadmin_dashboard/dashboard.dart';
 import 'package:petropal/widgets/buttons.dart';
 import 'package:provider/provider.dart';
 

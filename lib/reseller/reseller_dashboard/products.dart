@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/screens/dashboard/approval/price/price_approval.dart';
+import 'package:petropal/screens/superadmin_dashboard/approval/price/price_approval.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});

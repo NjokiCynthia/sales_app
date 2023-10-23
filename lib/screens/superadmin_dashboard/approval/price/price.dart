@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/screens/dashboard/chart_data.dart';
+import 'package:petropal/screens/superadmin_dashboard/chart_data.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class ApprovePricing extends StatefulWidget {
