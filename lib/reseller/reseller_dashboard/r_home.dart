@@ -5,6 +5,7 @@ import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_transactions.dart';
 import 'package:petropal/screens/superadmin_dashboard/chart_data.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -16,12 +17,6 @@ class ResellerHome extends StatefulWidget {
 }
 
 class _ResellerHomeState extends State<ResellerHome> {
-  final List<Color> cardColors = [
-    const Color(0xFF012F6D), // #012F6D
-    const Color(0xFFFF9A00), // #FF9A00
-    const Color(0xFFAABBCC), // Another color of your choice
-  ];
-
   // Initial Selected Value
   String dropdownvalue = 'Weekly';
 
@@ -35,12 +30,6 @@ class _ResellerHomeState extends State<ResellerHome> {
   int _currentgraph = 0;
 
   List<String> titles = ['Petrol', 'Diesel', 'Kerosene'];
-  List<String> card_titles = [
-    'Transactions',
-    'Products',
-    'Orders',
-    'Users',
-  ];
 
   int selectedCardIndex = 0;
 
@@ -222,6 +211,20 @@ class _ResellerHomeState extends State<ResellerHome> {
               SizedBox(
                 height: 10,
               ),
+              CarouselSlider(
+                items: List.generate(5, (index) => buildCard(index)),
+                options: CarouselOptions(
+                  height: 200,
+                  autoPlay: true,
+                  autoPlayInterval: Duration(seconds: 2),
+                  autoPlayAnimationDuration: Duration(milliseconds: 800),
+                  enableInfiniteScroll: true,
+                  enlargeCenterPage: true,
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
               Padding(
                 padding: EdgeInsets.all(8),
                 child: Row(
@@ -349,4 +352,19 @@ class _ResellerHomeState extends State<ResellerHome> {
               )
             ])));
   }
+}
+
+Widget buildCard(int index) {
+  return AnimatedContainer(
+    height: 100,
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        gradient: SweepGradient(
+          colors: [Color(0xffff9a00), Color(0xfffdfdfc)],
+          stops: [0.01, 0.9],
+          center: Alignment.bottomRight,
+        )),
+    duration: Duration(seconds: 1),
+    width: double.infinity,
+  );
 }

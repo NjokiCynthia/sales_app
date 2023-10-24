@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
+import 'package:petropal/reseller/reseller_dashboard/products.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_home.dart';
+import 'package:petropal/reseller/reseller_dashboard/r_orders.dart';
 import 'package:petropal/screens/superadmin_dashboard/home.dart';
 import 'package:petropal/screens/superadmin_dashboard/orders.dart';
 import 'package:petropal/screens/superadmin_dashboard/products.dart';
@@ -21,9 +23,8 @@ class _ResellerDasboardState extends State<ResellerDasboard> {
   List<Widget> _buildScreens() {
     return [
       const ResellerHome(),
-      const ProductsScreen(),
-      const UsersScreen(),
-      const AllOrders(),
+      const ResellerProducts(),
+      const ResellerOrders(),
       const Profile(),
     ];
   }
@@ -43,7 +44,6 @@ class _ResellerDasboardState extends State<ResellerDasboard> {
         items: [
           _buildNavBarItem(0, CupertinoIcons.home, 'Home'),
           _buildNavBarItem(1, CupertinoIcons.shopping_cart, 'Products'),
-          _buildNavBarItem(2, Icons.people, 'Users'),
           _buildNavBarItem(3, CupertinoIcons.list_bullet, 'Orders'),
           _buildNavBarItem(4, CupertinoIcons.settings, 'Settings'),
         ],

@@ -41,7 +41,7 @@ class _AllOrdersState extends State<AllOrders> {
                         child: Row(children: [
                           Text(
                             "#1234",
-                            style: textBold,
+                            style: textBolder,
                           ),
                           SizedBox(
                             width: 10,

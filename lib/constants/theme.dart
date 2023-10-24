@@ -63,9 +63,17 @@ TextStyle displayTitle = GoogleFonts.getFont(
   fontWeight: FontWeight.bold,
   color: Colors.black,
 );
-TextStyle textBold = GoogleFonts.getFont(
+
+TextStyle textBolder = GoogleFonts.getFont(
   Strings.fontName,
-  fontSize: 14,
+  fontSize: 16,
+  fontWeight: FontWeight.w700,
+  color: Colors.black,
+);
+
+TextStyle boldText = GoogleFonts.getFont(
+  Strings.fontName,
+  fontSize: 18,
   fontWeight: FontWeight.w700,
   color: Colors.black,
 );

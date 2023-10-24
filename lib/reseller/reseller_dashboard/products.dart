@@ -4,18 +4,18 @@ import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/screens/superadmin_dashboard/approval/price/price_approval.dart';
 
-class ProductsScreen extends StatefulWidget {
-  const ProductsScreen({super.key});
+class ResellerProducts extends StatefulWidget {
+  const ResellerProducts({super.key});
 
   @override
-  State<ProductsScreen> createState() => _ProductsScreenState();
+  State<ResellerProducts> createState() => _ResellerProductsState();
 }
 
-class _ProductsScreenState extends State<ProductsScreen> {
+class _ResellerProductsState extends State<ResellerProducts> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.grey[50], // Set the desired color
+      statusBarColor: Colors.grey[50],
     ));
     return Scaffold(
       backgroundColor: Colors.grey[50],
