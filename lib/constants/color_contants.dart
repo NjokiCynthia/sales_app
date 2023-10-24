@@ -10,7 +10,7 @@ const Color secondaryDarkColor = Color.fromRGBO(255, 154, 0, 1.0);
 
 const Color dark2Color = Color.fromARGB(255, 46, 19, 24);
 const Color texformfieldColor = Colors.white;
-const Color backColor = Color.fromRGBO(238, 239, 240, 1);
+const Color backColor = Color.fromARGB(255, 250, 250, 250);
 const Color dark4Color = Color.fromARGB(255, 12, 1, 3);
 const Color dark5Color = Color.fromARGB(255, 169, 159, 161);
 const Color labelColor = Color.fromARGB(189, 189, 189, 1);

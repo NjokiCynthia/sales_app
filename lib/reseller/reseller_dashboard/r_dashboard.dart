@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
-import 'package:petropal/reseller/reseller_dashboard/products.dart';
+import 'package:petropal/reseller/reseller_dashboard/r_products.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_home.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_orders.dart';
 import 'package:petropal/screens/superadmin_dashboard/home.dart';
