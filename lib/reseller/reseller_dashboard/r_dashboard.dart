@@ -4,6 +4,7 @@ import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_products.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_home.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_orders.dart';
+import 'package:petropal/reseller/reseller_dashboard/reseller_profile/r_profile.dart';
 import 'package:petropal/screens/superadmin_dashboard/home.dart';
 import 'package:petropal/screens/superadmin_dashboard/orders.dart';
 import 'package:petropal/screens/superadmin_dashboard/products.dart';
@@ -25,7 +26,7 @@ class _ResellerDasboardState extends State<ResellerDasboard> {
       const ResellerHome(),
       const ResellerProducts(),
       const ResellerOrders(),
-      const Profile(),
+      const ResellerProfile(),
     ];
   }
 

@@ -114,16 +114,6 @@ class _SignupState extends State<Signup> {
         body: SafeArea(
           child: Column(
             children: [
-              // Container(
-              //     margin: const EdgeInsets.only(top: 20, bottom: 20),
-              //     child: Container(
-              //       margin: const EdgeInsets.only(right: 10),
-              //       child: Image.asset(
-              //         'assets/images/icons/petropal_logo.png',
-              //         width: 40,
-              //         height: 50,
-              //       ),
-              //     )),
               SizedBox(
                 height: 50,
               ),
@@ -148,10 +138,8 @@ class _SignupState extends State<Signup> {
                   padding: EdgeInsets.all(5),
                   child: TabBarView(
                     children: [
-                      // First Page
                       buildFirstPage(),
 
-                      // Second Page
                       buildSecondPage(),
 
                       // Third Page
@@ -191,8 +179,7 @@ class _SignupState extends State<Signup> {
                       filled: true,
                       fillColor: Colors.white,
                       labelText: 'First name',
-                      labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                          .copyWith(color: Colors.grey),
+                      labelStyle: TextStyle(color: Colors.grey[500]),
                       border: OutlineInputBorder(
                         borderSide: const BorderSide(
                           color: Colors.grey,
@@ -232,8 +219,7 @@ class _SignupState extends State<Signup> {
                       filled: true,
                       fillColor: Colors.white,
                       labelText: 'Last name',
-                      labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                          .copyWith(color: Colors.grey),
+                    labelStyle: TextStyle(color: Colors.grey[500]),
                       border: OutlineInputBorder(
                         borderSide: const BorderSide(
                           color: Colors.grey,
@@ -299,8 +285,7 @@ class _SignupState extends State<Signup> {
               filled: true,
               fillColor: Colors.white,
               labelText: 'Phone number',
-              labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                  .copyWith(color: Colors.grey),
+             labelStyle: TextStyle(color: Colors.grey[500]),
               border: OutlineInputBorder(
                 borderSide: const BorderSide(
                   color: Colors.grey,
@@ -340,8 +325,7 @@ class _SignupState extends State<Signup> {
               filled: true,
               fillColor: Colors.white,
               labelText: 'Enter Email Address',
-              labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                  .copyWith(color: Colors.grey),
+             labelStyle: TextStyle(color: Colors.grey[500]),
               border: OutlineInputBorder(
                 borderSide: const BorderSide(
                   color: Colors.grey,
@@ -456,8 +440,7 @@ class _SignupState extends State<Signup> {
               filled: true,
               fillColor: Colors.white,
               labelText: 'Orgnisation name',
-              labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                  .copyWith(color: Colors.grey),
+             labelStyle: TextStyle(color: Colors.grey[500]),
               border: OutlineInputBorder(
                 borderSide: const BorderSide(
                   color: Colors.grey,
@@ -550,8 +533,7 @@ class _SignupState extends State<Signup> {
               filled: true,
               fillColor: Colors.white,
               labelText: 'Organisation Email Address',
-              labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                  .copyWith(color: Colors.grey),
+            labelStyle: TextStyle(color: Colors.grey[500]),
               border: OutlineInputBorder(
                 borderSide: const BorderSide(
                   color: Colors.grey,
@@ -615,8 +597,7 @@ class _SignupState extends State<Signup> {
               filled: true,
               fillColor: Colors.white,
               labelText: 'Organisation Phone number',
-              labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                  .copyWith(color: Colors.grey),
+             labelStyle: TextStyle(color: Colors.grey[500]),
               border: OutlineInputBorder(
                 borderSide: const BorderSide(
                   color: Colors.grey,
@@ -680,8 +661,7 @@ class _SignupState extends State<Signup> {
             filled: true,
             fillColor: Colors.white,
             labelText: 'Enter password',
-            labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                .copyWith(color: Colors.grey),
+           labelStyle: TextStyle(color: Colors.grey[500]),
             border: OutlineInputBorder(
               borderSide: const BorderSide(
                 color: Colors.grey,
@@ -732,8 +712,7 @@ class _SignupState extends State<Signup> {
             filled: true,
             fillColor: Colors.white,
             labelText: 'Confirm password',
-            labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                .copyWith(color: Colors.grey),
+          labelStyle: TextStyle(color: Colors.grey[500]),
             border: OutlineInputBorder(
               borderSide: const BorderSide(
                 color: Colors.grey,

@@ -38,23 +38,31 @@ class _ResellerProductsState extends State<ResellerProducts> {
               decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(
-                    color: Colors.grey,
+                    color: Colors.grey.shade200,
+                    width: 2,
                   ),
                   borderRadius: BorderRadius.circular(8)),
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(15),
+                    padding: EdgeInsets.only(left: 15, right: 15, top: 5),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "#2023/INV/10-0001",
-                          style: TextStyle(color: Colors.black),
+                          "Total Energies Kenya",
+                          style: boldText,
                         ),
-                        Text(
-                          "Diesel",
-                          style: TextStyle(color: Colors.black),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: primaryDarkColor.withOpacity(0.1),
+                            shape: BoxShape.circle,
+                          ),
+                          padding: const EdgeInsets.all(5),
+                          child: const Icon(
+                            Icons.more_vert,
+                            color: primaryDarkColor,
+                          ),
                         ),
                       ],
                     ),
@@ -64,96 +72,73 @@ class _ResellerProductsState extends State<ResellerProducts> {
                     //  indent: BorderSide.strokeAlignInside,
                   ),
                   Padding(
-                    padding: EdgeInsets.all(15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "#2023/INV/10-0001",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              "Sun, 15 Feb 2023",
-                              style: greyText,
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  "Diesel",
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: Color.fromRGBO(255, 226, 229, 1.0),
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                        top: 4, bottom: 4, left: 8, right: 8),
-                                    child: Text(
-                                      "Pending",
-                                      style: TextStyle(
-                                        color: Color.fromRGBO(246, 78, 96, 1.0),
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      RichText(
-                        text: TextSpan(
-                          style: DefaultTextStyle.of(context).style,
-                          children: <TextSpan>[
-                            TextSpan(text: "KES 50,000/", style: boldText),
-                            TextSpan(
-                              text: '50 liters',
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey), // Style for the unit
-                            ),
-                          ],
-                        ),
-                      ),
-                      // Text(
-                      //   "KES 50,000",
-                      //   style: textbold,
-                      // ),
-                      Text(
-                        "View more",
-                        style: TextStyle(
-                          color: primaryDarkColor.withOpacity(0.5),
-                          fontSize: 12,
-                          decoration: TextDecoration.underline,
-                          decorationColor: primaryDarkColor,
-                          decorationStyle: TextDecorationStyle.dotted,
-                          decorationThickness: 3,
-                        ),
-                      ),
-                    ],
-                  ),
+                      padding: EdgeInsets.all(15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Depot Location",
+                            style: greyText,
+                          ),
+                          Text(
+                            'Mombasa',
+                            style: bold,
+                          ),
+                        ],
+                      )),
+                  Padding(
+                      padding: EdgeInsets.only(left: 15, right: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Diesel",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          Text(
+                            'KES 200',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      )),
+                  Padding(
+                      padding: EdgeInsets.only(top: 5, left: 15, right: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Kerosene",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          Text(
+                            'KES 200',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      )),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          top: 5, left: 15, right: 15, bottom: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //crossAxisAlignment: CrossAxisAlignment.spa,
+                        children: [
+                          Text(
+                            "Petrol",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          Text(
+                            'KES 200',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      )),
                 ],
               ))),
           itemCount: 20,

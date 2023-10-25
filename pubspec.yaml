@@ -51,6 +51,7 @@ dependencies:
   persistent_bottom_nav_bar: ^5.0.2
   cupertino_icons: ^1.0.6
   carousel_slider: ^4.2.1
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
@@ -97,6 +98,8 @@ flutter:
     - assets/illustrations/invoice.png
     - assets/illustrations/organize.png
     - assets/images/icons/avatar.png
+    - assets/images/bank.png
+    - assets/images/users.png
     - assets/images/icons/invest.png
     - assets/images/icons/manage.png
     - assets/images/rubis.png

@@ -47,8 +47,7 @@ class _AddCustomerState extends State<AddCustomer> {
             filled: true,
             fillColor: Colors.white,
             labelText: 'Enter the customer name',
-            labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                .copyWith(color: Colors.grey),
+           labelStyle: TextStyle(color: Colors.grey[500]),
             border: OutlineInputBorder(
               borderSide: const BorderSide(
                 color: Colors.grey,
@@ -127,8 +126,7 @@ class _AddCustomerState extends State<AddCustomer> {
             filled: true,
             fillColor: Colors.white,
             labelText: 'Enter Phone number',
-            labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                .copyWith(color: Colors.grey),
+            labelStyle: TextStyle(color: Colors.grey[500]),
             border: OutlineInputBorder(
               borderSide: const BorderSide(
                 color: Colors.grey,

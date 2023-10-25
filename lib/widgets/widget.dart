@@ -661,129 +661,23 @@ void showCustomBottomSheet(BuildContext context) {
   );
 }
 
+class PageTransition extends PageRouteBuilder {
+  final Widget page;
 
-
-
- 
-
-
-
-
-
-
-
-//     Padding(
-//         padding:
-//             EdgeInsets.symmetric(horizontal: 10), // Adjust horizontal padding
-//         child: Card(
-//             color: Colors.white,
-//             shape: RoundedRectangleBorder(
-//               borderRadius: BorderRadius.circular(8.0),
-//               side: BorderSide(
-//                 color: primaryDarkColor.withOpacity(0.1),
-//                 width: 1.0,
-//               ),
-//             ),
-//             child: Column(children: [
-//               Padding(
-//                 padding: EdgeInsets.all(10),
-//                 child: Icon(
-//                   Icons.assignment,
-//                   size: 48.0,
-//                   color: primaryDarkColor,
-//                 ),
-//               ),
-//               Text(
-//                 userName,
-//                 style: displayTitle,
-//               ),
-//               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-//                 Text('Proforma Invoice ',
-//                     //'Amount: $amount',
-//                     style: displayTitle),
-//                 Text(
-//                   '#20001',
-//                   style: bodyText,
-//                 ),
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                   children: [
-//                     Text(date, style: bodyText),
-//                     StatusContainer(
-//                       color: Colors.green,
-//                       text: 'Pending',
-//                     ),
-//                   ],
-//                 ),
-//               ]),
-//             ])));
-//   }
-// }
-
-// class StatusContainer extends StatelessWidget {
-//   final Color color;
-//   final String text;
-//   final Color? fadedColor;
-
-//   StatusContainer({
-//     required this.color,
-//     required this.text,
-//     this.fadedColor,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       decoration: BoxDecoration(
-//           color: Colors.greenAccent.withOpacity(0.1),
-//           borderRadius: BorderRadius.only(
-//             topLeft: Radius.circular(8.0),
-//             bottomRight: Radius.circular(8.0),
-//           ),
-//           border: Border.all(color: Colors.greenAccent)),
-//       padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-//       child: Text(
-//         text,
-//         style: TextStyle(color: Colors.greenAccent),
-//       ),
-//     );
-//   }
-// }
-// // import 'package:flutter/material.dart';
-// // import 'package:petropal/constants/color_contants.dart';
-// // import 'package:petropal/constants/theme.dart';
-
-// // class TransactionCard extends StatelessWidget {
-// //   const TransactionCard({super.key});
-
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     return Container(
-// //       child: Column(
-// //         children: [
-// //           Icon(
-// //             Icons.assignment,
-// //           ),
-// //           Row(children: [
-// //             Text(
-// //               'Proforma Invoice #20001',
-// //               style: displayTitle,
-// //             ),
-// //             Text('Kes 500,000')
-// //           ]),
-// //           Row(children: [
-// //             Text('5th September 2023: '),
-// //             Container(
-// //               decoration:
-// //                   BoxDecoration(color: Colors.greenAccent.withOpacity(0.1)),
-// //               child: Text(
-// //                 'pending',
-// //                 style: TextStyle(color: Colors.greenAccent),
-// //               ),
-// //             )
-// //           ]),
-// //         ],
-// //       ),
-// //     );
-// //   }
-// // }
+  PageTransition({required this.page})
+      : super(
+          pageBuilder: (context, animation, secondaryAnimation) => page,
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(1.0, 0.0);
+            const end = Offset.zero;
+            const curve = Curves.easeInOut;
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
+            return SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            );
+          },
+        );
+}

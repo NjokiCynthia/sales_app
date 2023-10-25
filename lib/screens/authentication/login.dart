@@ -79,8 +79,7 @@ class _LoginState extends State<Login> {
                           filled: true,
                           fillColor: Colors.white,
                           labelText: 'Enter email address',
-                          labelStyle:
-                              bodyTextSmall.copyWith(color: Colors.grey),
+                         labelStyle: TextStyle(color: Colors.grey[500]),
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: primaryDarkColor.withOpacity(0.1),
@@ -128,8 +127,7 @@ class _LoginState extends State<Login> {
                           filled: true,
                           fillColor: Colors.white,
                           labelText: 'Enter password',
-                          labelStyle:
-                              bodyTextSmall.copyWith(color: Colors.grey),
+                         labelStyle: TextStyle(color: Colors.grey[500]),
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
                               color: primaryDarkColor.withOpacity(0.1),

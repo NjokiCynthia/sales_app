@@ -45,6 +45,12 @@ TextStyle bodyGrey1 = GoogleFonts.getFont(
   fontWeight: FontWeight.bold,
   color: Colors.grey,
 );
+TextStyle greyT = GoogleFonts.getFont(
+  Strings.fontName,
+  fontSize: 14,
+  fontWeight: FontWeight.normal,
+  color: Colors.grey,
+);
 TextStyle bodyTextSmaller = GoogleFonts.getFont(
   Strings.fontName,
   fontSize: 12,
@@ -74,6 +80,12 @@ TextStyle textBolder = GoogleFonts.getFont(
 TextStyle boldText = GoogleFonts.getFont(
   Strings.fontName,
   fontSize: 18,
+  fontWeight: FontWeight.w700,
+  color: Colors.black,
+);
+TextStyle bold = GoogleFonts.getFont(
+  Strings.fontName,
+  fontSize: 16,
   fontWeight: FontWeight.w700,
   color: Colors.black,
 );

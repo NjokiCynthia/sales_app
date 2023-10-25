@@ -57,8 +57,7 @@ class _AddOMCState extends State<AddOMC> {
                               filled: true,
                               fillColor: Colors.white,
                               labelText: 'Enter date',
-                              labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                                  .copyWith(color: Colors.grey),
+                              labelStyle: TextStyle(color: Colors.grey[500]),
                               border: OutlineInputBorder(
                                 borderSide: const BorderSide(
                                   color: Colors.grey,
