@@ -25,12 +25,12 @@ class _AllOrdersState extends State<AllOrders> {
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: ListView.builder(
           itemBuilder: ((context, index) => Container(
-              margin: EdgeInsets.only(bottom: 10),
-              decoration: BoxDecoration(color: Colors.white),
-              padding: EdgeInsets.all(10),
+              margin: const EdgeInsets.only(bottom: 10),
+              decoration: const BoxDecoration(color: Colors.white),
+              padding: const EdgeInsets.all(10),
               child: Column(
                 children: [
                   Row(
@@ -43,7 +43,7 @@ class _AllOrdersState extends State<AllOrders> {
                             "#1234",
                             style: textBolder,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Text(
@@ -56,7 +56,7 @@ class _AllOrdersState extends State<AllOrders> {
                         decoration: BoxDecoration(
                             color: Colors.red[100],
                             borderRadius: BorderRadius.circular(10)),
-                        child: Padding(
+                        child: const Padding(
                           padding: EdgeInsets.all(4),
                           child: Text(
                             "Pending",
@@ -70,14 +70,14 @@ class _AllOrdersState extends State<AllOrders> {
                   ),
                   Row(
                     children: [
-                      Icon(Icons.check), // Replace with your desired icon
+                      const Icon(Icons.check), // Replace with your desired icon
                       Text(
                         "5000 ltrs",
                         style: displayTitle,
                       ),
                     ],
                   ),
-                  Divider(
+                  const Divider(
                     color: Colors.grey,
                   ),
                   Row(

@@ -17,7 +17,7 @@ class _ContactDetailsState extends State<ContactDetails> {
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
-            padding: EdgeInsets.all(15),
+            padding: const EdgeInsets.all(15),
             child: Column(
               children: [
                 Row(
@@ -26,9 +26,9 @@ class _ContactDetailsState extends State<ContactDetails> {
                     GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ResellerProfile()));
+                            builder: (context) => const ResellerProfile()));
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.arrow_back_ios,
                         color: primaryDarkColor,
                       ),

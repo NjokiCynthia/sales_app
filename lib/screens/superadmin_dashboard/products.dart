@@ -23,14 +23,14 @@ class _ProductsScreenState extends State<ProductsScreen> {
           child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(bottom: 20, top: 10, left: 10),
+            padding: const EdgeInsets.only(bottom: 20, top: 10, left: 10),
             child: Row(children: [
-              Icon(
+              const Icon(
                 Icons.arrow_back_ios,
                 color: primaryDarkColor,
               ),
               Padding(
-                padding: EdgeInsets.only(left: 20),
+                padding: const EdgeInsets.only(left: 20),
                 child: Text(
                   'Products',
                   style: m_title,
@@ -49,7 +49,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                           color: primaryDarkColor.withOpacity(0.005))),
                   color: Colors.white,
                   child: ListTile(
-                    contentPadding: EdgeInsets.only(left: 16.0, right: 16.0),
+                    contentPadding: const EdgeInsets.only(left: 16.0, right: 16.0),
                     leading:
                         // Container(
                         //   decoration: BoxDecoration(
@@ -84,14 +84,14 @@ class _ProductsScreenState extends State<ProductsScreen> {
                       ),
                     ),
                     title: Padding(
-                      padding: EdgeInsets.only(top: 10),
+                      padding: const EdgeInsets.only(top: 10),
                       child: Text(
                         'Kerosene',
                         style: displayTitle,
                       ),
                     ),
                     subtitle: Padding(
-                      padding: EdgeInsets.only(top: 30, bottom: 30),
+                      padding: const EdgeInsets.only(top: 30, bottom: 30),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -129,9 +129,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => PriceApproval()));
+                                builder: (context) => const PriceApproval()));
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.more_vert,
                         color: primaryDarkColor,
                       ),

@@ -129,23 +129,23 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ResellerProfile()));
+                          builder: (context) => const ResellerProfile()));
                 },
-                child: Icon(
+                child: const Icon(
                   Icons.arrow_back_ios,
                   color: primaryDarkColor,
                 ))),
         body: SingleChildScrollView(
           child: SafeArea(
             child: Padding(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: Column(children: [
-                CircleAvatar(
+                const CircleAvatar(
                   backgroundColor: Colors.white,
                   backgroundImage: AssetImage('assets/images/icons/avatar.png'),
                   radius: 50,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 InternationalPhoneNumberInput(
@@ -211,7 +211,7 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                   ),
                   onSaved: (PhoneNumber number) {},
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 TextFormField(
@@ -251,7 +251,7 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 TextFormField(
@@ -291,7 +291,7 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 TextFormField(
@@ -302,7 +302,7 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                     fillColor: Colors.white,
                     labelText: 'Select expriry Date',
                     suffixIcon: IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.calendar_today,
                         color: primaryDarkColor,
                       ),
@@ -335,7 +335,7 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                   ),
                   readOnly: true,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Column(children: [
@@ -362,7 +362,7 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                       style: bodyText,
                     ),
                 ]),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 TextFormField(
@@ -400,7 +400,7 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Column(children: [
@@ -427,7 +427,7 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                       style: bodyText,
                     ),
                 ]),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 TextFormField(
@@ -465,7 +465,7 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Column(children: [
@@ -492,7 +492,7 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                       style: bodyText,
                     ),
                 ]),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 SizedBox(
@@ -503,9 +503,9 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                             backgroundColor: primaryDarkColor),
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ResellerProfile()));
+                              builder: (context) => const ResellerProfile()));
                         },
-                        child: Text('Confirm')))
+                        child: const Text('Confirm')))
               ]),
             ),
           ),

@@ -50,7 +50,7 @@ class _ResellerTransactionsState extends State<ResellerTransactions> {
                       ],
                     ),
                     subtitle: Padding(
-                      padding: EdgeInsets.only(top: 10),
+                      padding: const EdgeInsets.only(top: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -76,9 +76,10 @@ class _ResellerTransactionsState extends State<ResellerTransactions> {
                               ),
                               Container(
                                 decoration: BoxDecoration(
-                                    color: Color.fromRGBO(201, 247, 245, 1.0),
+                                    color: const Color.fromRGBO(
+                                        201, 247, 245, 1.0),
                                     borderRadius: BorderRadius.circular(10)),
-                                child: Padding(
+                                child: const Padding(
                                   padding: EdgeInsets.only(
                                       left: 8,
                                       //top: 8,
@@ -101,7 +102,7 @@ class _ResellerTransactionsState extends State<ResellerTransactions> {
                   ),
                   if (index < 5)
                     Padding(
-                      padding: EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(8),
                       child: Divider(
                         color: Colors.grey[200],
                         thickness: 2,

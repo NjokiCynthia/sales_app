@@ -75,7 +75,7 @@ class _BankAccountDetailsState extends State<BankAccountDetails> {
       body: SingleChildScrollView(
         child: SafeArea(
             child: Padding(
-          padding: EdgeInsets.all(15),
+          padding: const EdgeInsets.all(15),
           child: Column(
             children: [
               Row(
@@ -84,9 +84,9 @@ class _BankAccountDetailsState extends State<BankAccountDetails> {
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ResellerProfile()));
+                          builder: (context) => const ResellerProfile()));
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_back_ios,
                       color: primaryDarkColor,
                     ),
@@ -100,7 +100,7 @@ class _BankAccountDetailsState extends State<BankAccountDetails> {
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               DropdownButtonFormField<String>(
@@ -118,7 +118,7 @@ class _BankAccountDetailsState extends State<BankAccountDetails> {
                         Text(capitalize(bank)), // Use the capitalize function
                   );
                 }).toList(),
-                style: TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
@@ -147,7 +147,7 @@ class _BankAccountDetailsState extends State<BankAccountDetails> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               // Second Dropdown for Branches
               if (selectedBank != null && selectedBank == 'KCB Bank')
                 DropdownButtonFormField<String>(
@@ -164,7 +164,7 @@ class _BankAccountDetailsState extends State<BankAccountDetails> {
                       child: Text(branch),
                     );
                   }).toList(),
-                  style: TextStyle(color: Colors.black),
+                  style: const TextStyle(color: Colors.black),
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
@@ -193,7 +193,7 @@ class _BankAccountDetailsState extends State<BankAccountDetails> {
                     ),
                   ),
                 ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFormField(
                 onChanged: (text) {
                   validateBankInputs();
@@ -229,7 +229,7 @@ class _BankAccountDetailsState extends State<BankAccountDetails> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               SizedBox(
@@ -238,10 +238,10 @@ class _BankAccountDetailsState extends State<BankAccountDetails> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: primaryDarkColor),
-                  child: Text('Confirm'),
+                  child: const Text('Confirm'),
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ResellerProfile()));
+                        builder: (context) => const ResellerProfile()));
                   },
                 ),
               )

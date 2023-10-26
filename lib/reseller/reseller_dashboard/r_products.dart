@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/screens/superadmin_dashboard/approval/price/price_approval.dart';
+
 
 class ResellerProducts extends StatefulWidget {
   const ResellerProducts({super.key});
@@ -20,7 +20,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        leading: Icon(
+        leading: const Icon(
           Icons.arrow_back_ios,
           color: primaryDarkColor,
         ),
@@ -31,10 +31,10 @@ class _ResellerProductsState extends State<ResellerProducts> {
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: ListView.builder(
           itemBuilder: ((context, index) => Container(
-              margin: EdgeInsets.only(bottom: 10),
+              margin: const EdgeInsets.only(bottom: 10),
               decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(
@@ -45,7 +45,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(left: 15, right: 15, top: 5),
+                    padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -67,12 +67,12 @@ class _ResellerProductsState extends State<ResellerProducts> {
                       ],
                     ),
                   ),
-                  Divider(
+                  const Divider(
                     color: Colors.black,
                     //  indent: BorderSide.strokeAlignInside,
                   ),
                   Padding(
-                      padding: EdgeInsets.all(15),
+                      padding: const EdgeInsets.all(15),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -86,7 +86,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                           ),
                         ],
                       )),
-                  Padding(
+                  const Padding(
                       padding: EdgeInsets.only(left: 15, right: 15),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -103,7 +103,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                           ),
                         ],
                       )),
-                  Padding(
+                  const Padding(
                       padding: EdgeInsets.only(top: 5, left: 15, right: 15),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -120,7 +120,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                           ),
                         ],
                       )),
-                  Padding(
+                  const Padding(
                       padding: EdgeInsets.only(
                           top: 5, left: 15, right: 15, bottom: 15),
                       child: Row(

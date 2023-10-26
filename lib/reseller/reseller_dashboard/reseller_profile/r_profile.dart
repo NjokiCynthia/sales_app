@@ -17,9 +17,47 @@ class ResellerProfile extends StatefulWidget {
 }
 
 class _ResellerProfileState extends State<ResellerProfile> {
+  // Function to show the logout confirmation dialog.
+  Future<void> _showLogoutDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          content: Text(
+            'Are you sure you want to logout?',
+            style: TextStyle(color: Colors.black),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: primaryDarkColor.withOpacity(0.5)),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                // Perform the logout action here
+                // You can add your logic to sign the user out.
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Confirm',
+                style: TextStyle(color: primaryDarkColor),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         statusBarColor: Colors.white // Set the desired color
         ));
     return Scaffold(
@@ -36,7 +74,7 @@ class _ResellerProfileState extends State<ResellerProfile> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         backgroundColor: Colors.white,
                         backgroundImage:
                             AssetImage('assets/images/icons/avatar.png'),
@@ -46,7 +84,7 @@ class _ResellerProfileState extends State<ResellerProfile> {
                         'Settings and more',
                         style: m_title,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 30,
                       ),
                     ],
@@ -58,7 +96,7 @@ class _ResellerProfileState extends State<ResellerProfile> {
                       border: Border.all(color: Colors.grey.shade200),
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8)),
-                  child: ListTile(
+                  child: const ListTile(
                     leading: CircleAvatar(
                       backgroundColor: Colors.white,
                       backgroundImage:
@@ -93,7 +131,7 @@ class _ResellerProfileState extends State<ResellerProfile> {
                 GestureDetector(
                   onTap: () {
                     Navigator.of(context).pushReplacement(
-                      PageTransition(page: OrganisationDetails()),
+                      PageTransition(page: const OrganisationDetails()),
                     );
                   },
                   child: Container(
@@ -114,15 +152,15 @@ class _ResellerProfileState extends State<ResellerProfile> {
                         ),
                       ),
                       title: Padding(
-                        padding: EdgeInsets.only(top: 10),
+                        padding: const EdgeInsets.only(top: 10),
                         child: Text('Organisation Details', style: bodyGrey),
                       ),
                       subtitle: Padding(
-                        padding: EdgeInsets.only(top: 20, bottom: 10),
+                        padding: const EdgeInsets.only(top: 20, bottom: 10),
                         child: Text('Essential organisation information',
                             style: greyT),
                       ),
-                      trailing: Padding(
+                      trailing: const Padding(
                         padding: EdgeInsets.only(top: 20),
                         child: Icon(
                           Icons.arrow_forward_ios,
@@ -140,11 +178,12 @@ class _ResellerProfileState extends State<ResellerProfile> {
                 GestureDetector(
                   onTap: () {
                     Navigator.of(context).pushReplacement(
-                      PageTransition(page: BankAccountDetails()),
+                      PageTransition(page: const BankAccountDetails()),
                     );
                   },
                   child: Container(
                     decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.shade100),
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8)),
                     child: ListTile(
@@ -154,7 +193,7 @@ class _ResellerProfileState extends State<ResellerProfile> {
                             shape: BoxShape.circle,
                           ),
                           padding: const EdgeInsets.all(8),
-                          child: Icon(
+                          child: const Icon(
                             Icons.account_balance,
                             color: primaryDarkColor,
                           )
@@ -166,18 +205,18 @@ class _ResellerProfileState extends State<ResellerProfile> {
                           // )
                           ),
                       title: Padding(
-                        padding: EdgeInsets.only(top: 10),
+                        padding: const EdgeInsets.only(top: 10),
                         child: Text(
                           'Bank Account Details',
                           style: bodyGrey,
                         ),
                       ),
                       subtitle: Padding(
-                        padding: EdgeInsets.only(top: 20, bottom: 10),
+                        padding: const EdgeInsets.only(top: 20, bottom: 10),
                         child: Text('Manage your bank account information',
                             style: greyT),
                       ),
-                      trailing: Padding(
+                      trailing: const Padding(
                         padding: EdgeInsets.only(top: 20),
                         child: Icon(
                           Icons.arrow_forward_ios,
@@ -188,18 +227,19 @@ class _ResellerProfileState extends State<ResellerProfile> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 GestureDetector(
                   onTap: () {
                     Navigator.of(context).pushReplacement(
-                      PageTransition(page: ContactDetails()),
+                      PageTransition(page: const ContactDetails()),
                     );
                   },
                   child: Container(
                     decoration: BoxDecoration(
                         color: Colors.white,
+                        border: Border.all(color: Colors.grey.shade100),
                         borderRadius: BorderRadius.circular(8)),
                     child: ListTile(
                       leading: Container(
@@ -214,20 +254,20 @@ class _ResellerProfileState extends State<ResellerProfile> {
                         ),
                       ),
                       title: Padding(
-                        padding: EdgeInsets.only(top: 20),
+                        padding: const EdgeInsets.only(top: 20),
                         child: Text(
                           'Contact Details',
                           style: bodyGrey,
                         ),
                       ),
                       subtitle: Padding(
-                        padding: EdgeInsets.only(top: 20, bottom: 10),
+                        padding: const EdgeInsets.only(top: 20, bottom: 10),
                         child: Text(
                           'Stay in touch with us',
                           style: greyT,
                         ),
                       ),
-                      trailing: Padding(
+                      trailing: const Padding(
                         padding: EdgeInsets.only(top: 20),
                         child: Icon(
                           Icons.arrow_forward_ios,
@@ -238,17 +278,18 @@ class _ResellerProfileState extends State<ResellerProfile> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(
-                      PageTransition(page: OrganisationProfile()),
+                      PageTransition(page: const OrganisationProfile()),
                     );
                   },
                   child: Container(
                     decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.shade100),
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8)),
                     child: ListTile(
@@ -265,20 +306,20 @@ class _ResellerProfileState extends State<ResellerProfile> {
                             color: primaryDarkColor,
                           )),
                       title: Padding(
-                        padding: EdgeInsets.only(top: 10),
+                        padding: const EdgeInsets.only(top: 10),
                         child: Text(
                           'Organization Profile',
                           style: bodyGrey,
                         ),
                       ),
                       subtitle: Padding(
-                        padding: EdgeInsets.only(top: 20, bottom: 10),
+                        padding: const EdgeInsets.only(top: 20, bottom: 10),
                         child: Text(
                           "Customize your organization's public profile",
                           style: greyT,
                         ),
                       ),
-                      trailing: Padding(
+                      trailing: const Padding(
                         padding: EdgeInsets.only(top: 20),
                         child: Icon(
                           Icons.arrow_forward_ios,
@@ -289,18 +330,19 @@ class _ResellerProfileState extends State<ResellerProfile> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(
-                      PageTransition(page: ChangePassword()),
+                      PageTransition(page: const ChangePassword()),
                     );
                   },
                   child: Container(
                     decoration: BoxDecoration(
                         color: Colors.white,
+                        border: Border.all(color: Colors.grey.shade100),
                         borderRadius: BorderRadius.circular(8)),
                     child: ListTile(
                       leading: Container(
@@ -315,13 +357,13 @@ class _ResellerProfileState extends State<ResellerProfile> {
                         ),
                       ),
                       title: Padding(
-                        padding: EdgeInsets.only(top: 10),
+                        padding: const EdgeInsets.only(top: 10),
                         child: Text(
                           'Change Password',
                           style: bodyGrey,
                         ),
                       ),
-                      trailing: Icon(
+                      trailing: const Icon(
                         Icons.arrow_forward_ios,
                         color: primaryDarkColor,
                         size: 20,
@@ -329,7 +371,7 @@ class _ResellerProfileState extends State<ResellerProfile> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
 
@@ -339,7 +381,9 @@ class _ResellerProfileState extends State<ResellerProfile> {
                     height: 50,
                     width: double.infinity,
                     child: ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        _showLogoutDialog(context);
+                      },
                       icon: const Icon(Icons.exit_to_app, color: Colors.red),
                       label: Text(
                         'Logout',
