@@ -190,7 +190,7 @@ class _SignupState extends State<Signup> {
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.grey.shade300,
-                          width: 2.0,
+                          width: 1.0,
                         ),
                         borderRadius: BorderRadius.circular(8.0),
                       ),
@@ -219,7 +219,7 @@ class _SignupState extends State<Signup> {
                       filled: true,
                       fillColor: Colors.white,
                       labelText: 'Last name',
-                    labelStyle: TextStyle(color: Colors.grey[500]),
+                      labelStyle: TextStyle(color: Colors.grey[500]),
                       border: OutlineInputBorder(
                         borderSide: const BorderSide(
                           color: Colors.grey,
@@ -285,7 +285,7 @@ class _SignupState extends State<Signup> {
               filled: true,
               fillColor: Colors.white,
               labelText: 'Phone number',
-             labelStyle: TextStyle(color: Colors.grey[500]),
+              labelStyle: TextStyle(color: Colors.grey[500]),
               border: OutlineInputBorder(
                 borderSide: const BorderSide(
                   color: Colors.grey,
@@ -325,7 +325,7 @@ class _SignupState extends State<Signup> {
               filled: true,
               fillColor: Colors.white,
               labelText: 'Enter Email Address',
-             labelStyle: TextStyle(color: Colors.grey[500]),
+              labelStyle: TextStyle(color: Colors.grey[500]),
               border: OutlineInputBorder(
                 borderSide: const BorderSide(
                   color: Colors.grey,
@@ -440,7 +440,7 @@ class _SignupState extends State<Signup> {
               filled: true,
               fillColor: Colors.white,
               labelText: 'Orgnisation name',
-             labelStyle: TextStyle(color: Colors.grey[500]),
+              labelStyle: TextStyle(color: Colors.grey[500]),
               border: OutlineInputBorder(
                 borderSide: const BorderSide(
                   color: Colors.grey,
@@ -533,7 +533,7 @@ class _SignupState extends State<Signup> {
               filled: true,
               fillColor: Colors.white,
               labelText: 'Organisation Email Address',
-            labelStyle: TextStyle(color: Colors.grey[500]),
+              labelStyle: TextStyle(color: Colors.grey[500]),
               border: OutlineInputBorder(
                 borderSide: const BorderSide(
                   color: Colors.grey,
@@ -597,7 +597,7 @@ class _SignupState extends State<Signup> {
               filled: true,
               fillColor: Colors.white,
               labelText: 'Organisation Phone number',
-             labelStyle: TextStyle(color: Colors.grey[500]),
+              labelStyle: TextStyle(color: Colors.grey[500]),
               border: OutlineInputBorder(
                 borderSide: const BorderSide(
                   color: Colors.grey,
@@ -661,7 +661,7 @@ class _SignupState extends State<Signup> {
             filled: true,
             fillColor: Colors.white,
             labelText: 'Enter password',
-           labelStyle: TextStyle(color: Colors.grey[500]),
+            labelStyle: TextStyle(color: Colors.grey[500]),
             border: OutlineInputBorder(
               borderSide: const BorderSide(
                 color: Colors.grey,
@@ -712,7 +712,7 @@ class _SignupState extends State<Signup> {
             filled: true,
             fillColor: Colors.white,
             labelText: 'Confirm password',
-          labelStyle: TextStyle(color: Colors.grey[500]),
+            labelStyle: TextStyle(color: Colors.grey[500]),
             border: OutlineInputBorder(
               borderSide: const BorderSide(
                 color: Colors.grey,

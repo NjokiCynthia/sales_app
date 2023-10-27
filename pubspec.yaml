@@ -52,6 +52,8 @@ dependencies:
   cupertino_icons: ^1.0.6
   carousel_slider: ^4.2.1
   intl: ^0.18.1
+  data_table_2: ^2.5.8
+  flutter_masked_text2: ^0.9.1
 
 dev_dependencies:
   flutter_test:
@@ -114,6 +116,7 @@ flutter:
     - assets/images/petrol.png
     - assets/images/cancel.png
     - assets/images/tick.png
+    - assets/images/icons/blob.png
  
 
   # An image asset can refer to one or more resolution-specific "variants", see

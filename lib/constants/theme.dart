@@ -150,6 +150,12 @@ TextStyle greyText = GoogleFonts.getFont(
   fontWeight: FontWeight.bold,
   color: Colors.black.withOpacity(0.4),
 );
+TextStyle greytext = GoogleFonts.getFont(
+  Strings.fontName,
+  fontSize: 14,
+  fontWeight: FontWeight.normal,
+  color: Colors.black.withOpacity(0.4),
+);
 
 TextStyle displayBigBoldBlack = GoogleFonts.getFont(
   Strings.fontName,

@@ -54,10 +54,10 @@ class _ResellerHomeState extends State<ResellerHome> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: primaryDarkColor.withOpacity(0.1)));
+        statusBarColor: primaryDarkColor.withOpacity(0.01)));
 
     return Scaffold(
-        backgroundColor: Colors.grey[50],
+        backgroundColor: Colors.grey[20],
         body: SafeArea(
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,7 +65,8 @@ class _ResellerHomeState extends State<ResellerHome> {
                 children: [
               Column(children: [
                 Container(
-                    color: primaryDarkColor.withOpacity(0.1),
+                    color: Colors.grey[20],
+                    //primaryDarkColor.withOpacity(0.01),
                     child: Column(children: [
                       SizedBox(
                         height: 210,
@@ -85,6 +86,8 @@ class _ResellerHomeState extends State<ResellerHome> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Padding(
                                           padding: EdgeInsets.only(left: 10),
@@ -94,9 +97,12 @@ class _ResellerHomeState extends State<ResellerHome> {
                                                 color: Colors.black),
                                           ),
                                         ),
-                                        Text(
-                                          'Kes 91.30',
-                                          style: m_title,
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 10),
+                                          child: Text(
+                                            'Kes 91.30',
+                                            style: m_title,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -155,7 +161,9 @@ class _ResellerHomeState extends State<ResellerHome> {
                                           splineType: SplineType.natural,
                                           gradient: LinearGradient(
                                             colors: [
-                                              Color.fromARGB(133, 233, 176, 92),
+                                              // primaryDarkColor.withOpacity(0.5),
+                                              secondaryDarkColor,
+                                              //Color.fromARGB(133, 216, 161, 79),
                                               Color.fromARGB(0, 255, 255, 255)
                                             ],
                                             stops: [0.01, 0.75],
@@ -165,9 +173,10 @@ class _ResellerHomeState extends State<ResellerHome> {
                                       SplineSeries(
                                         dataSource: data,
                                         color: secondaryDarkColor,
+                                        // primaryDarkColor.withOpacity(0.02),
                                         markerSettings: const MarkerSettings(
                                           color: secondaryDarkColor,
-                                          borderWidth: 2,
+                                          borderWidth: 1,
                                           shape: DataMarkerType.circle,
                                           isVisible: false,
                                         ),
@@ -214,7 +223,7 @@ class _ResellerHomeState extends State<ResellerHome> {
               CarouselSlider(
                 items: List.generate(5, (index) => buildCard(index)),
                 options: CarouselOptions(
-                  height: 200,
+                  height: 120,
                   autoPlay: true,
                   autoPlayInterval: Duration(seconds: 2),
                   autoPlayAnimationDuration: Duration(milliseconds: 800),
@@ -359,12 +368,85 @@ Widget buildCard(int index) {
     height: 100,
     decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        gradient: SweepGradient(
-          colors: [Color(0xffff9a00), Color(0xfffdfdfc)],
-          stops: [0.01, 0.9],
-          center: Alignment.bottomRight,
-        )),
+        // image: DecorationImage(
+        //   image: AssetImage("assets/images/icons/blob.png"),
+        //   fit: BoxFit.cover,
+        //   alignment: Alignment.topCenter,
+        // ),
+        gradient: LinearGradient(
+          colors: [Color(0xffd6e0f0), Color(0xfff4eadc)],
+          stops: [0.2, 0.75],
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+        ),
+        border: Border.all(color: (Colors.grey[100])!)),
     duration: Duration(seconds: 1),
     width: double.infinity,
+    child: Column(
+      children: [
+        Align(
+          alignment: Alignment.topRight,
+          child: Container(
+            decoration: BoxDecoration(
+                color: Color.fromRGBO(238, 229, 255, 1.0),
+                borderRadius: BorderRadius.circular(10)),
+            child: const Padding(
+              padding: EdgeInsets.all(4),
+              child: Text(
+                "Best price!!",
+                style: TextStyle(color: Color.fromRGBO(137, 80, 252, 1)),
+              ),
+            ),
+          ),
+        ),
+        ListTile(
+            // leading: Image.asset(
+            //   'assets/images/icons/blob.png',
+            //   height: 5,
+            //   width: 5,
+            // ),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Shell Limited',
+                  style: bodyGrey,
+                ),
+                Text(
+                  'Nairobi',
+                  style: greyT,
+                ),
+              ],
+            ),
+            subtitle: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Petrol',
+                      style: greyT,
+                    ),
+                    Text(
+                      'KES 200',
+                      style: bodyGrey,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: primaryDarkColor.withOpacity(0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      padding: const EdgeInsets.all(4),
+                      child: const Icon(
+                        Icons.shopping_cart,
+                        color: primaryDarkColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            )),
+      ],
+    ),
   );
 }

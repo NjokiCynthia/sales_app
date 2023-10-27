@@ -1,12 +1,19 @@
-class Product {
+class ProductModel {
   final String productName;
+  final String dealerName;
+  final double price;
+  final String location;
+  final double availableVolume;
+  final double minimumVolume;
+  final double maximumVolume;
 
-  final double revenue;
-  final double averagePrice;
-
-  Product({
+  ProductModel({
     required this.productName,
-    required this.revenue,
-    required this.averagePrice,
+    required this.dealerName,
+    required this.price,
+    required this.location,
+    required this.availableVolume,
+    required this.minimumVolume,
+    required this.maximumVolume,
   });
 }
