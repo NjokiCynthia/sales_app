@@ -76,6 +76,12 @@ TextStyle textBolder = GoogleFonts.getFont(
   fontWeight: FontWeight.w700,
   color: Colors.black,
 );
+TextStyle textBolderSmall = GoogleFonts.getFont(
+  Strings.fontName,
+  fontSize: 14,
+  fontWeight: FontWeight.w700,
+  color: Colors.black,
+);
 
 TextStyle boldText = GoogleFonts.getFont(
   Strings.fontName,

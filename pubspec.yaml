@@ -54,6 +54,7 @@ dependencies:
   intl: ^0.18.1
   data_table_2: ^2.5.8
   flutter_masked_text2: ^0.9.1
+  im_stepper: ^1.0.1+1
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/reseller/orders/make_order.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_products.dart';
 
 class OrderDetails extends StatefulWidget {
@@ -29,15 +30,6 @@ class _OrderDetailsState extends State<OrderDetails> {
         buttonErrorMessage = '';
       });
     }
-  }
-
-  void calculateTotalValue() {
-    // Parse the entered volume, default to 0 if empty or non-numeric.
-    final double enteredVolume = double.tryParse(volumeController.text) ?? 0.0;
-
-    // Calculate the total value based on the entered volume and price per liter.
-    totalValue = enteredVolume * pricePerLiter;
-    setState(() {});
   }
 
   @override
@@ -79,35 +71,49 @@ class _OrderDetailsState extends State<OrderDetails> {
                   ),
                 ],
               ),
+              SizedBox(
+                height: 10,
+              ),
               Container(
                 decoration: BoxDecoration(color: Colors.grey[100]),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          'Total Energies Kenya',
-                          style: bodyTextSmall,
-                        ),
-                        Text(
-                          'Mombasa',
-                          style: bodyTextSmall,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          'Depot Location',
-                          style: bodyTextSmall,
-                        ),
-                        Text(
-                          'Vivo',
-                          style: bodyTextSmall,
-                        ),
-                      ],
-                    ),
-                  ],
+                child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Total Energies Kenya',
+                            style: textBolderSmall,
+                          ),
+                          Text(
+                            'Mombasa',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Depot Location',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          Text(
+                            'Vivo',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
               SizedBox(
@@ -115,87 +121,145 @@ class _OrderDetailsState extends State<OrderDetails> {
               ),
               Text(
                 'Products Available',
-                style: m_title,
+                style: textBolder,
               ),
               SizedBox(
                 height: 10,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Kerosene',
-                        style: bodyText,
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Available volume',
-                        style: bodyText,
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Minimum volume',
-                        style: bodyText,
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        '200 litres',
-                        style: bodyTextSmaller,
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Volume to purchase',
-                        style: bodyText,
-                      ),
-                      SizedBox(height: 10),
-                      TextFormField(
-                        onChanged: (text) {
-                          calculateTotalValue();
+              Expanded(
+                child: ListView.builder(
+                    itemCount: 3,
+                    itemBuilder: (BuildContext context, int index) {
+                      String productName;
+                      if (index == 0) {
+                        productName = 'Kerosene';
+                      } else if (index == 1) {
+                        productName = 'Diesel';
+                      } else {
+                        productName = 'Petrol';
+                      }
+
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => MakeOrder())));
                         },
-                        keyboardType: TextInputType.number,
-                        style: bodyText,
-                        controller: volumeController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          labelText: 'Volume (litres)',
-                          labelStyle: TextStyle(color: Colors.grey[500]),
-                          border: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Colors.grey,
-                              width: 1.0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      productName,
+                                      style: textBolderSmall,
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      'Minimum volume',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                    Text(
+                                      '200 litres',
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Available volume:',
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                        Text(
+                                          '5000 litres',
+                                          style: textBolderSmall,
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    RichText(
+                                        text: TextSpan(children: [
+                                      TextSpan(
+                                        text: 'KES 200/',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: 'litre',
+                                        style: bodyTextSmaller,
+                                      ),
+                                    ])),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      'Maximum volume',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                    Text(
+                                      '400 litres',
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          color: primaryDarkColor
+                                              .withOpacity(0.1)),
+                                      child: Padding(
+                                        padding: EdgeInsets.all(4),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              "Place Order",
+                                              style: TextStyle(
+                                                color: primaryDarkColor
+                                                    .withOpacity(0.5),
+                                                fontSize: 12,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                                decorationColor:
+                                                    primaryDarkColor,
+                                                decorationStyle:
+                                                    TextDecorationStyle.dotted,
+                                                decorationThickness: 3,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
                             ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.grey.shade300,
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Colors.grey,
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
+                            if (index < 2)
+                              Divider(
+                                color: Colors.black,
+                              ),
+                          ],
                         ),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Total Value: KES ${totalValue.toStringAsFixed(2)}',
-                        style:
-                            bodyText, // Display total value below the TextFormField.
-                      ),
-                    ],
-                  ),
-                ],
+                      );
+                    }),
               ),
             ],
           ),
