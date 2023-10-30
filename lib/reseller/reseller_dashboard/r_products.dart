@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/product.dart';
-import 'package:petropal/reseller/orders/product_details.dart';
+import 'package:petropal/reseller/orders/order_details.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_home.dart';
 
 class ResellerProducts extends StatefulWidget {
@@ -190,7 +190,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                 return GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ProductDetails()));
+                        builder: (context) => OrderDetails()));
                   },
                   child: Container(
                       margin: const EdgeInsets.only(bottom: 10),
