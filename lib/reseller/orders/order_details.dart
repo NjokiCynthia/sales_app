@@ -127,12 +127,15 @@ class _OrderDetailsState extends State<OrderDetails> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: ((context) => MakeOrder( productName: productName, // Pass product name
-          minVolume: '200 litres', 
-          maxVolume: '400 litres', 
-          availableVolume: '5000 litres',
-           depotName: 'Vivo', // Pass depot name
-          depotLocation: 'Mombasa',  ))));
+                                  builder: ((context) => MakeOrder(
+                                        productName:
+                                            productName, // Pass product name
+                                        minVolume: '200 litres',
+                                        maxVolume: '400 litres',
+                                        availableVolume: '5000 litres',
+                                        depotName: 'Vivo', // Pass depot name
+                                        depotLocation: 'Mombasa',
+                                      ))));
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
