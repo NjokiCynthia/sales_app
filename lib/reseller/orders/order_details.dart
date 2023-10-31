@@ -12,25 +12,8 @@ class OrderDetails extends StatefulWidget {
 }
 
 class _OrderDetailsState extends State<OrderDetails> {
-  final TextEditingController volumeController = TextEditingController();
-  bool buttonError = true;
-  String buttonErrorMessage = 'Enter all inputs';
   double totalValue = 0.0;
   final double pricePerLiter = 200.0;
-
-  void validateVolumeInputs() {
-    if (volumeController.text.isEmpty) {
-      setState(() {
-        buttonError = true;
-        buttonErrorMessage = 'Enter volume';
-      });
-    } else {
-      setState(() {
-        buttonError = false;
-        buttonErrorMessage = '';
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +127,12 @@ class _OrderDetailsState extends State<OrderDetails> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: ((context) => MakeOrder())));
+                                  builder: ((context) => MakeOrder( productName: productName, // Pass product name
+          minVolume: '200 litres', 
+          maxVolume: '400 litres', 
+          availableVolume: '5000 litres',
+           depotName: 'Vivo', // Pass depot name
+          depotLocation: 'Mombasa',  ))));
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
