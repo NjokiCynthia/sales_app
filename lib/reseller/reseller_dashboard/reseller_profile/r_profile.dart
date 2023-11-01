@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/reseller/authentication/signup.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/bank_account_details.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/change_pass.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/contact_details.dart';
@@ -40,9 +42,10 @@ class _ResellerProfileState extends State<ResellerProfile> {
             ),
             TextButton(
               onPressed: () {
-                // Perform the logout action here
-                // You can add your logic to sign the user out.
-                Navigator.of(context).pop();
+                Navigator.push(context,
+                    MaterialPageRoute(builder: ((context) => Signup())));
+
+                //Navigator.of(context).pop();
               },
               child: Text(
                 'Confirm',
@@ -57,11 +60,11 @@ class _ResellerProfileState extends State<ResellerProfile> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        statusBarColor: Colors.white // Set the desired color
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Colors.grey[50] // Set the desired color
         ));
     return Scaffold(
-      backgroundColor: Colors.grey[20], // Very light shade of grey
+      backgroundColor: Colors.grey[50], // Very light shade of grey
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10),
@@ -130,9 +133,11 @@ class _ResellerProfileState extends State<ResellerProfile> {
                 const SizedBox(height: 10),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).pushReplacement(
-                      PageTransition(page: const OrganisationDetails()),
-                    );
+                    PersistentNavBarNavigator.pushNewScreen(context,
+                        withNavBar: false,
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino,
+                        screen: OrganisationDetails());
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -177,9 +182,11 @@ class _ResellerProfileState extends State<ResellerProfile> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).pushReplacement(
-                      PageTransition(page: const BankAccountDetails()),
-                    );
+                    PersistentNavBarNavigator.pushNewScreen(context,
+                        screen: BankAccountDetails(),
+                        withNavBar: false,
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino);
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -232,9 +239,11 @@ class _ResellerProfileState extends State<ResellerProfile> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).pushReplacement(
-                      PageTransition(page: const ContactDetails()),
-                    );
+                    PersistentNavBarNavigator.pushNewScreen(context,
+                        screen: ContactDetails(),
+                        withNavBar: false,
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino);
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -283,9 +292,11 @@ class _ResellerProfileState extends State<ResellerProfile> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).push(
-                      PageTransition(page: const OrganisationProfile()),
-                    );
+                    PersistentNavBarNavigator.pushNewScreen(context,
+                        screen: OrganisationProfile(),
+                        withNavBar: false,
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino);
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -335,9 +346,11 @@ class _ResellerProfileState extends State<ResellerProfile> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).push(
-                      PageTransition(page: const ChangePassword()),
-                    );
+                    PersistentNavBarNavigator.pushNewScreen(context,
+                        screen: ChangePassword(),
+                        withNavBar: false,
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino);
                   },
                   child: Container(
                     decoration: BoxDecoration(

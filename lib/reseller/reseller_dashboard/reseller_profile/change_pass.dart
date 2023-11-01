@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/r_profile.dart';
@@ -27,7 +28,11 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.grey[50],
+    ));
     return Scaffold(
+      backgroundColor: Colors.grey[50],
       body: SafeArea(
           child: Column(
         children: [
@@ -38,8 +43,7 @@ class _ChangePasswordState extends State<ChangePassword> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ResellerProfile()));
+                    Navigator.pop(context);
                   },
                   child: Icon(
                     Icons.arrow_back_ios,

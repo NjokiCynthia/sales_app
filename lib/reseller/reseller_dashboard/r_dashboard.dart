@@ -16,8 +16,6 @@ class ResellerDasboard extends StatefulWidget {
 }
 
 class _ResellerDasboardState extends State<ResellerDasboard> {
-  int _currentIndex = 0;
-
   List<Widget> _buildScreens() {
     return [
       const ResellerHome(),
@@ -56,12 +54,6 @@ class _ResellerDasboardState extends State<ResellerDasboard> {
         inactiveColorPrimary: Colors.grey,
       ),
     ];
-  }
-
-  void _onNavBarItemTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
   }
 
   @override

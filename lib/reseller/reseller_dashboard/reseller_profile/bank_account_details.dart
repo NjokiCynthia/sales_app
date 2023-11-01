@@ -83,8 +83,7 @@ class _BankAccountDetailsState extends State<BankAccountDetails> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const ResellerProfile()));
+                      Navigator.pop(context);
                     },
                     child: const Icon(
                       Icons.arrow_back_ios,

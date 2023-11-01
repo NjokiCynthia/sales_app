@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
@@ -38,7 +39,11 @@ class _OrganisationProfileState extends State<OrganisationProfile> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.grey[50],
+    ));
     return Scaffold(
+      backgroundColor: Colors.grey[50],
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
@@ -50,8 +55,7 @@ class _OrganisationProfileState extends State<OrganisationProfile> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ResellerProfile()));
+                        Navigator.pop(context);
                       },
                       child: Icon(
                         Icons.arrow_back_ios,

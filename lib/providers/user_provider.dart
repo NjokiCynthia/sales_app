@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
 class User {
-  String? email;
+  final String first_name;
+  final String last_name;
+  final String phone_number;
 
-  String? password;
+  final String email;
+
+  final String password;
 
   final String token;
 
@@ -11,6 +15,9 @@ class User {
     required this.email,
     required this.password,
     required this.token,
+    required this.first_name,
+    required this.last_name,
+    required this.phone_number,
   });
 }
 

@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(statusBarColor: Color.fromRGBO(238, 239, 240, 1)));
+      SystemUiOverlayStyle(statusBarColor: Colors.grey[50]));
   runApp(
     MultiProvider(
       providers: [

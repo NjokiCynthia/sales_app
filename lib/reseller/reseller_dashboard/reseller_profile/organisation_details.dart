@@ -17,6 +17,14 @@ class OrganisationDetails extends StatefulWidget {
 class _OrganisationDetailsState extends State<OrganisationDetails> {
   final TextEditingController phone_number_ctrl = TextEditingController();
   final TextEditingController email_ctrl = TextEditingController();
+  final TextEditingController volume_ctrl = TextEditingController();
+  final TextEditingController licence_ctrl = TextEditingController();
+  final TextEditingController expiry_ctrl = TextEditingController();
+  final TextEditingController epra_ctrl = TextEditingController();
+  final TextEditingController krapin_ctrl = TextEditingController();
+  final TextEditingController kra_ctrl = TextEditingController();
+  final TextEditingController certno_ctrl = TextEditingController();
+  final TextEditingController cert_ctrl = TextEditingController();
   String phone_number_inpt = '';
   String initialCountry = 'KE';
 
@@ -113,23 +121,20 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.grey[10],
+      statusBarColor: Colors.grey[50],
     ));
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(context).pop();
-        return false;
+        return true;
       },
       child: Scaffold(
-        backgroundColor: Colors.grey[10],
+        backgroundColor: Colors.grey[50],
         appBar: AppBar(
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.grey[50],
             leading: GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ResellerProfile()));
+                  Navigator.pop(context);
                 },
                 child: const Icon(
                   Icons.arrow_back_ios,
@@ -138,7 +143,7 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
         body: SingleChildScrollView(
           child: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(20),
               child: Column(children: [
                 const CircleAvatar(
                   backgroundColor: Colors.white,
@@ -219,8 +224,6 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                     validateOrganisationInputs();
                   },
                   keyboardType: TextInputType.text,
-                  //obscureText: true,
-
                   style: bodyText,
                   controller: email_ctrl,
                   decoration: InputDecoration(
@@ -259,10 +262,48 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                     validateOrganisationInputs();
                   },
                   keyboardType: TextInputType.text,
+                  style: bodyText,
+                  controller: volume_ctrl,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'Minimum volume per order',
+                    labelStyle: TextStyle(color: Colors.grey[500]),
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey.shade300,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  onChanged: (text) {
+                    validateOrganisationInputs();
+                  },
+                  keyboardType: TextInputType.text,
                   //obscureText: true,
 
                   style: bodyText,
-                  controller: email_ctrl,
+                  controller: epra_ctrl,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
@@ -371,7 +412,7 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                   },
                   keyboardType: TextInputType.text,
                   style: bodyText,
-                  controller: email_ctrl,
+                  controller: krapin_ctrl,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
@@ -436,7 +477,7 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                   },
                   keyboardType: TextInputType.text,
                   style: bodyText,
-                  controller: email_ctrl,
+                  controller: cert_ctrl,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,

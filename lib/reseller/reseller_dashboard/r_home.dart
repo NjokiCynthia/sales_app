@@ -55,11 +55,11 @@ class _ResellerHomeState extends State<ResellerHome> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.grey[10],
+      statusBarColor: Colors.grey[50],
     ));
 
     return Scaffold(
-        backgroundColor: Colors.grey[10],
+        backgroundColor: Colors.grey[50],
         body: SafeArea(
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,8 +67,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                 children: [
               Column(children: [
                 Container(
-                    color: Colors.grey[20],
-                    //primaryDarkColor.withOpacity(0.01),
+                    color: Colors.grey[50],
                     child: Column(children: [
                       SizedBox(
                         height: 210,
@@ -94,7 +93,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                                         Padding(
                                           padding: EdgeInsets.only(left: 10),
                                           child: Text(
-                                            'Current price for ${titles[index]}',
+                                            'Current average price for ${titles[index]}',
                                             style: const TextStyle(
                                                 color: Colors.black),
                                           ),

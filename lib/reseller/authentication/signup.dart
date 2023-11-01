@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/models/user_details.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_dashboard.dart';
 
 class Signup extends StatefulWidget {
@@ -12,9 +13,11 @@ class Signup extends StatefulWidget {
   State<Signup> createState() => _SignupState();
 }
 
-class _SignupState extends State<Signup> {
+class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
+  TabController? _tabController;
   final TextEditingController first_name_ctrl = TextEditingController();
   final TextEditingController last_name_ctrl = TextEditingController();
+  final TextEditingController email_ctrl = TextEditingController();
   final TextEditingController phone_number_ctrl = TextEditingController();
   final TextEditingController property_name_ctrl = TextEditingController();
   final TextEditingController property_location_ctrl = TextEditingController();
@@ -26,6 +29,7 @@ class _SignupState extends State<Signup> {
   bool buttonError = true;
   String buttonErrorMessage = 'Enter all inputs';
   bool _obscurePassword = true;
+  UserDetails? userDetails;
 
   validateSignupInputs() {
     if (first_name_ctrl.text == '') {
@@ -39,6 +43,14 @@ class _SignupState extends State<Signup> {
         buttonError = true;
         buttonErrorMessage = 'Enter last name';
       });
+    }
+    if (!buttonError) {
+      userDetails = UserDetails(
+        firstName: first_name_ctrl.text,
+        lastName: last_name_ctrl.text,
+        phoneNumber: phone_number_inpt,
+        email: email_ctrl.text,
+      );
     }
 
     if (phone_number_inpt == '') {
@@ -71,7 +83,16 @@ class _SignupState extends State<Signup> {
   @override
   void initState() {
     super.initState();
+    _tabController =
+        TabController(length: 3, vsync: this); // Initialize the TabController
     validateSignupInputs();
+  }
+
+  @override
+  void dispose() {
+    _tabController
+        ?.dispose(); // Make sure to dispose of the TabController when the widget is disposed
+    super.dispose();
   }
 
   // Initial Selected Value
@@ -317,10 +338,8 @@ class _SignupState extends State<Signup> {
               validateSignupInputs();
             },
             keyboardType: TextInputType.text,
-            //obscureText: true,
-            obscureText: _obscurePassword,
             style: bodyText,
-            controller: password_ctrl,
+            controller: email_ctrl,
             decoration: InputDecoration(
               filled: true,
               fillColor: Colors.white,
@@ -352,18 +371,27 @@ class _SignupState extends State<Signup> {
           SizedBox(
             height: 20,
           ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Container(
-              decoration: BoxDecoration(
-                color: primaryDarkColor.withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
-              padding: const EdgeInsets.all(8),
-              child: const Icon(
-                Icons.arrow_forward,
-                color: primaryDarkColor,
-                size: 30,
+          GestureDetector(
+            onTap: () {
+              //  _tabController.animateTo(_tabController.index + 1);
+              if (validateSignupInputs()) {
+                // Navigate to the next tab
+                _tabController!.animateTo(_tabController!.index + 1);
+              }
+            },
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: primaryDarkColor.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                padding: const EdgeInsets.all(8),
+                child: const Icon(
+                  Icons.arrow_forward,
+                  color: primaryDarkColor,
+                  size: 30,
+                ),
               ),
             ),
           ),

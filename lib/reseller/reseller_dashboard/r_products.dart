@@ -85,15 +85,16 @@ class _ResellerProductsState extends State<ResellerProducts> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.grey[20],
+      statusBarColor: Colors.grey[50],
     ));
     return Scaffold(
-      backgroundColor: Colors.grey[20],
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => ResellerHome()));
+            // // Navigator.pop(context);
+            // Navigator.pushReplacement(context,
+            //     MaterialPageRoute(builder: (context) => ResellerHome()));
           },
           child: Icon(
             Icons.arrow_back_ios,

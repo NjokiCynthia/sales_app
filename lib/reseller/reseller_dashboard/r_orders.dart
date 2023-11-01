@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/reseller/reseller_dashboard/r_dashboard.dart';
+import 'package:petropal/reseller/reseller_dashboard/r_home.dart';
 
 class ResellerOrders extends StatefulWidget {
   const ResellerOrders({super.key});
@@ -19,11 +21,38 @@ class _ResellerOrdersState extends State<ResellerOrders> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        backgroundColor: Colors.grey[50],
-        title: Text(
-          'Orders',
-          style: m_title,
+        leading: GestureDetector(
+          onTap: () {
+            // Navigator.push(context,
+            //     MaterialPageRoute(builder: (context) => ResellerHome()));
+          },
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: primaryDarkColor,
+          ),
         ),
+        backgroundColor: Colors.grey[50],
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'All Orders',
+              style: m_title,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: primaryDarkColor.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              padding: const EdgeInsets.all(5),
+              child: const Icon(
+                Icons.check,
+                color: primaryDarkColor,
+              ),
+            ),
+          ],
+        ),
+        elevation: 0,
       ),
       body: Padding(
         padding: EdgeInsets.all(10),
@@ -55,8 +84,7 @@ class _ResellerOrdersState extends State<ResellerOrders> {
                         ],
                       ),
                       Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             "Sun, 15 Feb 2023",
