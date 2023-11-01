@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/strings.dart';
 
@@ -20,6 +21,9 @@ class MyTheme {
     ),
   );
 }
+
+PersistentTabController bottomNavigationController =
+    PersistentTabController(initialIndex: 0);
 
 TextStyle bodyText = GoogleFonts.getFont(
   Strings.fontName,

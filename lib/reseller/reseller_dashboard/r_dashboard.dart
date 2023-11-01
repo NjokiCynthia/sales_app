@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/color_contants.dart';
+import 'package:petropal/constants/theme.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_products.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_home.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_orders.dart';
@@ -29,7 +30,9 @@ class _ResellerDasboardState extends State<ResellerDasboard> {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        icon: Icon(CupertinoIcons.home),
+        icon: Icon(
+          CupertinoIcons.home,
+        ),
         title: ("Home"),
         activeColorPrimary: primaryDarkColor,
         inactiveColorPrimary: Colors.grey,
@@ -89,7 +92,7 @@ class _ResellerDasboardState extends State<ResellerDasboard> {
           curve: Curves.ease,
           duration: Duration(milliseconds: 200),
         ),
-        navBarStyle: NavBarStyle.style1,
+        navBarStyle: NavBarStyle.style6,
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_transactions.dart';
@@ -54,10 +55,11 @@ class _ResellerHomeState extends State<ResellerHome> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: primaryDarkColor.withOpacity(0.01)));
+      statusBarColor: Colors.grey[10],
+    ));
 
     return Scaffold(
-        backgroundColor: Colors.grey[20],
+        backgroundColor: Colors.grey[10],
         body: SafeArea(
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,14 +243,17 @@ class _ResellerHomeState extends State<ResellerHome> {
                   children: [
                     Text(
                       'Transactions',
-                      style: mytitle,
+                      style: TextStyle(color: Colors.black),
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ResellerTransactions()));
+                        PersistentNavBarNavigator.pushNewScreen(
+                          context,
+                          screen: ResellerTransactions(),
+                          withNavBar: false,
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.cupertino,
+                        );
                       },
                       child: Text(
                         'See all',
@@ -279,11 +284,24 @@ class _ResellerHomeState extends State<ResellerHome> {
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'Shell Limited',
-                                textScaleFactor: 1,
-                                style: displayTitle,
+                              Row(
+                                children: [
+                                  Text(
+                                    'Shell Limited ',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  Text(
+                                    '| 12 Sept 2023',
+                                    style: displaySmallerLightGrey.copyWith(
+                                        fontSize: 12),
+                                  ),
+                                  Text('')
+                                ],
                               ),
+                              // Text(
+                              //   'Shell Limited | 12 Sept 2023',
+                              //   style: TextStyle(color: Colors.black),
+                              // ),
                               Text(
                                 'Kes 5,000',
                                 style: displayTitle,
@@ -291,7 +309,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                             ],
                           ),
                           subtitle: Padding(
-                            padding: EdgeInsets.only(top: 10),
+                            padding: const EdgeInsets.only(top: 10),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -301,12 +319,12 @@ class _ResellerHomeState extends State<ResellerHome> {
                                   children: [
                                     Text(
                                       'Payment for kerosene',
-                                      style: bodyGrey1,
+                                      style: TextStyle(color: Colors.grey),
                                     ),
-                                    Text(
-                                      '12 Sept 2023',
-                                      style: displaySmallerLightGrey,
-                                    ),
+                                    // Text(
+                                    //   '12 Sept 2023',
+                                    //   style: displaySmallerLightGrey,
+                                    // ),
                                   ],
                                 ),
                                 Row(
@@ -315,24 +333,25 @@ class _ResellerHomeState extends State<ResellerHome> {
                                   children: [
                                     Text(
                                       '#12345678h',
-                                      style: bodyGrey1,
+                                      style: TextStyle(color: Colors.grey),
                                     ),
                                     Container(
                                       decoration: BoxDecoration(
-                                          color: Color.fromRGBO(
+                                          color: const Color.fromRGBO(
                                               201, 247, 245, 1.0),
                                           borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: Padding(
+                                              BorderRadius.circular(8)),
+                                      child: const Padding(
                                         padding: EdgeInsets.only(
                                             left: 8,
-                                            //top: 8,
+                                            top: 4,
                                             bottom: 4,
                                             right: 8),
                                         child: Text(
                                           "Successful",
                                           style: TextStyle(
                                             fontWeight: FontWeight.w500,
+                                            fontSize: 12,
                                             color: Color.fromRGBO(
                                                 27, 197, 189, 1.0),
                                           ),
@@ -349,8 +368,8 @@ class _ResellerHomeState extends State<ResellerHome> {
                           Padding(
                             padding: EdgeInsets.all(8),
                             child: Divider(
-                              color: Colors.grey[200],
-                              thickness: 2,
+                              color: Colors.grey[100],
+                              thickness: 1,
                             ),
                           ), // Add a divider except for the last item
                       ],
