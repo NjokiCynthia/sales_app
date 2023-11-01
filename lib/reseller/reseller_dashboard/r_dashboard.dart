@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_products.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_home.dart';
@@ -25,6 +26,35 @@ class _ResellerDasboardState extends State<ResellerDasboard> {
     ];
   }
 
+  List<PersistentBottomNavBarItem> _navBarsItems() {
+    return [
+      PersistentBottomNavBarItem(
+        icon: Icon(CupertinoIcons.home),
+        title: ("Home"),
+        activeColorPrimary: primaryDarkColor,
+        inactiveColorPrimary: Colors.grey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(CupertinoIcons.shopping_cart),
+        title: ("Products"),
+        activeColorPrimary: primaryDarkColor,
+        inactiveColorPrimary: Colors.grey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(CupertinoIcons.list_bullet),
+        title: ("Orders"),
+        activeColorPrimary: primaryDarkColor,
+        inactiveColorPrimary: Colors.grey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(CupertinoIcons.settings),
+        title: ("Settings"),
+        activeColorPrimary: primaryDarkColor,
+        inactiveColorPrimary: Colors.grey,
+      ),
+    ];
+  }
+
   void _onNavBarItemTapped(int index) {
     setState(() {
       _currentIndex = index;
@@ -33,34 +63,34 @@ class _ResellerDasboardState extends State<ResellerDasboard> {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoTabScaffold(
-      backgroundColor: Colors.white,
-      tabBar: CupertinoTabBar(
+    return Scaffold(
+      body: PersistentTabView(
+        context,
+        controller: bottomNavigationController,
+        screens: _buildScreens(),
+        items: _navBarsItems(),
+        confineInSafeArea: true,
         backgroundColor: Colors.white,
-        items: [
-          _buildNavBarItem(0, CupertinoIcons.home, 'Home'),
-          _buildNavBarItem(1, CupertinoIcons.shopping_cart, 'Products'),
-          _buildNavBarItem(3, CupertinoIcons.list_bullet, 'Orders'),
-          _buildNavBarItem(4, CupertinoIcons.settings, 'Settings'),
-        ],
-        currentIndex: _currentIndex,
-        onTap: _onNavBarItemTapped,
-        activeColor:
-            primaryDarkColor, // Icon and label color for the selected item
+        handleAndroidBackButtonPress: true,
+        resizeToAvoidBottomInset: true,
+        stateManagement: true,
+        hideNavigationBarWhenKeyboardShows: true,
+        decoration: const NavBarDecoration(
+          colorBehindNavBar: Colors.white,
+        ),
+        popAllScreensOnTapOfSelectedTab: true,
+        popActionScreens: PopActionScreensType.all,
+        itemAnimationProperties: const ItemAnimationProperties(
+          duration: Duration(milliseconds: 200),
+          curve: Curves.ease,
+        ),
+        screenTransitionAnimation: const ScreenTransitionAnimation(
+          animateTabTransition: true,
+          curve: Curves.ease,
+          duration: Duration(milliseconds: 200),
+        ),
+        navBarStyle: NavBarStyle.style1,
       ),
-      tabBuilder: (context, index) {
-        return CupertinoTabView(
-          builder: (context) => _buildScreens()[index],
-        );
-      },
-    );
-  }
-
-  BottomNavigationBarItem _buildNavBarItem(
-      int index, IconData iconData, String label) {
-    return BottomNavigationBarItem(
-      icon: Icon(iconData),
-      label: label,
     );
   }
 }

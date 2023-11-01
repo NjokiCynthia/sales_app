@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/reseller/orders/order_details.dart';
+import 'package:petropal/reseller/reseller_dashboard/r_orders.dart';
+import 'package:petropal/widgets/widget.dart';
 
 class MakeOrder extends StatefulWidget {
   final String productName;
@@ -565,7 +567,12 @@ class _MakeOrderState extends State<MakeOrder> {
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             backgroundColor: primaryDarkColor),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ResellerOrders()));
+                        },
                         child: Text('Confirm Order'))
                   ],
                 ),
