@@ -4,24 +4,43 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/user_details.dart';
+import 'package:petropal/reseller/authentication/login.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_dashboard.dart';
+import 'package:petropal/widgets/buttons.dart';
 
 class Signup extends StatefulWidget {
-  const Signup({super.key});
+  const Signup({Key? key}) : super(key: key);
 
   @override
   State<Signup> createState() => _SignupState();
 }
 
 class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
-  TabController? _tabController;
+  late TabController _tabController; // Initialize TabController as late
+
   final TextEditingController first_name_ctrl = TextEditingController();
   final TextEditingController last_name_ctrl = TextEditingController();
   final TextEditingController email_ctrl = TextEditingController();
   final TextEditingController phone_number_ctrl = TextEditingController();
-  final TextEditingController property_name_ctrl = TextEditingController();
-  final TextEditingController property_location_ctrl = TextEditingController();
-  final TextEditingController password_ctrl = TextEditingController();
+
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+
+  String firstName = '';
+  String lastName = '';
+  String firstPagePhoneNumber = '';
+  String email = '';
+  String userItems = 'Reseller';
+  String organizationName = '';
+  String organizationLocation = '';
+  String organizationEmail = '';
+  String secondPagePhoneNumber = '';
+  String password = '';
+  String confrimPassword = '';
+
   String phone_number_inpt = '';
   String initialCountry = 'KE';
   PhoneNumber number = PhoneNumber(isoCode: 'KE');
@@ -31,18 +50,22 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
   bool _obscurePassword = true;
   UserDetails? userDetails;
 
-  validateSignupInputs() {
+  int currentTab = 0;
+
+  void validateSignupInputs() {
     if (first_name_ctrl.text == '') {
-      return setState(() {
+      setState(() {
         buttonError = true;
         buttonErrorMessage = 'Enter first name';
       });
+      return;
     }
     if (last_name_ctrl.text == '') {
-      return setState(() {
+      setState(() {
         buttonError = true;
         buttonErrorMessage = 'Enter last name';
       });
+      return;
     }
     if (!buttonError) {
       userDetails = UserDetails(
@@ -54,27 +77,30 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
     }
 
     if (phone_number_inpt == '') {
-      return setState(() {
+      setState(() {
         buttonError = true;
         buttonErrorMessage = 'Enter phone number';
       });
+      return;
     }
-    if (password_ctrl.text == '') {
-      return setState(() {
+    if (passwordController.text == '') {
+      setState(() {
         buttonError = true;
         buttonErrorMessage = 'Enter password';
       });
+      return;
     }
-    if (password_ctrl.text.length < 8) {
-      return setState(() {
+    if (passwordController.text.length < 8) {
+      setState(() {
         buttonError = true;
         buttonErrorMessage =
             'Minimum password length must be at least 8 characters';
       });
+      return;
     }
     print('buttonError');
     print(buttonError);
-    return setState(() {
+    setState(() {
       buttonError = false;
       buttonErrorMessage = 'Enter sending request';
     });
@@ -83,43 +109,58 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _tabController =
-        TabController(length: 3, vsync: this); // Initialize the TabController
+    _tabController = TabController(length: 3, vsync: this);
+    _tabController.addListener(_handleTabChange); // Add listener for tab change
     validateSignupInputs();
+  }
+
+  void _handleTabChange() {
+    setState(() {
+      currentTab = _tabController.index;
+    });
   }
 
   @override
   void dispose() {
-    _tabController
-        ?.dispose(); // Make sure to dispose of the TabController when the widget is disposed
+    _tabController.removeListener(_handleTabChange);
+    _tabController.dispose();
     super.dispose();
   }
 
-  // Initial Selected Value
   String dropdownvalue = 'Nairobi';
-
-  // List of items in our dropdown menu
   var locations = [
-    'Nairobi',
-    'Mombasa',
+    'Eldoret',
     'Kisumu',
     'Konza',
-    'Eldoret',
+    'Mombasa',
+    'Nairobi',
+    'Nakuru',
     'Nanyuki',
   ];
-  String userItems = 'Oil Marketing Company';
 
-  // List of items in our dropdown menu
   var users = [
     'Oil Marketing Company',
     'Reseller',
   ];
+
   bool agreedToTerms = false;
 
   toggleAgreement(value) {
     setState(() {
       agreedToTerms = value;
     });
+  }
+
+// Add a GlobalKey for each form to validate it independently
+  final GlobalKey<FormState> _page1Key = GlobalKey<FormState>();
+  final GlobalKey<FormState> _page2Key = GlobalKey<FormState>();
+  final GlobalKey<FormState> _page3Key = GlobalKey<FormState>();
+
+  void validateAndMoveToNextPage(GlobalKey<FormState> currentPageKey) {
+    if (currentPageKey.currentState!.validate()) {
+      // Move to the next page
+      _tabController.animateTo(_tabController!.index + 1);
+    }
   }
 
   @override
@@ -133,43 +174,98 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
       child: Scaffold(
         backgroundColor: Colors.grey[50],
         body: SafeArea(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 50,
-              ),
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: TabBar(
-                  indicatorColor: primaryDarkColor,
-                  labelStyle: displaySmaller,
-                  labelColor: primaryDarkColor,
-                  unselectedLabelColor: Colors.black,
-                  tabs: [
-                    Tab(
-                      text: "Personal details",
-                    ),
-                    Tab(text: "Organisation details"),
-                    Tab(text: "Confirm"),
-                  ],
+          child: Padding(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 50,
                 ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.all(5),
-                  child: TabBarView(
-                    children: [
-                      buildFirstPage(),
-
-                      buildSecondPage(),
-
-                      // Third Page
-                      buildThirdPage(),
+                Center(
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 40),
+                    child: Image.asset(
+                      'assets/images/icons/petropal_logo.png',
+                      width: 200,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Sign Up',
+                  style: displayBigBoldBlack,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(0),
+                  child: TabBar(
+                    controller: _tabController,
+                    indicatorColor: primaryDarkColor,
+                    labelStyle: displaySmaller,
+                    labelColor: primaryDarkColor,
+                    unselectedLabelColor: Colors.black,
+                    tabs: [
+                      Tab(
+                        text: "Personal details",
+                      ),
+                      Tab(text: "Organisation details"),
+                      Tab(text: "Confirm Details"),
                     ],
                   ),
                 ),
-              ),
-            ],
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      Form(
+                        key: _page1Key, // Use the key for the first page
+                        child: buildFirstPage(),
+                      ),
+                      Form(
+                        key: _page2Key, // Use the key for the second page
+                        child: buildSecondPage(),
+                      ),
+                      Form(
+                        key: _page3Key, // Use the key for the third page
+                        child: buildThirdPage(),
+                      ),
+                    ],
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: ((context) => const Login()),
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Center(
+                      child: RichText(
+                        text: TextSpan(
+                          text: 'Already have an account? ',
+                          style: const TextStyle(color: Colors.black),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: 'Login',
+                              style: TextStyle(color: primaryDarkColor),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -178,7 +274,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
 
   Widget buildFirstPage() {
     return Padding(
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -211,7 +307,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.grey.shade300,
-                          width: 1.0,
+                          width: 2.0,
                         ),
                         borderRadius: BorderRadius.circular(8.0),
                       ),
@@ -373,11 +469,11 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
           ),
           GestureDetector(
             onTap: () {
-              //  _tabController.animateTo(_tabController.index + 1);
-              if (validateSignupInputs()) {
-                // Navigate to the next tab
-                _tabController!.animateTo(_tabController!.index + 1);
-              }
+              firstName = first_name_ctrl.text;
+              lastName = last_name_ctrl.text;
+              firstPagePhoneNumber = phone_number_inpt;
+              email = email_ctrl.text;
+              _tabController.animateTo(1);
             },
             child: Align(
               alignment: Alignment.bottomRight,
@@ -402,7 +498,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
 
   Widget buildSecondPage() {
     return Padding(
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -451,17 +547,13 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
             }).toList(),
             onChanged: (String? newValue) {
               setState(() {
-                dropdownvalue = newValue!;
+                userItems = newValue!;
               });
             },
           ),
-          const SizedBox(height: 10),
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
           TextFormField(
-            onChanged: (text) {
-              validateSignupInputs();
-            },
-            controller: first_name_ctrl,
+            controller: nameController,
             keyboardType: TextInputType.name,
             style: bodyText,
             decoration: InputDecoration(
@@ -549,14 +641,9 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
             height: 20,
           ),
           TextFormField(
-            onChanged: (text) {
-              validateSignupInputs();
-            },
             keyboardType: TextInputType.text,
-            //obscureText: true,
-            obscureText: _obscurePassword,
             style: bodyText,
-            controller: password_ctrl,
+            controller: emailController,
             decoration: InputDecoration(
               filled: true,
               fillColor: Colors.white,
@@ -607,7 +694,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
             selectorTextStyle: const TextStyle(color: Colors.black),
             initialValue: number,
             textAlignVertical: TextAlignVertical.top,
-            textFieldController: phone_number_ctrl,
+            textFieldController: phoneController,
             formatInput: false,
             keyboardType: const TextInputType.numberWithOptions(
               signed: true,
@@ -650,20 +737,29 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
             ),
             onSaved: (PhoneNumber number) {},
           ),
-          const SizedBox(height: 20),
-          const SizedBox(height: 10),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Container(
-              decoration: BoxDecoration(
-                color: primaryDarkColor.withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
-              padding: const EdgeInsets.all(8),
-              child: const Icon(
-                Icons.arrow_forward,
-                color: primaryDarkColor,
-                size: 30,
+          const SizedBox(height: 30),
+          GestureDetector(
+            onTap: () {
+              userItems = userItems;
+              organizationName = nameController.text;
+              organizationLocation = dropdownvalue;
+              organizationEmail = emailController.text;
+              secondPagePhoneNumber = phoneController.text;
+              _tabController.animateTo(2);
+            },
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: primaryDarkColor.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                padding: const EdgeInsets.all(8),
+                child: const Icon(
+                  Icons.arrow_forward,
+                  color: primaryDarkColor,
+                  size: 30,
+                ),
               ),
             ),
           ),
@@ -673,148 +769,186 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
   }
 
   Widget buildThirdPage() {
+    print('First Name: $firstName');
+    print('Last Name: $lastName');
+    print('First Page Phone Number: $firstPagePhoneNumber');
+    print('Email: $email');
+    print('User Item: $userItems');
+    print('Organization Name: $organizationName');
+    print('Organization Location: $organizationLocation');
+    print('Organization Email: $organizationEmail');
+    print('Second Page Phone Number: $secondPagePhoneNumber');
     return Padding(
-      padding: EdgeInsets.all(8),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        TextFormField(
-          onChanged: (text) {
-            validateSignupInputs();
-          },
-          keyboardType: TextInputType.text,
-          //obscureText: true,
-          obscureText: _obscurePassword,
-          style: bodyText,
-          controller: password_ctrl,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            labelText: 'Enter password',
-            labelStyle: TextStyle(color: Colors.grey[500]),
-            border: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.grey,
-                width: 1.0,
+      padding: EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextFormField(
+            onChanged: (text) {
+              validateSignupInputs();
+            },
+            keyboardType: TextInputType.text,
+            obscureText: _obscurePassword,
+            style: bodyText,
+            controller: passwordController,
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
+              labelText: 'Enter password',
+              labelStyle: TextStyle(color: Colors.grey[500]),
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.grey,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
               ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.grey.shade300,
-                width: 2.0,
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.grey.shade300,
+                  width: 2.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
               ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.grey,
-                width: 1.0,
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.grey,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
               ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            suffixIcon: IconButton(
-              onPressed: () {
-                setState(() {
-                  _obscurePassword = !_obscurePassword;
-                });
-              },
-              icon: Icon(
-                _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                color: Colors.grey,
-              ),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        TextFormField(
-          onChanged: (text) {
-            validateSignupInputs();
-          },
-          keyboardType: TextInputType.text,
-          //obscureText: true,
-          obscureText: _obscurePassword,
-          style: bodyText,
-          controller: password_ctrl,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            labelText: 'Confirm password',
-            labelStyle: TextStyle(color: Colors.grey[500]),
-            border: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.grey,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.grey.shade300,
-                width: 2.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.grey,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            suffixIcon: IconButton(
-              onPressed: () {
-                setState(() {
-                  _obscurePassword = !_obscurePassword;
-                });
-              },
-              icon: Icon(
-                _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                color: Colors.grey,
+              suffixIcon: IconButton(
+                onPressed: () {
+                  setState(() {
+                    _obscurePassword = !_obscurePassword;
+                  });
+                },
+                icon: Icon(
+                  _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                  color: Colors.grey,
+                ),
               ),
             ),
           ),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Row(
-          children: [
-            Checkbox(
-              fillColor: MaterialStateProperty.resolveWith((states) {
-                if (!states.contains(MaterialState.selected)) {
-                  return primaryDarkColor.withOpacity(0.1);
-                }
-                return null;
-              }),
-              side: const BorderSide(color: primaryDarkColor, width: 2),
-              value: agreedToTerms,
-              onChanged: toggleAgreement,
+          SizedBox(
+            height: 20,
+          ),
+          TextFormField(
+            onChanged: (text) {
+              validateSignupInputs();
+            },
+            keyboardType: TextInputType.text,
+            //obscureText: true,
+            obscureText: _obscurePassword,
+            style: bodyText,
+            controller: confirmController,
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
+              labelText: 'Confirm password',
+              labelStyle: TextStyle(color: Colors.grey[500]),
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.grey,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.grey.shade300,
+                  width: 2.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.grey,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              suffixIcon: IconButton(
+                onPressed: () {
+                  setState(() {
+                    _obscurePassword = !_obscurePassword;
+                  });
+                },
+                icon: Icon(
+                  _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                  color: Colors.grey,
+                ),
+              ),
             ),
-            Text(
-              'I agree to the Terms and Conditions',
-              style: bodyText,
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 30,
-        ),
-        SizedBox(
-          width: double.infinity,
-          height: 48,
-          child: ElevatedButton(
-              style:
-                  ElevatedButton.styleFrom(backgroundColor: primaryDarkColor),
-              onPressed: () {
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Row(
+            children: [
+              Checkbox(
+                fillColor: MaterialStateProperty.resolveWith((states) {
+                  if (!states.contains(MaterialState.selected)) {
+                    return primaryDarkColor.withOpacity(0.1);
+                  }
+                  return null;
+                }),
+                side: const BorderSide(color: primaryDarkColor, width: 2),
+                value: agreedToTerms,
+                onChanged: toggleAgreement,
+              ),
+              Text(
+                'I agree to the Terms and Conditions',
+                style: bodyText,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          CustomRequestButton(
+            url: '/account/sign-up/reseller',
+            method: 'POST',
+            buttonText: 'SignUp',
+            body: {
+              "user": {
+                "bankDetails": [],
+                "companyEmail": emailController.text,
+                "companyName": "${nameController.text}",
+                "companyPhone": phoneController.text,
+                "confirmPassword": passwordController.text,
+                "contactDetails": [],
+                "email": email_ctrl.text,
+                "first_name": first_name_ctrl.text,
+                "is_verified": true,
+                "last_name": last_name_ctrl.text,
+                "location": 2,
+                "password": passwordController.text,
+                "phone_number": phone_number_ctrl.text,
+                "role_id": 3, // Modify role_id as needed
+              }
+            },
+            onSuccess: (res) {
+              print('Signup Response: $res');
+              final isSuccessful = res['isSuccessful'] as bool;
+              final message = res['message'] as String;
+
+              if (isSuccessful) {
+                // Handle successful signup
+                print(message);
                 Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ResellerDasboard()));
-              },
-              child: Text('SignUp')),
-        )
-      ]),
+                  context,
+                  MaterialPageRoute(builder: (context) => ResellerDasboard()),
+                );
+              } else {
+                // Handle signup failure
+                print(message);
+                // Show an error message to the user.
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:petropal/reseller/authentication/login.dart';
 import 'package:petropal/reseller/authentication/signup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petropal/constants/theme.dart';
@@ -42,9 +43,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Petropal',
       theme: MyTheme.darkTheme,
-      home: isFirstInstall
-          ? SplashScreen()
-          : Signup(), // Show SignUp if not the first install
+      home: isFirstInstall ? SplashScreen() : Login(),
       debugShowCheckedModeBanner: false,
     );
   }
