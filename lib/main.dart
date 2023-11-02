@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petropal/reseller/authentication/login.dart';
-import 'package:petropal/reseller/authentication/signup.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/providers/user_provider.dart';
