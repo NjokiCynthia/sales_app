@@ -275,223 +275,224 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
   Widget buildFirstPage() {
     return Padding(
       padding: EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 10),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.only(right: 10),
-                  child: TextFormField(
-                    onChanged: (text) {
-                      validateSignupInputs();
-                    },
-                    controller: first_name_ctrl,
-                    keyboardType: TextInputType.name,
-                    style: bodyText,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      labelText: 'First name',
-                      labelStyle: TextStyle(color: Colors.grey[500]),
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Colors.grey,
-                          width: 1.0,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 10),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(right: 10),
+                    child: TextFormField(
+                      onChanged: (text) {
+                        validateSignupInputs();
+                      },
+                      controller: first_name_ctrl,
+                      keyboardType: TextInputType.name,
+                      style: bodyText,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        labelText: 'First name',
+                        labelStyle: TextStyle(color: Colors.grey[500]),
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.grey.shade300,
-                          width: 2.0,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade300,
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Colors.grey,
-                          width: 1.0,
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.only(left: 10),
-                  child: TextFormField(
-                    onChanged: (text) {
-                      validateSignupInputs();
-                    },
-                    controller: last_name_ctrl,
-                    style: bodyText,
-                    keyboardType: TextInputType.name,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      labelText: 'Last name',
-                      labelStyle: TextStyle(color: Colors.grey[500]),
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Colors.grey,
-                          width: 1.0,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.grey.shade300,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Colors.grey,
-                          width: 1.0,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
                       ),
                     ),
                   ),
                 ),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 10),
+                    child: TextFormField(
+                      onChanged: (text) {
+                        validateSignupInputs();
+                      },
+                      controller: last_name_ctrl,
+                      style: bodyText,
+                      keyboardType: TextInputType.name,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        labelText: 'Last name',
+                        labelStyle: TextStyle(color: Colors.grey[500]),
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade300,
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            InternationalPhoneNumberInput(
+              onInputChanged: (PhoneNumber number) {
+                setState(() {
+                  phone_number_inpt = number.phoneNumber ?? '';
+                });
+                validateSignupInputs();
+              },
+              onInputValidated: (bool value) {},
+              selectorConfig: const SelectorConfig(
+                selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                setSelectorButtonAsPrefixIcon: true,
+                leadingPadding: 10,
               ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          InternationalPhoneNumberInput(
-            onInputChanged: (PhoneNumber number) {
-              setState(() {
-                phone_number_inpt = number.phoneNumber ?? '';
-              });
-              validateSignupInputs();
-            },
-            onInputValidated: (bool value) {},
-            selectorConfig: const SelectorConfig(
-              selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
-              setSelectorButtonAsPrefixIcon: true,
-              leadingPadding: 10,
-            ),
-            textStyle: bodyText,
-            ignoreBlank: false,
-            autoValidateMode: AutovalidateMode.disabled,
-            selectorTextStyle: const TextStyle(color: Colors.black),
-            initialValue: number,
-            textAlignVertical: TextAlignVertical.top,
-            textFieldController: phone_number_ctrl,
-            formatInput: false,
-            keyboardType: const TextInputType.numberWithOptions(
-              signed: true,
-              decimal: true,
-            ),
-            maxLength: 10,
-            inputBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.grey,
-                width: 1.0,
+              textStyle: bodyText,
+              ignoreBlank: false,
+              autoValidateMode: AutovalidateMode.disabled,
+              selectorTextStyle: const TextStyle(color: Colors.black),
+              initialValue: number,
+              textAlignVertical: TextAlignVertical.top,
+              textFieldController: phone_number_ctrl,
+              formatInput: false,
+              keyboardType: const TextInputType.numberWithOptions(
+                signed: true,
+                decimal: true,
               ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            inputDecoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              labelText: 'Phone number',
-              labelStyle: TextStyle(color: Colors.grey[500]),
-              border: OutlineInputBorder(
+              maxLength: 10,
+              inputBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
                   color: Colors.grey,
                   width: 1.0,
                 ),
                 borderRadius: BorderRadius.circular(8.0),
               ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.grey.shade300,
-                  width: 2.0,
+              inputDecoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                labelText: 'Phone number',
+                labelStyle: TextStyle(color: Colors.grey[500]),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.grey.shade300,
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                borderRadius: BorderRadius.circular(8.0),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
               ),
+              onSaved: (PhoneNumber number) {},
             ),
-            onSaved: (PhoneNumber number) {},
-          ),
-          const SizedBox(height: 20),
-          const SizedBox(height: 10),
-          TextFormField(
-            onChanged: (text) {
-              validateSignupInputs();
-            },
-            keyboardType: TextInputType.text,
-            style: bodyText,
-            controller: email_ctrl,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              labelText: 'Enter Email Address',
-              labelStyle: TextStyle(color: Colors.grey[500]),
-              border: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
+            const SizedBox(height: 30),
+            TextFormField(
+              onChanged: (text) {
+                validateSignupInputs();
+              },
+              keyboardType: TextInputType.text,
+              style: bodyText,
+              controller: email_ctrl,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                labelText: 'Enter Email Address',
+                labelStyle: TextStyle(color: Colors.grey[500]),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.grey.shade300,
-                  width: 2.0,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.grey.shade300,
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          GestureDetector(
-            onTap: () {
-              firstName = first_name_ctrl.text;
-              lastName = last_name_ctrl.text;
-              firstPagePhoneNumber = phone_number_inpt;
-              email = email_ctrl.text;
-              _tabController.animateTo(1);
-            },
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: primaryDarkColor.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                padding: const EdgeInsets.all(8),
-                child: const Icon(
-                  Icons.arrow_forward,
-                  color: primaryDarkColor,
-                  size: 30,
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
             ),
-          ),
-        ],
+            SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              onTap: () {
+                firstName = first_name_ctrl.text;
+                lastName = last_name_ctrl.text;
+                firstPagePhoneNumber = phone_number_inpt;
+                email = email_ctrl.text;
+                _tabController.animateTo(1);
+              },
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: primaryDarkColor.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  padding: const EdgeInsets.all(8),
+                  child: const Icon(
+                    Icons.arrow_forward,
+                    color: primaryDarkColor,
+                    size: 30,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -499,96 +500,12 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
   Widget buildSecondPage() {
     return Padding(
       padding: EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          DropdownButtonFormField<String>(
-            value: userItems,
-            dropdownColor: Colors.white,
-            iconDisabledColor: primaryDarkColor,
-            iconEnabledColor: primaryDarkColor,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.grey.shade300,
-                  width: 2.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-            ),
-            items: users.map((String item) {
-              return DropdownMenuItem<String>(
-                value: item,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        item,
-                        style: const TextStyle(color: primaryDarkColor),
-                      ),
-                    ]),
-              );
-            }).toList(),
-            onChanged: (String? newValue) {
-              setState(() {
-                userItems = newValue!;
-              });
-            },
-          ),
-          const SizedBox(height: 20),
-          TextFormField(
-            controller: nameController,
-            keyboardType: TextInputType.name,
-            style: bodyText,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              labelText: 'Orgnisation name',
-              labelStyle: TextStyle(color: Colors.grey[500]),
-              border: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.grey.shade300,
-                  width: 2.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            child: DropdownButtonFormField<String>(
-              value: dropdownvalue,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            DropdownButtonFormField<String>(
+              value: userItems,
               dropdownColor: Colors.white,
               iconDisabledColor: primaryDarkColor,
               iconEnabledColor: primaryDarkColor,
@@ -617,7 +534,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              items: locations.map((String item) {
+              items: users.map((String item) {
                 return DropdownMenuItem<String>(
                   value: item,
                   child: Row(
@@ -632,138 +549,224 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
               }).toList(),
               onChanged: (String? newValue) {
                 setState(() {
-                  dropdownvalue = newValue!;
+                  userItems = newValue!;
                 });
               },
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          TextFormField(
-            keyboardType: TextInputType.text,
-            style: bodyText,
-            controller: emailController,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              labelText: 'Organisation Email Address',
-              labelStyle: TextStyle(color: Colors.grey[500]),
-              border: OutlineInputBorder(
+            const SizedBox(height: 20),
+            TextFormField(
+              controller: nameController,
+              keyboardType: TextInputType.name,
+              style: bodyText,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                labelText: 'Orgnisation name',
+                labelStyle: TextStyle(color: Colors.grey[500]),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.grey.shade300,
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: DropdownButtonFormField<String>(
+                value: dropdownvalue,
+                dropdownColor: Colors.white,
+                iconDisabledColor: primaryDarkColor,
+                iconEnabledColor: primaryDarkColor,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.grey,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade300,
+                      width: 2.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.grey,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                items: locations.map((String item) {
+                  return DropdownMenuItem<String>(
+                    value: item,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            item,
+                            style: const TextStyle(color: primaryDarkColor),
+                          ),
+                        ]),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownvalue = newValue!;
+                  });
+                },
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            TextFormField(
+              keyboardType: TextInputType.text,
+              style: bodyText,
+              controller: emailController,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                labelText: 'Organisation Email Address',
+                labelStyle: TextStyle(color: Colors.grey[500]),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.grey.shade300,
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            InternationalPhoneNumberInput(
+              onInputChanged: (PhoneNumber number) {
+                setState(() {
+                  phone_number_inpt = number.phoneNumber ?? '';
+                });
+                validateSignupInputs();
+              },
+              onInputValidated: (bool value) {},
+              selectorConfig: const SelectorConfig(
+                selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                setSelectorButtonAsPrefixIcon: true,
+                leadingPadding: 10,
+              ),
+              textStyle: bodyText,
+              ignoreBlank: false,
+              autoValidateMode: AutovalidateMode.disabled,
+              selectorTextStyle: const TextStyle(color: Colors.black),
+              initialValue: number,
+              textAlignVertical: TextAlignVertical.top,
+              textFieldController: phoneController,
+              formatInput: false,
+              keyboardType: const TextInputType.numberWithOptions(
+                signed: true,
+                decimal: true,
+              ),
+              maxLength: 10,
+              inputBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
                   color: Colors.grey,
                   width: 1.0,
                 ),
                 borderRadius: BorderRadius.circular(8.0),
               ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.grey.shade300,
-                  width: 2.0,
+              inputDecoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                labelText: 'Organisation Phone number',
+                labelStyle: TextStyle(color: Colors.grey[500]),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.grey.shade300,
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                borderRadius: BorderRadius.circular(8.0),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
               ),
+              onSaved: (PhoneNumber number) {},
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          InternationalPhoneNumberInput(
-            onInputChanged: (PhoneNumber number) {
-              setState(() {
-                phone_number_inpt = number.phoneNumber ?? '';
-              });
-              validateSignupInputs();
-            },
-            onInputValidated: (bool value) {},
-            selectorConfig: const SelectorConfig(
-              selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
-              setSelectorButtonAsPrefixIcon: true,
-              leadingPadding: 10,
-            ),
-            textStyle: bodyText,
-            ignoreBlank: false,
-            autoValidateMode: AutovalidateMode.disabled,
-            selectorTextStyle: const TextStyle(color: Colors.black),
-            initialValue: number,
-            textAlignVertical: TextAlignVertical.top,
-            textFieldController: phoneController,
-            formatInput: false,
-            keyboardType: const TextInputType.numberWithOptions(
-              signed: true,
-              decimal: true,
-            ),
-            maxLength: 10,
-            inputBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.grey,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            inputDecoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              labelText: 'Organisation Phone number',
-              labelStyle: TextStyle(color: Colors.grey[500]),
-              border: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.grey.shade300,
-                  width: 2.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-            ),
-            onSaved: (PhoneNumber number) {},
-          ),
-          const SizedBox(height: 30),
-          GestureDetector(
-            onTap: () {
-              userItems = userItems;
-              organizationName = nameController.text;
-              organizationLocation = dropdownvalue;
-              organizationEmail = emailController.text;
-              secondPagePhoneNumber = phoneController.text;
-              _tabController.animateTo(2);
-            },
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: primaryDarkColor.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                padding: const EdgeInsets.all(8),
-                child: const Icon(
-                  Icons.arrow_forward,
-                  color: primaryDarkColor,
-                  size: 30,
+            const SizedBox(height: 30),
+            GestureDetector(
+              onTap: () {
+                userItems = userItems;
+                organizationName = nameController.text;
+                organizationLocation = dropdownvalue;
+                organizationEmail = emailController.text;
+                secondPagePhoneNumber = phoneController.text;
+                _tabController.animateTo(2);
+              },
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: primaryDarkColor.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  padding: const EdgeInsets.all(8),
+                  child: const Icon(
+                    Icons.arrow_forward,
+                    color: primaryDarkColor,
+                    size: 30,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -780,174 +783,173 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
     print('Second Page Phone Number: $secondPagePhoneNumber');
     return Padding(
       padding: EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextFormField(
-            onChanged: (text) {
-              validateSignupInputs();
-            },
-            keyboardType: TextInputType.text,
-            obscureText: _obscurePassword,
-            style: bodyText,
-            controller: passwordController,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              labelText: 'Enter password',
-              labelStyle: TextStyle(color: Colors.grey[500]),
-              border: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFormField(
+              onChanged: (text) {
+                validateSignupInputs();
+              },
+              keyboardType: TextInputType.text,
+              obscureText: _obscurePassword,
+              style: bodyText,
+              controller: passwordController,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                labelText: 'Enter password',
+                labelStyle: TextStyle(color: Colors.grey[500]),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.grey.shade300,
-                  width: 2.0,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.grey.shade300,
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              suffixIcon: IconButton(
-                onPressed: () {
-                  setState(() {
-                    _obscurePassword = !_obscurePassword;
-                  });
-                },
-                icon: Icon(
-                  _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          TextFormField(
-            onChanged: (text) {
-              validateSignupInputs();
-            },
-            keyboardType: TextInputType.text,
-            //obscureText: true,
-            obscureText: _obscurePassword,
-            style: bodyText,
-            controller: confirmController,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              labelText: 'Confirm password',
-              labelStyle: TextStyle(color: Colors.grey[500]),
-              border: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.grey.shade300,
-                  width: 2.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              suffixIcon: IconButton(
-                onPressed: () {
-                  setState(() {
-                    _obscurePassword = !_obscurePassword;
-                  });
-                },
-                icon: Icon(
-                  _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                  color: Colors.grey,
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
+                  },
+                  icon: Icon(
+                    _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                    color: Colors.grey,
+                  ),
                 ),
               ),
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Row(
-            children: [
-              Checkbox(
-                fillColor: MaterialStateProperty.resolveWith((states) {
-                  if (!states.contains(MaterialState.selected)) {
-                    return primaryDarkColor.withOpacity(0.1);
-                  }
-                  return null;
-                }),
-                side: const BorderSide(color: primaryDarkColor, width: 2),
-                value: agreedToTerms,
-                onChanged: toggleAgreement,
+            SizedBox(
+              height: 20,
+            ),
+            TextFormField(
+              onChanged: (text) {
+                validateSignupInputs();
+              },
+              keyboardType: TextInputType.text,
+              //obscureText: true,
+              obscureText: _obscurePassword,
+              style: bodyText,
+              controller: confirmController,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                labelText: 'Confirm password',
+                labelStyle: TextStyle(color: Colors.grey[500]),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.grey.shade300,
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
+                  },
+                  icon: Icon(
+                    _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                    color: Colors.grey,
+                  ),
+                ),
               ),
-              Text(
-                'I agree to the Terms and Conditions',
-                style: bodyText,
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          CustomRequestButton(
-            url: '/account/sign-up/reseller',
-            method: 'POST',
-            buttonText: 'SignUp',
-            body: {
-              "user": {
-                "bankDetails": [],
-                "companyEmail": emailController.text,
-                "companyName": "${nameController.text}",
-                "companyPhone": phoneController.text,
-                "confirmPassword": passwordController.text,
-                "contactDetails": [],
-                "email": email_ctrl.text,
-                "first_name": first_name_ctrl.text,
-                "is_verified": true,
-                "last_name": last_name_ctrl.text,
-                "location": 2,
-                "password": passwordController.text,
-                "phone_number": phone_number_ctrl.text,
-                "role_id": 3, // Modify role_id as needed
-              }
-            },
-            onSuccess: (res) {
-              print('Signup Response: $res');
-              final isSuccessful = res['isSuccessful'] as bool;
-              final message = res['message'] as String;
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              children: [
+                Checkbox(
+                  fillColor: MaterialStateProperty.resolveWith((states) {
+                    if (!states.contains(MaterialState.selected)) {
+                      return primaryDarkColor.withOpacity(0.1);
+                    }
+                    return null;
+                  }),
+                  side: const BorderSide(color: primaryDarkColor, width: 2),
+                  value: agreedToTerms,
+                  onChanged: toggleAgreement,
+                ),
+                Text(
+                  'I agree to the Terms and Conditions',
+                  style: bodyText,
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            CustomRequestButton(
+              url: '/account/sign-up/reseller',
+              method: 'POST',
+              buttonText: 'SignUp',
+              body: {
+                "user": {
+                  "bankDetails": [],
+                  "companyEmail": emailController.text,
+                  "companyName": nameController.text,
+                  "companyPhone": phoneController.text,
+                  "confirmPassword": passwordController.text,
+                  "contactDetails": [],
+                  "email": email_ctrl.text,
+                  "first_name": first_name_ctrl.text,
+                  "is_verified": false,
+                  "last_name": last_name_ctrl.text,
+                  "location": dropdownvalue,
+                  "password": passwordController.text,
+                  "phone_number": phone_number_ctrl.text,
+                  "role_id": 3,
+                }
+              },
+              onSuccess: (res) {
+                print('Signup Response: $res');
+                final isSuccessful = res['isSuccessful'] as bool;
+                final message = res['message'];
 
-              if (isSuccessful) {
-                // Handle successful signup
-                print(message);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => ResellerDasboard()),
-                );
-              } else {
-                // Handle signup failure
-                print(message);
-                // Show an error message to the user.
-              }
-            },
-          ),
-        ],
+                if (isSuccessful) {
+                  print(message);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => ResellerDasboard()),
+                  );
+                } else {
+                  print(message);
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

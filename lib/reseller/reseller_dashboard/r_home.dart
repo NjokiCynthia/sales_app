@@ -4,9 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/providers/user_provider.dart';
+import 'package:petropal/reseller/authentication/login.dart';
+import 'package:petropal/reseller/reseller_dashboard/reseller_profile/profile_setup.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_transactions.dart';
 import 'package:petropal/screens/superadmin_dashboard/chart_data.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:provider/provider.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -31,6 +35,7 @@ class _ResellerHomeState extends State<ResellerHome> {
   int _currentgraph = 0;
 
   List<String> titles = ['Petrol', 'Diesel', 'Kerosene'];
+  List<String> title = ['Petrol', 'Diesel', 'Kerosene'];
 
   int selectedCardIndex = 0;
 
@@ -38,6 +43,38 @@ class _ResellerHomeState extends State<ResellerHome> {
   @override
   void initState() {
     super.initState();
+    bool isActivated =
+        Provider.of<UserProvider>(context, listen: false).isActivated;
+    print('The status os my account is ........ $isActivated');
+    if (!isActivated) {
+      Future.delayed(Duration(seconds: 1), () {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("Activation Required"),
+            content: Text(
+                "Your account is not activated. Please complete your profile to activate your account"),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: ((context) => Login())));
+                },
+                child: Text('No'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ProfileSetUp()));
+                },
+                child: Text('Yes'),
+              ),
+            ],
+          ),
+        );
+      });
+    }
+
     data = [
       ChartData(17, 200),
       ChartData(18, 205),
@@ -222,7 +259,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                 height: 10,
               ),
               CarouselSlider(
-                items: List.generate(5, (index) => buildCard(index)),
+                items: List.generate(3, (index) => buildCard(index)),
                 options: CarouselOptions(
                   height: 120,
                   autoPlay: true,
@@ -382,15 +419,11 @@ class _ResellerHomeState extends State<ResellerHome> {
 }
 
 Widget buildCard(int index) {
+  List<String> title = ['Petrol', 'Diesel', 'Kerosene'];
   return AnimatedContainer(
     height: 100,
     decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        // image: DecorationImage(
-        //   image: AssetImage("assets/images/icons/blob.png"),
-        //   fit: BoxFit.cover,
-        //   alignment: Alignment.topCenter,
-        // ),
         gradient: LinearGradient(
           colors: [Color(0xffd6e0f0), Color(0xfff4eadc)],
           stops: [0.2, 0.75],
@@ -398,7 +431,7 @@ Widget buildCard(int index) {
           end: Alignment.bottomLeft,
         ),
         border: Border.all(color: (Colors.grey[100])!)),
-    duration: Duration(seconds: 1),
+    duration: Duration(seconds: 2),
     width: double.infinity,
     child: Column(
       children: [
@@ -418,11 +451,6 @@ Widget buildCard(int index) {
           ),
         ),
         ListTile(
-            // leading: Image.asset(
-            //   'assets/images/icons/blob.png',
-            //   height: 5,
-            //   width: 5,
-            // ),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -442,7 +470,7 @@ Widget buildCard(int index) {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Petrol',
+                      title[index],
                       style: greyT,
                     ),
                     Text(
