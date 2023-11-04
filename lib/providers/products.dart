@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:petropal/models/product.dart';
 
 class ProductProvider with ChangeNotifier {
-  List<ProductModel> _products = []; // List to store product data
+  List<ProductModel> _products = [];
 
   // Getter to access the list of products
   List<ProductModel> get products => _products;

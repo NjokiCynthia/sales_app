@@ -3,7 +3,6 @@ import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/reseller/orders/order_details.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_orders.dart';
-import 'package:petropal/widgets/widget.dart';
 
 class MakeOrder extends StatefulWidget {
   final String productName;
@@ -30,6 +29,9 @@ class MakeOrder extends StatefulWidget {
 class _MakeOrderState extends State<MakeOrder> {
   int currentStep = 0;
   final TextEditingController volumeController = TextEditingController();
+  final TextEditingController keroseneVolumeController =
+      TextEditingController();
+  final TextEditingController dieselVolumeController = TextEditingController();
   bool buttonError = true;
   String buttonErrorMessage = 'Enter all inputs';
   double totalAmount = 0.0;
@@ -63,9 +65,12 @@ class _MakeOrderState extends State<MakeOrder> {
   void calculateTotalAmount() {
     if (volumeController.text.isNotEmpty) {
       double volume = double.tryParse(volumeController.text) ?? 0.0;
+      double keroseneVolume =
+          double.tryParse(keroseneVolumeController.text) ?? 0.0;
+      double dieselVolume = double.tryParse(dieselVolumeController.text) ?? 0.0;
       double pricePerLiter = 200.0;
       setState(() {
-        totalAmount = volume * pricePerLiter;
+        totalAmount = (volume + keroseneVolume + dieselVolume) * pricePerLiter;
       });
     } else {
       setState(() {
@@ -94,13 +99,12 @@ class _MakeOrderState extends State<MakeOrder> {
             style: m_title,
           ),
         ),
-        body: Center(
-            child: Stepper(
-                currentStep: currentStep,
-                onStepTapped: (index) {
-                  setState(() => currentStep = index);
-                },
-                steps: [
+        body: Stepper(
+            currentStep: currentStep,
+            onStepTapped: (index) {
+              setState(() => currentStep = index);
+            },
+            steps: [
               Step(
                 isActive: currentStep >= 0,
                 title: Text(
@@ -121,7 +125,7 @@ class _MakeOrderState extends State<MakeOrder> {
                           width: 5,
                         ),
                         Text(
-                          'Enter the volume you want to purchase',
+                          'Enter the volume of petrol you want to purchase',
                           style: TextStyle(color: Colors.black),
                         ),
                       ],
@@ -158,6 +162,75 @@ class _MakeOrderState extends State<MakeOrder> {
                     ),
                     SizedBox(
                       height: 10,
+                    ),
+                    Text(
+                      'Enter the volume of diesel you want to purchase',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    TextFormField(
+                      style: bodyText,
+                      controller: dieselVolumeController,
+                      onChanged: (value) {
+                        enteredVolume = value;
+                        calculateTotalAmount();
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Enter volume',
+                        labelStyle:
+                            bodyTextSmall.copyWith(color: Colors.grey[500]),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade300,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Enter the volume of kerosene you want to purchase',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    TextFormField(
+                      style: bodyText,
+                      controller: keroseneVolumeController,
+                      onChanged: (value) {
+                        enteredVolume = value;
+                        calculateTotalAmount();
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Enter volume',
+                        labelStyle:
+                            bodyTextSmall.copyWith(color: Colors.grey[500]),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade300,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
                     ),
                     Row(
                       children: [
@@ -577,7 +650,7 @@ class _MakeOrderState extends State<MakeOrder> {
                   ],
                 ),
               ),
-            ])));
+            ]));
   }
 
   Future<void> _showTruckDialog(BuildContext context) async {

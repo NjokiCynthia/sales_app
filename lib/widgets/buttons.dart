@@ -136,7 +136,6 @@ class _CustomRequestButtonState extends State<CustomRequestButton> {
   }
 
   Future<Response<dynamic>> _makeRequest() async {
-    // Retrieve user information from provider
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final token = userProvider.user?.token;
     final headers = {

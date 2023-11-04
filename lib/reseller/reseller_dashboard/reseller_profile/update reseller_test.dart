@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:petropal/constants/color_contants.dart';
@@ -12,7 +9,6 @@ import 'package:petropal/constants/theme.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/widgets/buttons.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
 class ProfileSetUp extends StatefulWidget {
   const ProfileSetUp({super.key});
@@ -115,29 +111,19 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
   String? selectedKraPinDocumentTitle;
   String? selectedCertTitle;
 
-  List<PlatformFile>?
-      selectedFiles; // Change the variable to hold a list of PlatformFile
+  PlatformFile? selectedFiles;
 
   Future<void> openFilePicker() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
       // Handle the selected file here
-      selectedFiles = result.files; // Assign the selected files to the variable
-
-      if (selectedFiles != null && selectedFiles!.isNotEmpty) {
-        PlatformFile file = selectedFiles![
-            0]; // Assuming you're handling only the first selected file
-        print('File Name: ${file.name}');
-        print('File Size: ${file.size}');
-
-        setState(() {
-          selectedDocumentTitle = file.name; // Update the selectedDocumentTitle
-        });
-      }
-    } else {
-      // User canceled the file picker
-    }
+      PlatformFile file = result.files.first;
+      setState(() {
+        selectedDocumentTitle = file.name;
+        selectedFiles = file;
+      });
+    } else {}
   }
 
   bool _obscurePassword = true;
@@ -176,87 +162,18 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
 
       setState(() {
         selectedKraPinDocumentTitle = file.name;
-        selectedKraCertificatePhoto = file;
+        selectedKraCertificatePhoto =
+            file; // Assign the selected file to the variable
       });
-    } else {}
+    } else {
+      // User canceled the file picker
+    }
   }
 
   String phone_number_inpt = '';
   String initialCountry = 'KE';
 
   PhoneNumber number = PhoneNumber(isoCode: 'KE');
-
-  Future<void> sendFormData() async {
-    final url =
-        Uri.parse('https://petropal.sandbox.co.ke:8040/user/update-profile');
-    final request = http.MultipartRequest('POST', url);
-    final userProvider = context.read<UserProvider>();
-    final user = userProvider.user;
-
-    final token = userProvider.user?.token;
-
-    if (token == null) {
-      return;
-    }
-    request.headers['Authorization'] = 'Bearer $token';
-
-    request.fields.addAll({
-      'kra_certificate_number': kraController.text,
-      'epra_license_number': licenseController.text,
-      'epra_license_expiry_date': selectedDate.toLocal().toString(),
-      'certificate_of_incorporation_number': certController.text,
-      'email': emailController.text,
-      'phone': numberController.text,
-      'firstname': user?.first_name ?? '',
-      'lastname': user?.last_name ?? '',
-      'account_id': user?.account_id.toString() ?? '',
-      'minimum_volume_per_order': minVolController.text,
-      'pic': '',
-    });
-
-    if (selectedKraCertificatePhoto != null) {
-      final photoBytes = selectedKraCertificatePhoto!.bytes;
-      if (photoBytes != null) {
-        request.files.add(await http.MultipartFile.fromBytes(
-            'kra_certificate_photo', photoBytes as List<int>,
-            filename: selectedKraCertificatePhoto!.name,
-            contentType: MediaType('application', 'pdf')));
-      } else {
-        // Handle the case where 'bytes' is null, which means the selectedKraCertificatePhoto is not valid.
-      }
-    }
-
-    if (selectedFiles != null && selectedFiles!.isNotEmpty) {
-      final file = selectedFiles![0];
-      final fileBytes = file.bytes;
-      if (fileBytes != null) {
-        request.files.add(await http.MultipartFile.fromBytes(
-            'epra_license_photo', fileBytes as List<int>,
-            filename: file.name, contentType: MediaType('application', 'pdf')));
-      } else {}
-    }
-    if (selectedCertificateOfIncorporationDocument != null) {
-      final documentBytes = selectedCertificateOfIncorporationDocument!.bytes;
-      if (documentBytes != null) {
-        request.files.add(await http.MultipartFile.fromBytes(
-            'certificate_of_incorporation_photo', documentBytes as List<int>,
-            filename: selectedCertificateOfIncorporationDocument!.name,
-            contentType: MediaType('application', 'pdf')));
-      } else {}
-    }
-
-    final streamedResponse = await request.send();
-    final response = await http.Response.fromStream(streamedResponse);
-
-    if (response.statusCode == 200) {
-      final responseData = json.decode(response.body);
-      print('Request was successful. and this is my response here below');
-      print('Request was successful. Response data: $responseData');
-      _tabController!.animateTo(1);
-    } else {
-      print('Request failed with status code: ${response.statusCode}');
-    }
-  }
 
   @override
   void initState() {
@@ -274,7 +191,6 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
       print('User email is: ${user.email}');
       print('User phone number is: ${user.phone}');
       print('User account id is: ${user.account_id}');
-      print('User token is: ${user.token}');
 
       emailController.text = user.email;
       numberController.text = user.phone;
@@ -744,13 +660,86 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
             const SizedBox(
               height: 10,
             ),
-            ElevatedButton(
-              onPressed: () {
-                // Call the function to send the form data when the button is pressed
-                sendFormData();
-              },
-              child: Text('Submit'), // You can customize the button text here
-            )
+            Consumer<UserProvider>(builder: (context, userProvider, child) {
+              final selectedKraCertificatePhotoBytes =
+                  selectedKraCertificatePhoto != null
+                      ? selectedKraCertificatePhoto!.bytes as List<int>
+                      : null;
+              return CustomRequestButton(
+                url: '/user/update-profile',
+                method: 'POST',
+                buttonText: 'Confirm',
+                body: {
+                  'user': {
+                    'kra_certificate_photo': selectedKraCertificatePhoto != null
+                        ? MultipartFile.fromBytes(
+                            selectedKraCertificatePhoto!.bytes as List<int>,
+                            filename: selectedKraCertificatePhoto!.name,
+                          )
+                        : '',
+                    'epra_license_photo': selectedFiles != null
+                        ? MultipartFile.fromBytes(
+                            selectedFiles!.bytes as List<int>,
+                            filename: selectedFiles!.name,
+                          )
+                        : null,
+                    'certificate_of_incorporation_photo':
+                        selectedCertificateOfIncorporationDocument != null
+                            ? MultipartFile.fromBytes(
+                                selectedCertificateOfIncorporationDocument!
+                                    .bytes as List<int>,
+                                filename:
+                                    selectedCertificateOfIncorporationDocument!
+                                        .name,
+                              )
+                            : '',
+                    'kra_certificate_number': kraController.text,
+                    'epra_license_number': licenseController.text,
+                    'epra_license_expiry_date':
+                        selectedDate.toLocal().toString(),
+                    'certificate_of_incorporation_number': certController.text,
+                    'email': emailController.text,
+                    'phone': numberController,
+                    'firstname': userProvider.user?.first_name ?? '',
+                    'lastname': userProvider.user?.last_name ?? '',
+                    'account_id': userProvider.user?.account_id ?? '',
+                    'minimum_volume_per_order': minVolController.text,
+                  },
+                },
+                onSuccess: (res) async {
+                  print('This is my Update profile Response: $res');
+                  final isSuccessful = res['isSuccessful'] as bool;
+                  final message = res['message'];
+
+                  if (isSuccessful) {
+                    print(message);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => buildSecondPage()),
+                    );
+                  } else {
+                    print(message);
+                  }
+                },
+              );
+            })
+            // onSuccess: (res) {
+            //   print('Update profile Response: $res');
+            //   final isSuccessful = res['isSuccessful'] as bool;
+            //   final message = res['message'];
+
+            //   if (isSuccessful) {
+            //     print(message);
+            //     Navigator.pushReplacement(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => buildSecondPage()),
+            //     );
+            //   } else {
+            //     print(message);
+            //   }
+            // },
+            //),
           ]),
         ),
       ),

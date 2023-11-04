@@ -190,6 +190,7 @@ class _LoginState extends State<Login> {
                                 first_name: userData['first_name'] ?? '',
                                 last_name: userData['last_name'] ?? '',
                                 phone: userData['phone'] ?? '',
+                                account_id: userData['account_id'] ?? '',
                                 isActivated: isActivatedValue,
                               );
 

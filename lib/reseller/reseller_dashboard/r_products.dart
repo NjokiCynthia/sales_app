@@ -2,11 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/product.dart';
 import 'package:petropal/reseller/orders/order_details.dart';
-import 'package:petropal/reseller/reseller_dashboard/r_home.dart';
 
 class ResellerProducts extends StatefulWidget {
   const ResellerProducts({super.key});
@@ -18,7 +18,6 @@ class ResellerProducts extends StatefulWidget {
 class _ResellerProductsState extends State<ResellerProducts> {
   List<ProductModel>? products;
 
-  // Add filter variables for selected criteria
   String? selectedLocation;
   String? selectedDealer;
   String? selectedProduct;
@@ -68,20 +67,6 @@ class _ResellerProductsState extends State<ResellerProducts> {
     return products;
   }
 
-  List<ProductModel> filterProducts() {
-    return products!.where((product) {
-      bool locationMatch =
-          selectedLocation == null || product.location == selectedLocation;
-      bool dealerMatch =
-          selectedDealer == null || product.dealerName == selectedDealer;
-      bool productMatch =
-          selectedProduct == null || product.productName == selectedProduct;
-      bool priceMatch = selectedPrice == null || product.price == selectedPrice;
-
-      return locationMatch && dealerMatch && productMatch && priceMatch;
-    }).toList();
-  }
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -91,11 +76,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         leading: GestureDetector(
-          onTap: () {
-            // // Navigator.pop(context);
-            // Navigator.pushReplacement(context,
-            //     MaterialPageRoute(builder: (context) => ResellerHome()));
-          },
+          onTap: () {},
           child: Icon(
             Icons.arrow_back_ios,
             color: primaryDarkColor,
@@ -182,16 +163,13 @@ class _ResellerProductsState extends State<ResellerProducts> {
           Expanded(
             child: ListView.builder(
               itemBuilder: ((context, index) {
-                final filteredProducts = filterProducts();
-
-                if (index >= filteredProducts.length) {
-                  return Container(); // No more items to display
-                }
-
                 return GestureDetector(
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => OrderDetails()));
+                    PersistentNavBarNavigator.pushNewScreen(context,
+                        screen: OrderDetails(),
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino,
+                        withNavBar: false);
                   },
                   child: Container(
                       margin: const EdgeInsets.only(bottom: 10),
@@ -212,7 +190,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  "${filteredProducts[index].dealerName}",
+                                  "Shell Limited",
                                   style: boldText,
                                 ),
                                 Container(
@@ -230,103 +208,77 @@ class _ResellerProductsState extends State<ResellerProducts> {
                             ),
                           ),
                           const Divider(
-                            color: Colors.black,
+                            color: Colors.grey,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    bottom: 15, left: 15, right: 15),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "${filteredProducts[index].productName}",
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Row(children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                                bottom: 15, left: 15, right: 15),
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Available Volume:",
+                                          style: greytext,
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          "Minimum  Order Volume:",
+                                          style: greytext,
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          "Maximum Order Volume:",
+                                          style: greytext,
+                                        ),
+                                      ]),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
                                       Text(
-                                        "Available Volume:",
-                                        style: greytext,
-                                      ),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Text(
-                                        '${filteredProducts[index].availableVolume.toStringAsFixed(2)} litres',
+                                        '10000 litres',
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontWeight: FontWeight.normal),
-                                      ),
-                                    ]),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      "Minimum Volume",
-                                      style: greytext,
-                                    ),
-                                    Text(
-                                      '${filteredProducts[index].minimumVolume.toStringAsFixed(2)} litres',
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.normal),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                  padding: EdgeInsets.only(
-                                      top: 5, bottom: 15, left: 15, right: 15),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    //crossAxisAlignment: CrossAxisAlignment.spa,
-                                    children: [
-                                      Text(
-                                        "KES ${filteredProducts[index].price.toStringAsFixed(2)}",
-                                        style: bold,
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        '${filteredProducts[index].location}',
-                                        style: bold,
                                       ),
                                       SizedBox(
                                         height: 5,
                                       ),
                                       Text(
-                                        "Maximum Volume",
-                                        style: greytext,
-                                      ),
-                                      Text(
-                                        '${filteredProducts[index].maximumVolume.toStringAsFixed(2)} litres',
+                                        '50 litres',
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.normal,
                                         ),
                                       ),
                                       SizedBox(
-                                        height: 10,
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        '50 litres',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.normal,
+                                        ),
                                       ),
                                     ],
-                                  )),
-                            ],
+                                  )
+                                ]),
                           ),
                         ],
                       )),
                 );
               }),
-              itemCount: filterProducts().length,
+              itemCount: 10,
             ),
           ),
         ]),
