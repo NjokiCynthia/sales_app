@@ -29,8 +29,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ResellerProducts()));
+                      Navigator.pop(context);
                     },
                     child: Icon(
                       Icons.arrow_back_ios,
