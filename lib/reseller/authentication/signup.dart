@@ -4,9 +4,11 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/user_details.dart';
+import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/authentication/login.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_dashboard.dart';
 import 'package:petropal/widgets/buttons.dart';
+import 'package:provider/provider.dart';
 
 class Signup extends StatefulWidget {
   const Signup({Key? key}) : super(key: key);
@@ -16,7 +18,7 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
-  late TabController _tabController; // Initialize TabController as late
+  late TabController _tabController;
 
   final TextEditingController first_name_ctrl = TextEditingController();
   final TextEditingController last_name_ctrl = TextEditingController();
@@ -165,6 +167,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.grey[50],
     ));
@@ -781,6 +784,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
     print('Organization Location: $organizationLocation');
     print('Organization Email: $organizationEmail');
     print('Second Page Phone Number: $secondPagePhoneNumber');
+    final userProvider = Provider.of<UserProvider>(context);
     return Padding(
       padding: EdgeInsets.all(20),
       child: SingleChildScrollView(
@@ -911,43 +915,64 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
               height: 30,
             ),
             CustomRequestButton(
-              url: '/account/sign-up/reseller',
-              method: 'POST',
-              buttonText: 'SignUp',
-              body: {
-                "user": {
-                  "bankDetails": [],
-                  "companyEmail": emailController.text,
-                  "companyName": nameController.text,
-                  "companyPhone": phoneController.text,
-                  "confirmPassword": passwordController.text,
-                  "contactDetails": [],
-                  "email": email_ctrl.text,
-                  "first_name": first_name_ctrl.text,
-                  "is_verified": false,
-                  "last_name": last_name_ctrl.text,
-                  "location": dropdownvalue,
-                  "password": passwordController.text,
-                  "phone_number": phone_number_ctrl.text,
-                  "role_id": 3,
-                }
-              },
-              onSuccess: (res) {
-                print('Signup Response: $res');
-                final isSuccessful = res['isSuccessful'] as bool;
-                final message = res['message'];
+                url: '/account/sign-up/reseller',
+                method: 'POST',
+                buttonText: 'SignUp',
+                body: {
+                  "user": {
+                    "bankDetails": [],
+                    "companyEmail": emailController.text,
+                    "companyName": nameController.text,
+                    "companyPhone": phoneController.text,
+                    "confirmPassword": passwordController.text,
+                    "contactDetails": [],
+                    "email": email_ctrl.text,
+                    "first_name": first_name_ctrl.text,
+                    "is_verified": false,
+                    "last_name": last_name_ctrl.text,
+                    "location": dropdownvalue,
+                    "password": passwordController.text,
+                    "phone_number": phone_number_ctrl.text,
+                    "role_id": 3,
+                  }
+                },
+                onSuccess: (res) {
+                  print('Signup Response: $res');
+                  final isSuccessful = res['isSuccessful'] as bool;
+                  final message = res['message'];
 
-                if (isSuccessful) {
-                  print(message);
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => ResellerDasboard()),
-                  );
-                } else {
-                  print(message);
-                }
-              },
-            ),
+                  if (isSuccessful) {
+                    final data = res['data'] as Map<String, dynamic>?;
+                    if (data != null) {
+                      final userData = data['user'] as Map<String, dynamic>?;
+                      final token = data['api_token'] as String?;
+                      final user = User(
+                        email: userData!['email'].replaceAll(' ', ''),
+                        token: token!,
+                        password: 'password',
+                        first_name: userData!['first_name'] ?? '',
+                        last_name: userData['last_name'] ?? '',
+                        phone: userData['phone'] ?? '',
+                        account_id: userData['account_id'] ?? '',
+                        isActivated: false,
+                        company_email: userData['company_email'],
+                        company_name: userData['company_name'],
+                        company_phone: userData['company_phone'],
+                      );
+
+                      userProvider.setUser(user);
+                      print(message);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ResellerDasboard()),
+                      );
+                    } else {
+                      print(message);
+                    }
+                  }
+                  ;
+                }),
           ],
         ),
       ),

@@ -21,11 +21,11 @@ class ProfileSetUp extends StatefulWidget {
   State<ProfileSetUp> createState() => _ProfileSetUpState();
 }
 
-class _ProfileSetUpState extends State<ProfileSetUp> {
-  String? selectedBank;
+class _ProfileSetUpState extends State<ProfileSetUp>
+    with SingleTickerProviderStateMixin {
   String? selectedBranch;
 
-  TabController? _tabController;
+  late TabController _tabController;
   final TextEditingController ONameontroller = TextEditingController();
   final TextEditingController OAddressontroller = TextEditingController();
   final TextEditingController OPhoneontroller = TextEditingController();
@@ -78,12 +78,21 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
       'KCB Eldoret Branch',
       // Add more KCB branches...
     ],
-    'Equity Bank': ['Branch A', 'Branch B', 'Branch C'],
+    'Equity Bank': [
+      'Head Office, Equity Centre Branch NAIROBI',
+      'CORPORATE Branch, NAIROBI',
+      'FOURWAYS Branch, NAIROBI',
+      'KANGEMA Branch, KANGEMA',
+      'KARATINA Branch, KARATINA',
+      'KIRIAINI Branch, KIRIANI',
+      'MURARANDIA Branch, MURARANDIA',
+      'HARAMBEE A Branch, NAIROBI',
+      'KIMATHI ST Branch, NAIROBI',
+    ],
     'Cooperative Bank': ['Branch X', 'Branch Y', 'Branch Z'],
     // Add more branches...
   };
 
-// Helper function to capitalize each word
   String capitalize(String input) {
     List<String> words = input.split(' ');
     for (int i = 0; i < words.length; i++) {
@@ -91,6 +100,9 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
     }
     return words.join(' ');
   }
+
+  List<String> bankNames = [];
+  String? selectedBank;
 
   DateTime selectedDate = DateTime.now();
 
@@ -225,6 +237,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
         // Handle the case where 'bytes' is null, which means the selectedKraCertificatePhoto is not valid.
       }
     }
+    print('this is the selected kra photo $selectedKraCertificatePhoto');
 
     if (selectedFiles != null && selectedFiles!.isNotEmpty) {
       final file = selectedFiles![0];
@@ -235,6 +248,7 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
             filename: file.name, contentType: MediaType('application', 'pdf')));
       } else {}
     }
+
     if (selectedCertificateOfIncorporationDocument != null) {
       final documentBytes = selectedCertificateOfIncorporationDocument!.bytes;
       if (documentBytes != null) {
@@ -246,21 +260,64 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
     }
 
     final streamedResponse = await request.send();
+
+    print('This is my request here ${request.files}');
     final response = await http.Response.fromStream(streamedResponse);
 
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
       print('Request was successful. and this is my response here below');
       print('Request was successful. Response data: $responseData');
-      _tabController!.animateTo(1);
+      _tabController.animateTo(1);
     } else {
       print('Request failed with status code: ${response.statusCode}');
     }
   }
 
+  Future<void> sendBankData() async {
+    final userProvider = UserProvider();
+    final token = userProvider.user?.token;
+
+    if (token == null) {
+      return;
+    }
+
+    final url = Uri.parse('https://your-api-url.com/your-endpoint');
+
+    // Define the form data
+    final formData = {
+      'account_id': '9',
+      'bank_details':
+          '[{"bank_name": $selectedBank,"bank_code": "123","bank_branch": $selectedBranch,"account_number": $accountController}]',
+    };
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: formData,
+    );
+
+    if (response.statusCode == 200) {
+      // Request was successful
+      print('Request was successful');
+      _tabController.animateTo(2);
+    } else {
+      // Request failed
+      print('Request failed with status code: ${response.statusCode}');
+    }
+  }
+
+  int currentTab = 0;
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 5, vsync: this);
+    _tabController.addListener(_handleTabChange);
+
+    fetchBanks();
 
     // Access the UserProvider and retrieve the user data
     final userProvider = context.read<UserProvider>();
@@ -278,6 +335,31 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
 
       emailController.text = user.email;
       numberController.text = user.phone;
+      nameController.text = user.first_name;
+      phoneController.text = user.phone;
+      passwordController.text = user.password;
+      OEmailController.text = user.company_email;
+      ONameontroller.text = user.company_name;
+      OPhoneontroller.text = user.company_phone;
+    }
+  }
+
+  void _handleTabChange() {
+    setState(() {
+      currentTab = _tabController.index;
+    });
+  }
+
+  Future<void> fetchBanks() async {
+    final baseUrl = 'https://petropal.sandbox.co.ke:8040';
+    final response = await http.get(Uri.parse('$baseUrl/bank/get-all'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      setState(() {
+        // Map data to a list of bank names
+        bankNames = data.map((bank) => bank['name'].toString()).toList();
+      });
     }
   }
 
@@ -808,9 +890,13 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                   ),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
+                suffixIcon: Icon(
+                  Icons.keyboard_arrow_down,
+                  color: primaryDarkColor,
+                ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             // Second Dropdown for Branches
             if (selectedBank != null && selectedBank == 'KCB Bank')
               DropdownButtonFormField<String>(
@@ -853,6 +939,10 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                       width: 1.0,
                     ),
                     borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  suffixIcon: Icon(
+                    Icons.keyboard_arrow_down,
+                    color: primaryDarkColor,
                   ),
                 ),
               ),
@@ -941,7 +1031,10 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                 style:
                     ElevatedButton.styleFrom(backgroundColor: primaryDarkColor),
                 child: const Text('Confirm'),
-                onPressed: () {},
+                onPressed: () {
+                  sendBankData();
+                  _tabController.animateTo(2);
+                },
               ),
             )
           ],

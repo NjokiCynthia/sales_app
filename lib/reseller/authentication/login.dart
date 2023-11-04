@@ -192,6 +192,9 @@ class _LoginState extends State<Login> {
                                 phone: userData['phone'] ?? '',
                                 account_id: userData['account_id'] ?? '',
                                 isActivated: isActivatedValue,
+                                company_email: userData['company_email'],
+                                company_name: userData['company_name'],
+                                company_phone: userData['company_phone'],
                               );
 
                               userProvider.setUser(user);

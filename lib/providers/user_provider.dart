@@ -12,6 +12,9 @@ class User {
   final String token;
   final bool isActivated;
   final int account_id;
+  final String company_name;
+  final String company_email;
+  final String company_phone;
 
   User({
     required this.email,
@@ -22,6 +25,9 @@ class User {
     required this.phone,
     required this.isActivated,
     required this.account_id,
+    required this.company_email,
+    required this.company_name,
+    required this.company_phone,
   });
 }
 
