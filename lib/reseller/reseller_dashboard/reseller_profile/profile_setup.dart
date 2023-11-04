@@ -276,8 +276,6 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
 
       print('User email is: ${user.email}');
       print('User phone number is: ${user.phone}');
-
-      
     }
   }
 
