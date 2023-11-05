@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Column(
                                 children: [
                                   Text(
-                                    'Current price for ${titles[index]}',
+                                    'Current kenya for ${titles[index]}',
                                     style: const TextStyle(color: Colors.black),
                                   ),
                                   Text(
