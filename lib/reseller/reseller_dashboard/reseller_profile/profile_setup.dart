@@ -230,51 +230,40 @@ class _ProfileSetUpState extends State<ProfileSetUp>
       });
 
       if (selectedKraCertificatePhoto != null) {
-        final photoBytes = selectedKraCertificatePhoto!.bytes;
-        if (photoBytes != null) {
-          formData.files.add(MapEntry(
-            'kra_certificate_photo',
-            await MultipartFile.fromBytes(
-              photoBytes as List<int>,
-              filename: selectedKraCertificatePhoto!.name,
-              contentType: MediaType('application', 'pdf'),
-            ),
-          ));
-        } else {
-          // Handle the case where 'bytes' is null, which means the selectedKraCertificatePhoto is not valid.
-        }
+        formData.files.add(MapEntry(
+          'kra_certificate_photo',
+          await MultipartFile.fromFile(
+            selectedKraCertificatePhoto!.path.toString(),
+            filename: selectedKraCertificatePhoto!.name,
+          ),
+        ));
       }
 
       if (selectedFiles != null && selectedFiles!.isNotEmpty) {
         final file = selectedFiles![0];
-        final fileBytes = file.bytes;
-        if (fileBytes != null) {
-          formData.files.add(MapEntry(
-            'epra_license_photo',
-            await MultipartFile.fromBytes(
-              fileBytes as List<int>,
-              filename: file.name,
-              contentType: MediaType('application', 'pdf'),
-            ),
-          ));
-        }
+        formData.files.add(MapEntry(
+          'epra_license_photo',
+          await MultipartFile.fromFile(
+            file.path.toString(),
+            filename: file.name
+          ),
+        ));
       }
 
       if (selectedCertificateOfIncorporationDocument != null) {
-        final documentBytes = selectedCertificateOfIncorporationDocument!.bytes;
-        if (documentBytes != null) {
-          formData.files.add(MapEntry(
-            'certificate_of_incorporation_photo',
-            await MultipartFile.fromBytes(
-              documentBytes as List<int>,
-              filename: selectedCertificateOfIncorporationDocument!.name,
-              contentType: MediaType('application', 'pdf'),
-            ),
-          ));
-        }
+        formData.files.add(MapEntry(
+          'certificate_of_incorporation_photo',
+          await MultipartFile.fromFile(
+            selectedCertificateOfIncorporationDocument!.path.toString(),
+            filename: selectedCertificateOfIncorporationDocument!.name,
+          ),
+        ));
       }
-      print('@####################################');
+      print('@############ FILES ########################');
       // Log the specific details of each field in formData
+      print(formData.files);
+
+      print('@############ FIELDS ########################');
       // Log the specific details of each field in formData
       for (var entry in formData.fields) {
         print('Field: ${entry.key} - Value: ${entry.value}');
