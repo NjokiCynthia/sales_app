@@ -945,7 +945,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                     final data = res['data'] as Map<String, dynamic>?;
 
                     if (data != null) {
-                      final userData = data['user'] as Map<String, dynamic>?;
+                      //final userData = data['user'] as Map<String, dynamic>?;
 
                       print(message);
                       Navigator.pushReplacement(

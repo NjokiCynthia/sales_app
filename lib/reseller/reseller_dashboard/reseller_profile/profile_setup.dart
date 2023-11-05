@@ -10,6 +10,7 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/providers/user_provider.dart';
+import 'package:petropal/reseller/reseller_dashboard/r_dashboard.dart';
 import 'package:petropal/widgets/buttons.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -273,7 +274,20 @@ class _ProfileSetUpState extends State<ProfileSetUp>
         }
       }
       print('@####################################');
-      print('Request being sent is in this format here shown: $formData');
+      // Log the specific details of each field in formData
+      // Log the specific details of each field in formData
+      for (var entry in formData.fields) {
+        print('Field: ${entry.key} - Value: ${entry.value}');
+      }
+
+// Log the specific details of each file in formData
+      for (var entry in formData.files) {
+        print(
+            'File Name: ${entry.value.filename} - Field Name: ${entry.key} - Content Type: ${entry.value.contentType}');
+      }
+
+// Log the entire request payload for debugging
+      print('Request payload details: ${dio.options} $formData');
 
       final response = await dio.post(
         url.toString(),
@@ -281,7 +295,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
       );
 
       if (response.statusCode == 200) {
-        final responseData = json.decode(response.data);
+        final responseData = response.data;
         print('Request was successful. Response data: $responseData');
         _tabController.animateTo(1);
       } else {
@@ -292,41 +306,44 @@ class _ProfileSetUpState extends State<ProfileSetUp>
     }
   }
 
-  Future<void> sendBankData() async {
-    final userProvider = UserProvider();
-    final token = userProvider.user?.token;
+  // Future<void> sendBankData() async {
+  //   print('sendBankData() called');
+  //   final userProvider = UserProvider();
+  //   final token = userProvider.user?.token;
 
-    if (token == null) {
-      return;
-    }
+  //   if (token == null) {
+  //     return;
+  //   }
 
-    final url = Uri.parse('https://your-api-url.com/your-endpoint');
+  //   final url = Uri.parse(
+  //       'https://petropal.sandbox.co.ke:8040/account/update/bank_details');
 
-    // Define the form data
-    final formData = {
-      'account_id': '9',
-      'bank_details':
-          '[{"bank_name": $selectedBank,"bank_code": "123","bank_branch": $selectedBranch,"account_number": $accountController}]',
-    };
+  //   // Define the form data
+  //   final formData = {
+  //     'account_id': '9',
+  //     'bank_details':
+  //         '[{"bank_name": $selectedBank,"bank_code": "123","bank_branch": $selectedBranch,"account_number": $accountController}]',
+  //   };
 
-    final response = await http.post(
-      url,
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: formData,
-    );
+  //   final response = await http.post(
+  //     url,
+  //     headers: {
+  //       'Authorization': 'Bearer $token',
+  //       'Content-Type': 'application/x-www-form-urlencoded',
+  //     },
+  //     body: formData,
+  //   );
 
-    if (response.statusCode == 200) {
-      // Request was successful
-      print('Request was successful');
-      _tabController.animateTo(2);
-    } else {
-      // Request failed
-      print('Request failed with status code: ${response.statusCode}');
-    }
-  }
+  //   if (response.statusCode == 200) {
+  //     // Request was successful
+  //     print('Request was successful');
+  //     print(response);
+  //     _tabController.animateTo(2);
+  //   } else {
+  //     // Request failed
+  //     print('Request failed with status code: ${response.statusCode}');
+  //   }
+  // }
 
   int currentTab = 0;
   @override
@@ -862,6 +879,8 @@ class _ProfileSetUpState extends State<ProfileSetUp>
   }
 
   Widget buildSecondPage() {
+    final userProvider = context.read<UserProvider>();
+    final user = userProvider.user;
     return SingleChildScrollView(
       child: SafeArea(
           child: Padding(
@@ -1046,19 +1065,34 @@ class _ProfileSetUpState extends State<ProfileSetUp>
             const SizedBox(
               height: 20,
             ),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                style:
-                    ElevatedButton.styleFrom(backgroundColor: primaryDarkColor),
-                child: const Text('Confirm'),
-                onPressed: () {
-                  sendBankData();
-                  _tabController.animateTo(2);
+            CustomRequestButton(
+                url: '/account/update/bank_details',
+                method: 'POST',
+                buttonText: 'Confirm',
+                body: {
+                  "account_number": accountController.text,
+                  "account_name": accountName.text,
+                  "bank_id": 50,
+                  "branch_id": 1592,
+                  "account_id": user?.account_id.toString() ?? '',
                 },
-              ),
-            )
+                onSuccess: (res) {
+                  print('This is my response');
+                  print(res);
+
+                  final isSuccessful = res['isSuccessful'] as bool;
+
+                  final message = res['message'];
+                  if (isSuccessful) {
+                    final data = res['data'] as Map<String, dynamic>?;
+
+                    if (data != null) {
+                      _tabController.animateTo(2);
+                    } else {
+                      print(message);
+                    }
+                  }
+                })
           ],
         ),
       )),
@@ -1066,6 +1100,8 @@ class _ProfileSetUpState extends State<ProfileSetUp>
   }
 
   Widget buildThirdPage() {
+    final userProvider = context.read<UserProvider>();
+    final user = userProvider.user;
     return SingleChildScrollView(
       child: SafeArea(
         child: Padding(
@@ -1210,16 +1246,36 @@ class _ProfileSetUpState extends State<ProfileSetUp>
               const SizedBox(
                 height: 40,
               ),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: primaryDarkColor),
-                  child: const Text('Confirm'),
-                  onPressed: () {},
-                ),
-              )
+              CustomRequestButton(
+                  url: '/contact-persons/create',
+                  method: 'POST',
+                  buttonText: 'Add details',
+                  body: {
+                    "name": nameController.text,
+                    "phone": phoneController.text,
+                    "email": emailController.text,
+                    "position": positionController.text,
+                    "accountId": user?.account_id.toString() ??
+                        '', //account id of the reseller
+                    "created_by": 61 // id of the logged in user
+                  },
+                  onSuccess: (res) {
+                    print('This is my response');
+                    print(res);
+
+                    final isSuccessful = res['isSuccessful'] as bool;
+
+                    final message = res['message'];
+                    if (isSuccessful) {
+                      final data = res['data'] as Map<String, dynamic>?;
+
+                      if (data != null) {
+                        _tabController.animateTo(3);
+                      } else {
+                        print(message);
+                      }
+                    }
+                  })
             ],
           ),
         ),
@@ -1587,7 +1643,12 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                   style: ElevatedButton.styleFrom(
                       backgroundColor: primaryDarkColor),
                   child: const Text('Confirm Details'),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: ((context) => ResellerDasboard())));
+                  },
                 ),
               )
             ],
