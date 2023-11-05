@@ -201,7 +201,6 @@ class _ProfileSetUpState extends State<ProfileSetUp>
   Future<void> sendFormData() async {
     final url =
         Uri.parse('https://petropal.sandbox.co.ke:8040/user/update-profile');
-    final request = http.MultipartRequest('POST', url);
     final userProvider = context.read<UserProvider>();
     final user = userProvider.user;
 
@@ -210,67 +209,86 @@ class _ProfileSetUpState extends State<ProfileSetUp>
     if (token == null) {
       return;
     }
-    request.headers['Authorization'] = 'Bearer $token';
 
-    request.fields.addAll({
-      'kra_certificate_number': kraController.text,
-      'epra_license_number': licenseController.text,
-      'epra_license_expiry_date': selectedDate.toLocal().toString(),
-      'certificate_of_incorporation_number': certController.text,
-      'email': emailController.text,
-      'phone': numberController.text,
-      'firstname': user?.first_name ?? '',
-      'lastname': user?.last_name ?? '',
-      'account_id': user?.account_id.toString() ?? '',
-      'minimum_volume_per_order': minVolController.text,
-      'pic': '',
-    });
+    final dio = Dio();
+    dio.options.headers['Authorization'] = 'Bearer $token';
 
-    if (selectedKraCertificatePhoto != null) {
-      final photoBytes = selectedKraCertificatePhoto!.bytes;
-      if (photoBytes != null) {
-        request.files.add(await http.MultipartFile.fromBytes(
-            'kra_certificate_photo', photoBytes as List<int>,
-            filename: selectedKraCertificatePhoto!.name,
-            contentType: MediaType('application', 'pdf')));
-      } else {
-        // Handle the case where 'bytes' is null, which means the selectedKraCertificatePhoto is not valid.
+    try {
+      final formData = FormData.fromMap({
+        'kra_certificate_number': kraController.text,
+        'epra_license_number': licenseController.text,
+        'epra_license_expiry_date': selectedDate.toLocal().toString(),
+        'certificate_of_incorporation_number': certController.text,
+        'email': emailController.text,
+        'phone': numberController.text,
+        'firstname': user?.first_name ?? '',
+        'lastname': user?.last_name ?? '',
+        'account_id': user?.account_id.toString() ?? '',
+        'minimum_volume_per_order': minVolController.text,
+        'pic': '',
+      });
+
+      if (selectedKraCertificatePhoto != null) {
+        final photoBytes = selectedKraCertificatePhoto!.bytes;
+        if (photoBytes != null) {
+          formData.files.add(MapEntry(
+            'kra_certificate_photo',
+            await MultipartFile.fromBytes(
+              photoBytes as List<int>,
+              filename: selectedKraCertificatePhoto!.name,
+              contentType: MediaType('application', 'pdf'),
+            ),
+          ));
+        } else {
+          // Handle the case where 'bytes' is null, which means the selectedKraCertificatePhoto is not valid.
+        }
       }
-    }
-    print('this is the selected kra photo $selectedKraCertificatePhoto');
 
-    if (selectedFiles != null && selectedFiles!.isNotEmpty) {
-      final file = selectedFiles![0];
-      final fileBytes = file.bytes;
-      if (fileBytes != null) {
-        request.files.add(await http.MultipartFile.fromBytes(
-            'epra_license_photo', fileBytes as List<int>,
-            filename: file.name, contentType: MediaType('application', 'pdf')));
-      } else {}
-    }
+      if (selectedFiles != null && selectedFiles!.isNotEmpty) {
+        final file = selectedFiles![0];
+        final fileBytes = file.bytes;
+        if (fileBytes != null) {
+          formData.files.add(MapEntry(
+            'epra_license_photo',
+            await MultipartFile.fromBytes(
+              fileBytes as List<int>,
+              filename: file.name,
+              contentType: MediaType('application', 'pdf'),
+            ),
+          ));
+        }
+      }
 
-    if (selectedCertificateOfIncorporationDocument != null) {
-      final documentBytes = selectedCertificateOfIncorporationDocument!.bytes;
-      if (documentBytes != null) {
-        request.files.add(await http.MultipartFile.fromBytes(
-            'certificate_of_incorporation_photo', documentBytes as List<int>,
-            filename: selectedCertificateOfIncorporationDocument!.name,
-            contentType: MediaType('application', 'pdf')));
-      } else {}
-    }
+      if (selectedCertificateOfIncorporationDocument != null) {
+        final documentBytes = selectedCertificateOfIncorporationDocument!.bytes;
+        if (documentBytes != null) {
+          formData.files.add(MapEntry(
+            'certificate_of_incorporation_photo',
+            await MultipartFile.fromBytes(
+              documentBytes as List<int>,
+              filename: selectedCertificateOfIncorporationDocument!.name,
+              contentType: MediaType('application', 'pdf'),
+            ),
+          ));
+        }
+      }
+      print('@####################################');
+      print('Request being sent is in this format here shown: $formData');
 
-    final streamedResponse = await request.send();
+      final response = await dio.post(
+        url.toString(),
+        data: formData,
+      );
 
-    print('This is my request here ${request.files}');
-    final response = await http.Response.fromStream(streamedResponse);
-
-    if (response.statusCode == 200) {
-      final responseData = json.decode(response.body);
-      print('Request was successful. and this is my response here below');
-      print('Request was successful. Response data: $responseData');
-      _tabController.animateTo(1);
-    } else {
-      print('Request failed with status code: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.data);
+        print('Request was successful. Response data: $responseData');
+        _tabController.animateTo(1);
+      } else {
+        print('Request failed with status code: ${response.statusCode}');
+      }
+    } catch (err) {
+      print('Error sending the request: $err');
     }
   }
 
@@ -331,6 +349,10 @@ class _ProfileSetUpState extends State<ProfileSetUp>
       print('User email is: ${user.email}');
       print('User phone number is: ${user.phone}');
       print('User account id is: ${user.account_id}');
+      print('My company email is: ${user.companyAddress}');
+      print('My company name is: ${user.companyName}');
+      print('My company phone is: ${user.companyPhone}');
+      print('My company password is: ${user.password}');
       print('User token is: ${user.token}');
 
       emailController.text = user.email;
@@ -338,9 +360,9 @@ class _ProfileSetUpState extends State<ProfileSetUp>
       nameController.text = user.first_name;
       phoneController.text = user.phone;
       passwordController.text = user.password;
-      OEmailController.text = user.company_email;
-      ONameontroller.text = user.company_name;
-      OPhoneontroller.text = user.company_phone;
+      OEmailController.text = user.companyAddress;
+      ONameontroller.text = user.companyName;
+      OPhoneontroller.text = user.companyPhone;
     }
   }
 

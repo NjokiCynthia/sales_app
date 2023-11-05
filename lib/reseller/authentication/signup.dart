@@ -943,35 +943,19 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
 
                   if (isSuccessful) {
                     final data = res['data'] as Map<String, dynamic>?;
+
                     if (data != null) {
                       final userData = data['user'] as Map<String, dynamic>?;
-                      final token = data['api_token'] as String?;
-                      final user = User(
-                        email: userData!['email'].replaceAll(' ', ''),
-                        token: token!,
-                        password: 'password',
-                        first_name: userData!['first_name'] ?? '',
-                        last_name: userData['last_name'] ?? '',
-                        phone: userData['phone'] ?? '',
-                        account_id: userData['account_id'] ?? '',
-                        isActivated: false,
-                        company_email: userData['company_email'],
-                        company_name: userData['company_name'],
-                        company_phone: userData['company_phone'],
-                      );
 
-                      userProvider.setUser(user);
                       print(message);
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => ResellerDasboard()),
+                        MaterialPageRoute(builder: (context) => Login()),
                       );
                     } else {
                       print(message);
                     }
                   }
-                  ;
                 }),
           ],
         ),
