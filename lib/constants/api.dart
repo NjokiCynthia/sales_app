@@ -6,10 +6,14 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/driver.dart';
+import 'package:petropal/models/omc_product.dart';
 import 'package:petropal/models/order.dart';
+import 'package:petropal/models/product.dart';
 import 'package:petropal/models/truck.dart';
 import 'package:petropal/providers/driver.dart';
+import 'package:petropal/providers/omc_product.dart';
 import 'package:petropal/providers/order.dart';
+import 'package:petropal/providers/products.dart';
 import 'package:petropal/providers/truck.dart';
 
 String ipAddress = 'https://petropal.sandbox.co.ke:8040';
@@ -369,6 +373,163 @@ class ApiClient {
 
   }
 
+  // fetching products.
+  Future<dynamic> fetchProducts(String path) async {
+    try {
+
+      Map<String,String> headers = {};
+
+      print(">>>>>> sending fetch products request >>>>>>");
+
+      print(headers);
+
+      // start the loading
+      ProductProvider().startLoading();
+
+      // fetch
+
+      final response = await _dio.post('$ipAddress$path',data: null, options: Options(headers: headers));
+
+      // check the status code returned.
+
+      Map<String,dynamic> jsonResponse = jsonDecode(response.data);
+
+
+      if(jsonResponse['status'] == '1'){ // Very successful response
+
+        List<ProductModel> products = [];
+
+        // map through the returned products.
+        List fetchedProducts = jsonResponse['data'];
+
+        for (var element in fetchedProducts) {
+
+          // append the truck to the trucks list.
+
+          products.add(ProductModel(
+              id: element['id'].toString(),
+              counter: element['counter'].toString(),
+              product: element['product'].toString(),
+              depot: element['depot'].toString(),
+              price: double.parse(element['price'].replaceAll(',','')) != null ? double.parse(element['price']) : 0.0,
+              sellingPrice: double.parse(element['selling_price'].replaceAll(',','')) != null ? double.parse(element['selling_price']) : 0.0 ,
+              availableVolume: double.parse(element['volume'].replaceAll(',','')) != null ? double.parse(element['volume']) : 0.0 ,
+              minimumVolume: double.parse(element['min_vol'].replaceAll(',','')) != null ? double.parse(element['min_vol']) : 0.0 ,
+              maximumVolume: double.parse(element['max_vol'].replaceAll(',','')) != null ? double.parse(element['max_vol']) : 0.0  ,
+              ordersApproved: element['orders_approved'].toString(),
+              dealerName: element['dealer'].toString(),
+              commissionRate: double.parse(element['commission_rate'].replaceAll(',','')) != null ? double.parse(element['commission_rate']) : 0.0,
+              ordersPending: element['orders_pending'].toString(),
+              companyId: element['company_id'].toString(),
+              location: element['location'].toString(),
+              status: element['status'].toString(),
+              createdBy: element['created_by'].toString()
+          ));
+
+        }
+
+        // append the drivers.
+        ProductProvider().setProducts(products);
+
+        // set the loading to off.
+        ProductProvider().stopLoading();
+
+        return;
+
+      }else{
+
+        // set the loading to off.
+        ProductProvider().stopLoading();
+
+        // some  server error occurred.
+        throw Exception(jsonResponse['message']);
+
+      }
+    } on DioException catch (error) {
+
+      // set the loading to off.
+      ProductProvider().stopLoading();
+
+      return error.response?.data;
+    }
+  }
+
+  // fetching omc products.
+
+  Future<dynamic> fetchOmcProducts(String path,dynamic data,{Map<String, dynamic>? queryParameters,Map<String, dynamic>? headers}) async {
+    try {
+
+      // start the loading
+      OmcProductProvider().startLoading();
+
+      // fetch
+
+      final response = await _dio.post('$ipAddress$path',data: data, options: Options(headers: headers));
+
+      // check the status code returned.
+
+      Map<String,dynamic> jsonResponse = jsonDecode(response.data);
+
+
+      if(jsonResponse['status'] == '1'){ // Very successful response
+
+        List<OmcProductModel> products = [];
+
+        // map through the returned products.
+        List fetchedProducts = jsonResponse['data'];
+
+        for (var element in fetchedProducts) {
+
+          // append the truck to the trucks list.
+
+          products.add(OmcProductModel(
+              productId: element['product_id'].toString(),
+              productName: element['product_name'].toString(),
+              productCode: element['product_code'].toString(),
+              depotName: element['depot_name'].toString(),
+              companyName: element['company_name'].toString(),
+              companyEmail: element['company_email'].toString(),
+              companyPhone: element['company_phone'].toString(),
+              minVolumePerOrder: element['minimum_volume_per_order'].toString(),
+              pricePer: double.parse(element['price_per'].replaceAll(',','')) != null ? double.parse(element['price_per']) : 0.0,
+              sellingPrice: double.parse(element['selling_price'].replaceAll(',','')) != null ? double.parse(element['selling_price']) : 0.0 ,
+              stockVolume: double.parse(element['stock_volume'].replaceAll(',','')) != null ? double.parse(element['stock_volume']) : 0.0 ,
+              availableVolume: double.parse(element['volume'].replaceAll(',','')) != null ? double.parse(element['volume']) : 0.0 ,
+              minVolume: double.parse(element['min_vol'].replaceAll(',','')) != null ? double.parse(element['min_vol']) : 0.0 ,
+              maxVolume: double.parse(element['max_vol'].replaceAll(',','')) != null ? double.parse(element['max_vol']) : 0.0  ,
+              commissionRate: double.parse(element['commission_rate'].replaceAll(',','')) != null ? double.parse(element['commission_rate']) : 0.0,
+              companyId: element['company_id'].toString(),
+              location: element['location'].toString(),
+              status: element['status'].toString(),
+          ));
+
+        }
+
+        // append the drivers.
+        OmcProductProvider().setOmcProducts(products);
+
+        // set the loading to off.
+        OmcProductProvider().stopLoading();
+
+        return;
+
+      }else{
+
+        // set the loading to off.
+        OmcProductProvider().stopLoading();
+
+        // some  server error occurred.
+        throw Exception(jsonResponse['message']);
+
+      }
+    } on DioException catch (error) {
+
+      // set the loading to off.
+      OmcProductProvider().stopLoading();
+
+      return error.response?.data;
+    }
+  }
 
 }
 

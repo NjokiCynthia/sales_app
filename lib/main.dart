@@ -5,7 +5,13 @@ import 'package:petropal/reseller/authentication/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/providers/user_provider.dart';
+import 'package:petropal/providers/driver.dart';
+import 'package:petropal/providers/omc_product.dart';
+import 'package:petropal/providers/order.dart';
+import 'package:petropal/providers/products.dart';
+import 'package:petropal/providers/truck.dart';
 import 'package:petropal/screens/onboarding/splash.dart';
+
 
 import 'package:provider/provider.dart';
 
@@ -27,6 +33,11 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider<UserProvider>.value(value: UserProvider()),
+        ChangeNotifierProvider<DriverProvider>.value(value: DriverProvider()),
+        ChangeNotifierProvider<OmcProductProvider>.value(value: OmcProductProvider()),
+        ChangeNotifierProvider<OrderProvider>.value(value: OrderProvider()),
+        ChangeNotifierProvider<ProductProvider>.value(value: ProductProvider()),
+        ChangeNotifierProvider<TruckProvider>.value(value: TruckProvider()),
       ],
       child: MyApp(isFirstInstall: isFirstInstall),
     ),

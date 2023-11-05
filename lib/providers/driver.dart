@@ -7,7 +7,7 @@ class DriverProvider with ChangeNotifier {
   final List<DriverModel> _drivers = [];
 
   bool _isLoading = false;
-
+  bool get isLoading => _isLoading;
   // Getter to access the list of products
   List<DriverModel> get drivers => _drivers;
 

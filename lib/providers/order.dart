@@ -4,6 +4,7 @@ import 'package:petropal/models/order.dart';
 class OrderProvider with ChangeNotifier {
   final List<OrderModel> _orders = [];
   bool _isLoading = false;
+  bool get isLoading => _isLoading;
   // Getter to access the list of products
   List<OrderModel> get orders => _orders;
 

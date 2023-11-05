@@ -1,12 +1,13 @@
 import 'package:flutter/foundation.dart';
-import 'package:petropal/models/product.dart';
+import 'package:petropal/models/omc_product.dart';
 
-class ProductProvider with ChangeNotifier {
-  final List<ProductModel> _products = [];
+class OmcProductProvider with ChangeNotifier {
+  final List<OmcProductModel> _products = [];
   bool _isLoading = false;
-  bool get isLoading => _isLoading;
+
   // Getter to access the list of products
-  List<ProductModel> get products => _products;
+  bool get isLoading => _isLoading;
+  List<OmcProductModel> get products => _products;
 
   // start loading.
   void startLoading(){
@@ -21,14 +22,14 @@ class ProductProvider with ChangeNotifier {
   }
 
   // Method to add a product to the list
-  void addProduct(ProductModel product) {
+  void addOmcProduct(OmcProductModel product) {
     _products.add(product);
     notifyListeners();
   }
 
   // setting products.
-  void setProducts(List<ProductModel> products){
+  void setOmcProducts(List<OmcProductModel> products){
     _products.addAll(products);
-    // notifyListeners();
+    notifyListeners();
   }
 }
