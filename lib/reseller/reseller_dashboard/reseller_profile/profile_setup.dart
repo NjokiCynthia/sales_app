@@ -21,11 +21,11 @@ class ProfileSetUp extends StatefulWidget {
   State<ProfileSetUp> createState() => _ProfileSetUpState();
 }
 
-class _ProfileSetUpState extends State<ProfileSetUp> {
-  String? selectedBank;
+class _ProfileSetUpState extends State<ProfileSetUp>
+    with SingleTickerProviderStateMixin {
   String? selectedBranch;
 
-  TabController? _tabController;
+  late TabController _tabController;
   final TextEditingController ONameontroller = TextEditingController();
   final TextEditingController OAddressontroller = TextEditingController();
   final TextEditingController OPhoneontroller = TextEditingController();
@@ -78,12 +78,21 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
       'KCB Eldoret Branch',
       // Add more KCB branches...
     ],
-    'Equity Bank': ['Branch A', 'Branch B', 'Branch C'],
+    'Equity Bank': [
+      'Head Office, Equity Centre Branch NAIROBI',
+      'CORPORATE Branch, NAIROBI',
+      'FOURWAYS Branch, NAIROBI',
+      'KANGEMA Branch, KANGEMA',
+      'KARATINA Branch, KARATINA',
+      'KIRIAINI Branch, KIRIANI',
+      'MURARANDIA Branch, MURARANDIA',
+      'HARAMBEE A Branch, NAIROBI',
+      'KIMATHI ST Branch, NAIROBI',
+    ],
     'Cooperative Bank': ['Branch X', 'Branch Y', 'Branch Z'],
     // Add more branches...
   };
 
-// Helper function to capitalize each word
   String capitalize(String input) {
     List<String> words = input.split(' ');
     for (int i = 0; i < words.length; i++) {
@@ -91,6 +100,9 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
     }
     return words.join(' ');
   }
+
+  List<String> bankNames = [];
+  String? selectedBank;
 
   DateTime selectedDate = DateTime.now();
 
@@ -189,7 +201,6 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
   Future<void> sendFormData() async {
     final url =
         Uri.parse('https://petropal.sandbox.co.ke:8040/user/update-profile');
-    final request = http.MultipartRequest('POST', url);
     final userProvider = context.read<UserProvider>();
     final user = userProvider.user;
 
@@ -198,69 +209,133 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
     if (token == null) {
       return;
     }
-    request.headers['Authorization'] = 'Bearer $token';
 
-    request.fields.addAll({
-      'kra_certificate_number': kraController.text,
-      'epra_license_number': licenseController.text,
-      'epra_license_expiry_date': selectedDate.toLocal().toString(),
-      'certificate_of_incorporation_number': certController.text,
-      'email': emailController.text,
-      'phone': numberController.text,
-      'firstname': user?.first_name ?? '',
-      'lastname': user?.last_name ?? '',
-      'account_id': user?.account_id.toString() ?? '',
-      'minimum_volume_per_order': minVolController.text,
-      'pic': '',
-    });
+    final dio = Dio();
+    dio.options.headers['Authorization'] = 'Bearer $token';
 
-    if (selectedKraCertificatePhoto != null) {
-      final photoBytes = selectedKraCertificatePhoto!.bytes;
-      if (photoBytes != null) {
-        request.files.add(await http.MultipartFile.fromBytes(
-            'kra_certificate_photo', photoBytes as List<int>,
-            filename: selectedKraCertificatePhoto!.name,
-            contentType: MediaType('application', 'pdf')));
-      } else {
-        // Handle the case where 'bytes' is null, which means the selectedKraCertificatePhoto is not valid.
+    try {
+      final formData = FormData.fromMap({
+        'kra_certificate_number': kraController.text,
+        'epra_license_number': licenseController.text,
+        'epra_license_expiry_date': selectedDate.toLocal().toString(),
+        'certificate_of_incorporation_number': certController.text,
+        'email': emailController.text,
+        'phone': numberController.text,
+        'firstname': user?.first_name ?? '',
+        'lastname': user?.last_name ?? '',
+        'account_id': user?.account_id.toString() ?? '',
+        'minimum_volume_per_order': minVolController.text,
+        'pic': '',
+      });
+
+      if (selectedKraCertificatePhoto != null) {
+        final photoBytes = selectedKraCertificatePhoto!.bytes;
+        if (photoBytes != null) {
+          formData.files.add(MapEntry(
+            'kra_certificate_photo',
+            await MultipartFile.fromBytes(
+              photoBytes as List<int>,
+              filename: selectedKraCertificatePhoto!.name,
+              contentType: MediaType('application', 'pdf'),
+            ),
+          ));
+        } else {
+          // Handle the case where 'bytes' is null, which means the selectedKraCertificatePhoto is not valid.
+        }
       }
+
+      if (selectedFiles != null && selectedFiles!.isNotEmpty) {
+        final file = selectedFiles![0];
+        final fileBytes = file.bytes;
+        if (fileBytes != null) {
+          formData.files.add(MapEntry(
+            'epra_license_photo',
+            await MultipartFile.fromBytes(
+              fileBytes as List<int>,
+              filename: file.name,
+              contentType: MediaType('application', 'pdf'),
+            ),
+          ));
+        }
+      }
+
+      if (selectedCertificateOfIncorporationDocument != null) {
+        final documentBytes = selectedCertificateOfIncorporationDocument!.bytes;
+        if (documentBytes != null) {
+          formData.files.add(MapEntry(
+            'certificate_of_incorporation_photo',
+            await MultipartFile.fromBytes(
+              documentBytes as List<int>,
+              filename: selectedCertificateOfIncorporationDocument!.name,
+              contentType: MediaType('application', 'pdf'),
+            ),
+          ));
+        }
+      }
+      print('@####################################');
+      print('Request being sent is in this format here shown: $formData');
+
+      final response = await dio.post(
+        url.toString(),
+        data: formData,
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.data);
+        print('Request was successful. Response data: $responseData');
+        _tabController.animateTo(1);
+      } else {
+        print('Request failed with status code: ${response.statusCode}');
+      }
+    } catch (err) {
+      print('Error sending the request: $err');
+    }
+  }
+
+  Future<void> sendBankData() async {
+    final userProvider = UserProvider();
+    final token = userProvider.user?.token;
+
+    if (token == null) {
+      return;
     }
 
-    if (selectedFiles != null && selectedFiles!.isNotEmpty) {
-      final file = selectedFiles![0];
-      final fileBytes = file.bytes;
-      if (fileBytes != null) {
-        request.files.add(await http.MultipartFile.fromBytes(
-            'epra_license_photo', fileBytes as List<int>,
-            filename: file.name, contentType: MediaType('application', 'pdf')));
-      } else {}
-    }
-    if (selectedCertificateOfIncorporationDocument != null) {
-      final documentBytes = selectedCertificateOfIncorporationDocument!.bytes;
-      if (documentBytes != null) {
-        request.files.add(await http.MultipartFile.fromBytes(
-            'certificate_of_incorporation_photo', documentBytes as List<int>,
-            filename: selectedCertificateOfIncorporationDocument!.name,
-            contentType: MediaType('application', 'pdf')));
-      } else {}
-    }
+    final url = Uri.parse('https://your-api-url.com/your-endpoint');
 
-    final streamedResponse = await request.send();
-    final response = await http.Response.fromStream(streamedResponse);
+    // Define the form data
+    final formData = {
+      'account_id': '9',
+      'bank_details':
+          '[{"bank_name": $selectedBank,"bank_code": "123","bank_branch": $selectedBranch,"account_number": $accountController}]',
+    };
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: formData,
+    );
 
     if (response.statusCode == 200) {
-      final responseData = json.decode(response.body);
-      print('Request was successful. and this is my response here below');
-      print('Request was successful. Response data: $responseData');
-      _tabController!.animateTo(1);
+      // Request was successful
+      print('Request was successful');
+      _tabController.animateTo(2);
     } else {
+      // Request failed
       print('Request failed with status code: ${response.statusCode}');
     }
   }
 
+  int currentTab = 0;
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 5, vsync: this);
+    _tabController.addListener(_handleTabChange);
+
+    fetchBanks();
 
     // Access the UserProvider and retrieve the user data
     final userProvider = context.read<UserProvider>();
@@ -274,10 +349,39 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
       print('User email is: ${user.email}');
       print('User phone number is: ${user.phone}');
       print('User account id is: ${user.account_id}');
+      print('My company email is: ${user.companyAddress}');
+      print('My company name is: ${user.companyName}');
+      print('My company phone is: ${user.companyPhone}');
+      print('My company password is: ${user.password}');
       print('User token is: ${user.token}');
 
       emailController.text = user.email;
       numberController.text = user.phone;
+      nameController.text = user.first_name;
+      phoneController.text = user.phone;
+      passwordController.text = user.password;
+      OEmailController.text = user.companyAddress;
+      ONameontroller.text = user.companyName;
+      OPhoneontroller.text = user.companyPhone;
+    }
+  }
+
+  void _handleTabChange() {
+    setState(() {
+      currentTab = _tabController.index;
+    });
+  }
+
+  Future<void> fetchBanks() async {
+    final baseUrl = 'https://petropal.sandbox.co.ke:8040';
+    final response = await http.get(Uri.parse('$baseUrl/bank/get-all'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      setState(() {
+        // Map data to a list of bank names
+        bankNames = data.map((bank) => bank['name'].toString()).toList();
+      });
     }
   }
 
@@ -808,9 +912,13 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                   ),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
+                suffixIcon: Icon(
+                  Icons.keyboard_arrow_down,
+                  color: primaryDarkColor,
+                ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             // Second Dropdown for Branches
             if (selectedBank != null && selectedBank == 'KCB Bank')
               DropdownButtonFormField<String>(
@@ -853,6 +961,10 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                       width: 1.0,
                     ),
                     borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  suffixIcon: Icon(
+                    Icons.keyboard_arrow_down,
+                    color: primaryDarkColor,
                   ),
                 ),
               ),
@@ -941,7 +1053,10 @@ class _ProfileSetUpState extends State<ProfileSetUp> {
                 style:
                     ElevatedButton.styleFrom(backgroundColor: primaryDarkColor),
                 child: const Text('Confirm'),
-                onPressed: () {},
+                onPressed: () {
+                  sendBankData();
+                  _tabController.animateTo(2);
+                },
               ),
             )
           ],

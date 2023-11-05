@@ -186,12 +186,15 @@ class _LoginState extends State<Login> {
                               final user = User(
                                 email: userData['email'].replaceAll(' ', ''),
                                 token: token,
-                                password: 'password',
+                                password: userData['password'] ?? '',
                                 first_name: userData['first_name'] ?? '',
                                 last_name: userData['last_name'] ?? '',
                                 phone: userData['phone'] ?? '',
                                 account_id: userData['account_id'] ?? '',
                                 isActivated: isActivatedValue,
+                                companyAddress: userData['companyAddress'] ?? '',
+                                companyName: userData['companyName'] ?? '',
+                                companyPhone: userData['companyPhone'] ?? '',
                               );
 
                               userProvider.setUser(user);
