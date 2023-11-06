@@ -28,6 +28,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
 
   bool fetchingProducts = true;
   List<ProductModel> products = [];
+
   _fetchProducts(BuildContext context) async {
     setState(() {
       fetchingProducts = true;
@@ -48,18 +49,46 @@ class _ResellerProductsState extends State<ResellerProducts> {
         .then((response) {
       print('Response: $response');
       if (response['data'] != null) {
-        setState(() {
-          products = List<ProductModel>.from(response['data']);
-        });
+        try {
+          final data = List<Map<String, dynamic>>.from(response['data']);
+          final productModels = data.map((productData) {
+            return ProductModel(
+              id: productData['id'].toString(),
+              counter: productData['counter'].toString(),
+              createdBy: productData['created_by'].toString(),
+              product: productData['product'].toString(),
+              depot: productData['depot'].toString(),
+              sellingPrice: productData['selling_price'],
+              price: productData['price'],
+              location: productData['location'].toString(),
+              availableVolume: productData['volume'],
+              minimumVolume: productData['min_vol'],
+              maximumVolume: productData['max_vol'],
+              ordersApproved: productData['orders_approved'].toString(),
+              dealerName: productData['dealer'].toString(),
+              commissionRate: productData['commission_rate'],
+              ordersPending: productData['orders_pending'],
+              status: productData['status'].toString(),
+              companyId: productData['company_id'].toString(),
+              remaining_volume: productData['remaining_volume'],
+            );
+          }).toList();
+
+          setState(() {
+            products = productModels;
+          });
+        } catch (e) {
+          print('Error parsing product data: $e');
+        }
       } else {
-        // Handle the case where 'products' is null or not present in the response.
+        // Handle the case where 'data' is null or not present in the response.
         print('No products found in the response');
       }
     }).catchError((error) {
       // Handle the error
-      print('error');
-      print(error);
+      print('Error: $error');
     });
+
     setState(() {
       fetchingProducts = false;
     });
@@ -176,8 +205,6 @@ class _ResellerProductsState extends State<ResellerProducts> {
                 SizedBox(
                   height: 10,
                 ),
-                // Text("isLoading $isLoading"),
-                // Text("the products length ${_products.length}"),
                 Expanded(
                   child: ListView.builder(
                     itemBuilder: ((context, index) {

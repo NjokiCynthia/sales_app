@@ -10,6 +10,7 @@ class ProductModel {
   final double availableVolume;
   final double minimumVolume;
   final double maximumVolume;
+  final String remaining_volume;
   final String ordersApproved;
   final String dealerName;
   final double commissionRate;
@@ -17,24 +18,23 @@ class ProductModel {
   final String status;
   final String companyId;
 
-
-  ProductModel({
-    required this.id,
-    required this.counter,
-    required this.createdBy,
-    required this.product,
-    required this.depot,
-    required this.sellingPrice,
-    required this.dealerName,
-    required this.price,
-    required this.location,
-    required this.availableVolume,
-    required this.minimumVolume,
-    required this.maximumVolume,
-    required this.ordersApproved,
-    required this.commissionRate,
-    required this.ordersPending,
-    required this.status,
-    required this.companyId
-  });
+  ProductModel(
+      {required this.id,
+      required this.counter,
+      required this.createdBy,
+      required this.product,
+      required this.depot,
+      required this.sellingPrice,
+      required this.dealerName,
+      required this.price,
+      required this.location,
+      required this.remaining_volume,
+      required this.availableVolume,
+      required this.minimumVolume,
+      required this.maximumVolume,
+      required this.ordersApproved,
+      required this.commissionRate,
+      required this.ordersPending,
+      required this.status,
+      required this.companyId});
 }

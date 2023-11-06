@@ -46,12 +46,11 @@ class ApiClient {
     }
   }
 
-
   // adding a driver.
 
-  Future<dynamic> addDriver(String path,dynamic data, {Map<String, dynamic>? headers}) async {
-    try{
-
+  Future<dynamic> addDriver(String path, dynamic data,
+      {Map<String, dynamic>? headers}) async {
+    try {
       // start loading
 
       DriverProvider().startLoading();
@@ -63,72 +62,65 @@ class ApiClient {
 
       // check if it is a successful response.
 
-      Map<String,dynamic> jsonResponse = jsonDecode(response.data);
+      Map<String, dynamic> jsonResponse = jsonDecode(response.data);
 
-      if(jsonResponse['status'] == '1'){
+      if (jsonResponse['status'] == '1') {
+        // successful, seed the data to the model
+        DriverModel addedDriver = DriverModel(
+            id: jsonResponse['data']['id'].toString(),
+            fullName: jsonResponse['data']['full_name'].toString(),
+            idNumber: jsonResponse['data']['id_number'].toString(),
+            phoneNumber: jsonResponse['data']['phone_number'].toString(),
+            epraLicenseNumber:
+                jsonResponse['data']['epra_licence_number'].toString(),
+            licenseNumber: jsonResponse['data']['licence_number'].toString(),
+            status: jsonResponse['data']['status'].toString(),
+            createdBy: jsonResponse['data']['created_by'].toString(),
+            createdAt: jsonResponse['data']['createdAt'].toString(),
+            updatedAt: jsonResponse['data']['updatedAt'].toString());
 
-          // successful, seed the data to the model
-          DriverModel addedDriver = DriverModel(
-              id: jsonResponse['data']['id'].toString(),
-              fullName: jsonResponse['data']['full_name'].toString(),
-              idNumber: jsonResponse['data']['id_number'].toString(),
-              phoneNumber: jsonResponse['data']['phone_number'].toString(),
-              epraLicenseNumber: jsonResponse['data']['epra_licence_number'].toString(),
-              licenseNumber: jsonResponse['data']['licence_number'].toString(),
-              status: jsonResponse['data']['status'].toString(),
-              createdBy: jsonResponse['data']['created_by'].toString(),
-              createdAt: jsonResponse['data']['createdAt'].toString(),
-              updatedAt: jsonResponse['data']['updatedAt'].toString()
-          );
+        // seed the data to the provider.
+        DriverProvider().addDriver(addedDriver);
 
+        // stop loading.
+        DriverProvider().stopLoading();
 
-          // seed the data to the provider.
-          DriverProvider().addDriver(addedDriver);
-
-          // stop loading.
-          DriverProvider().stopLoading();
-
-          // return the newly created driver to the screen.
-          return addedDriver;
-
-
-      }else{
-
+        // return the newly created driver to the screen.
+        return addedDriver;
+      } else {
         DriverProvider().stopLoading();
 
         // throw an exception, a server error occurred
 
         throw Exception(jsonResponse['message']);
-
       }
-    }on DioException catch(error){
-
+    } on DioException catch (error) {
       DriverProvider().stopLoading();
 
       return error.response?.data;
     }
-
   }
-
 
   // listing drivers.
 
-  Future<dynamic> fetchDrivers(String path,{Map<String, dynamic>? queryParameters,Map<String, dynamic>? headers}) async {
+  Future<dynamic> fetchDrivers(String path,
+      {Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? headers}) async {
     try {
-
       // start the loading
       DriverProvider().startLoading();
 
       // fetch
 
-      final response = await _dio.post('$ipAddress$path',data: null, options: Options(headers: headers));
+      final response = await _dio.post('$ipAddress$path',
+          data: null, options: Options(headers: headers));
 
       // check the status code returned.
 
-      Map<String,dynamic> jsonResponse = jsonDecode(response.data);
+      Map<String, dynamic> jsonResponse = jsonDecode(response.data);
 
-
-      if(jsonResponse['status'] == '1'){ // Very successful response
+      if (jsonResponse['status'] == '1') {
+        // Very successful response
 
         List<DriverModel> drivers = [];
 
@@ -136,7 +128,6 @@ class ApiClient {
         List fetchedDrivers = jsonResponse['data'];
 
         for (var element in fetchedDrivers) {
-
           // append the driver to the drivers list.
 
           drivers.add(DriverModel(
@@ -149,9 +140,7 @@ class ApiClient {
               status: element['status'].toString(),
               createdBy: element['created_by'].toString(),
               createdAt: element['createdAt'].toString(),
-              updatedAt: element['updatedAt'].toString()
-          ));
-
+              updatedAt: element['updatedAt'].toString()));
         }
 
         // append the drivers.
@@ -161,18 +150,14 @@ class ApiClient {
         DriverProvider().stopLoading();
 
         return;
-
-      }else{
-
+      } else {
         // set the loading to off.
         DriverProvider().stopLoading();
 
         // some  server error occurred.
         throw Exception(jsonResponse['message']);
-
       }
     } on DioException catch (error) {
-
       // set the loading to off.
       DriverProvider().stopLoading();
 
@@ -180,12 +165,11 @@ class ApiClient {
     }
   }
 
-
   // adding a truck.
 
-  Future<dynamic> addTruck(String path,dynamic data, {Map<String, dynamic>? headers}) async {
-    try{
-
+  Future<dynamic> addTruck(String path, dynamic data,
+      {Map<String, dynamic>? headers}) async {
+    try {
       // start loading
 
       TruckProvider().startLoading();
@@ -197,21 +181,19 @@ class ApiClient {
 
       // check if it is a successful response.
 
-      Map<String,dynamic> jsonResponse = jsonDecode(response.data);
+      Map<String, dynamic> jsonResponse = jsonDecode(response.data);
 
-      if(jsonResponse['status'] == '1'){
-
+      if (jsonResponse['status'] == '1') {
         // successful, seed the data to the model
         TruckModel addedTruck = TruckModel(
             id: jsonResponse['data']['id'].toString(),
-            registrationNumber: jsonResponse['data']['registration_number'].toString(),
+            registrationNumber:
+                jsonResponse['data']['registration_number'].toString(),
             compartment: jsonResponse['data']['compartment'].toString(),
             status: jsonResponse['data']['status'].toString(),
             createdBy: jsonResponse['data']['created_by'].toString(),
             createdAt: jsonResponse['data']['createdAt'].toString(),
-            updatedAt: jsonResponse['data']['updatedAt'].toString()
-        );
-
+            updatedAt: jsonResponse['data']['updatedAt'].toString());
 
         // seed the data to the provider.
         TruckProvider().addTruck(addedTruck);
@@ -221,44 +203,39 @@ class ApiClient {
 
         // return the newly created driver to the screen.
         return addedTruck;
-
-
-      }else{
-
+      } else {
         TruckProvider().stopLoading();
 
         // throw an exception, a server error occurred
 
         throw Exception(jsonResponse['message']);
-
       }
-    }on DioException catch(error){
-
+    } on DioException catch (error) {
       TruckProvider().stopLoading();
 
       return error.response?.data;
     }
-
   }
 
-
   // listing trucks.
-  Future<dynamic> fetchTrucks(String path,{Map<String, dynamic>? queryParameters,Map<String, dynamic>? headers}) async {
+  Future<dynamic> fetchTrucks(String path,
+      {Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? headers}) async {
     try {
-
       // start the loading
       TruckProvider().startLoading();
 
       // fetch
 
-      final response = await _dio.post('$ipAddress$path',data: null, options: Options(headers: headers));
+      final response = await _dio.post('$ipAddress$path',
+          data: null, options: Options(headers: headers));
 
       // check the status code returned.
 
-      Map<String,dynamic> jsonResponse = jsonDecode(response.data);
+      Map<String, dynamic> jsonResponse = jsonDecode(response.data);
 
-
-      if(jsonResponse['status'] == '1'){ // Very successful response
+      if (jsonResponse['status'] == '1') {
+        // Very successful response
 
         List<TruckModel> trucks = [];
 
@@ -266,7 +243,6 @@ class ApiClient {
         List fetchedTrucks = jsonResponse['data'];
 
         for (var element in fetchedTrucks) {
-
           // append the truck to the trucks list.
 
           trucks.add(TruckModel(
@@ -276,9 +252,7 @@ class ApiClient {
               status: element['status'].toString(),
               createdBy: element['created_by'].toString(),
               createdAt: element['createdAt'].toString(),
-              updatedAt: element['updatedAt'].toString()
-          ));
-
+              updatedAt: element['updatedAt'].toString()));
         }
 
         // append the drivers.
@@ -288,18 +262,14 @@ class ApiClient {
         TruckProvider().stopLoading();
 
         return;
-
-      }else{
-
+      } else {
         // set the loading to off.
         TruckProvider().stopLoading();
 
         // some  server error occurred.
         throw Exception(jsonResponse['message']);
-
       }
     } on DioException catch (error) {
-
       // set the loading to off.
       TruckProvider().stopLoading();
 
@@ -307,11 +277,10 @@ class ApiClient {
     }
   }
 
-
   // making an order.
-  Future<dynamic> makeOrder(String path,dynamic data, {Map<String, dynamic>? headers}) async {
-    try{
-
+  Future<dynamic> makeOrder(String path, dynamic data,
+      {Map<String, dynamic>? headers}) async {
+    try {
       // start loading
 
       OrderProvider().startLoading();
@@ -323,27 +292,27 @@ class ApiClient {
 
       // check if it is a successful response.
 
-      Map<String,dynamic> jsonResponse = jsonDecode(response.data);
+      Map<String, dynamic> jsonResponse = jsonDecode(response.data);
 
-      if(jsonResponse['status'] == '1'){
-
+      if (jsonResponse['status'] == '1') {
         // successful, seed the data to the model
         OrderModel addedOrder = OrderModel(
             id: jsonResponse['data']['id'].toString(),
-            commissionEarned: jsonResponse['data']['commission_earned'].toString(),
+            commissionEarned:
+                jsonResponse['data']['commission_earned'].toString(),
             driverId: jsonResponse['data']['driver_id'].toString(),
             truckId: jsonResponse['data']['truck_id'].toString(),
             invoiceNumber: jsonResponse['data']['invoice_number'].toString(),
             payableAmount: jsonResponse['data']['payable_amount'].toString(),
-            paymentBankOption: jsonResponse['data']['payment_bank_option'].toString(),
-            invoiceDocument: jsonResponse['data']['invoice_document'].toString(),
+            paymentBankOption:
+                jsonResponse['data']['payment_bank_option'].toString(),
+            invoiceDocument:
+                jsonResponse['data']['invoice_document'].toString(),
             accountId: jsonResponse['data']['account_id'].toString(),
             status: jsonResponse['data']['status'].toString(),
             createdBy: jsonResponse['data']['created_by'].toString(),
             createdAt: jsonResponse['data']['createdAt'].toString(),
-            updatedAt: jsonResponse['data']['updatedAt'].toString()
-        );
-
+            updatedAt: jsonResponse['data']['updatedAt'].toString());
 
         // seed the data to the provider.
         OrderProvider().addOrder(addedOrder);
@@ -353,31 +322,24 @@ class ApiClient {
 
         // return the newly created driver to the screen.
         return addedOrder;
-
-
-      }else{
-
+      } else {
         OrderProvider().stopLoading();
 
         // throw an exception, a server error occurred
 
         throw Exception(jsonResponse['message']);
-
       }
-    }on DioException catch(error){
-
+    } on DioException catch (error) {
       OrderProvider().stopLoading();
 
       return error.response?.data;
     }
-
   }
 
   // fetching products.
   Future<dynamic> fetchProducts(String path) async {
     try {
-
-      Map<String,String> headers = {};
+      Map<String, String> headers = {};
 
       print(">>>>>> sending fetch products request >>>>>>");
 
@@ -388,14 +350,15 @@ class ApiClient {
 
       // fetch
 
-      final response = await _dio.post('$ipAddress$path',data: null, options: Options(headers: headers));
+      final response = await _dio.post('$ipAddress$path',
+          data: null, options: Options(headers: headers));
 
       // check the status code returned.
 
-      Map<String,dynamic> jsonResponse = jsonDecode(response.data);
+      Map<String, dynamic> jsonResponse = jsonDecode(response.data);
 
-
-      if(jsonResponse['status'] == '1'){ // Very successful response
+      if (jsonResponse['status'] == '1') {
+        // Very successful response
 
         List<ProductModel> products = [];
 
@@ -403,29 +366,45 @@ class ApiClient {
         List fetchedProducts = jsonResponse['data'];
 
         for (var element in fetchedProducts) {
-
           // append the truck to the trucks list.
 
           products.add(ProductModel(
-              id: element['id'].toString(),
+              id: element['id'],
               counter: element['counter'].toString(),
               product: element['product'].toString(),
               depot: element['depot'].toString(),
-              price: double.parse(element['price'].replaceAll(',','')) != null ? double.parse(element['price']) : 0.0,
-              sellingPrice: double.parse(element['selling_price'].replaceAll(',','')) != null ? double.parse(element['selling_price']) : 0.0 ,
-              availableVolume: double.parse(element['volume'].replaceAll(',','')) != null ? double.parse(element['volume']) : 0.0 ,
-              minimumVolume: double.parse(element['min_vol'].replaceAll(',','')) != null ? double.parse(element['min_vol']) : 0.0 ,
-              maximumVolume: double.parse(element['max_vol'].replaceAll(',','')) != null ? double.parse(element['max_vol']) : 0.0  ,
+              price: double.parse(element['price'].replaceAll(',', '')) != null
+                  ? double.parse(element['price'])
+                  : 0.0,
+              sellingPrice:
+                  double.parse(element['selling_price'].replaceAll(',', '')) !=
+                          null
+                      ? double.parse(element['selling_price'])
+                      : 0.0,
+              availableVolume:
+                  double.parse(element['volume'].replaceAll(',', '')) != null
+                      ? double.parse(element['volume'])
+                      : 0.0,
+              minimumVolume:
+                  double.parse(element['min_vol'].replaceAll(',', '')) != null
+                      ? double.parse(element['min_vol'])
+                      : 0.0,
+              maximumVolume:
+                  double.parse(element['max_vol'].replaceAll(',', '')) != null
+                      ? double.parse(element['max_vol'])
+                      : 0.0,
               ordersApproved: element['orders_approved'].toString(),
               dealerName: element['dealer'].toString(),
-              commissionRate: double.parse(element['commission_rate'].replaceAll(',','')) != null ? double.parse(element['commission_rate']) : 0.0,
+              commissionRate:
+                  double.parse(element['commission_rate'].replaceAll(',', '')) !=
+                          null
+                      ? double.parse(element['commission_rate'])
+                      : 0.0,
               ordersPending: element['orders_pending'].toString(),
               companyId: element['company_id'].toString(),
               location: element['location'].toString(),
               status: element['status'].toString(),
-              createdBy: element['created_by'].toString()
-          ));
-
+              createdBy: element['created_by'].toString(), remaining_volume: element['remaining_volume'].toString()));
         }
 
         // append the drivers.
@@ -435,18 +414,14 @@ class ApiClient {
         ProductProvider().stopLoading();
 
         return;
-
-      }else{
-
+      } else {
         // set the loading to off.
         ProductProvider().stopLoading();
 
         // some  server error occurred.
         throw Exception(jsonResponse['message']);
-
       }
     } on DioException catch (error) {
-
       // set the loading to off.
       ProductProvider().stopLoading();
 
@@ -456,22 +431,24 @@ class ApiClient {
 
   // fetching omc products.
 
-  Future<dynamic> fetchOmcProducts(String path,dynamic data,{Map<String, dynamic>? queryParameters,Map<String, dynamic>? headers}) async {
+  Future<dynamic> fetchOmcProducts(String path, dynamic data,
+      {Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? headers}) async {
     try {
-
       // start the loading
       OmcProductProvider().startLoading();
 
       // fetch
 
-      final response = await _dio.post('$ipAddress$path',data: data, options: Options(headers: headers));
+      final response = await _dio.post('$ipAddress$path',
+          data: data, options: Options(headers: headers));
 
       // check the status code returned.
 
-      Map<String,dynamic> jsonResponse = jsonDecode(response.data);
+      Map<String, dynamic> jsonResponse = jsonDecode(response.data);
 
-
-      if(jsonResponse['status'] == '1'){ // Very successful response
+      if (jsonResponse['status'] == '1') {
+        // Very successful response
 
         List<OmcProductModel> products = [];
 
@@ -479,30 +456,52 @@ class ApiClient {
         List fetchedProducts = jsonResponse['data'];
 
         for (var element in fetchedProducts) {
-
           // append the truck to the trucks list.
 
           products.add(OmcProductModel(
-              productId: element['product_id'].toString(),
-              productName: element['product_name'].toString(),
-              productCode: element['product_code'].toString(),
-              depotName: element['depot_name'].toString(),
-              companyName: element['company_name'].toString(),
-              companyEmail: element['company_email'].toString(),
-              companyPhone: element['company_phone'].toString(),
-              minVolumePerOrder: element['minimum_volume_per_order'].toString(),
-              pricePer: double.parse(element['price_per'].replaceAll(',','')) != null ? double.parse(element['price_per']) : 0.0,
-              sellingPrice: double.parse(element['selling_price'].replaceAll(',','')) != null ? double.parse(element['selling_price']) : 0.0 ,
-              stockVolume: double.parse(element['stock_volume'].replaceAll(',','')) != null ? double.parse(element['stock_volume']) : 0.0 ,
-              availableVolume: double.parse(element['volume'].replaceAll(',','')) != null ? double.parse(element['volume']) : 0.0 ,
-              minVolume: double.parse(element['min_vol'].replaceAll(',','')) != null ? double.parse(element['min_vol']) : 0.0 ,
-              maxVolume: double.parse(element['max_vol'].replaceAll(',','')) != null ? double.parse(element['max_vol']) : 0.0  ,
-              commissionRate: double.parse(element['commission_rate'].replaceAll(',','')) != null ? double.parse(element['commission_rate']) : 0.0,
-              companyId: element['company_id'].toString(),
-              location: element['location'].toString(),
-              status: element['status'].toString(),
+            productId: element['product_id'].toString(),
+            productName: element['product_name'].toString(),
+            productCode: element['product_code'].toString(),
+            depotName: element['depot_name'].toString(),
+            companyName: element['company_name'].toString(),
+            companyEmail: element['company_email'].toString(),
+            companyPhone: element['company_phone'].toString(),
+            minVolumePerOrder: element['minimum_volume_per_order'].toString(),
+            pricePer:
+                double.parse(element['price_per'].replaceAll(',', '')) != null
+                    ? double.parse(element['price_per'])
+                    : 0.0,
+            sellingPrice:
+                double.parse(element['selling_price'].replaceAll(',', '')) !=
+                        null
+                    ? double.parse(element['selling_price'])
+                    : 0.0,
+            stockVolume:
+                double.parse(element['stock_volume'].replaceAll(',', '')) !=
+                        null
+                    ? double.parse(element['stock_volume'])
+                    : 0.0,
+            availableVolume:
+                double.parse(element['volume'].replaceAll(',', '')) != null
+                    ? double.parse(element['volume'])
+                    : 0.0,
+            minVolume:
+                double.parse(element['min_vol'].replaceAll(',', '')) != null
+                    ? double.parse(element['min_vol'])
+                    : 0.0,
+            maxVolume:
+                double.parse(element['max_vol'].replaceAll(',', '')) != null
+                    ? double.parse(element['max_vol'])
+                    : 0.0,
+            commissionRate:
+                double.parse(element['commission_rate'].replaceAll(',', '')) !=
+                        null
+                    ? double.parse(element['commission_rate'])
+                    : 0.0,
+            companyId: element['company_id'].toString(),
+            location: element['location'].toString(),
+            status: element['status'].toString(),
           ));
-
         }
 
         // append the drivers.
@@ -512,25 +511,20 @@ class ApiClient {
         OmcProductProvider().stopLoading();
 
         return;
-
-      }else{
-
+      } else {
         // set the loading to off.
         OmcProductProvider().stopLoading();
 
         // some  server error occurred.
         throw Exception(jsonResponse['message']);
-
       }
     } on DioException catch (error) {
-
       // set the loading to off.
       OmcProductProvider().stopLoading();
 
       return error.response?.data;
     }
   }
-
 }
 
 class SizeConfig {
