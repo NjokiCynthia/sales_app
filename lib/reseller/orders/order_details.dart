@@ -3,6 +3,7 @@ import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/product.dart';
+import 'package:petropal/models/product_details.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/orders/make_order.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +20,7 @@ class _OrderDetailsState extends State<OrderDetails> {
   double totalValue = 0.0;
   final double pricePerLiter = 200.0;
   bool fetchingDetails = true;
-  List<ProductModel> products = [];
+  List<ProductListing> products = [];
   Future<void> _fetchDetails(BuildContext context) async {
     setState(() {
       fetchingDetails = true;
@@ -28,13 +29,14 @@ class _OrderDetailsState extends State<OrderDetails> {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final token = userProvider.user?.token;
     final postData = {
-      'product_id': '${widget.product.id}',
+      'productId': '${widget.product.id}',
     };
     final apiClient = ApiClient();
     final headers = {
       'Authorization': 'Bearer $token',
       'Content-Type': 'application/json',
     };
+    print('${widget.product.id}');
 
     try {
       final response = await apiClient.post(
@@ -49,25 +51,27 @@ class _OrderDetailsState extends State<OrderDetails> {
         final data =
             List<Map<String, dynamic>>.from(response['cartProductsListing']);
         final productModels = data.map((productData) {
-          return ProductModel(
-            id: int.parse(productData['product_id'].toString()),
-            product: productData['product_name'].toString(),
-            depot: productData['depot_name'].toString(),
-            counter: int.parse(productData['counter'].toString()),
-            createdBy: int.parse(productData['created_by'].toString()),
-            sellingPrice: double.parse(productData['selling_price'].toString()),
-            price: double.parse(productData['price'].toString()),
+          return ProductListing(
+            product_id: int.parse(productData['product_id'].toString()),
+            product_name: productData['product_name'].toString(),
+            depot_name: productData['depot_name'].toString(),
             location: productData['location'].toString(),
-            availableVolume: double.parse(productData['volume'].toString()),
-            minimumVolume: double.parse(productData['min_vol'].toString()),
-            maximumVolume: double.parse(productData['max_vol'].toString()),
-            dealerName: productData['dealer'].toString(),
-            commissionRate:
-                double.parse(productData['commission_rate'].toString()),
+            product_code: '',
+            depot_code: '',
+            company_id: int.parse(productData['company_id'].toString()),
+            company_name: productData['company_name'],
+            company_email: productData['company_email'],
+            company_phone: productData['company_phone'],
+            minimum_volume_per_order: productData['min_vol'],
+            price_per: productData['price'],
+            selling_price: productData['selling_price'],
+            stock_volume: productData['stock_volume'],
+            available_volume: productData['available_volume'],
+            min_vol: productData['min_vol'],
+            max_vol: productData['max_vol'],
             status: int.parse(productData['status'].toString()),
-            companyId: int.parse(productData['company_id'].toString()),
-            remainingVolume:
-                double.parse(productData['remaining_volume'].toString()),
+            commission_rate:
+                double.parse(productData['commission_rate'].toString()),
           );
         }).toList();
 
@@ -202,7 +206,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  product.product,
+                                  '${widget.product.product}',
                                   style: textBolderSmall,
                                 ),
                                 SizedBox(
@@ -218,7 +222,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   style: TextStyle(color: Colors.black),
                                 ),
                                 Text(
-                                  '${product.minimumVolume} litres',
+                                  '${widget.product.minimumVolume} litres',
                                   style: TextStyle(color: Colors.grey),
                                 ),
                                 SizedBox(
@@ -233,7 +237,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   text: TextSpan(
                                     children: [
                                       TextSpan(
-                                        text: 'KES ${product.sellingPrice}/',
+                                        text:
+                                            'KES ${widget.product.sellingPrice}/',
                                         style: TextStyle(
                                           color: Colors.black,
                                         ),
@@ -249,7 +254,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   height: 5,
                                 ),
                                 Text(
-                                  '${product.availableVolume} litres',
+                                  '${widget.product.availableVolume} litres',
                                   style: textBolderSmall,
                                 ),
                                 SizedBox(height: 5),
@@ -258,7 +263,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   style: TextStyle(color: Colors.black),
                                 ),
                                 Text(
-                                  '${product.maximumVolume} litres',
+                                  '${widget.product.maximumVolume} litres',
                                   style: TextStyle(color: Colors.grey),
                                 ),
                                 SizedBox(
