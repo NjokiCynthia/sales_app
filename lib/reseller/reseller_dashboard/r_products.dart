@@ -101,6 +101,11 @@ class _ResellerProductsState extends State<ResellerProducts> {
     _fetchProducts(context);
   }
 
+  Future<void> _refreshProducts(BuildContext context) async {
+    // Fetch orders data here
+    await _fetchProducts(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -211,171 +216,176 @@ class _ResellerProductsState extends State<ResellerProducts> {
                     height: 10,
                   ),
                   Expanded(
-                    child: ListView.builder(
-                      itemBuilder: (context, index) {
-                        final product =
-                            products[index]; // Get the actual product data
-
-                        return GestureDetector(
-                          onTap: () {
-                            PersistentNavBarNavigator.pushNewScreen(
-                              context,
-                              screen: OrderDetails(
-                                product: product,
-                              ),
-                              pageTransitionAnimation:
-                                  PageTransitionAnimation.cupertino,
-                              withNavBar: false,
-                            );
-                            print(product);
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.only(bottom: 10),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                color: Colors.grey.shade200,
-                                width: 2,
-                              ),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 15,
-                                    right: 15,
-                                    top: 5,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        product.product,
-                                        style: boldText,
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color:
-                                              primaryDarkColor.withOpacity(0.1),
-                                          shape: BoxShape.circle,
-                                        ),
-                                        padding: const EdgeInsets.all(8),
-                                        child: const Icon(
-                                          Icons.add_shopping_cart,
-                                          color: primaryDarkColor,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const Divider(
-                                  color: Colors.grey,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    bottom: 15,
-                                    left: 15,
-                                    right: 15,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Dealer name",
-                                            style:
-                                                TextStyle(color: Colors.grey),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            "Depot",
-                                            style:
-                                                TextStyle(color: Colors.grey),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            "Available Volume:",
-                                            style:
-                                                TextStyle(color: Colors.grey),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            "Minimum Order Volume:",
-                                            style:
-                                                TextStyle(color: Colors.grey),
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            product
-                                                .dealerName, // Actual dealer name
-                                            style: boldText,
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            product.depot,
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            '${product.availableVolume} litres',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            '${product.minimumVolume} litres',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        await _fetchProducts(context);
                       },
-                      itemCount:
-                          products.length, // Use the actual product list length
+                      child: ListView.builder(
+                        itemBuilder: (context, index) {
+                          final product =
+                              products[index]; // Get the actual product data
+
+                          return GestureDetector(
+                            onTap: () {
+                              PersistentNavBarNavigator.pushNewScreen(
+                                context,
+                                screen: OrderDetails(
+                                  product: product,
+                                ),
+                                pageTransitionAnimation:
+                                    PageTransitionAnimation.cupertino,
+                                withNavBar: false,
+                              );
+                              print(product);
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(bottom: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: Colors.grey.shade200,
+                                  width: 2,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 15,
+                                      right: 15,
+                                      top: 5,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          product.product,
+                                          style: boldText,
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: primaryDarkColor
+                                                .withOpacity(0.1),
+                                            shape: BoxShape.circle,
+                                          ),
+                                          padding: const EdgeInsets.all(8),
+                                          child: const Icon(
+                                            Icons.add_shopping_cart,
+                                            color: primaryDarkColor,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const Divider(
+                                    color: Colors.grey,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      bottom: 15,
+                                      left: 15,
+                                      right: 15,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Dealer name",
+                                              style:
+                                                  TextStyle(color: Colors.grey),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              "Depot",
+                                              style:
+                                                  TextStyle(color: Colors.grey),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              "Available Volume:",
+                                              style:
+                                                  TextStyle(color: Colors.grey),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              "Minimum Order Volume:",
+                                              style:
+                                                  TextStyle(color: Colors.grey),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                          ],
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              product
+                                                  .dealerName, // Actual dealer name
+                                              style: boldText,
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              product.depot,
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              '${product.availableVolume} litres',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              '${product.minimumVolume} litres',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        itemCount: products
+                            .length, // Use the actual product list length
+                      ),
                     ),
                   ),
                 ],

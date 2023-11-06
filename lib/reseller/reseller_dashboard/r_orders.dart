@@ -133,6 +133,11 @@ class _ResellerOrdersState extends State<ResellerOrders> {
     _fetchOrders(context);
   }
 
+  Future<void> _refreshOrders(BuildContext context) async {
+    // Fetch orders data here
+    await _fetchOrders(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -175,137 +180,148 @@ class _ResellerOrdersState extends State<ResellerOrders> {
         ),
         body: Padding(
           padding: EdgeInsets.all(10),
-          child: fetchingOrders
-              ? CircularProgressIndicator() // Display a loading indicator while fetching data
-              : orders.isNotEmpty
-                  ? ListView.builder(
-                      itemBuilder: (context, index) {
-                        final order = orders[index];
+          child: RefreshIndicator(
+            onRefresh: () => _refreshOrders(context),
+            child: fetchingOrders
+                ? Center(
+                    child:
+                        CircularProgressIndicator()) // Display a loading indicator while fetching data
+                : orders.isNotEmpty
+                    ? ListView.builder(
+                        itemBuilder: (context, index) {
+                          final order = orders[index];
 
-                        return Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          decoration: BoxDecoration(color: Colors.white),
-                          padding: EdgeInsets.all(15),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "#${order.orderInvoiceNumber}",
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        "${order.vendorName}",
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        order.orderCreatedAt
-                                            .toLocal()
-                                            .toString(),
-                                        style: greyText,
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                            color: getStatusContainerColor(
-                                                order.orderStatus),
-                                            // color: Color.fromRGBO(
-                                            //     255, 226, 229, 1.0),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: Padding(
-                                          padding: EdgeInsets.only(
-                                              top: 4,
-                                              bottom: 4,
-                                              left: 8,
-                                              right: 8),
-                                          child: Text(
-                                            getStatusText(order.orderStatus),
-                                            style: TextStyle(
-                                              color: getStatusColor(
-                                                  order.orderStatus),
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                          // child: Text(
-                                          //   order.orderStatus,
-                                          //   style: TextStyle(
-                                          //     color: Color.fromRGBO(
-                                          //         246, 78, 96, 1.0),
-                                          //     fontSize: 12,
-                                          //   ),
-                                          // ),
+                          return Container(
+                            margin: EdgeInsets.only(bottom: 10),
+                            decoration: BoxDecoration(color: Colors.white),
+                            padding: EdgeInsets.all(15),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "#${order.orderInvoiceNumber}",
+                                          style: TextStyle(color: Colors.black),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  RichText(
-                                    text: TextSpan(
-                                      style: DefaultTextStyle.of(context).style,
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                          text:
-                                              "KES ${order.orderPayableAmount}/",
-                                          style: boldText,
+                                        SizedBox(
+                                          height: 10,
                                         ),
-                                        TextSpan(
-                                          text: '${order.orderVolume ?? ''}',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey,
-                                          ), // Style for the unit
+                                        Text(
+                                          "${order.vendorName}",
+                                          style: TextStyle(color: Colors.black),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                  Text(
-                                    "View more",
-                                    style: TextStyle(
-                                      color: primaryDarkColor.withOpacity(0.5),
-                                      fontSize: 12,
-                                      decoration: TextDecoration.underline,
-                                      decorationColor: primaryDarkColor,
-                                      decorationStyle:
-                                          TextDecorationStyle.dotted,
-                                      decorationThickness: 3,
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          order.orderCreatedAt
+                                              .toLocal()
+                                              .toString(),
+                                          style: greyText,
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                              color: getStatusContainerColor(
+                                                  order.orderStatus),
+                                              // color: Color.fromRGBO(
+                                              //     255, 226, 229, 1.0),
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          child: Padding(
+                                            padding: EdgeInsets.only(
+                                                top: 4,
+                                                bottom: 4,
+                                                left: 8,
+                                                right: 8),
+                                            child: Text(
+                                              getStatusText(order.orderStatus),
+                                              style: TextStyle(
+                                                color: getStatusColor(
+                                                    order.orderStatus),
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            // child: Text(
+                                            //   order.orderStatus,
+                                            //   style: TextStyle(
+                                            //     color: Color.fromRGBO(
+                                            //         246, 78, 96, 1.0),
+                                            //     fontSize: 12,
+                                            //   ),
+                                            // ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                      itemCount: orders.length,
-                    )
-                  : Text('No orders found in the response'),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    RichText(
+                                      text: TextSpan(
+                                        style:
+                                            DefaultTextStyle.of(context).style,
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                            text:
+                                                "KES ${order.orderPayableAmount}/",
+                                            style: boldText,
+                                          ),
+                                          TextSpan(
+                                            text: '${order.orderVolume ?? ''}',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey,
+                                            ), // Style for the unit
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Text(
+                                      "View more",
+                                      style: TextStyle(
+                                        color:
+                                            primaryDarkColor.withOpacity(0.5),
+                                        fontSize: 12,
+                                        decoration: TextDecoration.underline,
+                                        decorationColor: primaryDarkColor,
+                                        decorationStyle:
+                                            TextDecorationStyle.dotted,
+                                        decorationThickness: 3,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        itemCount: orders.length,
+                      )
+                    : Text(
+                        'No orders found in the response',
+                        style: TextStyle(color: Colors.black),
+                      ),
+          ),
         ));
   }
 }
