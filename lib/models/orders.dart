@@ -1,8 +1,6 @@
-import 'package:flutter/rendering.dart';
-
 class Order {
   final String id;
-  final String orderStatus;
+  final int orderStatus;
   final String orderPayableAmount;
   final String? orderVolume;
   final String orderInvoiceNumber;

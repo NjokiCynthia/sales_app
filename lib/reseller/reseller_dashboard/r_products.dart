@@ -53,24 +53,25 @@ class _ResellerProductsState extends State<ResellerProducts> {
           final data = List<Map<String, dynamic>>.from(response['data']);
           final productModels = data.map((productData) {
             return ProductModel(
-              id: productData['id'].toString(),
-              counter: productData['counter'].toString(),
-              createdBy: productData['created_by'].toString(),
+              id: int.parse(productData['id'].toString()),
+              counter: int.parse(productData['counter'].toString()),
+              createdBy: int.parse(productData['created_by'].toString()),
               product: productData['product'].toString(),
               depot: productData['depot'].toString(),
-              sellingPrice: productData['selling_price'],
-              price: productData['price'],
+              sellingPrice:
+                  double.parse(productData['selling_price'].toString()),
+              price: double.parse(productData['price'].toString()),
               location: productData['location'].toString(),
-              availableVolume: productData['volume'],
-              minimumVolume: productData['min_vol'],
-              maximumVolume: productData['max_vol'],
-              ordersApproved: productData['orders_approved'].toString(),
+              availableVolume: double.parse(productData['volume'].toString()),
+              minimumVolume: double.parse(productData['min_vol'].toString()),
+              maximumVolume: double.parse(productData['max_vol'].toString()),
               dealerName: productData['dealer'].toString(),
-              commissionRate: productData['commission_rate'],
-              ordersPending: productData['orders_pending'],
-              status: productData['status'].toString(),
-              companyId: productData['company_id'].toString(),
-              remaining_volume: productData['remaining_volume'],
+              commissionRate:
+                  double.parse(productData['commission_rate'].toString()),
+              status: int.parse(productData['status'].toString()),
+              companyId: int.parse(productData['company_id'].toString()),
+              remainingVolume:
+                  double.parse(productData['remaining_volume'].toString()),
             );
           }).toList();
 
@@ -102,57 +103,49 @@ class _ResellerProductsState extends State<ResellerProducts> {
 
   @override
   Widget build(BuildContext context) {
-    List<ProductModel> _products =
-        Provider.of<ProductProvider>(context, listen: true).products;
-
-    bool isLoading =
-        Provider.of<ProductProvider>(context, listen: true).isLoading;
-
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.grey[50],
     ));
     return Scaffold(
-        backgroundColor: Colors.grey[50],
-        appBar: AppBar(
-          leading: GestureDetector(
-            onTap: () {},
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: primaryDarkColor,
-            ),
+      backgroundColor: Colors.grey[50],
+      appBar: AppBar(
+        leading: GestureDetector(
+          onTap: () {},
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: primaryDarkColor,
           ),
-          backgroundColor: Colors.grey[50],
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Products and Cart',
-                style: m_title,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: primaryDarkColor.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                padding: const EdgeInsets.all(5),
-                child: const Icon(
-                  Icons.shopping_cart,
-                  color: primaryDarkColor,
-                ),
-              ),
-            ],
-          ),
-          elevation: 0,
         ),
-        body: Provider<ProductProvider>(
-          create: (_) => ProductProvider(),
-          builder: (context, child) {
-            // bool isLoading = context.watch<ProductProvider>().isLoading;
-            // List<ProductModel> products = context.watch<ProductProvider>().products;
-
-            return Padding(
-              padding: const EdgeInsets.all(10),
-              child: Column(children: [
+        backgroundColor: Colors.grey[50],
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Products and Cart',
+              style: m_title,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: primaryDarkColor.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              padding: const EdgeInsets.all(5),
+              child: const Icon(
+                Icons.shopping_cart,
+                color: primaryDarkColor,
+              ),
+            ),
+          ],
+        ),
+        elevation: 0,
+      ),
+      body: Provider<ProductProvider>(
+        create: (_) => ProductProvider(),
+        builder: (context, child) {
+          return Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              children: [
                 SizedBox(
                   height: 42,
                   child: TextFormField(
@@ -207,143 +200,173 @@ class _ResellerProductsState extends State<ResellerProducts> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemBuilder: ((context, index) {
+                    itemBuilder: (context, index) {
+                      final product =
+                          products[index]; // Get the actual product data
+
                       return GestureDetector(
                         onTap: () {
-                          PersistentNavBarNavigator.pushNewScreen(context,
-                              screen: OrderDetails(),
-                              pageTransitionAnimation:
-                                  PageTransitionAnimation.cupertino,
-                              withNavBar: false);
+                          PersistentNavBarNavigator.pushNewScreen(
+                            context,
+                            screen: OrderDetails(
+                              product: product,
+                            ),
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.cupertino,
+                            withNavBar: false,
+                          );
+                          print(product);
                         },
                         child: Container(
-                            margin: const EdgeInsets.only(bottom: 10),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                  color: Colors.grey.shade200,
-                                  width: 2,
+                          margin: const EdgeInsets.only(bottom: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Colors.grey.shade200,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 15,
+                                  right: 15,
+                                  top: 5,
                                 ),
-                                borderRadius: BorderRadius.circular(8)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 15, right: 15, top: 5),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Shell Limited",
-                                        style: boldText,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      product.product,
+                                      style: boldText,
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color:
+                                            primaryDarkColor.withOpacity(0.1),
+                                        shape: BoxShape.circle,
                                       ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color:
-                                              primaryDarkColor.withOpacity(0.1),
-                                          shape: BoxShape.circle,
-                                        ),
-                                        padding: const EdgeInsets.all(8),
-                                        child: const Icon(
-                                          Icons.add_shopping_cart,
-                                          color: primaryDarkColor,
-                                        ),
+                                      padding: const EdgeInsets.all(8),
+                                      child: const Icon(
+                                        Icons.add_shopping_cart,
+                                        color: primaryDarkColor,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                                const Divider(
-                                  color: Colors.grey,
+                              ),
+                              const Divider(
+                                color: Colors.grey,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  bottom: 15,
+                                  left: 15,
+                                  right: 15,
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      bottom: 15, left: 15, right: 15),
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "Available Volume:",
-                                                style: greytext,
-                                              ),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              Text(
-                                                "Minimum  Order Volume:",
-                                                style: greytext,
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text(
-                                                "Maximum Order Volume:",
-                                                style: greytext,
-                                              ),
-                                            ]),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              '10000 litres',
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight:
-                                                      FontWeight.normal),
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(
-                                              '50 litres',
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.normal,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(
-                                              '50 litres',
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.normal,
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      ]),
+                                        Text(
+                                          "Dealer name",
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          "Depot",
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          "Available Volume:",
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          "Minimum Order Volume:",
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          product
+                                              .dealerName, // Actual dealer name
+                                          style: boldText,
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          product.depot,
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          '${product.availableVolume} litres',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          '${product.minimumVolume} litres',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            )),
+                              ),
+                            ],
+                          ),
+                        ),
                       );
-                    }),
-                    itemCount: 10,
+                    },
+                    itemCount:
+                        products.length, // Use the actual product list length
                   ),
                 ),
-              ]),
-            );
-          },
-        )
-        // body:  Text("the pirates are here")
-        //   body: Provider<ProductProvider>(
-        //     create: (_) => ProductProvider(),
-        //     builder: (context,child) {
-        // return (
-        //     Text("${context.watch<ProductProvider>().products.length}");
-        // )
-        //     })
-        //
-        //       }
-        //     }
-        );
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 }

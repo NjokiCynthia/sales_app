@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/models/product.dart';
 import 'package:petropal/reseller/orders/order_details.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_orders.dart';
 
@@ -86,8 +87,28 @@ class _MakeOrderState extends State<MakeOrder> {
           backgroundColor: Colors.white,
           leading: GestureDetector(
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: ((context) => OrderDetails())));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: ((context) => OrderDetails(
+                            product: ProductModel(
+                                id: 1,
+                                counter: 1,
+                                createdBy: 1,
+                                product: 'Kerosene',
+                                depot: 'Vivo',
+                                sellingPrice: 100.1,
+                                dealerName: 'Shell Limited',
+                                price: 100.1,
+                                location: 'Nairobi',
+                                remainingVolume: 100000,
+                                availableVolume: 1000,
+                                minimumVolume: 390,
+                                maximumVolume: 4000,
+                                commissionRate: 1.3,
+                                status: 1,
+                                companyId: 19),
+                          ))));
             },
             child: Icon(
               Icons.arrow_back_ios,

@@ -1,7 +1,7 @@
 class ProductModel {
-  final String id;
-  final String counter;
-  final String createdBy;
+  final int id;
+  final int counter;
+  final int createdBy;
   final String product;
   final String depot;
   final double price;
@@ -10,13 +10,11 @@ class ProductModel {
   final double availableVolume;
   final double minimumVolume;
   final double maximumVolume;
-  final String remaining_volume;
-  final String ordersApproved;
+  final double remainingVolume;
   final String dealerName;
   final double commissionRate;
-  final String ordersPending;
-  final String status;
-  final String companyId;
+  final int status;
+  final int companyId;
 
   ProductModel(
       {required this.id,
@@ -28,13 +26,11 @@ class ProductModel {
       required this.dealerName,
       required this.price,
       required this.location,
-      required this.remaining_volume,
+      required this.remainingVolume,
       required this.availableVolume,
       required this.minimumVolume,
       required this.maximumVolume,
-      required this.ordersApproved,
       required this.commissionRate,
-      required this.ordersPending,
       required this.status,
       required this.companyId});
 }

@@ -368,43 +368,43 @@ class ApiClient {
         for (var element in fetchedProducts) {
           // append the truck to the trucks list.
 
-          products.add(ProductModel(
-              id: element['id'],
-              counter: element['counter'].toString(),
-              product: element['product'].toString(),
-              depot: element['depot'].toString(),
-              price: double.parse(element['price'].replaceAll(',', '')) != null
-                  ? double.parse(element['price'])
-                  : 0.0,
-              sellingPrice:
-                  double.parse(element['selling_price'].replaceAll(',', '')) !=
-                          null
-                      ? double.parse(element['selling_price'])
-                      : 0.0,
-              availableVolume:
-                  double.parse(element['volume'].replaceAll(',', '')) != null
-                      ? double.parse(element['volume'])
-                      : 0.0,
-              minimumVolume:
-                  double.parse(element['min_vol'].replaceAll(',', '')) != null
-                      ? double.parse(element['min_vol'])
-                      : 0.0,
-              maximumVolume:
-                  double.parse(element['max_vol'].replaceAll(',', '')) != null
-                      ? double.parse(element['max_vol'])
-                      : 0.0,
-              ordersApproved: element['orders_approved'].toString(),
-              dealerName: element['dealer'].toString(),
-              commissionRate:
-                  double.parse(element['commission_rate'].replaceAll(',', '')) !=
-                          null
-                      ? double.parse(element['commission_rate'])
-                      : 0.0,
-              ordersPending: element['orders_pending'].toString(),
-              companyId: element['company_id'].toString(),
-              location: element['location'].toString(),
-              status: element['status'].toString(),
-              createdBy: element['created_by'].toString(), remaining_volume: element['remaining_volume'].toString()));
+          // products.add(ProductModel(
+          //     id: element['id'],
+          //     counter: element['counter'].toString(),
+          //     product: element['product'].toString(),
+          //     depot: element['depot'].toString(),
+          //     price: double.parse(element['price'].replaceAll(',', '')) != null
+          //         ? double.parse(element['price'])
+          //         : 0.0,
+          //     sellingPrice:
+          //         double.parse(element['selling_price'].replaceAll(',', '')) !=
+          //                 null
+          //             ? double.parse(element['selling_price'])
+          //             : 0.0,
+          //     availableVolume:
+          //         double.parse(element['volume'].replaceAll(',', '')) != null
+          //             ? double.parse(element['volume'])
+          //             : 0.0,
+          //     minimumVolume:
+          //         double.parse(element['min_vol'].replaceAll(',', '')) != null
+          //             ? double.parse(element['min_vol'])
+          //             : 0.0,
+          //     maximumVolume:
+          //         double.parse(element['max_vol'].replaceAll(',', '')) != null
+          //             ? double.parse(element['max_vol'])
+          //             : 0.0,
+          //     ordersApproved: element['orders_approved'].toString(),
+          //     dealerName: element['dealer'].toString(),
+          //     commissionRate:
+          //         double.parse(element['commission_rate'].replaceAll(',', '')) !=
+          //                 null
+          //             ? double.parse(element['commission_rate'])
+          //             : 0.0,
+          //     ordersPending: element['orders_pending'].toString(),
+          //     companyId: element['company_id'].toString(),
+          //     location: element['location'].toString(),
+          //     status: element['status'].toString(),
+          //     createdBy: element['created_by'].toString(), remaining_volume: element['remaining_volume'].toString()));
         }
 
         // append the drivers.
