@@ -42,14 +42,14 @@ class _ResellerOrdersState extends State<ResellerOrders> {
         setState(() {
           orders = (response['data'] as List).map((orderData) {
             return Order(
-              id: orderData['id'],
-              orderStatus: orderData['orderStatus'] ?? '',
-              orderPayableAmount: orderData['orderPayableAmount'] ?? '',
-              orderVolume: orderData['orderVolume'] ?? '',
-              orderInvoiceNumber: orderData['orderInvoiceNumber'] ?? '',
-              vendorName: orderData['vendorName'] ?? '',
-              vendorEmail: orderData['vendorEmail'] ?? '',
-              orderCreatedAt: orderData['orderCreatedAt'] ?? '',
+              id: orderData['id'].toString(),
+              orderStatus: orderData['orderStatus'].toString() ?? '',
+              orderPayableAmount: orderData['orderPayableAmount'].toString() ?? '',
+              orderVolume: orderData['orderVolume'].toString() ?? '',
+              orderInvoiceNumber: orderData['orderInvoiceNumber'].toString() ?? '',
+              vendorName: orderData['vendorName'].toString() ?? '',
+              vendorEmail: orderData['vendorEmail'].toString() ?? '',
+              orderCreatedAt: DateTime.parse(orderData['orderCreatedAt'].toString() ?? ''),
             );
           }).toList();
         });
