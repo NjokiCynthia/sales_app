@@ -45,7 +45,7 @@ class _ResellerHomeState extends State<ResellerHome> {
     super.initState();
     bool isActivated =
         Provider.of<UserProvider>(context, listen: false).isActivated;
-    print('The status os my account is ........ $isActivated');
+    print('The status of my account is ........ $isActivated');
     if (!isActivated) {
       Future.delayed(Duration(seconds: 1), () {
         showDialog(

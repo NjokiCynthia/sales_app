@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/reseller/reseller_dashboard/r_dashboard.dart';
-import 'package:petropal/reseller/reseller_dashboard/r_home.dart';
+import 'package:petropal/models/orders.dart';
+import 'package:petropal/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class ResellerOrders extends StatefulWidget {
   const ResellerOrders({super.key});
@@ -13,6 +15,65 @@ class ResellerOrders extends StatefulWidget {
 }
 
 class _ResellerOrdersState extends State<ResellerOrders> {
+  bool fetchingOrders = true;
+  List<Order> orders = [];
+
+  _fetchOrders(BuildContext context) async {
+    setState(() {
+      fetchingOrders = true;
+    });
+
+    // Retrieve user information from the provider
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final token = userProvider.user?.token;
+
+    final postData = {};
+    final apiClient = ApiClient();
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    await apiClient
+        .post('/order/query', postData, headers: headers)
+        .then((response) {
+      print('Response: $response');
+      if (response['data'] != null) {
+        setState(() {
+          orders = (response['data'] as List).map((orderData) {
+            return Order(
+              id: orderData['id'],
+              orderStatus: orderData['orderStatus'] ?? '',
+              orderPayableAmount: orderData['orderPayableAmount'] ?? '',
+              orderVolume: orderData['orderVolume'] ?? '',
+              orderInvoiceNumber: orderData['orderInvoiceNumber'] ?? '',
+              vendorName: orderData['vendorName'] ?? '',
+              vendorEmail: orderData['vendorEmail'] ?? '',
+              orderCreatedAt: orderData['orderCreatedAt'] ?? '',
+            );
+          }).toList();
+        });
+      } else {
+        // Handle the case where 'data' is null or not present in the response.
+        print('No orders found in the response');
+      }
+    }).catchError((error) {
+      // Handle the error
+      print('error');
+      print(error);
+    });
+
+    setState(() {
+      fetchingOrders = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchOrders(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -23,8 +84,7 @@ class _ResellerOrdersState extends State<ResellerOrders> {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () {
-            // Navigator.push(context,
-            //     MaterialPageRoute(builder: (context) => ResellerHome()));
+            Navigator.pop(context);
           },
           child: Icon(
             Icons.arrow_back_ios,

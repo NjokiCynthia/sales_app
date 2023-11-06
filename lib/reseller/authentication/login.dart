@@ -178,7 +178,7 @@ class _LoginState extends State<Login> {
                                 isActivatedValue = isActivated;
                               } else if (isActivated is String) {
                                 isActivatedValue =
-                                    isActivated.toLowerCase() == 'false';
+                                    isActivated.toLowerCase() == 'true';
                               } else {
                                 isActivatedValue = false;
                               }
@@ -192,7 +192,8 @@ class _LoginState extends State<Login> {
                                 phone: userData['phone'] ?? '',
                                 account_id: userData['account_id'] ?? '',
                                 isActivated: isActivatedValue,
-                                companyAddress: userData['companyAddress'] ?? '',
+                                companyAddress:
+                                    userData['companyAddress'] ?? '',
                                 companyName: userData['companyName'] ?? '',
                                 companyPhone: userData['companyPhone'] ?? '',
                               );

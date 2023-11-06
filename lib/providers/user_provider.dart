@@ -35,18 +35,13 @@ class UserProvider extends ChangeNotifier {
   User? _user;
 
   User? get user => _user;
-  bool _isActivated = false;
+  bool _isActivated = true;
 
   bool get isActivated => _isActivated;
-  // Method to update the activation status.
-  void updateActivationStatus(bool status) {
-    _isActivated = status;
-    notifyListeners();
-  }
 
   void setUser(User user) {
     _user = user;
-
+    _isActivated = user.isActivated;
     notifyListeners();
   }
 }
