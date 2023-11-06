@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
@@ -10,6 +11,7 @@ import 'package:provider/provider.dart';
 
 class OrderDetails extends StatefulWidget {
   final ProductModel product;
+
   const OrderDetails({super.key, required this.product});
 
   @override
@@ -18,9 +20,11 @@ class OrderDetails extends StatefulWidget {
 
 class _OrderDetailsState extends State<OrderDetails> {
   double totalValue = 0.0;
+  double minimumVolumePerOrder = 0.0;
   final double pricePerLiter = 200.0;
   bool fetchingDetails = true;
   List<ProductListing> products = [];
+  List<TextEditingController> orderVolume = [];
   Future<void> _fetchDetails(BuildContext context) async {
     setState(() {
       fetchingDetails = true;
@@ -28,6 +32,7 @@ class _OrderDetailsState extends State<OrderDetails> {
 
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final token = userProvider.user?.token;
+    
     final postData = {
       'productId': '${widget.product.id}',
     };
@@ -47,43 +52,57 @@ class _OrderDetailsState extends State<OrderDetails> {
 
       print('Response: $response');
 
+
       if (response['status'] == 1 && response['cartProductsListing'] != null) {
         final data =
             List<Map<String, dynamic>>.from(response['cartProductsListing']);
         final productModels = data.map((productData) {
+
+          minimumVolumePerOrder = double.parse(productData['minimum_volume_per_order'].toString());
           return ProductListing(
-            product_id: int.parse(productData['product_id'].toString()),
-            product_name: productData['product_name'].toString(),
-            depot_name: productData['depot_name'].toString(),
+            productId: int.parse(productData['product_id'].toString() ?? ''),
+            productName: productData['product_name'].toString(),
+            depotName: productData['depot_name'].toString(),
             location: productData['location'].toString(),
-            product_code: '',
-            depot_code: '',
-            company_id: int.parse(productData['company_id'].toString()),
-            company_name: productData['company_name'],
-            company_email: productData['company_email'],
-            company_phone: productData['company_phone'],
-            minimum_volume_per_order: productData['min_vol'],
-            price_per: productData['price'],
-            selling_price: productData['selling_price'],
-            stock_volume: productData['stock_volume'],
-            available_volume: productData['available_volume'],
-            min_vol: productData['min_vol'],
-            max_vol: productData['max_vol'],
+            productCode: productData['product_code'].toString(),
+            depotCode: productData['depot_code'].toString(),
+            companyId: int.parse(productData['company_id'].toString() ?? ''),
+            companyName: productData['company_name'].toString(),
+            companyEmail: productData['company_email'].toString(),
+            companyPhone: productData['company_phone'].toString(),
+            minimumVolumePerOrder: double.parse(productData['minimum_volume_per_order'].toString()),
+            pricePer: double.parse(productData['price_per'].toString()),
+            sellingPrice: double.parse(productData['selling_price'].toString()),
+            stockVolume: double.parse(productData['stock_volume'].toString()),
+            availableVolume: double.parse(productData['available_volume'].toString()),
+            minVol: double.parse(productData['min_vol'].toString()),
+            maxVol: double.parse(productData['max_vol'].toString()),
             status: int.parse(productData['status'].toString()),
-            commission_rate:
+            commissionRate:
                 double.parse(productData['commission_rate'].toString()),
           );
         }).toList();
 
+        final orderVols = data.map((productData) {
+           return TextEditingController();
+        }).toList();
+
+
+
+
         setState(() {
           products = productModels;
+        });
+
+        setState(() {
+          orderVolume = orderVols;
         });
       } else {
         print('No or invalid products found in the response');
         // Handle the case when 'status' is not 1 or 'cartProductsListing' is null
       }
     } catch (error) {
-      print('Error: $error');
+      print('Product Fetch By ID Error: $error');
       // Handle the error
     }
 
@@ -97,6 +116,36 @@ class _OrderDetailsState extends State<OrderDetails> {
     super.initState();
     _fetchDetails(context);
   }
+  
+  double calculateOrderVolume() {
+    List<double> vols = [];
+    List<TextEditingController> orderItems = orderVolume;
+    vols = orderItems.map((e) => e.text.toString().isEmpty?0.0:double.parse(e.text.toString())).toList();
+    double totalVols = vols.reduce((value, element) => value + element);
+    return totalVols;
+
+  }
+
+  String checkMinimumVolume(String value,int index) {
+    double minimumVolume = double.parse(products[index].minVol.toString());
+    if (value.isNotEmpty) {
+      double currentVolume = double.parse(value);
+      if(currentVolume < minimumVolume){
+        return 'Value is less than minimum volume: ${minimumVolume}';
+      } else {
+        return '';
+      }
+    }
+    return '';
+  }
+
+  void updateTotal(total){
+    setState(() {
+      totalValue = total;
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -196,6 +245,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                   itemCount: products.length,
                   itemBuilder: (BuildContext context, int index) {
                     final product = products[index];
+
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -225,9 +275,12 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   '${widget.product.minimumVolume} litres',
                                   style: TextStyle(color: Colors.grey),
                                 ),
-                                SizedBox(
-                                  height: 10,
+                                SizedBox(height: 10),
+                                Text(
+                                  'Specify the Volume:',
+                                  style: TextStyle(color: Colors.grey),
                                 ),
+                                SizedBox(height: 10),
                               ],
                             ),
                             Column(
@@ -269,6 +322,52 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 SizedBox(
                                   height: 10,
                                 ),
+                                SizedBox(
+                                  width: 200,
+                                  child: TextFormField(
+                                    controller: orderVolume[index],
+                                    style: TextStyle(color: Colors.black),
+                                    keyboardType: TextInputType.number,
+                                    onChanged: (text) {
+                                        double totalVolumeOrdered = calculateOrderVolume();
+                                        print(totalVolumeOrdered);
+                                        updateTotal(totalVolumeOrdered);
+
+                                    },
+
+                                    decoration: InputDecoration(
+                                      labelText: 'Volume',
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      errorText: checkMinimumVolume(orderVolume[index].text,index).isNotEmpty?checkMinimumVolume(orderVolume[index].text,index):null,
+                                      prefixIcon: const Icon(Icons.add_circle),
+                                      prefixIconColor: Colors.grey,
+                                      labelStyle: TextStyle(color: Colors.grey[500]),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: primaryDarkColor.withOpacity(0.1),
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8.0),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: primaryDarkColor.withOpacity(0.1),
+                                          width: 2.0,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8.0),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: const BorderSide(
+                                          color: primaryDarkColor,
+                                          width: 1.0,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 10,),
                               ],
                             ),
                           ],
@@ -282,6 +381,32 @@ class _OrderDetailsState extends State<OrderDetails> {
                   },
                 ),
               ),
+              SizedBox(
+                width: double.infinity,
+                height: 48,
+                child:  Text('Volume: ${totalValue}',
+                  style: textBolder,
+                ),
+              ),
+              SizedBox(
+                width: double.infinity,
+                height: 48,
+                child:  Text('Minimum Volume: ${minimumVolumePerOrder}',
+                  style: textBolderSmall,
+                ),
+              ),
+              SizedBox(
+                width: double.infinity,
+                height: 48,
+                child:  (totalValue < minimumVolumePerOrder)? Text('Volume is less than the minimum value required per order: ${minimumVolumePerOrder}',
+                  style: TextStyle(
+                    color: Colors.red
+                  ),
+                ): null,
+              ),
+
+
+
               SizedBox(
                 width: double.infinity,
                 height: 48,
