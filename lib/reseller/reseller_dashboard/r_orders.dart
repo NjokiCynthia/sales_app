@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/orders.dart';
 import 'package:petropal/providers/user_provider.dart';
+import 'package:petropal/reseller/orders/orderDocuments.dart';
 import 'package:provider/provider.dart';
 
 class ResellerOrders extends StatefulWidget {
@@ -183,135 +185,148 @@ class _ResellerOrdersState extends State<ResellerOrders> {
           child: RefreshIndicator(
             onRefresh: () => _refreshOrders(context),
             child: fetchingOrders
-                ? Center(
-                    child:
-                        CircularProgressIndicator()) // Display a loading indicator while fetching data
+                ? Center(child: CircularProgressIndicator())
                 : orders.isNotEmpty
                     ? ListView.builder(
                         itemBuilder: (context, index) {
                           final order = orders[index];
 
-                          return Container(
-                            margin: EdgeInsets.only(bottom: 10),
-                            decoration: BoxDecoration(color: Colors.white),
-                            padding: EdgeInsets.all(15),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "#${order.orderInvoiceNumber}",
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "${order.vendorName}",
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          order.orderCreatedAt
-                                              .toLocal()
-                                              .toString(),
-                                          style: greyText,
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              color: getStatusContainerColor(
-                                                  order.orderStatus),
-                                              // color: Color.fromRGBO(
-                                              //     255, 226, 229, 1.0),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child: Padding(
-                                            padding: EdgeInsets.only(
-                                                top: 4,
-                                                bottom: 4,
-                                                left: 8,
-                                                right: 8),
-                                            child: Text(
-                                              getStatusText(order.orderStatus),
-                                              style: TextStyle(
-                                                color: getStatusColor(
-                                                    order.orderStatus),
-                                                fontSize: 16,
-                                              ),
-                                            ),
-                                            // child: Text(
-                                            //   order.orderStatus,
-                                            //   style: TextStyle(
-                                            //     color: Color.fromRGBO(
-                                            //         246, 78, 96, 1.0),
-                                            //     fontSize: 12,
-                                            //   ),
-                                            // ),
+                          return GestureDetector(
+                            onTap: () {
+                              PersistentNavBarNavigator.pushNewScreen(
+                                context,
+                                screen: OrderDocuments(),
+                                pageTransitionAnimation:
+                                    PageTransitionAnimation.cupertino,
+                                withNavBar: false,
+                              );
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: 10),
+                              decoration: BoxDecoration(color: Colors.white),
+                              padding: EdgeInsets.all(15),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "#${order.orderInvoiceNumber}",
+                                            style:
+                                                TextStyle(color: Colors.black),
                                           ),
-                                        ),
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    RichText(
-                                      text: TextSpan(
-                                        style:
-                                            DefaultTextStyle.of(context).style,
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text:
-                                                "KES ${order.orderPayableAmount}/",
-                                            style: boldText,
+                                          SizedBox(
+                                            height: 10,
                                           ),
-                                          TextSpan(
-                                            text: '${order.orderVolume ?? ''}',
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.grey,
-                                            ), // Style for the unit
+                                          Text(
+                                            "${order.vendorName}",
+                                            style:
+                                                TextStyle(color: Colors.black),
                                           ),
                                         ],
                                       ),
-                                    ),
-                                    Text(
-                                      "View more",
-                                      style: TextStyle(
-                                        color:
-                                            primaryDarkColor.withOpacity(0.5),
-                                        fontSize: 12,
-                                        decoration: TextDecoration.underline,
-                                        decorationColor: primaryDarkColor,
-                                        decorationStyle:
-                                            TextDecorationStyle.dotted,
-                                        decorationThickness: 3,
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            order.orderCreatedAt
+                                                .toLocal()
+                                                .toString(),
+                                            style: greyText,
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                color: getStatusContainerColor(
+                                                    order.orderStatus),
+                                                // color: Color.fromRGBO(
+                                                //     255, 226, 229, 1.0),
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            child: Padding(
+                                              padding: EdgeInsets.only(
+                                                  top: 4,
+                                                  bottom: 4,
+                                                  left: 8,
+                                                  right: 8),
+                                              child: Text(
+                                                getStatusText(
+                                                    order.orderStatus),
+                                                style: TextStyle(
+                                                  color: getStatusColor(
+                                                      order.orderStatus),
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              // child: Text(
+                                              //   order.orderStatus,
+                                              //   style: TextStyle(
+                                              //     color: Color.fromRGBO(
+                                              //         246, 78, 96, 1.0),
+                                              //     fontSize: 12,
+                                              //   ),
+                                              // ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      RichText(
+                                        text: TextSpan(
+                                          style: DefaultTextStyle.of(context)
+                                              .style,
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text:
+                                                  "KES ${order.orderPayableAmount}/",
+                                              style: boldText,
+                                            ),
+                                            TextSpan(
+                                              text:
+                                                  '${order.orderVolume ?? ''}',
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.grey,
+                                              ), // Style for the unit
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Text(
+                                        "View more",
+                                        style: TextStyle(
+                                          color:
+                                              primaryDarkColor.withOpacity(0.5),
+                                          fontSize: 12,
+                                          decoration: TextDecoration.underline,
+                                          decorationColor: primaryDarkColor,
+                                          decorationStyle:
+                                              TextDecorationStyle.dotted,
+                                          decorationThickness: 3,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         },
