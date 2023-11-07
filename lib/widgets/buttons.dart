@@ -59,6 +59,7 @@ class CustomRequestButton extends StatefulWidget {
     required this.buttonText,
     required this.body,
     required this.onSuccess,
+    required Map<String, String> headers,
   });
 
   @override
@@ -83,9 +84,6 @@ class _CustomRequestButtonState extends State<CustomRequestButton> {
         'error': widget.buttonErrorMessage,
       });
     }
-    if (widget.url == null) {
-      return widget.onSuccess({'isSuccessful': true});
-    }
     setState(() {
       isButtonDisabled = true;
       isLoading = true;
@@ -99,7 +97,8 @@ class _CustomRequestButtonState extends State<CustomRequestButton> {
       });
       if (response.statusCode == 200) {
         // Request was successful
-        widget.onSuccess({'isSuccessful': true, 'data': response.data});
+        widget
+            .onSuccess({'isSuccessful IS HERE ': true, 'data': response.data});
       } else {
         // Request returned an error status code
         widget.onSuccess({
@@ -143,6 +142,9 @@ class _CustomRequestButtonState extends State<CustomRequestButton> {
       'Content-Type': 'application/json',
     };
     final options = Options(contentType: 'application/json', headers: headers);
+    print('here it is ${ipAddress + widget.url!}');
+    print(widget.body);
+    print(options);
 
     try {
       if (widget.method == 'POST') {
@@ -165,7 +167,7 @@ class _CustomRequestButtonState extends State<CustomRequestButton> {
     return GestureDetector(
       onTap: isButtonDisabled ? null : sendRequest,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 2000),
+        duration: const Duration(milliseconds: 10000),
         decoration: BoxDecoration(
           color: primaryDarkColor,
           borderRadius:

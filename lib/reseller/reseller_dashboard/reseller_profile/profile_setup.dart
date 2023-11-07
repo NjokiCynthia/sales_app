@@ -243,10 +243,8 @@ class _ProfileSetUpState extends State<ProfileSetUp>
         final file = selectedFiles![0];
         formData.files.add(MapEntry(
           'epra_license_photo',
-          await MultipartFile.fromFile(
-            file.path.toString(),
-            filename: file.name
-          ),
+          await MultipartFile.fromFile(file.path.toString(),
+              filename: file.name),
         ));
       }
 
@@ -1058,6 +1056,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                 url: '/account/update/bank_details',
                 method: 'POST',
                 buttonText: 'Confirm',
+                headers: {},
                 body: {
                   "account_number": accountController.text,
                   "account_name": accountName.text,
@@ -1239,6 +1238,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                   url: '/contact-persons/create',
                   method: 'POST',
                   buttonText: 'Add details',
+                  headers: {},
                   body: {
                     "name": nameController.text,
                     "phone": phoneController.text,

@@ -261,160 +261,190 @@ class _OrderDetailsState extends State<OrderDetails> {
               SizedBox(
                 height: 10,
               ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: products.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final product = products[index];
+              fetchingDetails
+                  ? Center(child: CircularProgressIndicator())
+                  : products.isNotEmpty
+                      ? Expanded(
+                          child: ListView.builder(
+                            itemCount: products.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final product = products[index];
 
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${widget.product.product}',
-                                  style: textBolderSmall,
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  'Available volume:',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                SizedBox(height: 5),
-                                Text(
-                                  'Minimum volume',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                Text(
-                                  '${widget.product.minimumVolume} litres',
-                                  style: TextStyle(color: Colors.grey),
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  'Specify the Volume:',
-                                  style: TextStyle(color: Colors.grey),
-                                ),
-                                SizedBox(height: 10),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                RichText(
-                                  text: TextSpan(
+                              return Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      TextSpan(
-                                        text:
-                                            'KES ${widget.product.sellingPrice}/',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                        ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '${widget.product.product}',
+                                            style: textBolderSmall,
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            'Available volume:',
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          ),
+                                          SizedBox(height: 5),
+                                          Text(
+                                            'Minimum volume',
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          ),
+                                          Text(
+                                            '${widget.product.minimumVolume} litres',
+                                            style:
+                                                TextStyle(color: Colors.grey),
+                                          ),
+                                          SizedBox(height: 10),
+                                          Text(
+                                            'Specify the Volume:',
+                                            style:
+                                                TextStyle(color: Colors.grey),
+                                          ),
+                                          SizedBox(height: 10),
+                                        ],
                                       ),
-                                      TextSpan(
-                                        text: 'litre',
-                                        style: bodyTextSmaller,
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          RichText(
+                                            text: TextSpan(
+                                              children: [
+                                                TextSpan(
+                                                  text:
+                                                      'KES ${widget.product.sellingPrice}/',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: 'litre',
+                                                  style: bodyTextSmaller,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            '${widget.product.availableVolume} litres',
+                                            style: textBolderSmall,
+                                          ),
+                                          SizedBox(height: 5),
+                                          Text(
+                                            'Maximum volume',
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          ),
+                                          Text(
+                                            '${widget.product.maximumVolume} litres',
+                                            style:
+                                                TextStyle(color: Colors.grey),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          SizedBox(
+                                            width: 200,
+                                            child: TextFormField(
+                                              controller: orderVolume[index],
+                                              style: TextStyle(
+                                                  color: Colors.black),
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              onChanged: (text) {
+                                                double totalVolumeOrdered =
+                                                    calculateOrderVolume();
+                                                print(totalVolumeOrdered);
+                                                updateTotal(totalVolumeOrdered);
+                                              },
+                                              decoration: InputDecoration(
+                                                labelText: 'Volume',
+                                                filled: true,
+                                                fillColor: Colors.white,
+                                                errorText:
+                                                    checkMinimumMaximumVolume(
+                                                                orderVolume[
+                                                                        index]
+                                                                    .text,
+                                                                index)
+                                                            .isNotEmpty
+                                                        ? checkMinimumMaximumVolume(
+                                                            orderVolume[index]
+                                                                .text,
+                                                            index)
+                                                        : null,
+                                                prefixIcon: const Icon(
+                                                    Icons.add_circle),
+                                                prefixIconColor: Colors.grey,
+                                                labelStyle: TextStyle(
+                                                    color: Colors.grey[500]),
+                                                border: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: primaryDarkColor
+                                                        .withOpacity(0.1),
+                                                    width: 1.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: primaryDarkColor
+                                                        .withOpacity(0.1),
+                                                    width: 2.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                    color: primaryDarkColor,
+                                                    width: 1.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  '${widget.product.availableVolume} litres',
-                                  style: textBolderSmall,
-                                ),
-                                SizedBox(height: 5),
-                                Text(
-                                  'Maximum volume',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                Text(
-                                  '${widget.product.maximumVolume} litres',
-                                  style: TextStyle(color: Colors.grey),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                SizedBox(
-                                  width: 200,
-                                  child: TextFormField(
-                                    controller: orderVolume[index],
-                                    style: TextStyle(color: Colors.black),
-                                    keyboardType: TextInputType.number,
-                                    onChanged: (text) {
-                                      double totalVolumeOrdered =
-                                          calculateOrderVolume();
-                                      print(totalVolumeOrdered);
-                                      updateTotal(totalVolumeOrdered);
-                                    },
-                                    decoration: InputDecoration(
-                                      labelText: 'Volume',
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                      errorText: checkMinimumMaximumVolume(
-                                                  orderVolume[index].text,
-                                                  index)
-                                              .isNotEmpty
-                                          ? checkMinimumMaximumVolume(
-                                              orderVolume[index].text, index)
-                                          : null,
-                                      prefixIcon: const Icon(Icons.add_circle),
-                                      prefixIconColor: Colors.grey,
-                                      labelStyle:
-                                          TextStyle(color: Colors.grey[500]),
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color:
-                                              primaryDarkColor.withOpacity(0.1),
-                                          width: 1.0,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color:
-                                              primaryDarkColor.withOpacity(0.1),
-                                          width: 2.0,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                          color: primaryDarkColor,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                      ),
+                                  if (index < products.length - 1)
+                                    Divider(
+                                      color: Colors.black,
                                     ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        if (index < products.length - 1)
-                          Divider(
-                            color: Colors.black,
+                                ],
+                              );
+                            },
                           ),
-                      ],
-                    );
-                  },
-                ),
-              ),
+                        )
+                      : Text(
+                          'No products available',
+                          style: TextStyle(color: primaryDarkColor),
+                        ),
               SizedBox(
                 width: double.infinity,
                 height: 48,

@@ -918,6 +918,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                 url: '/account/sign-up/reseller',
                 method: 'POST',
                 buttonText: 'SignUp',
+                headers: {},
                 body: {
                   "user": {
                     "bankDetails": [],

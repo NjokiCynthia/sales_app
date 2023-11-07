@@ -10,17 +10,15 @@ class DriverModel {
   final String createdAt;
   final String updatedAt;
 
-
-  DriverModel({
-    required this.id,
-    required this.fullName,
-    required this.idNumber,
-    required this.phoneNumber,
-    required this.epraLicenseNumber,
-    required this.licenseNumber,
-    required this.status,
-    required this.createdBy,
-    required this.createdAt,
-    required this.updatedAt
-  });
+  DriverModel(
+      {required this.id,
+      required this.fullName,
+      required this.idNumber,
+      required this.phoneNumber,
+      required this.epraLicenseNumber,
+      required this.licenseNumber,
+      required this.status,
+      required this.createdBy,
+      required this.createdAt,
+      required this.updatedAt});
 }

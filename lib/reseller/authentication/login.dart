@@ -54,13 +54,12 @@ class _LoginState extends State<Login> {
                     ),
                     SizedBox(
                       height: 30,
-                      child: errorText.isNotEmpty ? Text(
-                          errorText,
-                          style: const TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold
-                          )
-                      ): null,
+                      child: errorText.isNotEmpty
+                          ? Text(errorText,
+                              style: const TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold))
+                          : null,
                     ),
                     const SizedBox(
                       height: 10,
@@ -166,6 +165,7 @@ class _LoginState extends State<Login> {
                       url: '/user/login',
                       method: 'POST',
                       buttonText: 'Login',
+                      headers: {},
                       body: {
                         'email': emailAddress.text,
                         'password': password.text,
@@ -178,7 +178,7 @@ class _LoginState extends State<Login> {
 
                         if (isSuccessful) {
                           final data = res['data'] as Map<String, dynamic>?;
-                          if (data != null  && data['status'] != 'loggedOut') {
+                          if (data != null && data['status'] != 'loggedOut') {
                             final userData =
                                 data['user'] as Map<String, dynamic>?;
                             final token = data['api_token'] as String?;

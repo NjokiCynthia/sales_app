@@ -8,12 +8,12 @@ import 'package:petropal/models/truck.dart';
 import 'package:petropal/reseller/orders/order_details.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_orders.dart';
 import 'package:petropal/models/order_product.dart';
+import 'package:petropal/widgets/buttons.dart';
 import 'package:provider/provider.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/constants/api.dart';
 
 class MakeOrder extends StatefulWidget {
-
   final double totalVolume;
   final String depotName;
   final String depotLocation;
@@ -55,9 +55,6 @@ class _MakeOrderState extends State<MakeOrder> {
   List<TruckModel> truckModels = [];
   List<DriverModel> driverModels = [];
 
-
-
-
   Future<void> _fetchDetails(BuildContext context) async {
     setState(() {
       fetchingDetails = true;
@@ -90,8 +87,7 @@ class _MakeOrderState extends State<MakeOrder> {
       });
 
       if (response['status'] == 1 && response['data'] != null) {
-        final data =
-        List<Map<String, dynamic>>.from(response['data']);
+        final data = List<Map<String, dynamic>>.from(response['data']);
         final tempTruckModels = data.map((truckData) {
           return TruckModel(
             id: int.parse(truckData['id'].toString()),
@@ -104,11 +100,9 @@ class _MakeOrderState extends State<MakeOrder> {
           );
         }).toList();
 
-
         setState(() {
           truckModels = tempTruckModels;
         });
-
       } else {
         print('No or invalid trucks found in the response');
         // Handle the case when 'status' is not 1 or 'cartProductsListing' is null
@@ -131,14 +125,18 @@ class _MakeOrderState extends State<MakeOrder> {
         driverModels = [];
       });
 
-      if(driverModels.isNotEmpty){
-        selectedDriver = driverModels[0].id.toString()+' '+driverModels[0].fullName+' '+driverModels[0].idNumber+' '+driverModels[0].phoneNumber;
+      if (driverModels.isNotEmpty) {
+        selectedDriver = driverModels[0].id.toString() +
+            ' ' +
+            driverModels[0].fullName +
+            ' ' +
+            driverModels[0].idNumber +
+            ' ' +
+            driverModels[0].phoneNumber;
       }
 
-
       if (response['status'] == 1 && response['data'] != null) {
-        final data =
-        List<Map<String, dynamic>>.from(response['data']);
+        final data = List<Map<String, dynamic>>.from(response['data']);
         final tempDriverModels = data.map((driverData) {
           return DriverModel(
             id: int.parse(driverData['id'].toString()),
@@ -154,11 +152,9 @@ class _MakeOrderState extends State<MakeOrder> {
           );
         }).toList();
 
-
         setState(() {
           driverModels = tempDriverModels;
         });
-
       } else {
         print('No or invalid drivers found in the response');
         // Handle the case when 'status' is not 1 or 'cartProductsListing' is null
@@ -179,18 +175,14 @@ class _MakeOrderState extends State<MakeOrder> {
     _fetchDetails(context);
   }
 
-
-  double calculateTotal(orderProducts){
+  double calculateTotal(orderProducts) {
     double total = 0.0;
-    for(int i = 0; i < orderProducts.length; i++){
-      total += double.parse(orderProducts[i].price.toString()) * double.parse(orderProducts[i].volume.toString());
+    for (int i = 0; i < orderProducts.length; i++) {
+      total += double.parse(orderProducts[i].price.toString()) *
+          double.parse(orderProducts[i].volume.toString());
     }
     return total;
   }
-
-
-
-
 
   List<String> driverItems = [
     'Driver 1',
@@ -208,10 +200,8 @@ class _MakeOrderState extends State<MakeOrder> {
     '6000, 1000, 2000, 3000'
   ];
 
-
   @override
   Widget build(BuildContext context) {
-
     // print('products');
     // for(var i = 0; i < widget.orderProducts.length; i++){
     //   print(widget.orderProducts[i].show());
@@ -260,7 +250,6 @@ class _MakeOrderState extends State<MakeOrder> {
             onStepTapped: (index) {
               setState(() => currentStep = index);
             },
-
             steps: [
               Step(
                 isActive: currentStep >= 0,
@@ -353,18 +342,29 @@ class _MakeOrderState extends State<MakeOrder> {
                           selectedDriver = newValue!;
                         });
                       },
-                      items: driverModels.isNotEmpty?driverModels.map((driver) => driver.id.toString() + ' ' + driver.fullName+ ' ' + driver.idNumber + ' ' + driver.phoneNumber)
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList():driverItems.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
+                      items: driverModels.isNotEmpty
+                          ? driverModels
+                              .map((driver) =>
+                                  driver.id.toString() +
+                                  ' ' +
+                                  driver.fullName +
+                                  ' ' +
+                                  driver.idNumber +
+                                  ' ' +
+                                  driver.phoneNumber)
+                              .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList()
+                          : driverItems
+                              .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
                     ),
                     SizedBox(height: 10),
                     Row(
@@ -467,45 +467,48 @@ class _MakeOrderState extends State<MakeOrder> {
                 content: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Product Details: ${widget.orderProducts.length}', style: bodyGrey),
+                    Text('Product Details: ${widget.orderProducts.length}',
+                        style: bodyGrey),
                     SizedBox(
                       height: 180.0,
                       child: ListView.builder(
-                            itemCount: widget.orderProducts.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              final orderedProduct = widget.orderProducts[index];
-                              return Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            orderedProduct.productName,
-                                            style: TextStyle(color: Colors.green),
-                                          ),
-                                          Text(
-                                            'Price: ${orderedProduct.price.toStringAsFixed(2)}',
-                                            style: TextStyle(color: Colors.blue),
-                                          ),
-                                          Text(
-                                            'Volume Ordered: ${orderedProduct.volume.toStringAsFixed(2)}',
-                                            style: TextStyle(color: Colors.grey),
-                                          ),
-                                          Text(
-                                            'Sub Total: ${(orderedProduct.volume * orderedProduct.price).toStringAsFixed(2)}',
-                                            style: TextStyle(color: Colors.grey),
-                                          ),
-                                          SizedBox(height: 10,)
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              );
-                            }
-                        ),
+                          itemCount: widget.orderProducts.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final orderedProduct = widget.orderProducts[index];
+                            return Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          orderedProduct.productName,
+                                          style: TextStyle(color: Colors.green),
+                                        ),
+                                        Text(
+                                          'Price: ${orderedProduct.price.toStringAsFixed(2)}',
+                                          style: TextStyle(color: Colors.blue),
+                                        ),
+                                        Text(
+                                          'Volume Ordered: ${orderedProduct.volume.toStringAsFixed(2)}',
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                        Text(
+                                          'Sub Total: ${(orderedProduct.volume * orderedProduct.price).toStringAsFixed(2)}',
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            );
+                          }),
                     ),
                     SizedBox(
                       height: 5,
@@ -608,7 +611,8 @@ class _MakeOrderState extends State<MakeOrder> {
                     SizedBox(
                       height: 10,
                     ),
-                    Text('Amount payable: KES ${calculateTotal(widget.orderProducts).toStringAsFixed(2)}',
+                    Text(
+                        'Amount payable: KES ${calculateTotal(widget.orderProducts).toStringAsFixed(2)}',
                         style: bodyGrey),
                     Text('Payment Details:', style: bodyGrey),
                     SizedBox(height: 5),
@@ -812,6 +816,16 @@ class _MakeOrderState extends State<MakeOrder> {
   }
 
   Future<void> _showAddDialog(BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final user = userProvider.user;
+    // final token = userProvider.user?.token;
+    if (user == null || user.token == null) {
+      // Handle the case where the user or token is null, e.g., show an error message.
+      return;
+    }
+    final token = user.token;
+    final user_id = user.id;
+
     TextEditingController nameController = TextEditingController();
     TextEditingController phoneNumberController = TextEditingController();
     TextEditingController idController = TextEditingController();
@@ -1081,20 +1095,70 @@ class _MakeOrderState extends State<MakeOrder> {
               },
               child: Text('Cancel'),
             ),
-            TextButton(
-              onPressed: () {
-                // Add the newly entered driver
-                String newName = nameController.text;
-                setState(() {
-                  if (!driverItems.contains(newName)) {
-                    driverItems.add(newName);
-                  }
-                  selectedDriver = newName; // Set the selected driver
-                });
-                Navigator.of(context).pop(); // Close the dialog
+            CustomRequestButton(
+              url: '/driver/create',
+              method: 'POST',
+              buttonText: 'Add driver',
+              body: {
+                "full_name": nameController.text,
+                "phone_number": phoneNumberController.text,
+                "id_number": idController.text,
+                "epra_licence_number": EPRAController.text,
+                "driver_licence": licenceController.text,
+                "created_by": user_id,
+                "status": 1
               },
-              child: Text('Add'),
+              headers: {
+                'Authorization': 'Bearer $token',
+              },
+              onSuccess: (res) {
+                print('Request payload:'); // Add this line to log the payload
+                print({
+                  "full_name": nameController.text,
+                  "phone_number": phoneNumberController.text,
+                  "id_number": idController.text,
+                  "epra_licence_number": EPRAController.text,
+                  "driver_licence": licenceController.text,
+                  "created_by": user_id,
+                  "status": 1
+                });
+                print('This is my response here ');
+                print(res);
+
+                final isSuccessful = res['isSuccessful'] as bool;
+                final message = res['message'];
+
+                if (isSuccessful) {
+                  final data = res['data'] as Map<String, dynamic>?;
+                  String newName = nameController.text;
+                  setState(() {
+                    if (!driverItems.contains(newName)) {
+                      driverItems.add(newName);
+                    }
+                    selectedDriver = newName; 
+                  });
+
+                  Navigator.pop(context);
+                  // Handle the success case as needed.
+                } else {
+                  // Handle the error case.
+                }
+              },
             ),
+            // TextButton(
+            //   onPressed: () {
+            //     // Add the newly entered driver
+            //     String newName = nameController.text;
+            //     setState(() {
+            //       if (!driverItems.contains(newName)) {
+            //         driverItems.add(newName);
+            //       }
+            //       selectedDriver = newName; // Set the selected driver
+            //     });
+            //     Navigator.of(context).pop(); // Close the dialog
+            //   },
+            //   child: Text('Add'),
+            // ),
           ],
         );
       },
