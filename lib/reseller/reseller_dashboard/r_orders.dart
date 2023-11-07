@@ -195,7 +195,9 @@ class _ResellerOrdersState extends State<ResellerOrders> {
                             onTap: () {
                               PersistentNavBarNavigator.pushNewScreen(
                                 context,
-                                screen: OrderDocuments(),
+                                screen: OrderDocuments(
+                                  orders: order,
+                                ),
                                 pageTransitionAnimation:
                                     PageTransitionAnimation.cupertino,
                                 withNavBar: false,

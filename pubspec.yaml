@@ -57,6 +57,7 @@ dependencies:
   persistent_bottom_nav_bar: ^5.0.2
   shared_preferences: ^2.2.2
   http_parser: ^4.0.2
+  url_launcher: ^6.2.1
   
 
 dev_dependencies:

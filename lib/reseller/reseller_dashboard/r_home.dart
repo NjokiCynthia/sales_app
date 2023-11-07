@@ -2,8 +2,10 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/models/orders.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/authentication/login.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/profile_setup.dart';
@@ -38,8 +40,119 @@ class _ResellerHomeState extends State<ResellerHome> {
   List<String> title = ['Petrol', 'Diesel', 'Kerosene'];
 
   int selectedCardIndex = 0;
+  bool fetchingCompletedOrders = true;
+  List<Order> orders = [];
 
   late List<ChartData> data;
+  _fetchCompleteOrders(BuildContext context) async {
+    setState(() {
+      fetchingCompletedOrders = true;
+    });
+
+    // Retrieve user information from the provider
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final token = userProvider.user?.token;
+
+    final postData = {};
+    final apiClient = ApiClient();
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    await apiClient
+        .post('/order/fetch/complete', postData, headers: headers)
+        .then((response) {
+      print('Response for the completed orders is here: $response');
+      if (response['data'] != null) {
+        setState(() {
+          orders = (response['data'] as List).map((orderData) {
+            return Order(
+              id: orderData['id'].toString(),
+              orderStatus: orderData['orderStatus'] as int,
+              orderPayableAmount:
+                  orderData['orderPayableAmount'].toString() ?? '',
+              orderVolume: orderData['orderVolume'].toString() ?? '',
+              orderInvoiceNumber:
+                  orderData['orderInvoiceNumber'].toString() ?? '',
+              vendorName: orderData['vendorName'].toString() ?? '',
+              vendorEmail: orderData['vendorEmail'].toString() ?? '',
+              orderCreatedAt:
+                  DateTime.parse(orderData['orderCreatedAt'].toString() ?? ''),
+            );
+          }).toList();
+        });
+      } else {
+        // Handle the case where 'data' is null or not present in the response.
+        print('No orders found in the response');
+      }
+    }).catchError((error) {
+      // Handle the error
+      print('error');
+      print(error);
+    });
+
+    setState(() {
+      fetchingCompletedOrders = false;
+    });
+  }
+
+  String getStatusText(int status) {
+    switch (status) {
+      case 1:
+        return 'Awaiting Payment';
+      case 2:
+        return 'Awaiting Confirmation';
+      case 3:
+        return 'Pending Loading Order';
+      case 4:
+        return 'Completed';
+      case 5:
+        return 'Expired';
+      default:
+        return 'Unknown Status';
+    }
+  }
+
+  Color getStatusColor(int status) {
+    switch (status) {
+      case 1:
+        return Colors.blue;
+      case 2:
+        return Colors.yellow;
+      case 3:
+        return Colors
+            .black; // You can specify the existing color or a custom color here
+      case 4:
+        return Colors.orange;
+      case 5:
+        return Colors.red;
+      default:
+        return Colors.black; // You can specify the default color here
+    }
+  }
+
+  Color getStatusContainerColor(int status) {
+    switch (status) {
+      case 1:
+        return const Color.fromARGB(
+            255, 187, 222, 251); // Lighter shade of blue
+      case 2:
+        return const Color.fromARGB(
+            255, 255, 249, 196); // Lighter shade of yellow
+      case 3:
+        return const Color.fromARGB(
+            255, 245, 245, 245); // Lighter shade of grey
+      case 4:
+        return const Color.fromARGB(
+            255, 255, 224, 178); // Lighter shade of orange
+      case 5:
+        return const Color.fromARGB(255, 255, 205, 210); // Lighter shade of red
+      default:
+        return Colors.black; // You can specify the default color here
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -74,7 +187,7 @@ class _ResellerHomeState extends State<ResellerHome> {
         );
       });
     }
-
+    _fetchCompleteOrders(context);
     data = [
       ChartData(17, 200),
       ChartData(18, 205),
@@ -87,6 +200,11 @@ class _ResellerHomeState extends State<ResellerHome> {
       ChartData(25, 191),
       ChartData(26, 195),
     ];
+  }
+
+  Future<void> _refreshCompletedOrders(BuildContext context) async {
+    // Fetch orders data here
+    await _fetchCompleteOrders(context);
   }
 
   @override
@@ -411,7 +529,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                       ],
                     );
                   },
-                  itemCount: 6,
+                  itemCount: 5,
                 ),
               )
             ])));

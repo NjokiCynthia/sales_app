@@ -294,7 +294,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                       context,
                       MaterialPageRoute(
                         builder: ((context) => MakeOrder(
-                              productName: widget.product.product,
+                              productName: widget.product.product!,
                               minVolume:
                                   widget.product.minimumVolume.toString() +
                                       ' litres',
@@ -304,8 +304,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                               availableVolume:
                                   widget.product.availableVolume.toString() +
                                       ' litres',
-                              depotName: widget.product.depot,
-                              depotLocation: widget.product.location,
+                              depotName: widget.product.depot!,
+                              depotLocation: widget.product.depot!,
                             )),
                       ),
                     );

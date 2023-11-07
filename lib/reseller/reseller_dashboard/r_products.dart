@@ -262,7 +262,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          product.product,
+                                          product.product!,
                                           style: boldText,
                                         ),
                                         Container(
@@ -337,14 +337,14 @@ class _ResellerProductsState extends State<ResellerProducts> {
                                           children: [
                                             Text(
                                               product
-                                                  .dealerName, // Actual dealer name
+                                                  .dealerName!, // Actual dealer name
                                               style: boldText,
                                             ),
                                             SizedBox(
                                               height: 5,
                                             ),
                                             Text(
-                                              product.depot,
+                                              product.depot!,
                                               style: TextStyle(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.normal,
