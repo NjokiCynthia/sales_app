@@ -4,23 +4,21 @@ import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/product.dart';
 import 'package:petropal/reseller/orders/order_details.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_orders.dart';
+import 'package:petropal/models/order_product.dart';
 
 class MakeOrder extends StatefulWidget {
-  final String productName;
-  final String minVolume;
-  final String maxVolume;
-  final String availableVolume;
+
+  final double totalVolume;
   final String depotName;
   final String depotLocation;
+  final List<OrderProductModel> orderProducts;
 
   const MakeOrder({
     Key? key,
-    required this.productName,
-    required this.minVolume,
-    required this.maxVolume,
-    required this.availableVolume,
     required this.depotName,
     required this.depotLocation,
+    required this.totalVolume,
+    required this.orderProducts
   }) : super(key: key);
 
   @override
@@ -47,6 +45,10 @@ class _MakeOrderState extends State<MakeOrder> {
   String truckNumberPlate = '';
   String truckCompartments = '';
 
+
+
+
+
   List<String> driverItems = [
     'Driver 1',
     'Driver 2',
@@ -63,25 +65,15 @@ class _MakeOrderState extends State<MakeOrder> {
     '6000, 1000, 2000, 3000'
   ];
 
-  void calculateTotalAmount() {
-    if (volumeController.text.isNotEmpty) {
-      double volume = double.tryParse(volumeController.text) ?? 0.0;
-      double keroseneVolume =
-          double.tryParse(keroseneVolumeController.text) ?? 0.0;
-      double dieselVolume = double.tryParse(dieselVolumeController.text) ?? 0.0;
-      double pricePerLiter = 200.0;
-      setState(() {
-        totalAmount = (volume + keroseneVolume + dieselVolume) * pricePerLiter;
-      });
-    } else {
-      setState(() {
-        totalAmount = 0.0;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
+
+    // print('products');
+    // for(var i = 0; i < widget.orderProducts.length; i++){
+    //   print(widget.orderProducts[i].show());
+    // }
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -110,7 +102,7 @@ class _MakeOrderState extends State<MakeOrder> {
                                 companyId: 19),
                           ))));
             },
-            child: Icon(
+            child: const Icon(
               Icons.arrow_back_ios,
               color: primaryDarkColor,
             ),
@@ -125,160 +117,10 @@ class _MakeOrderState extends State<MakeOrder> {
             onStepTapped: (index) {
               setState(() => currentStep = index);
             },
+
             steps: [
               Step(
                 isActive: currentStep >= 0,
-                title: Text(
-                  'Order Details',
-                  style: bodyGrey.copyWith(fontWeight: FontWeight.bold),
-                ),
-                content: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.shopping_basket_outlined,
-                          color: primaryDarkColor,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          'Enter the volume of petrol you want to purchase',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    TextFormField(
-                      style: bodyText,
-                      controller: volumeController,
-                      onChanged: (value) {
-                        enteredVolume = value;
-                        calculateTotalAmount();
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Enter volume',
-                        labelStyle:
-                            bodyTextSmall.copyWith(color: Colors.grey[500]),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.grey.shade300,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.grey,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'Enter the volume of diesel you want to purchase',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    TextFormField(
-                      style: bodyText,
-                      controller: dieselVolumeController,
-                      onChanged: (value) {
-                        enteredVolume = value;
-                        calculateTotalAmount();
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Enter volume',
-                        labelStyle:
-                            bodyTextSmall.copyWith(color: Colors.grey[500]),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.grey.shade300,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.grey,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Enter the volume of kerosene you want to purchase',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    TextFormField(
-                      style: bodyText,
-                      controller: keroseneVolumeController,
-                      onChanged: (value) {
-                        enteredVolume = value;
-                        calculateTotalAmount();
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Enter volume',
-                        labelStyle:
-                            bodyTextSmall.copyWith(color: Colors.grey[500]),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.grey.shade300,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.grey,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          'Total Amount payable:',
-                          style: bodyGrey1,
-                        ),
-                        Text(
-                          'KES $totalAmount', // Display the total amount
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: primaryDarkColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: primaryDarkColor),
-                        onPressed: () {},
-                        child: Text('Proceed')),
-                  ],
-                ),
-              ),
-              Step(
-                isActive: currentStep >= 1,
                 title: Text(
                   'Delivery Details',
                   style: bodyGrey.copyWith(fontWeight: FontWeight.bold),
@@ -469,65 +311,65 @@ class _MakeOrderState extends State<MakeOrder> {
                 ),
               ),
               Step(
-                isActive: currentStep >= 2,
+                isActive: currentStep >= 1,
                 title: Text(
-                  'Confirm and Submit',
+                  'Confirm Order Details',
                   style: bodyGrey.copyWith(fontWeight: FontWeight.bold),
                 ),
                 content: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Product Details:', style: bodyGrey),
-                    SizedBox(height: 5),
-                    Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${widget.productName},',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            Text(
-                              'Depot',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            Text(
-                              'Volume Ordered:',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'KES 200.0 per liter',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            Text(
-                              '${widget.depotName}',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            Text(
-                              '${enteredVolume} liters',
-                              style: TextStyle(color: Colors.black),
-                            )
-                          ],
-                        ),
-                      ],
+                    Text('Product Details: ${widget.orderProducts.length}', style: bodyGrey),
+                    SizedBox(
+                      height: 180.0,
+                      child: Expanded(
+                        flex: 1,
+                        child: ListView.builder(
+                              itemCount: widget.orderProducts.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final orderedProduct = widget.orderProducts[index];
+                                return Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              orderedProduct.productName,
+                                              style: TextStyle(color: Colors.green),
+                                            ),
+                                            Text(
+                                              'Price: ${orderedProduct.price.toStringAsFixed(2)}',
+                                              style: TextStyle(color: Colors.blue),
+                                            ),
+                                            Text(
+                                              'Volume Ordered: ${orderedProduct.volume.toStringAsFixed(2)}',
+                                              style: TextStyle(color: Colors.grey),
+                                            ),
+                                            Text(
+                                              'Sub Total: ${(orderedProduct.volume * orderedProduct.price).toStringAsFixed(2)}',
+                                              style: TextStyle(color: Colors.grey),
+                                            ),
+                                            SizedBox(height: 10,)
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                );
+                              }
+                          ),
+                      ),
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     Text(
-                      'Subtotal: KES ${totalAmount.toStringAsFixed(2)}, ',
+                      'Total: KES ${widget.totalVolume.toStringAsFixed(2)}, ',
                       style: TextStyle(color: Colors.black),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 5),
                     Text(
                       'Delivery Details:',
                       style: bodyGrey,
@@ -701,7 +543,7 @@ class _MakeOrderState extends State<MakeOrder> {
                     width: 5,
                   ),
                   Text(
-                    'Enter the truck registration number',
+                    'Truck registration number',
                     style: TextStyle(color: Colors.black),
                   )
                 ],
@@ -712,7 +554,7 @@ class _MakeOrderState extends State<MakeOrder> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
-                  labelText: "Enter the truck registration number",
+                  labelText: "Truck registration number",
                   labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
                   border: OutlineInputBorder(
                     borderSide: const BorderSide(
@@ -753,7 +595,7 @@ class _MakeOrderState extends State<MakeOrder> {
                     width: 5,
                   ),
                   Text(
-                    'Enter the truck compartments',
+                    'Truck compartments',
                     style: TextStyle(color: Colors.black),
                   )
                 ],
@@ -764,7 +606,7 @@ class _MakeOrderState extends State<MakeOrder> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
-                  labelText: 'Enter the truck compartments',
+                  labelText: 'Truck compartments',
                   labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
                   border: OutlineInputBorder(
                     borderSide: const BorderSide(
@@ -850,7 +692,7 @@ class _MakeOrderState extends State<MakeOrder> {
                     color: primaryDarkColor,
                   ),
                   Text(
-                    'Enter the drivers name',
+                    'Name',
                     style: TextStyle(color: Colors.black),
                   )
                 ],
@@ -861,7 +703,7 @@ class _MakeOrderState extends State<MakeOrder> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
-                  labelText: "Enter the driver's name",
+                  labelText: "driver's name",
                   labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
                   border: OutlineInputBorder(
                     borderSide: const BorderSide(
@@ -896,7 +738,7 @@ class _MakeOrderState extends State<MakeOrder> {
                     color: primaryDarkColor,
                   ),
                   Text(
-                    'Enter the drivers phone number',
+                    'Phone number',
                     style: TextStyle(color: Colors.black),
                   )
                 ],
@@ -907,7 +749,7 @@ class _MakeOrderState extends State<MakeOrder> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
-                  labelText: 'Enter the drivers phone number',
+                  labelText: 'Phone number',
                   labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
                   border: OutlineInputBorder(
                     borderSide: const BorderSide(
@@ -945,7 +787,7 @@ class _MakeOrderState extends State<MakeOrder> {
                     color: primaryDarkColor,
                   ),
                   Text(
-                    'Enter the drivers id number',
+                    'ID number',
                     style: TextStyle(color: Colors.black),
                   )
                 ],
@@ -994,7 +836,7 @@ class _MakeOrderState extends State<MakeOrder> {
                     color: primaryDarkColor,
                   ),
                   Text(
-                    'Enter the drivers EPRA Licence number',
+                    'EPRA Licence number',
                     style: TextStyle(color: Colors.black),
                   )
                 ],
@@ -1005,7 +847,7 @@ class _MakeOrderState extends State<MakeOrder> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
-                  labelText: 'Enter the EPRA Licence number',
+                  labelText: 'EPRA Licence number',
                   labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
                   border: OutlineInputBorder(
                     borderSide: const BorderSide(
@@ -1043,7 +885,7 @@ class _MakeOrderState extends State<MakeOrder> {
                     color: primaryDarkColor,
                   ),
                   Text(
-                    'Enter the driving licence number',
+                    'Driving licence number',
                     style: TextStyle(color: Colors.black),
                   )
                 ],
@@ -1054,7 +896,7 @@ class _MakeOrderState extends State<MakeOrder> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
-                  labelText: 'Enter the driving licence number',
+                  labelText: 'Driving licence number',
                   labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
                   border: OutlineInputBorder(
                     borderSide: const BorderSide(

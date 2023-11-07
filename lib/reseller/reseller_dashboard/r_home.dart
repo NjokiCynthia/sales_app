@@ -424,7 +424,7 @@ Widget buildCard(int index) {
     height: 100,
     decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           colors: [Color(0xffd6e0f0), Color(0xfff4eadc)],
           stops: [0.2, 0.75],
           begin: Alignment.topRight,
@@ -433,66 +433,69 @@ Widget buildCard(int index) {
         border: Border.all(color: (Colors.grey[100])!)),
     duration: Duration(seconds: 2),
     width: double.infinity,
-    child: Column(
-      children: [
-        Align(
-          alignment: Alignment.topRight,
-          child: Container(
-            decoration: BoxDecoration(
-                color: Color.fromRGBO(238, 229, 255, 1.0),
-                borderRadius: BorderRadius.circular(10)),
-            child: const Padding(
-              padding: EdgeInsets.all(4),
-              child: Text(
-                "Best price!!",
-                style: TextStyle(color: Color.fromRGBO(137, 80, 252, 1)),
+    child: SizedBox(
+      height: 50.0,
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: const Color.fromRGBO(238, 229, 255, 1.0),
+                  borderRadius: BorderRadius.circular(10)),
+              child: const Padding(
+                padding: EdgeInsets.all(4),
+                child: Text(
+                  "Best price!!",
+                  style: TextStyle(color: Color.fromRGBO(137, 80, 252, 1)),
+                ),
               ),
             ),
           ),
-        ),
-        ListTile(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Shell Limited',
-                  style: bodyGrey,
-                ),
-                Text(
-                  'Nairobi',
-                  style: greyT,
-                ),
-              ],
-            ),
-            subtitle: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      title[index],
-                      style: greyT,
-                    ),
-                    Text(
-                      'KES 200',
-                      style: bodyGrey,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: primaryDarkColor.withOpacity(0.1),
-                        shape: BoxShape.circle,
+          ListTile(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Shell Limited',
+                    style: bodyGrey,
+                  ),
+                  Text(
+                    'Nairobi',
+                    style: greyT,
+                  ),
+                ],
+              ),
+              subtitle: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        title[index],
+                        style: greyT,
                       ),
-                      padding: const EdgeInsets.all(4),
-                      child: const Icon(
-                        Icons.shopping_cart,
-                        color: primaryDarkColor,
+                      Text(
+                        'KES 200',
+                        style: bodyGrey,
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            )),
-      ],
+                      Container(
+                        decoration: BoxDecoration(
+                          color: primaryDarkColor.withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        padding: const EdgeInsets.all(4),
+                        child: const Icon(
+                          Icons.shopping_cart,
+                          color: primaryDarkColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              )),
+        ],
+      ),
     ),
   );
 }
