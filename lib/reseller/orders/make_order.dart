@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/models/driver.dart';
 import 'package:petropal/models/product.dart';
+import 'package:petropal/models/truck.dart';
 import 'package:petropal/reseller/orders/order_details.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_orders.dart';
+import 'package:petropal/models/order_product.dart';
+import 'package:provider/provider.dart';
+import 'package:petropal/providers/user_provider.dart';
+import 'package:petropal/constants/api.dart';
 
 class MakeOrder extends StatefulWidget {
-  final String productName;
-  final String minVolume;
-  final String maxVolume;
-  final String availableVolume;
+
+  final double totalVolume;
   final String depotName;
   final String depotLocation;
+  final List<OrderProductModel> orderProducts;
 
   const MakeOrder({
     Key? key,
-    required this.productName,
-    required this.minVolume,
-    required this.maxVolume,
-    required this.availableVolume,
     required this.depotName,
     required this.depotLocation,
+    required this.totalVolume,
+    required this.orderProducts,
   }) : super(key: key);
 
   @override
@@ -47,6 +51,147 @@ class _MakeOrderState extends State<MakeOrder> {
   String truckNumberPlate = '';
   String truckCompartments = '';
 
+  bool fetchingDetails = false;
+  List<TruckModel> truckModels = [];
+  List<DriverModel> driverModels = [];
+
+
+
+
+  Future<void> _fetchDetails(BuildContext context) async {
+    setState(() {
+      fetchingDetails = true;
+    });
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final token = userProvider.user?.token;
+    final userId = userProvider.user?.id;
+
+    final postData = {
+      'user_id': userId,
+    };
+    final apiClient = ApiClient();
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      final response = await apiClient.post(
+        '/truck/get-all',
+        postData,
+        headers: headers,
+      );
+
+      print('Trucks Response: $response');
+
+      setState(() {
+        truckModels = [];
+      });
+
+      if (response['status'] == 1 && response['data'] != null) {
+        final data =
+        List<Map<String, dynamic>>.from(response['data']);
+        final tempTruckModels = data.map((truckData) {
+          return TruckModel(
+            id: int.parse(truckData['id'].toString()),
+            compartment: truckData['compartment'].toString(),
+            registrationNumber: truckData['registration_number'].toString(),
+            createdAt: '',
+            createdBy: truckData['created_by'].toString(),
+            status: '',
+            updatedAt: '',
+          );
+        }).toList();
+
+
+        setState(() {
+          truckModels = tempTruckModels;
+        });
+
+      } else {
+        print('No or invalid trucks found in the response');
+        // Handle the case when 'status' is not 1 or 'cartProductsListing' is null
+      }
+    } catch (error) {
+      print('Trucks Fetch By ID User Id: $error');
+      // Handle the error
+    }
+
+    try {
+      final response = await apiClient.post(
+        '/driver/get-all',
+        postData,
+        headers: headers,
+      );
+
+      print('Driver Response: $response');
+
+      setState(() {
+        driverModels = [];
+      });
+
+      if(driverModels.isNotEmpty){
+        selectedDriver = driverModels[0].id.toString()+' '+driverModels[0].fullName+' '+driverModels[0].idNumber+' '+driverModels[0].phoneNumber;
+      }
+
+
+      if (response['status'] == 1 && response['data'] != null) {
+        final data =
+        List<Map<String, dynamic>>.from(response['data']);
+        final tempDriverModels = data.map((driverData) {
+          return DriverModel(
+            id: int.parse(driverData['id'].toString()),
+            epraLicenseNumber: driverData['epra_licence_number'].toString(),
+            fullName: driverData['full_name'].toString(),
+            idNumber: driverData['id_number'].toString(),
+            phoneNumber: driverData['phone_number'].toString(),
+            licenseNumber: driverData['licence_number'].toString(),
+            createdAt: '',
+            createdBy: driverData['created_by'].toString(),
+            status: '',
+            updatedAt: '',
+          );
+        }).toList();
+
+
+        setState(() {
+          driverModels = tempDriverModels;
+        });
+
+      } else {
+        print('No or invalid drivers found in the response');
+        // Handle the case when 'status' is not 1 or 'cartProductsListing' is null
+      }
+    } catch (error) {
+      print('Trucks Fetch By ID User Id: $error');
+      // Handle the error
+    }
+
+    setState(() {
+      fetchingDetails = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchDetails(context);
+  }
+
+
+  double calculateTotal(orderProducts){
+    double total = 0.0;
+    for(int i = 0; i < orderProducts.length; i++){
+      total += double.parse(orderProducts[i].price.toString()) * double.parse(orderProducts[i].volume.toString());
+    }
+    return total;
+  }
+
+
+
+
+
   List<String> driverItems = [
     'Driver 1',
     'Driver 2',
@@ -63,25 +208,15 @@ class _MakeOrderState extends State<MakeOrder> {
     '6000, 1000, 2000, 3000'
   ];
 
-  void calculateTotalAmount() {
-    if (volumeController.text.isNotEmpty) {
-      double volume = double.tryParse(volumeController.text) ?? 0.0;
-      double keroseneVolume =
-          double.tryParse(keroseneVolumeController.text) ?? 0.0;
-      double dieselVolume = double.tryParse(dieselVolumeController.text) ?? 0.0;
-      double pricePerLiter = 200.0;
-      setState(() {
-        totalAmount = (volume + keroseneVolume + dieselVolume) * pricePerLiter;
-      });
-    } else {
-      setState(() {
-        totalAmount = 0.0;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
+
+    // print('products');
+    // for(var i = 0; i < widget.orderProducts.length; i++){
+    //   print(widget.orderProducts[i].show());
+    // }
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -110,7 +245,7 @@ class _MakeOrderState extends State<MakeOrder> {
                                 companyId: 19),
                           ))));
             },
-            child: Icon(
+            child: const Icon(
               Icons.arrow_back_ios,
               color: primaryDarkColor,
             ),
@@ -125,160 +260,10 @@ class _MakeOrderState extends State<MakeOrder> {
             onStepTapped: (index) {
               setState(() => currentStep = index);
             },
+
             steps: [
               Step(
                 isActive: currentStep >= 0,
-                title: Text(
-                  'Order Details',
-                  style: bodyGrey.copyWith(fontWeight: FontWeight.bold),
-                ),
-                content: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.shopping_basket_outlined,
-                          color: primaryDarkColor,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          'Enter the volume of petrol you want to purchase',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    TextFormField(
-                      style: bodyText,
-                      controller: volumeController,
-                      onChanged: (value) {
-                        enteredVolume = value;
-                        calculateTotalAmount();
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Enter volume',
-                        labelStyle:
-                            bodyTextSmall.copyWith(color: Colors.grey[500]),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.grey.shade300,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.grey,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'Enter the volume of diesel you want to purchase',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    TextFormField(
-                      style: bodyText,
-                      controller: dieselVolumeController,
-                      onChanged: (value) {
-                        enteredVolume = value;
-                        calculateTotalAmount();
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Enter volume',
-                        labelStyle:
-                            bodyTextSmall.copyWith(color: Colors.grey[500]),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.grey.shade300,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.grey,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Enter the volume of kerosene you want to purchase',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    TextFormField(
-                      style: bodyText,
-                      controller: keroseneVolumeController,
-                      onChanged: (value) {
-                        enteredVolume = value;
-                        calculateTotalAmount();
-                      },
-                      decoration: InputDecoration(
-                        labelText: 'Enter volume',
-                        labelStyle:
-                            bodyTextSmall.copyWith(color: Colors.grey[500]),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.grey.shade300,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.grey,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          'Total Amount payable:',
-                          style: bodyGrey1,
-                        ),
-                        Text(
-                          'KES $totalAmount', // Display the total amount
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: primaryDarkColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: primaryDarkColor),
-                        onPressed: () {},
-                        child: Text('Proceed')),
-                  ],
-                ),
-              ),
-              Step(
-                isActive: currentStep >= 1,
                 title: Text(
                   'Delivery Details',
                   style: bodyGrey.copyWith(fontWeight: FontWeight.bold),
@@ -328,7 +313,7 @@ class _MakeOrderState extends State<MakeOrder> {
                       height: 10,
                     ),
                     DropdownButtonFormField<String>(
-                      value: selectedDriver,
+                      //value: selectedDriver,
                       dropdownColor: Colors.white,
                       style: bodyTextSmall,
                       decoration: InputDecoration(
@@ -368,8 +353,13 @@ class _MakeOrderState extends State<MakeOrder> {
                           selectedDriver = newValue!;
                         });
                       },
-                      items: driverItems
+                      items: driverModels.isNotEmpty?driverModels.map((driver) => driver.id.toString() + ' ' + driver.fullName+ ' ' + driver.idNumber + ' ' + driver.phoneNumber)
                           .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList():driverItems.map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),
@@ -469,65 +459,62 @@ class _MakeOrderState extends State<MakeOrder> {
                 ),
               ),
               Step(
-                isActive: currentStep >= 2,
+                isActive: currentStep >= 1,
                 title: Text(
-                  'Confirm and Submit',
+                  'Confirm Order Details',
                   style: bodyGrey.copyWith(fontWeight: FontWeight.bold),
                 ),
                 content: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Product Details:', style: bodyGrey),
-                    SizedBox(height: 5),
-                    Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${widget.productName},',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            Text(
-                              'Depot',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            Text(
-                              'Volume Ordered:',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
+                    Text('Product Details: ${widget.orderProducts.length}', style: bodyGrey),
+                    SizedBox(
+                      height: 180.0,
+                      child: ListView.builder(
+                            itemCount: widget.orderProducts.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final orderedProduct = widget.orderProducts[index];
+                              return Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            orderedProduct.productName,
+                                            style: TextStyle(color: Colors.green),
+                                          ),
+                                          Text(
+                                            'Price: ${orderedProduct.price.toStringAsFixed(2)}',
+                                            style: TextStyle(color: Colors.blue),
+                                          ),
+                                          Text(
+                                            'Volume Ordered: ${orderedProduct.volume.toStringAsFixed(2)}',
+                                            style: TextStyle(color: Colors.grey),
+                                          ),
+                                          Text(
+                                            'Sub Total: ${(orderedProduct.volume * orderedProduct.price).toStringAsFixed(2)}',
+                                            style: TextStyle(color: Colors.grey),
+                                          ),
+                                          SizedBox(height: 10,)
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              );
+                            }
                         ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'KES 200.0 per liter',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            Text(
-                              '${widget.depotName}',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            Text(
-                              '${enteredVolume} liters',
-                              style: TextStyle(color: Colors.black),
-                            )
-                          ],
-                        ),
-                      ],
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     Text(
-                      'Subtotal: KES ${totalAmount.toStringAsFixed(2)}, ',
+                      'Total: KES ${calculateTotal(widget.orderProducts).toStringAsFixed(2)}, ',
                       style: TextStyle(color: Colors.black),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 5),
                     Text(
                       'Delivery Details:',
                       style: bodyGrey,
@@ -621,7 +608,7 @@ class _MakeOrderState extends State<MakeOrder> {
                     SizedBox(
                       height: 10,
                     ),
-                    Text('Total Amunt payable: KES ${totalAmount}',
+                    Text('Amount payable: KES ${calculateTotal(widget.orderProducts).toStringAsFixed(2)}',
                         style: bodyGrey),
                     Text('Payment Details:', style: bodyGrey),
                     SizedBox(height: 5),
@@ -651,7 +638,7 @@ class _MakeOrderState extends State<MakeOrder> {
                               style: TextStyle(color: Colors.black),
                             ),
                             Text(
-                              '01601719776507 [CYNTHIA NJOKI]',
+                              '01601719776507',
                               style: TextStyle(color: Colors.black),
                             ),
                           ],
@@ -701,7 +688,7 @@ class _MakeOrderState extends State<MakeOrder> {
                     width: 5,
                   ),
                   Text(
-                    'Enter the truck registration number',
+                    'Truck registration number',
                     style: TextStyle(color: Colors.black),
                   )
                 ],
@@ -712,7 +699,7 @@ class _MakeOrderState extends State<MakeOrder> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
-                  labelText: "Enter the truck registration number",
+                  labelText: "Truck registration number",
                   labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
                   border: OutlineInputBorder(
                     borderSide: const BorderSide(
@@ -753,7 +740,7 @@ class _MakeOrderState extends State<MakeOrder> {
                     width: 5,
                   ),
                   Text(
-                    'Enter the truck compartments',
+                    'Truck compartments',
                     style: TextStyle(color: Colors.black),
                   )
                 ],
@@ -764,7 +751,7 @@ class _MakeOrderState extends State<MakeOrder> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
-                  labelText: 'Enter the truck compartments',
+                  labelText: 'Truck compartments',
                   labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
                   border: OutlineInputBorder(
                     borderSide: const BorderSide(
@@ -840,249 +827,252 @@ class _MakeOrderState extends State<MakeOrder> {
             'Add Driver',
             style: bodyGrey,
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                children: [
-                  Icon(
-                    Icons.person_outline_sharp,
-                    color: primaryDarkColor,
-                  ),
-                  Text(
-                    'Enter the drivers name',
-                    style: TextStyle(color: Colors.black),
-                  )
-                ],
-              ),
-              TextFormField(
-                style: bodyText,
-                controller: nameController,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelText: "Enter the driver's name",
-                  labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
+          content: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.person_outline_sharp,
+                      color: primaryDarkColor,
                     ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.grey.shade300,
-                      width: 1.0,
+                    Text(
+                      'Name',
+                      style: TextStyle(color: Colors.black),
+                    )
+                  ],
+                ),
+                TextFormField(
+                  style: bodyText,
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: "driver's name",
+                    labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey.shade300,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
-                    borderRadius: BorderRadius.circular(8.0),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  Icon(
-                    Icons.phone,
-                    color: primaryDarkColor,
-                  ),
-                  Text(
-                    'Enter the drivers phone number',
-                    style: TextStyle(color: Colors.black),
-                  )
-                ],
-              ),
-              TextFormField(
-                controller: phoneNumberController,
-                style: bodyText,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelText: 'Enter the drivers phone number',
-                  labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.grey.shade300,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
+                SizedBox(
+                  height: 10,
                 ),
-                onChanged: (value) {
-                  driverPhoneNumber = value;
-                },
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  Icon(
-                    Icons.numbers,
-                    color: primaryDarkColor,
-                  ),
-                  Text(
-                    'Enter the drivers id number',
-                    style: TextStyle(color: Colors.black),
-                  )
-                ],
-              ),
-              TextFormField(
-                controller: idController,
-                style: bodyText,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelText: 'ID number',
-                  labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
+                Row(
+                  children: [
+                    Icon(
+                      Icons.phone,
+                      color: primaryDarkColor,
                     ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.grey.shade300,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
+                    Text(
+                      'Phone number',
+                      style: TextStyle(color: Colors.black),
+                    )
+                  ],
                 ),
-                onChanged: (value) {
-                  driverIdNumber = value;
-                },
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  Icon(
-                    Icons.confirmation_number_rounded,
-                    color: primaryDarkColor,
-                  ),
-                  Text(
-                    'Enter the drivers EPRA Licence number',
-                    style: TextStyle(color: Colors.black),
-                  )
-                ],
-              ),
-              TextFormField(
-                controller: EPRAController,
-                style: bodyText,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelText: 'Enter the EPRA Licence number',
-                  labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
+                TextFormField(
+                  controller: phoneNumberController,
+                  style: bodyText,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'Phone number',
+                    labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.grey.shade300,
-                      width: 1.0,
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey.shade300,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
-                    borderRadius: BorderRadius.circular(8.0),
                   ),
+                  onChanged: (value) {
+                    driverPhoneNumber = value;
+                  },
                 ),
-                onChanged: (value) {
-                  driverEpraLicense = value;
-                },
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  Icon(
-                    Icons.phone,
-                    color: primaryDarkColor,
-                  ),
-                  Text(
-                    'Enter the driving licence number',
-                    style: TextStyle(color: Colors.black),
-                  )
-                ],
-              ),
-              TextFormField(
-                controller: licenceController,
-                style: bodyText,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelText: 'Enter the driving licence number',
-                  labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.grey.shade300,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
+                SizedBox(
+                  height: 10,
                 ),
-                onChanged: (value) {
-                  driverDrivingLicense = value;
-                },
-              ),
-            ],
+                Row(
+                  children: [
+                    Icon(
+                      Icons.numbers,
+                      color: primaryDarkColor,
+                    ),
+                    Text(
+                      'ID number',
+                      style: TextStyle(color: Colors.black),
+                    )
+                  ],
+                ),
+                TextFormField(
+                  controller: idController,
+                  style: bodyText,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'ID number',
+                    labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey.shade300,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    driverIdNumber = value;
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.confirmation_number_rounded,
+                      color: primaryDarkColor,
+                    ),
+                    Text(
+                      'EPRA Licence number',
+                      style: TextStyle(color: Colors.black),
+                    )
+                  ],
+                ),
+                TextFormField(
+                  controller: EPRAController,
+                  style: bodyText,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'EPRA Licence number',
+                    labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey.shade300,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    driverEpraLicense = value;
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.phone,
+                      color: primaryDarkColor,
+                    ),
+                    Text(
+                      'Driving licence number',
+                      style: TextStyle(color: Colors.black),
+                    )
+                  ],
+                ),
+                TextFormField(
+                  controller: licenceController,
+                  style: bodyText,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'Driving licence number',
+                    labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey.shade300,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    driverDrivingLicense = value;
+                  },
+                ),
+              ],
+            ),
           ),
           actions: <Widget>[
             TextButton(

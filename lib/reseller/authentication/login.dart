@@ -22,6 +22,7 @@ class _LoginState extends State<Login> {
 
   TextEditingController password = TextEditingController();
   TextEditingController emailAddress = TextEditingController();
+  String errorText = '';
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +51,16 @@ class _LoginState extends State<Login> {
                           width: 200,
                         ),
                       ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                      child: errorText.isNotEmpty ? Text(
+                          errorText,
+                          style: const TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold
+                          )
+                      ): null,
                     ),
                     const SizedBox(
                       height: 10,
@@ -167,7 +178,7 @@ class _LoginState extends State<Login> {
 
                         if (isSuccessful) {
                           final data = res['data'] as Map<String, dynamic>?;
-                          if (data != null) {
+                          if (data != null  && data['status'] != 'loggedOut') {
                             final userData =
                                 data['user'] as Map<String, dynamic>?;
                             final token = data['api_token'] as String?;
@@ -184,6 +195,7 @@ class _LoginState extends State<Login> {
                               }
 
                               final user = User(
+                                id: int.parse(userData['id'].toString()),
                                 email: userData['email'].replaceAll(' ', ''),
                                 token: token,
                                 password: userData['password'] ?? '',
@@ -208,16 +220,17 @@ class _LoginState extends State<Login> {
                               );
                             } else {}
                           } else {
-                            // Handle missing data
+                            final errorObj = res['data'];
+                            final error = errorObj['message'].toString();
+                            setState(() {
+                              errorText = error;
+                            });
                           }
                         } else {
                           final error = res['error'] as String;
-                          showToast(
-                            context,
-                            'Error!',
-                            error,
-                            Colors.red,
-                          );
+                          setState(() {
+                            errorText = error;
+                          });
                         }
                       },
                     ),
