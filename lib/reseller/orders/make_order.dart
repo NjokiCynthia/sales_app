@@ -1135,7 +1135,7 @@ class _MakeOrderState extends State<MakeOrder> {
                     if (!driverItems.contains(newName)) {
                       driverItems.add(newName);
                     }
-                    selectedDriver = newName; 
+                    selectedDriver = newName;
                   });
 
                   Navigator.pop(context);

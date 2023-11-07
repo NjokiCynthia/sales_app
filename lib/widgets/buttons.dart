@@ -1,45 +1,8 @@
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:dio/dio.dart';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
-import 'package:petropal/constants/theme.dart';
-import 'package:petropal/providers/user_provider.dart';
-import 'package:provider/provider.dart';
-
-class ButtonUtils {
-  static Widget ElevatedButton({
-    required Function() onPressed,
-    required Widget child,
-  }) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      child: child,
-    );
-  }
-
-  static Widget textButton({
-    required Function() onPressed,
-    required Widget child,
-  }) {
-    return TextButton(
-      onPressed: onPressed,
-      style: ButtonStyle(
-        overlayColor: MaterialStateProperty.resolveWith<Color>(
-          (Set<MaterialState> states) {
-            if (states.contains(MaterialState.hovered)) {
-              return Colors.transparent; // Set the color to transparent
-            }
-            return Colors
-                .transparent; // Use the default overlay color for other states
-          },
-        ),
-      ),
-      child: child,
-    );
-  }
-}
 
 class CustomRequestButton extends StatefulWidget {
   final bool? buttonError;
@@ -70,6 +33,7 @@ class _CustomRequestButtonState extends State<CustomRequestButton> {
   bool isButtonDisabled = false;
   bool isLoading = false;
   late Dio _dio;
+  String errorText = '';
 
   @override
   void initState() {
@@ -84,48 +48,35 @@ class _CustomRequestButtonState extends State<CustomRequestButton> {
         'error': widget.buttonErrorMessage,
       });
     }
+
+    if (widget.url == null) {
+      return widget.onSuccess({'isSuccessful': true});
+    }
+
     setState(() {
       isButtonDisabled = true;
       isLoading = true;
+      errorText = ''; // Clear the previous error message
     });
 
     try {
       final response = await _makeRequest();
-      setState(() {
-        isButtonDisabled = false;
-        isLoading = false;
-      });
       if (response.statusCode == 200) {
         // Request was successful
-        widget
-            .onSuccess({'isSuccessful IS HERE ': true, 'data': response.data});
+        widget.onSuccess({'isSuccessful': true, 'data': response.data});
       } else {
         // Request returned an error status code
+        setState(() {
+          errorText = response.data['message'];
+        });
         widget.onSuccess({
           'isSuccessful': false,
           'error': response.data['error'],
         });
       }
     } on DioException catch (error) {
-      setState(() {
-        isButtonDisabled = false;
-        isLoading = false;
-      });
-      print('error8***********');
-      print(error.response);
-      var theError = error.response?.data;
-      var theStatus = error.response?.statusCode;
-
-      if (theStatus != 500) {
-        return widget.onSuccess({
-          'isSuccessful': false,
-          'error': theError['error'],
-        });
-      }
-      widget.onSuccess({
-        'isSuccessful': false,
-        'error': 'Error making request',
-      });
+      print('error');
+      print(error);
     }
 
     setState(() {
@@ -135,19 +86,16 @@ class _CustomRequestButtonState extends State<CustomRequestButton> {
   }
 
   Future<Response<dynamic>> _makeRequest() async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final token = userProvider.user?.token;
+    // Retrieve user information from provider
     final headers = {
-      'Authorization': 'Bearer $token',
-      'Content-Type': 'application/json',
+      'Versioncode': 99,
+      'version': 99,
     };
     final options = Options(contentType: 'application/json', headers: headers);
-    print('here it is ${ipAddress + widget.url!}');
-    print(widget.body);
-    print(options);
-
     try {
       if (widget.method == 'POST') {
+        print('url: ${ipAddress + widget.url!}');
+        print('widget.body');
         return _dio.post(
           ipAddress + widget.url!,
           data: widget.body,
@@ -165,9 +113,9 @@ class _CustomRequestButtonState extends State<CustomRequestButton> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: isButtonDisabled ? null : sendRequest,
+      onTap: sendRequest,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 10000),
+        duration: const Duration(milliseconds: 2000),
         decoration: BoxDecoration(
           color: primaryDarkColor,
           borderRadius:
@@ -179,12 +127,14 @@ class _CustomRequestButtonState extends State<CustomRequestButton> {
           child: isLoading
               ? const SpinKitThreeBounce(
                   color: Colors.white,
+                  size: 20,
                 )
               : Text(
                   widget.buttonText,
-                  style: MyTheme.darkTheme.textTheme.headlineSmall!.copyWith(
-                    color: Colors.white,
-                  ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .displayMedium!
+                      .copyWith(color: Colors.white, fontSize: 16),
                 ),
         ),
       ),

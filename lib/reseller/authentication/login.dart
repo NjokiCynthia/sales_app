@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petropal/constants/api.dart';
@@ -9,6 +12,7 @@ import 'package:petropal/reseller/reseller_dashboard/r_dashboard.dart';
 
 import 'package:petropal/widgets/buttons.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -23,6 +27,67 @@ class _LoginState extends State<Login> {
   TextEditingController password = TextEditingController();
   TextEditingController emailAddress = TextEditingController();
   String errorText = '';
+
+  Future<void> login(String username, String password) async {
+    final response = await http.post(
+      Uri.parse('https://petropal.sandbox.co.ke:8040/user/login'),
+      body: {
+        'email': emailAddress.text,
+        'password': password,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      final Map<String, dynamic> userData = responseData['user'];
+      final token = userData['api_token'] as String?;
+      final isActivated = userData['is_activated'];
+      if (token != null) {
+        bool isActivatedValue;
+        if (isActivated is bool) {
+          isActivatedValue = isActivated;
+        } else if (isActivated is String) {
+          isActivatedValue = isActivated.toLowerCase() == 'true';
+        } else {
+          isActivatedValue = false;
+        }
+      }
+      final user = User(
+        id: userData['id'],
+        email: userData['email'],
+        password: password,
+        token: responseData['api_token'],
+        first_name: userData['first_name'],
+        last_name: userData['last_name'],
+        phone: userData['phone'],
+        isActivated: userData['is_activated'],
+        account_id: userData['account_id'],
+        companyAddress: userData['companyAddress'],
+        companyName: userData['companyName'],
+        companyPhone: userData['companyPhone'],
+      );
+      // Create an instance of the UserProvider
+      final userProvider = UserProvider();
+      // Set the user in the provider
+      userProvider.setUser(user);
+
+      // Navigate to the dashboard or perform any other desired action.
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ResellerDasboard(),
+        ),
+      );
+
+      print('Login successful');
+      print(response.body); // You can parse the response JSON here if needed.
+    } else {
+      // Handle errors or failed login
+      print('Login failed');
+      print('Response status code: ${response.statusCode}');
+      print('Response body: ${response.body}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -161,79 +226,86 @@ class _LoginState extends State<Login> {
                     const SizedBox(
                       height: 20,
                     ),
-                    CustomRequestButton(
-                      url: '/user/login',
-                      method: 'POST',
-                      buttonText: 'Login',
-                      headers: {},
-                      body: {
-                        'email': emailAddress.text,
-                        'password': password.text,
-                      },
-                      onSuccess: (res) {
-                        print('This is my response');
-                        print(res);
+                    ElevatedButton(
+                        onPressed: () {
+                          login(emailAddress.text, password.text);
+                        },
+                        child: Text('Login')),
+                    // CustomRequestButton(
+                    //   url: '/user/login',
+                    //   method: 'POST',
+                    //   buttonText: 'Login',
+                    //   headers: {},
+                    //   body: {
+                    //     'email': emailAddress.text,
+                    //     'password': password.text,
+                    //   },
+                    //   onSuccess: (res) {
+                    //     print('This is my response');
+                    //     print(res);
 
-                        final isSuccessful = res['isSuccessful'] as bool;
+                    //     final isSuccessful = res['isSuccessful'] as bool;
 
-                        if (isSuccessful) {
-                          final data = res['data'] as Map<String, dynamic>?;
-                          if (data != null && data['status'] != 'loggedOut') {
-                            final userData =
-                                data['user'] as Map<String, dynamic>?;
-                            final token = data['api_token'] as String?;
-                            final isActivated = userData!['is_activated'];
-                            if (userData != null && token != null) {
-                              bool isActivatedValue;
-                              if (isActivated is bool) {
-                                isActivatedValue = isActivated;
-                              } else if (isActivated is String) {
-                                isActivatedValue =
-                                    isActivated.toLowerCase() == 'true';
-                              } else {
-                                isActivatedValue = false;
-                              }
+                    //     if (isSuccessful) {
+                    //       final data = res['data'] as Map<String, dynamic>?;
+                    //       if (data != null) {
+                    //         final userData =
+                    //             data['user'] as Map<String, dynamic>?;
+                    //         final token = data['api_token'] as String?;
+                    //         final isActivated = userData!['is_activated'];
+                    //         if (token != null) {
+                    //           bool isActivatedValue;
+                    //           if (isActivated is bool) {
+                    //             isActivatedValue = isActivated;
+                    //           } else if (isActivated is String) {
+                    //             isActivatedValue =
+                    //                 isActivated.toLowerCase() == 'true';
+                    //           } else {
+                    //             isActivatedValue = false;
+                    //           }
 
-                              final user = User(
-                                id: int.parse(userData['id'].toString()),
-                                email: userData['email'].replaceAll(' ', ''),
-                                token: token,
-                                password: userData['password'] ?? '',
-                                first_name: userData['first_name'] ?? '',
-                                last_name: userData['last_name'] ?? '',
-                                phone: userData['phone'] ?? '',
-                                account_id: userData['account_id'] ?? '',
-                                isActivated: isActivatedValue,
-                                companyAddress:
-                                    userData['companyAddress'] ?? '',
-                                companyName: userData['companyName'] ?? '',
-                                companyPhone: userData['companyPhone'] ?? '',
-                              );
+                    //           final user = User(
+                    //             id: int.parse(userData['id'].toString()),
+                    //             email: userData['email'].replaceAll(' ', ''),
+                    //             token: token,
+                    //             password: userData['password'] ?? '',
+                    //             first_name: userData['first_name'] ?? '',
+                    //             last_name: userData['last_name'] ?? '',
+                    //             phone: userData['phone'] ?? '',
+                    //             account_id: userData['account_id'] ?? '',
+                    //             isActivated: isActivatedValue,
+                    //             companyAddress:
+                    //                 userData['companyAddress'] ?? '',
+                    //             companyName: userData['companyName'] ?? '',
+                    //             companyPhone: userData['companyPhone'] ?? '',
+                    //           );
 
-                              userProvider.setUser(user);
+                    //           userProvider.setUser(user);
+                    //           // Force UI update after setting the user
+                    //           setState(() {});
 
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ResellerDasboard(),
-                                ),
-                              );
-                            } else {}
-                          } else {
-                            final errorObj = res['data'];
-                            final error = errorObj['message'].toString();
-                            setState(() {
-                              errorText = error;
-                            });
-                          }
-                        } else {
-                          final error = res['error'] as String;
-                          setState(() {
-                            errorText = error;
-                          });
-                        }
-                      },
-                    ),
+                    //           Navigator.push(
+                    //             context,
+                    //             MaterialPageRoute(
+                    //               builder: (context) => ResellerDasboard(),
+                    //             ),
+                    //           );
+                    //         } else {}
+                    //       } else {
+                    //         final errorObj = res['data'];
+                    //         final error = errorObj['message'].toString();
+                    //         setState(() {
+                    //           errorText = error;
+                    //         });
+                    //       }
+                    //     } else {
+                    //       final error = res['error'] as String;
+                    //       setState(() {
+                    //         errorText = error;
+                    //       });
+                    //     }
+                    //   },
+                    // ),
                     SizedBox(
                       height: 40,
                     ),
