@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petropal/constants/api.dart';
@@ -13,6 +15,7 @@ import 'package:petropal/models/product_document.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../widgets/buttons.dart';
 
 class OrderDocuments extends StatefulWidget {
   final Order orders;
@@ -152,6 +155,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
       final hasProformaInvoice = [1, 2, 3, 4, 5].contains(status);
       final hasProofOfPayment = [2, 3, 4].contains(status);
       final hasReceipt = [3, 4].contains(status);
+      final hasLoadingOrder = [4].contains(status);
       return Scaffold(
           backgroundColor: Colors.grey[50],
           appBar: AppBar(
@@ -192,177 +196,113 @@ class _OrderDocumentsState extends State<OrderDocuments> {
             padding: EdgeInsets.all(15),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  GestureDetector(
+                    onTap: () {
+                      _showUploadDialog(context);
+                    },
+                    child: Text(
+                      'Upload Proof of Payment',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
               Container(
                   decoration: BoxDecoration(color: Colors.grey[100]),
                   child: Padding(
                     padding: EdgeInsets.all(10),
-                    child: Row(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               'Invoice Number',
                               style: TextStyle(color: Colors.black),
                             ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            // ... conditionally show/hide document links ...
-                            if (hasProformaInvoice)
-                              buildDocumentLink(
-                                'Proforma Invoice',
-                                orderDocuments?.proformaInvoiceDoc ?? '',
-                              ),
-                            if (hasProofOfPayment)
-                              buildDocumentLink(
-                                'Proof of payment',
-                                orderDocuments?.resellerProofOfPayment ?? '',
-                              ),
-                            if (hasReceipt)
-                              buildDocumentLink(
-                                'Payment Receipt',
-                                orderDocuments?.receipt ?? '',
-                              ),
-
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              'Loading Order',
-                              style: textBolderSmall,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              'Payment receipt',
-                              style: textBolderSmall,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              'Loading Depot',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
                             Text(
                               '${widget.orders.orderInvoiceNumber}',
                               style: TextStyle(color: Colors.black),
                             ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: primaryDarkColor.withOpacity(0.1)),
-                                child: Padding(
-                                    padding: EdgeInsets.all(4),
-                                    child: Row(children: [
-                                      Text(
-                                        "View Document",
-                                        style: TextStyle(
-                                          color:
-                                              primaryDarkColor.withOpacity(0.5),
-                                          fontSize: 12,
-                                          decoration: TextDecoration.underline,
-                                          decorationColor: primaryDarkColor,
-                                          decorationStyle:
-                                              TextDecorationStyle.dotted,
-                                          decorationThickness: 3,
-                                        ),
-                                      ),
-                                    ]))),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: primaryDarkColor.withOpacity(0.1)),
-                                child: Padding(
-                                    padding: EdgeInsets.all(4),
-                                    child: Row(children: [
-                                      Text(
-                                        "View Document",
-                                        style: TextStyle(
-                                          color:
-                                              primaryDarkColor.withOpacity(0.5),
-                                          fontSize: 12,
-                                          decoration: TextDecoration.underline,
-                                          decorationColor: primaryDarkColor,
-                                          decorationStyle:
-                                              TextDecorationStyle.dotted,
-                                          decorationThickness: 3,
-                                        ),
-                                      ),
-                                    ]))),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: primaryDarkColor.withOpacity(0.1)),
-                                child: Padding(
-                                    padding: EdgeInsets.all(4),
-                                    child: Row(children: [
-                                      Text(
-                                        "View Document",
-                                        style: TextStyle(
-                                          color:
-                                              primaryDarkColor.withOpacity(0.5),
-                                          fontSize: 12,
-                                          decoration: TextDecoration.underline,
-                                          decorationColor: primaryDarkColor,
-                                          decorationStyle:
-                                              TextDecorationStyle.dotted,
-                                          decorationThickness: 3,
-                                        ),
-                                      ),
-                                    ]))),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: primaryDarkColor.withOpacity(0.1)),
-                                child: Padding(
-                                    padding: EdgeInsets.all(4),
-                                    child: Row(children: [
-                                      Text(
-                                        "View Document",
-                                        style: TextStyle(
-                                          color:
-                                              primaryDarkColor.withOpacity(0.5),
-                                          fontSize: 12,
-                                          decoration: TextDecoration.underline,
-                                          decorationColor: primaryDarkColor,
-                                          decorationStyle:
-                                              TextDecorationStyle.dotted,
-                                          decorationThickness: 3,
-                                        ),
-                                      ),
-                                    ]))),
-                            SizedBox(
-                              height: 5,
+                          ],
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Loading Depot',
+                              style: TextStyle(color: Colors.grey),
                             ),
                             Text(
-                              '${orderDocuments!.depot ?? ''}',
+                              '${orderDocuments!.depot.toString()}',
                               style: TextStyle(color: Colors.grey),
                             ),
                           ],
                         ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        // ... conditionally show/hide document links ...
+                        if (hasProformaInvoice)
+                          InkWell(
+                            onTap: () => launchUrl(Uri.parse(
+                                orderDocuments?.proformaInvoiceDoc.toString() ??
+                                    '')),
+                            child: const Text(
+                              'Download Proforma-Invoice',
+                              style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  color: Colors.blue),
+                            ),
+                          ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        if (hasProofOfPayment)
+                          InkWell(
+                            onTap: () => launchUrl(Uri.parse(orderDocuments
+                                    ?.resellerProofOfPayment
+                                    .toString() ??
+                                '')),
+                            child: const Text(
+                              'Download Proof of Payment',
+                              style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  color: Colors.blue),
+                            ),
+                          ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        if (hasReceipt)
+                          InkWell(
+                            onTap: () => launchUrl(Uri.parse(
+                                orderDocuments?.receipt.toString() ?? '')),
+                            child: const Text(
+                              'Download Receipt',
+                              style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  color: Colors.blue),
+                            ),
+                          ),
+
+                        SizedBox(
+                          height: 5,
+                        ),
+                        if (hasLoadingOrder)
+                          InkWell(
+                            onTap: () => launchUrl(Uri.parse(
+                                orderDocuments?.loadingOrder.toString() ?? '')),
+                            child: const Text(
+                              'Download Receipt',
+                              style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  color: Colors.blue),
+                            ),
+                          ),
                       ],
                     ),
                   )),
@@ -580,54 +520,186 @@ class _OrderDocumentsState extends State<OrderDocuments> {
     }
   }
 
-  // Helper function to build clickable document links or "No Document"/"Upload Document" text
-  Widget buildDocumentLink(String label, String documentUrl) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: textBolderSmall,
-        ),
-        if (documentUrl.isNotEmpty) // Check if a document URL exists
-          InkWell(
-            onTap: () {
-              launchURL(documentUrl); // Function to open the link
-            },
-            child: Text(
-              'View Document',
-              style: TextStyle(
-                color: primaryDarkColor.withOpacity(0.5),
-                fontSize: 12,
-                decoration: TextDecoration.underline,
-                decorationColor: primaryDarkColor,
-                decorationStyle: TextDecorationStyle.dotted,
-                decorationThickness: 3,
-              ),
-            ),
-          )
-        else
-          Text(
-            documentUrl.isEmpty ? 'No Document' : 'Upload Document',
-            style: TextStyle(
-              color: documentUrl.isEmpty ? Colors.red : primaryDarkColor,
-              fontSize: 12,
-            ),
-          ),
-      ],
-    );
+  PlatformFile? selectedProofOfPayment; // Add this variable
+  String selectedProofOfPaymentName = '';
+
+  Future<void> openPOPFilePicker() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      // Handle the selected KRA certificate photo here
+      PlatformFile file = result.files.first;
+      print('POP File Name: ${file.name}');
+      print('POP File Size: ${file.size}');
+
+      setState(() {
+        selectedProofOfPaymentName = file.name;
+        selectedProofOfPayment =
+            file; // Assign the selected file to the variable
+      });
+    } else {
+      // User canceled the file picker
+    }
   }
 
-// Function to open the link in a web browser
-  Future<void> launchURL(String url) async {
-    try {
-      if (await canLaunch(url)) {
-        await launch(url);
-      } else {
-        throw 'Could not launch $url';
-      }
-    } catch (e) {
-      print('Error launching URL: $e');
+  void  uploadPOP(transactionCode,uploadedFile) async{
+
+    FormData formData = FormData();
+
+    formData.files.add(MapEntry('file',
+        await MultipartFile.fromFile(
+      uploadedFile!.path.toString(),
+      filename: uploadedFile!.name,
+    )));
+
+    final url =
+    Uri.parse('https://petropal.sandbox.co.ke:8040/order/upload-receipt');
+    final url2 =Uri.parse('https://petropal.sandbox.co.ke:8040/payment/record');
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final token = userProvider.user?.token;
+
+
+    if (token == null) {
+      return;
     }
+
+    final dio = Dio();
+    dio.options.headers['Authorization'] = 'Bearer $token';
+
+    await dio.post(
+      url.toString(),
+      data: formData,
+    ).then((response){
+      print(response);
+      String filename = response.data['name'].toString();
+
+      //!order_id || !transaction_code || !payment_mode || !payment_date
+      return dio.post(
+        url2.toString(),
+        data: {
+          'order_id': widget.orders.id,
+          'transaction_code': transactionCode.toString(),
+          'payment_mode': 1,
+          'payment_date': DateTime.now().toString(),
+          'payment_document': filename
+        },
+      ).then((response2){
+        Navigator.of(context).pop(); // Close the dialog
+      });;
+    });
+  }
+
+  Future<void> _showUploadDialog(BuildContext context) async {
+    TextEditingController transactionCodeController = TextEditingController();
+
+
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: Text(
+            'Add Proof of Payment',
+            style: bodyGrey,
+          ),
+          content: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.comment_bank,
+                      color: primaryDarkColor,
+                    ),
+                    Text(
+                      'Transaction Code',
+                      style: TextStyle(color: Colors.black),
+                    )
+                  ],
+                ),
+                TextFormField(
+                  style: bodyText,
+                  controller: transactionCodeController,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    errorText: transactionCodeController.text.isEmpty?'Please add a transaction code':null,
+                    labelText: "Transaction Code",
+                    labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey.shade300,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Column(children: [
+                  GestureDetector(
+                    onTap: openPOPFilePicker,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Upload Proof of Payment',
+                          style: bodyText,
+                        ),
+                      ),
+                    ),
+                  ),
+                  if (selectedProofOfPaymentName != null)
+                    Text(
+                      '$selectedProofOfPaymentName',
+                      style: bodyText,
+                    ),
+                ]),
+
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Add the newlyuploaded file
+                uploadPOP(transactionCodeController.text,selectedProofOfPayment);
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Upload'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
