@@ -463,7 +463,7 @@ class _MakeOrderState extends State<MakeOrder> {
                     SizedBox(
                       height: 10,
                     ),
-                    Text('Total Amunt payable: KES ${totalAmount}',
+                    Text('Amount payable: KES ${totalAmount}',
                         style: bodyGrey),
                     Text('Payment Details:', style: bodyGrey),
                     SizedBox(height: 5),
@@ -493,7 +493,7 @@ class _MakeOrderState extends State<MakeOrder> {
                               style: TextStyle(color: Colors.black),
                             ),
                             Text(
-                              '01601719776507 [CYNTHIA NJOKI]',
+                              '01601719776507',
                               style: TextStyle(color: Colors.black),
                             ),
                           ],
