@@ -1,5 +1,5 @@
 class TruckModel {
-  final String id;
+  final int id;
   final String registrationNumber;
   final String compartment;
   final String status;

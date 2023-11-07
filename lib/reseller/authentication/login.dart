@@ -195,6 +195,7 @@ class _LoginState extends State<Login> {
                               }
 
                               final user = User(
+                                id: int.parse(userData['id'].toString()),
                                 email: userData['email'].replaceAll(' ', ''),
                                 token: token,
                                 password: userData['password'] ?? '',

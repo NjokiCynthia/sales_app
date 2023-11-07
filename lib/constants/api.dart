@@ -67,7 +67,7 @@ class ApiClient {
       if (jsonResponse['status'] == '1') {
         // successful, seed the data to the model
         DriverModel addedDriver = DriverModel(
-            id: jsonResponse['data']['id'].toString(),
+            id: int.parse(jsonResponse['data']['id'].toString()),
             fullName: jsonResponse['data']['full_name'].toString(),
             idNumber: jsonResponse['data']['id_number'].toString(),
             phoneNumber: jsonResponse['data']['phone_number'].toString(),
@@ -131,7 +131,7 @@ class ApiClient {
           // append the driver to the drivers list.
 
           drivers.add(DriverModel(
-              id: element['id'].toString(),
+              id: int.parse(element['id'].toString()),
               fullName: element['full_name'].toString(),
               idNumber: element['id_number'].toString(),
               phoneNumber: element['phone_number'].toString(),
@@ -186,7 +186,7 @@ class ApiClient {
       if (jsonResponse['status'] == '1') {
         // successful, seed the data to the model
         TruckModel addedTruck = TruckModel(
-            id: jsonResponse['data']['id'].toString(),
+            id: int.parse(jsonResponse['data']['id'].toString()),
             registrationNumber:
                 jsonResponse['data']['registration_number'].toString(),
             compartment: jsonResponse['data']['compartment'].toString(),
@@ -246,7 +246,7 @@ class ApiClient {
           // append the truck to the trucks list.
 
           trucks.add(TruckModel(
-              id: element['id'].toString(),
+              id: int.parse(element['id'].toString()),
               registrationNumber: element['registration_number'].toString(),
               compartment: element['compartment'].toString(),
               status: element['status'].toString(),
