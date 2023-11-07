@@ -45,6 +45,14 @@ class _MakeOrderState extends State<MakeOrder> {
   String truckNumberPlate = '';
   String truckCompartments = '';
 
+  double calculateTotal(orderProducts){
+    double total = 0.0;
+    for(int i = 0; i < orderProducts.length; i++){
+      total += double.parse(orderProducts[i].price.toString()) * double.parse(orderProducts[i].volume.toString());
+    }
+    return total;
+  }
+
 
 
 
@@ -366,7 +374,7 @@ class _MakeOrderState extends State<MakeOrder> {
                       height: 5,
                     ),
                     Text(
-                      'Total: KES ${widget.totalVolume.toStringAsFixed(2)}, ',
+                      'Total: KES ${calculateTotal(widget.orderProducts).toStringAsFixed(2)}, ',
                       style: TextStyle(color: Colors.black),
                     ),
                     SizedBox(height: 5),
@@ -463,7 +471,7 @@ class _MakeOrderState extends State<MakeOrder> {
                     SizedBox(
                       height: 10,
                     ),
-                    Text('Amount payable: KES ${totalAmount}',
+                    Text('Amount payable: KES ${calculateTotal(widget.orderProducts).toStringAsFixed(2)}',
                         style: bodyGrey),
                     Text('Payment Details:', style: bodyGrey),
                     SizedBox(height: 5),
