@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/models/order.dart';
+import 'package:petropal/models/completedOrders.dart';
 import 'package:petropal/models/order_documents.dart';
 import 'package:petropal/models/orders.dart';
 import 'package:petropal/models/product.dart';

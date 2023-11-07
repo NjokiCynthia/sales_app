@@ -7,7 +7,7 @@ import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/driver.dart';
 import 'package:petropal/models/omc_product.dart';
-import 'package:petropal/models/order.dart';
+import 'package:petropal/models/completedOrders.dart';
 import 'package:petropal/models/product.dart';
 import 'package:petropal/models/truck.dart';
 import 'package:petropal/providers/driver.dart';
@@ -272,65 +272,6 @@ class ApiClient {
     } on DioException catch (error) {
       // set the loading to off.
       TruckProvider().stopLoading();
-
-      return error.response?.data;
-    }
-  }
-
-  // making an order.
-  Future<dynamic> makeOrder(String path, dynamic data,
-      {Map<String, dynamic>? headers}) async {
-    try {
-      // start loading
-
-      OrderProvider().startLoading();
-
-      // fetch
-
-      final response = await _dio.post('$ipAddress$path',
-          data: data, options: Options(headers: headers));
-
-      // check if it is a successful response.
-
-      Map<String, dynamic> jsonResponse = jsonDecode(response.data);
-
-      if (jsonResponse['status'] == '1') {
-        // successful, seed the data to the model
-        OrderModel addedOrder = OrderModel(
-            id: jsonResponse['data']['id'].toString(),
-            commissionEarned:
-                jsonResponse['data']['commission_earned'].toString(),
-            driverId: jsonResponse['data']['driver_id'].toString(),
-            truckId: jsonResponse['data']['truck_id'].toString(),
-            invoiceNumber: jsonResponse['data']['invoice_number'].toString(),
-            payableAmount: jsonResponse['data']['payable_amount'].toString(),
-            paymentBankOption:
-                jsonResponse['data']['payment_bank_option'].toString(),
-            invoiceDocument:
-                jsonResponse['data']['invoice_document'].toString(),
-            accountId: jsonResponse['data']['account_id'].toString(),
-            status: jsonResponse['data']['status'].toString(),
-            createdBy: jsonResponse['data']['created_by'].toString(),
-            createdAt: jsonResponse['data']['createdAt'].toString(),
-            updatedAt: jsonResponse['data']['updatedAt'].toString());
-
-        // seed the data to the provider.
-        OrderProvider().addOrder(addedOrder);
-
-        // stop loading.
-        OrderProvider().stopLoading();
-
-        // return the newly created driver to the screen.
-        return addedOrder;
-      } else {
-        OrderProvider().stopLoading();
-
-        // throw an exception, a server error occurred
-
-        throw Exception(jsonResponse['message']);
-      }
-    } on DioException catch (error) {
-      OrderProvider().stopLoading();
 
       return error.response?.data;
     }

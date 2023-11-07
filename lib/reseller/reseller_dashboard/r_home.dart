@@ -5,6 +5,8 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/models/completedOrders.dart';
+import 'package:petropal/models/completedOrders.dart';
 import 'package:petropal/models/orders.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/authentication/login.dart';
@@ -41,7 +43,7 @@ class _ResellerHomeState extends State<ResellerHome> {
 
   int selectedCardIndex = 0;
   bool fetchingCompletedOrders = true;
-  List<Order> orders = [];
+  List<CompletedOrdersModel> orders = [];
 
   late List<ChartData> data;
   _fetchCompleteOrders(BuildContext context) async {
@@ -67,18 +69,24 @@ class _ResellerHomeState extends State<ResellerHome> {
       if (response['data'] != null) {
         setState(() {
           orders = (response['data'] as List).map((orderData) {
-            return Order(
-              id: orderData['id'].toString(),
-              orderStatus: orderData['orderStatus'] as int,
-              orderPayableAmount:
-                  orderData['orderPayableAmount'].toString() ?? '',
-              orderVolume: orderData['orderVolume'].toString() ?? '',
-              orderInvoiceNumber:
-                  orderData['orderInvoiceNumber'].toString() ?? '',
-              vendorName: orderData['vendorName'].toString() ?? '',
-              vendorEmail: orderData['vendorEmail'].toString() ?? '',
-              orderCreatedAt:
-                  DateTime.parse(orderData['orderCreatedAt'].toString() ?? ''),
+            return CompletedOrdersModel(
+              id: orderData['id'] as int,
+              invoiceNumber: orderData['invoice_number'] as String,
+              orderProductId: orderData['order_product_id'] as int?,
+              volume: orderData['volume'],
+              payableAmount: orderData['payable_amount'] as num,
+              invoiceDocument: orderData['invoice_document'] as String,
+              loadingOrder: orderData['loading_order'] as int?,
+              driverId: orderData['driver_id'] as int?,
+              truckId: orderData['truck_id'] as int?,
+              commissionEarned: orderData['commission_earned'],
+              accountId: orderData['account_id'] as int?,
+              status: orderData['status'] as int,
+              orderExpireTime: orderData['order_expire_time'] as String?,
+              createdBy: orderData['created_by'] as int?,
+              paymentBankOption: orderData['payment_bank_option'] as String,
+              createdAt: orderData['createdAt'] as String?,
+              updatedAt: orderData['updatedAt'] as String?,
             );
           }).toList();
         });
@@ -159,6 +167,7 @@ class _ResellerHomeState extends State<ResellerHome> {
     bool isActivated =
         Provider.of<UserProvider>(context, listen: false).isActivated;
     print('The status of my account is ........ $isActivated');
+
     if (!isActivated) {
       Future.delayed(Duration(seconds: 1), () {
         showDialog(
@@ -411,7 +420,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                       },
                       child: Text(
                         'See all',
-                        style: bodyText.copyWith(color: Colors.blue),
+                        style: bodyText.copyWith(color: Colors.white),
                       ),
                     )
                   ],
@@ -420,116 +429,121 @@ class _ResellerHomeState extends State<ResellerHome> {
               Expanded(
                 child: ListView.builder(
                   itemBuilder: (context, index) {
-                    return Column(
-                      children: <Widget>[
-                        ListTile(
-                          leading: Container(
-                            decoration: BoxDecoration(
-                              color: primaryDarkColor.withOpacity(0.1),
-                              shape: BoxShape.circle,
-                            ),
-                            padding: const EdgeInsets.all(8),
-                            child: const Icon(
-                              Icons.arrow_outward,
-                              color: primaryDarkColor,
-                              size: 15,
-                            ),
-                          ),
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    'Shell Limited ',
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                  Text(
-                                    '| 12 Sept 2023',
-                                    style: displaySmallerLightGrey.copyWith(
-                                        fontSize: 12),
-                                  ),
-                                  Text('')
-                                ],
+                    if (index < orders.length) {
+                      final order = orders[index]; // Define 'order' here
+                      return Column(
+                        children: <Widget>[
+                          ListTile(
+                            leading: Container(
+                              decoration: BoxDecoration(
+                                color: primaryDarkColor.withOpacity(0.1),
+                                shape: BoxShape.circle,
                               ),
-                              // Text(
-                              //   'Shell Limited | 12 Sept 2023',
-                              //   style: TextStyle(color: Colors.black),
-                              // ),
-                              Text(
-                                'Kes 5,000',
-                                style: displayTitle,
-                              )
-                            ],
-                          ),
-                          subtitle: Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              padding: const EdgeInsets.all(8),
+                              child: const Icon(
+                                Icons.arrow_outward,
+                                color: primaryDarkColor,
+                                size: 15,
+                              ),
+                            ),
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Payment for kerosene',
-                                      style: TextStyle(color: Colors.grey),
+                                      '${order.invoiceNumber}',
+                                      style: TextStyle(color: Colors.black),
                                     ),
-                                    // Text(
-                                    //   '12 Sept 2023',
-                                    //   style: displaySmallerLightGrey,
-                                    // ),
+                                    Text(
+                                      '| ${order.createdAt}',
+                                      // '| 12 Sept 2023',
+                                      style: displaySmallerLightGrey.copyWith(
+                                          fontSize: 12),
+                                    ),
+                                    Text('')
                                   ],
                                 ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      '#12345678h',
-                                      style: TextStyle(color: Colors.grey),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          color: const Color.fromRGBO(
-                                              201, 247, 245, 1.0),
-                                          borderRadius:
-                                              BorderRadius.circular(8)),
-                                      child: const Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 8,
-                                            top: 4,
-                                            bottom: 4,
-                                            right: 8),
-                                        child: Text(
-                                          "Successful",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 12,
-                                            color: Color.fromRGBO(
-                                                27, 197, 189, 1.0),
+                                // Text(
+                                //   'Shell Limited | 12 Sept 2023',
+                                //   style: TextStyle(color: Colors.black),
+                                // ),
+                                Text(
+                                  '${order.payableAmount}',
+                                  style: displayTitle,
+                                )
+                              ],
+                            ),
+                            subtitle: Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        '${order.paymentBankOption}',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                      // Text(
+                                      //   '12 Sept 2023',
+                                      //   style: displaySmallerLightGrey,
+                                      // ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Status',
+                                        // '#12345678h',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color: const Color.fromRGBO(
+                                                201, 247, 245, 1.0),
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        child: const Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 8,
+                                              top: 4,
+                                              bottom: 4,
+                                              right: 8),
+                                          child: Text(
+                                            "Completed",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 12,
+                                              color: Color.fromRGBO(
+                                                  27, 197, 189, 1.0),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        if (index < 5)
-                          Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Divider(
-                              color: Colors.grey[100],
-                              thickness: 1,
-                            ),
-                          ), // Add a divider except for the last item
-                      ],
-                    );
+                          if (index < 5)
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Divider(
+                                color: Colors.grey[100],
+                                thickness: 1,
+                              ),
+                            ), // Add a divider except for the last item
+                        ],
+                      );
+                    }
                   },
-                  itemCount: 5,
+                  itemCount: orders.length + 1,
                 ),
               )
             ])));

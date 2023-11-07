@@ -28,50 +28,44 @@ class _LoginState extends State<Login> {
   TextEditingController emailAddress = TextEditingController();
   String errorText = '';
 
-  Future<void> login(String username, String password) async {
+  Future<void> login() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     final response = await http.post(
       Uri.parse('https://petropal.sandbox.co.ke:8040/user/login'),
       body: {
         'email': emailAddress.text,
-        'password': password,
+        'password': password.text,
       },
     );
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
-      final Map<String, dynamic> userData = responseData['user'];
-      final token = userData['api_token'] as String?;
-      final isActivated = userData['is_activated'];
-      if (token != null) {
-        bool isActivatedValue;
-        if (isActivated is bool) {
-          isActivatedValue = isActivated;
-        } else if (isActivated is String) {
-          isActivatedValue = isActivated.toLowerCase() == 'true';
-        } else {
-          isActivatedValue = false;
-        }
-      }
+
+      final userData = responseData['user'];
+      final token = responseData['api_token'] as String;
+      final isActivated = userData['is_activated'] as bool;
+
       final user = User(
         id: userData['id'],
         email: userData['email'],
-        password: password,
-        token: responseData['api_token'],
+        password: '',
+        token: token,
         first_name: userData['first_name'],
         last_name: userData['last_name'],
         phone: userData['phone'],
-        isActivated: userData['is_activated'],
+        isActivated: isActivated,
         account_id: userData['account_id'],
         companyAddress: userData['companyAddress'],
         companyName: userData['companyName'],
         companyPhone: userData['companyPhone'],
       );
+
       // Create an instance of the UserProvider
-      final userProvider = UserProvider();
+      print('My token is here : $token');
+
       // Set the user in the provider
       userProvider.setUser(user);
 
-      // Navigate to the dashboard or perform any other desired action.
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -79,11 +73,13 @@ class _LoginState extends State<Login> {
         ),
       );
 
+      // Navigate to the dashboard or perform any other desired action.
       print('Login successful');
       print(response.body); // You can parse the response JSON here if needed.
     } else {
       // Handle errors or failed login
       print('Login failed');
+      // Print status code and response body for debugging
       print('Response status code: ${response.statusCode}');
       print('Response body: ${response.body}');
     }
@@ -91,7 +87,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
+    // final userProvider = Provider.of<UserProvider>(context);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.grey[50],
     ));
@@ -226,86 +222,17 @@ class _LoginState extends State<Login> {
                     const SizedBox(
                       height: 20,
                     ),
-                    ElevatedButton(
-                        onPressed: () {
-                          login(emailAddress.text, password.text);
-                        },
-                        child: Text('Login')),
-                    // CustomRequestButton(
-                    //   url: '/user/login',
-                    //   method: 'POST',
-                    //   buttonText: 'Login',
-                    //   headers: {},
-                    //   body: {
-                    //     'email': emailAddress.text,
-                    //     'password': password.text,
-                    //   },
-                    //   onSuccess: (res) {
-                    //     print('This is my response');
-                    //     print(res);
-
-                    //     final isSuccessful = res['isSuccessful'] as bool;
-
-                    //     if (isSuccessful) {
-                    //       final data = res['data'] as Map<String, dynamic>?;
-                    //       if (data != null) {
-                    //         final userData =
-                    //             data['user'] as Map<String, dynamic>?;
-                    //         final token = data['api_token'] as String?;
-                    //         final isActivated = userData!['is_activated'];
-                    //         if (token != null) {
-                    //           bool isActivatedValue;
-                    //           if (isActivated is bool) {
-                    //             isActivatedValue = isActivated;
-                    //           } else if (isActivated is String) {
-                    //             isActivatedValue =
-                    //                 isActivated.toLowerCase() == 'true';
-                    //           } else {
-                    //             isActivatedValue = false;
-                    //           }
-
-                    //           final user = User(
-                    //             id: int.parse(userData['id'].toString()),
-                    //             email: userData['email'].replaceAll(' ', ''),
-                    //             token: token,
-                    //             password: userData['password'] ?? '',
-                    //             first_name: userData['first_name'] ?? '',
-                    //             last_name: userData['last_name'] ?? '',
-                    //             phone: userData['phone'] ?? '',
-                    //             account_id: userData['account_id'] ?? '',
-                    //             isActivated: isActivatedValue,
-                    //             companyAddress:
-                    //                 userData['companyAddress'] ?? '',
-                    //             companyName: userData['companyName'] ?? '',
-                    //             companyPhone: userData['companyPhone'] ?? '',
-                    //           );
-
-                    //           userProvider.setUser(user);
-                    //           // Force UI update after setting the user
-                    //           setState(() {});
-
-                    //           Navigator.push(
-                    //             context,
-                    //             MaterialPageRoute(
-                    //               builder: (context) => ResellerDasboard(),
-                    //             ),
-                    //           );
-                    //         } else {}
-                    //       } else {
-                    //         final errorObj = res['data'];
-                    //         final error = errorObj['message'].toString();
-                    //         setState(() {
-                    //           errorText = error;
-                    //         });
-                    //       }
-                    //     } else {
-                    //       final error = res['error'] as String;
-                    //       setState(() {
-                    //         errorText = error;
-                    //       });
-                    //     }
-                    //   },
-                    // ),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: primaryDarkColor),
+                          onPressed: () {
+                            login();
+                          },
+                          child: Text('Login')),
+                    ),
                     SizedBox(
                       height: 40,
                     ),

@@ -852,12 +852,16 @@ class _ProfileSetUpState extends State<ProfileSetUp>
             const SizedBox(
               height: 10,
             ),
-            ElevatedButton(
-              onPressed: () {
-                // Call the function to send the form data when the button is pressed
-                sendFormData();
-              },
-              child: Text('Submit'), // You can customize the button text here
+            SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Call the function to send the form data when the button is pressed
+                  sendFormData();
+                },
+                child: Text('Submit'), // You can customize the button text here
+              ),
             )
           ]),
         ),

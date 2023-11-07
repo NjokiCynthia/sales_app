@@ -25,9 +25,16 @@ class _ResellerOrdersState extends State<ResellerOrders> {
       fetchingOrders = true;
     });
 
-    // Retrieve user information from the provider
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+
     final token = userProvider.user?.token;
+    if (token == null) {
+      print('Token is null.');
+      setState(() {
+        fetchingOrders = false;
+      });
+      return;
+    }
 
     final postData = {};
     final apiClient = ApiClient();
@@ -149,9 +156,7 @@ class _ResellerOrdersState extends State<ResellerOrders> {
         backgroundColor: Colors.grey[50],
         appBar: AppBar(
           leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
+            onTap: () {},
             child: Icon(
               Icons.arrow_back_ios,
               color: primaryDarkColor,
