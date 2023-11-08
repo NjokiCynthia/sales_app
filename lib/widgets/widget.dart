@@ -681,3 +681,37 @@ class PageTransition extends PageRouteBuilder {
           },
         );
 }
+
+class EmptyProducts extends StatelessWidget {
+  const EmptyProducts({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Image.asset('assets/illustrations/tenant.png', width: 250),
+        Text(
+          'The list of products is empty.',
+          style: Theme.of(context).textTheme.bodyMedium,
+          textAlign: TextAlign.center,
+        )
+      ],
+    );
+  }
+}
+
+class EmptyOrders extends StatelessWidget {
+  const EmptyOrders({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Image.asset('assets/illustrations/tenant.png', width: 250),
+        Text(
+          'Tenant list empty.',
+          style: Theme.of(context).textTheme.bodyMedium,
+          textAlign: TextAlign.center,
+        )
+      ],
+    );
+  }
+}

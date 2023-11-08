@@ -102,10 +102,9 @@ class _ResellerOrdersState extends State<ResellerOrders> {
       case 1:
         return Colors.blue;
       case 2:
-        return Colors.yellow;
+        return Colors.greenAccent;
       case 3:
-        return Colors
-            .black; // You can specify the existing color or a custom color here
+        return Colors.black;
       case 4:
         return Colors.orange;
       case 5:
@@ -121,8 +120,8 @@ class _ResellerOrdersState extends State<ResellerOrders> {
         return const Color.fromARGB(
             255, 187, 222, 251); // Lighter shade of blue
       case 2:
-        return const Color.fromARGB(
-            255, 255, 249, 196); // Lighter shade of yellow
+        return Color.fromARGB(255, 225, 225, 225);
+      //const Color.fromARGB(255, 255, 249, 196);
       case 3:
         return const Color.fromARGB(
             255, 245, 245, 245); // Lighter shade of grey
