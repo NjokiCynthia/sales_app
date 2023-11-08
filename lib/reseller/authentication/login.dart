@@ -23,9 +23,12 @@ class _LoginState extends State<Login> {
 
   TextEditingController password = TextEditingController();
   TextEditingController emailAddress = TextEditingController();
-  String errorText = '';
+  String errorText = ' ';
 
   Future<void> login() async {
+    setState(() {
+      errorText = '';
+    });
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final response = await http.post(
       Uri.parse('https://petropal.sandbox.co.ke:8040/user/login'),
@@ -34,8 +37,23 @@ class _LoginState extends State<Login> {
         'password': password.text,
       },
     );
+    final bool emailValid =
+    RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(emailAddress.text);
 
-    if (response.statusCode == 200) {
+    if(emailAddress.text.isEmpty) {
+      setState(() {
+        errorText = 'Please enter your email address';
+      });
+    } else if (!emailValid) {
+      setState(() {
+        errorText = 'Please enter a valid email address';
+      });
+    } else if (password.text.isEmpty) {
+      setState(() {
+        errorText = 'Please enter a password';
+      });
+    } else if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
 
       final status = responseData['status'];
@@ -145,6 +163,7 @@ class _LoginState extends State<Login> {
                           filled: true,
                           fillColor: Colors.white,
                           labelText: 'Enter email address',
+                          errorText: emailAddress.text.isEmpty && errorText!=' '?'Email is required':null,
                           labelStyle: TextStyle(color: Colors.grey[500]),
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -189,6 +208,7 @@ class _LoginState extends State<Login> {
                           filled: true,
                           fillColor: Colors.white,
                           labelText: 'Enter password',
+                          errorText: password.text.isEmpty && errorText!=' '?'Password is required':null,
                           labelStyle: TextStyle(color: Colors.grey[500]),
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
