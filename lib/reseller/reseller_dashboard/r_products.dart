@@ -153,10 +153,13 @@ class _ResellerProductsState extends State<ResellerProducts> {
           } else if (products.isEmpty) {
             // Show a message when there are no products
             return Center(
-              child: Text(
-                'No products available at the moment.',
-                style: TextStyle(fontSize: 18, color: Colors.black),
-              ),
+              child: Column(children: [
+                Image.asset('assets/illustrations/products.png'),
+                Text(
+                  'No products available at the moment',
+                  style: displayTitle,
+                )
+              ]),
             );
           } else {
             return Padding(

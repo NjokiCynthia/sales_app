@@ -196,15 +196,47 @@ class _OrderDocumentsState extends State<OrderDocuments> {
             padding: EdgeInsets.all(15),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  GestureDetector(
-                    onTap: () {
-                      _showUploadDialog(context);
-                    },
-                    child: Text(
-                      'Upload Proof of Payment',
-                      style: TextStyle(color: Colors.black),
+              if (status == 1)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Please upload proof of payment',
+                      style: m_title,
                     ),
-                  ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        _showUploadDialog(context);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: primaryDarkColor,
+                            border: Border.all(color: primaryDarkColor),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Padding(
+                          padding: EdgeInsets.all(5),
+                          child: Text(
+                            "Upload Proof of Payment",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              decoration: TextDecoration.underline,
+                              decorationColor: Colors.white,
+                              decorationStyle: TextDecorationStyle.dotted,
+                              decorationThickness: 3,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              SizedBox(
+                height: 10,
+              ),
               Container(
                   decoration: BoxDecoration(color: Colors.grey[100]),
                   child: Padding(
@@ -542,22 +574,22 @@ class _OrderDocumentsState extends State<OrderDocuments> {
     }
   }
 
-  void  uploadPOP(transactionCode,uploadedFile) async{
-
+  void uploadPOP(transactionCode, uploadedFile) async {
     FormData formData = FormData();
 
-    formData.files.add(MapEntry('file',
+    formData.files.add(MapEntry(
+        'file',
         await MultipartFile.fromFile(
-      uploadedFile!.path.toString(),
-      filename: uploadedFile!.name,
-    )));
+          uploadedFile!.path.toString(),
+          filename: uploadedFile!.name,
+        )));
 
     final url =
-    Uri.parse('https://petropal.sandbox.co.ke:8040/order/upload-receipt');
-    final url2 =Uri.parse('https://petropal.sandbox.co.ke:8040/payment/record');
+        Uri.parse('https://petropal.sandbox.co.ke:8040/order/upload-receipt');
+    final url2 =
+        Uri.parse('https://petropal.sandbox.co.ke:8040/payment/record');
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final token = userProvider.user?.token;
-
 
     if (token == null) {
       return;
@@ -566,10 +598,12 @@ class _OrderDocumentsState extends State<OrderDocuments> {
     final dio = Dio();
     dio.options.headers['Authorization'] = 'Bearer $token';
 
-    await dio.post(
+    await dio
+        .post(
       url.toString(),
       data: formData,
-    ).then((response){
+    )
+        .then((response) {
       print(response);
       String filename = response.data['name'].toString();
       return dio.post(
@@ -581,15 +615,15 @@ class _OrderDocumentsState extends State<OrderDocuments> {
           'payment_date': DateTime.now().toString(),
           'payment_document': filename
         },
-      ).then((response2){
+      ).then((response2) {
         Navigator.of(context).pop(); // Close the dialog
-      });;
+      });
+      ;
     });
   }
 
   Future<void> _showUploadDialog(BuildContext context) async {
     TextEditingController transactionCodeController = TextEditingController();
-
 
     showDialog<void>(
       context: context,
@@ -623,7 +657,9 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    errorText: transactionCodeController.text.isEmpty?'Please add a transaction code':null,
+                    errorText: transactionCodeController.text.isEmpty
+                        ? 'Please add a transaction code'
+                        : null,
                     labelText: "Transaction Code",
                     labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
                     border: OutlineInputBorder(
@@ -676,7 +712,6 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                       style: bodyText,
                     ),
                 ]),
-
               ],
             ),
           ),
@@ -690,7 +725,8 @@ class _OrderDocumentsState extends State<OrderDocuments> {
             TextButton(
               onPressed: () {
                 // Add the newlyuploaded file
-                uploadPOP(transactionCodeController.text,selectedProofOfPayment);
+                uploadPOP(
+                    transactionCodeController.text, selectedProofOfPayment);
                 Navigator.of(context).pop(); // Close the dialog
               },
               child: Text('Upload'),

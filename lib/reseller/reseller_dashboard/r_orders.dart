@@ -346,9 +346,14 @@ class _ResellerOrdersState extends State<ResellerOrders> {
                         },
                         itemCount: orders.length,
                       )
-                    : Text(
-                        'No orders found in the response',
-                        style: TextStyle(color: Colors.black),
+                    : Center(
+                        child: Column(children: [
+                          Image.asset('assets/illustrations/orders.png'),
+                          Text(
+                            'No orders made at the moment',
+                            style: displayTitle,
+                          )
+                        ]),
                       ),
           ),
         ));

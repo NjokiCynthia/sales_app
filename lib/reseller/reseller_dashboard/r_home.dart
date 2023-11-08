@@ -435,114 +435,143 @@ class _ResellerHomeState extends State<ResellerHome> {
                 ),
               ),
               Expanded(
-                child: ListView.builder(
-                  itemBuilder: (context, index) {
-                    if (index < orders.length) {
-                      final order = orders[index]; // Define 'order' here
-                      return Column(
-                        children: <Widget>[
-                          ListTile(
-                            leading: Container(
-                              decoration: BoxDecoration(
-                                color: primaryDarkColor.withOpacity(0.1),
-                                shape: BoxShape.circle,
-                              ),
-                              padding: const EdgeInsets.all(8),
-                              child: const Icon(
-                                Icons.arrow_outward,
-                                color: primaryDarkColor,
-                                size: 15,
-                              ),
-                            ),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '${order.invoiceNumber}',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                Text(
-                                  '${order.createdAt!}',
-                                  style: displaySmallerLightGrey.copyWith(
-                                      fontSize: 12),
-                                ),
-                              ],
-                            ),
-                            subtitle: Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        '${order.paymentBankOption}',
-                                        style: TextStyle(color: Colors.grey),
-                                      ),
-                                      // Text(
-                                      //   '12 Sept 2023',
-                                      //   style: displaySmallerLightGrey,
-                                      // ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'KES ${order.payableAmount}',
-                                        style: displayTitle.copyWith(
-                                            color: primaryDarkColor),
-                                      ),
-                                      Container(
+                  child: RefreshIndicator(
+                onRefresh: () => _refreshCompletedOrders(context),
+                child: fetchingCompletedOrders
+                    ? Center(child: CircularProgressIndicator())
+                    : orders.isNotEmpty
+                        ? ListView.builder(
+                            itemBuilder: (context, index) {
+                              if (index < orders.length) {
+                                final order =
+                                    orders[index]; // Define 'order' here
+                                return Column(
+                                  children: <Widget>[
+                                    ListTile(
+                                      leading: Container(
                                         decoration: BoxDecoration(
-                                            color: const Color.fromRGBO(
-                                                201, 247, 245, 1.0),
-                                            borderRadius:
-                                                BorderRadius.circular(8)),
-                                        child: const Padding(
-                                          padding: EdgeInsets.only(
-                                              left: 8,
-                                              top: 4,
-                                              bottom: 4,
-                                              right: 8),
-                                          child: Text(
-                                            "Completed",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 12,
-                                              color: Color.fromRGBO(
-                                                  27, 197, 189, 1.0),
-                                            ),
-                                          ),
+                                          color:
+                                              primaryDarkColor.withOpacity(0.1),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        padding: const EdgeInsets.all(8),
+                                        child: const Icon(
+                                          Icons.arrow_outward,
+                                          color: primaryDarkColor,
+                                          size: 15,
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
+                                      title: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            '${order.invoiceNumber}',
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          ),
+                                          Text(
+                                            '${order.createdAt!}',
+                                            style: displaySmallerLightGrey
+                                                .copyWith(fontSize: 12),
+                                          ),
+                                        ],
+                                      ),
+                                      subtitle: Padding(
+                                        padding: const EdgeInsets.only(top: 10),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  '${order.paymentBankOption}',
+                                                  style: TextStyle(
+                                                      color: Colors.grey),
+                                                ),
+                                                // Text(
+                                                //   '12 Sept 2023',
+                                                //   style: displaySmallerLightGrey,
+                                                // ),
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  'KES ${order.payableAmount}',
+                                                  style: displayTitle.copyWith(
+                                                      color: primaryDarkColor),
+                                                ),
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                      color:
+                                                          const Color.fromRGBO(
+                                                              201,
+                                                              247,
+                                                              245,
+                                                              1.0),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8)),
+                                                  child: const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 8,
+                                                        top: 4,
+                                                        bottom: 4,
+                                                        right: 8),
+                                                    child: Text(
+                                                      "Completed",
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontSize: 12,
+                                                        color: Color.fromRGBO(
+                                                            27, 197, 189, 1.0),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    if (index < 5)
+                                      Padding(
+                                        padding: EdgeInsets.all(8),
+                                        child: Divider(
+                                          color: Colors.grey[100],
+                                          thickness: 1,
+                                        ),
+                                      ), // Add a divider except for the last item
+                                  ],
+                                );
+                              }
+                            },
+                            itemCount: orders.length + 1,
+                          )
+                        : Center(
+                            child: Column(children: [
+                              Image.asset(
+                                  'assets/illustrations/transactions.png'),
+                              Text(
+                                'No completed orders at the moment',
+                                style: displayTitle,
+                              )
+                            ]),
                           ),
-                          if (index < 5)
-                            Padding(
-                              padding: EdgeInsets.all(8),
-                              child: Divider(
-                                color: Colors.grey[100],
-                                thickness: 1,
-                              ),
-                            ), // Add a divider except for the last item
-                        ],
-                      );
-                    }
-                  },
-                  itemCount: orders.length + 1,
-                ),
-              )
+              ))
             ])));
   }
 }
