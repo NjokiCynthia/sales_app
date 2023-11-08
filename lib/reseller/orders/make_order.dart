@@ -796,11 +796,11 @@ class _MakeOrderState extends State<MakeOrder> {
         final tempBankModels = data.map((bankData) {
           return BankModel(
               id: int.parse(bankData['id'].toString()),
-              dealer: bankData['dealer'],
-              accountNumber: bankData['account_number'],
-              accountName: bankData['account_name'],
-              bankBranch: bankData['bank_branch'],
-              bankName: bankData['bank_name']);
+              dealer: bankData['dealer'].toString(),
+              accountNumber: bankData['account_number'].toString(),
+              accountName: bankData['account_name'].toString(),
+              bankBranch: bankData['bank_branch'].toString(),
+              bankName: bankData['bank_name'].toString());
         }).toList();
 
         setState(() {
@@ -1046,10 +1046,10 @@ class _MakeOrderState extends State<MakeOrder> {
                         ])
                       ],
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     DropdownButtonFormField<String>(
                       dropdownColor: Colors.white,
-                      value: selectedTruck,
+                      //value: selectedTruck,
                       style: bodyTextSmall,
                       decoration: InputDecoration(
                         suffixIcon: const Icon(
