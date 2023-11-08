@@ -105,6 +105,9 @@ flutter:
     - assets/images/icons/petropal_logo.png
     - assets/illustrations/invoice.png
     - assets/illustrations/organize.png
+    - assets/illustrations/transactions.png
+    - assets/illustrations/orders.png
+    - assets/illustrations/products.png
     - assets/images/icons/avatar.png
     - assets/images/bank.png
     - assets/images/users.png
