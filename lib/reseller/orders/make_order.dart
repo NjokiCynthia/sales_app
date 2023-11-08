@@ -55,6 +55,7 @@ class _MakeOrderState extends State<MakeOrder> {
   double totalAmount = 0.0;
   String selectedDriver = 'Driver 1';
   String selectedTruck = '2000, 3000, 2000, 3000';
+  String selectedBankAccount = 'Select Bank';
   String enteredVolume = '';
   String driverPhoneNumber = '';
   String driverIdNumber = '';
@@ -312,7 +313,7 @@ class _MakeOrderState extends State<MakeOrder> {
           print('Truck added successfully');
           print(responseData);
           setState(() {
-            selectedTruck = responseData['compartment'];
+            selectedTruck = responseData['registration_number'].toString() + ' '+ responseData['compartment'].toString();
           });
           Navigator.pop(context);
 
@@ -452,10 +453,10 @@ class _MakeOrderState extends State<MakeOrder> {
                     driverPhoneNumber = value;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Row(
+                const Row(
                   children: [
                     Icon(
                       Icons.numbers,
@@ -501,10 +502,10 @@ class _MakeOrderState extends State<MakeOrder> {
                     driverIdNumber = value;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Row(
+                const Row(
                   children: [
                     Icon(
                       Icons.confirmation_number_rounded,
@@ -550,10 +551,10 @@ class _MakeOrderState extends State<MakeOrder> {
                     driverEpraLicense = value;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Row(
+                const Row(
                   children: [
                     Icon(
                       Icons.phone,
@@ -612,7 +613,7 @@ class _MakeOrderState extends State<MakeOrder> {
                     onPressed: () {
                       addDriver();
                     },
-                    child: Text('Add driver')))
+                    child: const Text('Add driver')))
           ],
         );
       },
@@ -651,13 +652,7 @@ class _MakeOrderState extends State<MakeOrder> {
       });
 
       if (driverModels.isNotEmpty) {
-        selectedDriver = driverModels[0].id.toString() +
-            ' ' +
-            driverModels[0].fullName +
-            ' ' +
-            driverModels[0].idNumber +
-            ' ' +
-            driverModels[0].phoneNumber;
+        selectedDriver = '${driverModels[0].fullName} ${driverModels[0].idNumber}';
       }
 
       if (response['status'] == 1 && response['data'] != null) {
@@ -679,13 +674,7 @@ class _MakeOrderState extends State<MakeOrder> {
         setState(() {
           driverModels = tempDriverModels;
           if (driverModels.isNotEmpty) {
-            selectedDriver = driverModels[0].id.toString() +
-                ' ' +
-                driverModels[0].fullName +
-                ' ' +
-                driverModels[0].idNumber +
-                ' ' +
-                driverModels[0].phoneNumber;
+            selectedDriver = '${driverModels[0].fullName} ${driverModels[0].idNumber}';
           }
         });
 
@@ -753,6 +742,10 @@ class _MakeOrderState extends State<MakeOrder> {
         setState(() {
           truckModels = tempTruckModels;
         });
+
+        setState(() {
+          selectedTruck = '${tempTruckModels[0].registrationNumber} ${tempTruckModels[0].compartment}';
+        });
       } else {
         print('No or invalid trucks found in the response');
         // Handle the case when 'status' is not 1 or 'cartProductsListing' is null
@@ -804,14 +797,18 @@ class _MakeOrderState extends State<MakeOrder> {
           return BankModel(
               id: int.parse(bankData['id'].toString()),
               dealer: bankData['dealer'],
-              accountNumber: bankData['accountNumber'],
-              accountName: bankData['accountName'],
-              bankBranch: bankData['bankBranch'],
-              bankName: bankData['bankName']);
+              accountNumber: bankData['account_number'],
+              accountName: bankData['account_name'],
+              bankBranch: bankData['bank_branch'],
+              bankName: bankData['bank_name']);
         }).toList();
 
         setState(() {
           bankModels = tempBankModels;
+        });
+
+        setState(() {
+          selectedBankAccount = '${bankModels[0].bankName} ${bankModels[0].accountNumber}';
         });
       } else {
         print('No or invalid banks found in the response');
@@ -845,19 +842,15 @@ class _MakeOrderState extends State<MakeOrder> {
   }
 
   List<String> driverItems = [
-    'Driver 1',
-    'Driver 2',
-    'Driver 3',
-    'Driver 4',
-    'Driver 5'
+    'Select driver',
   ];
 
   List<String> truckItems = [
-    '2000, 3000, 2000, 3000',
-    '3000, 1000, 2000, 1000',
-    '4000, 2000, 2000, 1000',
-    '5000, 1000, 1000, 2000',
-    '6000, 1000, 2000, 3000'
+    'Select truck'
+  ];
+
+  List<String> bankAccountItems = [
+    'Select bank account'
   ];
 
   @override
@@ -936,16 +929,16 @@ class _MakeOrderState extends State<MakeOrder> {
                           style: TextStyle(color: Colors.black),
                         ),
                         Row(children: [
-                          Icon(
+                          const Icon(
                             Icons.add,
                             color: Colors.grey,
                           ),
-                          SizedBox(width: 5),
+                          const SizedBox(width: 5),
                           GestureDetector(
                             onTap: () {
                               _showAddDialog(context);
                             },
-                            child: Text(
+                            child: const Text(
                               'Add new Driver',
                               style: TextStyle(color: Colors.black),
                             ),
@@ -953,7 +946,7 @@ class _MakeOrderState extends State<MakeOrder> {
                         ])
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     DropdownButtonFormField<String>(
@@ -966,7 +959,7 @@ class _MakeOrderState extends State<MakeOrder> {
                         labelText: 'Select the driver',
                         labelStyle:
                             bodyTextSmall.copyWith(color: Colors.grey[500]),
-                        suffixIcon: Icon(
+                        suffixIcon: const Icon(
                           Icons.keyboard_arrow_down_sharp,
                           color: Colors.grey,
                         ),
@@ -999,14 +992,7 @@ class _MakeOrderState extends State<MakeOrder> {
                       },
                       items: driverModels.isNotEmpty
                           ? driverModels
-                              .map((driver) =>
-                                  driver.id.toString() +
-                                  ' ' +
-                                  driver.fullName +
-                                  ' ' +
-                                  driver.idNumber +
-                                  ' ' +
-                                  driver.phoneNumber)
+                              .map((driver) => '${driver.fullName} ${driver.idNumber}')
                               .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
@@ -1066,7 +1052,7 @@ class _MakeOrderState extends State<MakeOrder> {
                       value: selectedTruck,
                       style: bodyTextSmall,
                       decoration: InputDecoration(
-                        suffixIcon: Icon(
+                        suffixIcon: const Icon(
                           Icons.keyboard_arrow_down_sharp,
                           color: Colors.grey,
                         ),
@@ -1102,7 +1088,13 @@ class _MakeOrderState extends State<MakeOrder> {
                           selectedTruck = newValue!;
                         });
                       },
-                      items: truckItems
+                      items: truckModels.isNotEmpty?truckModels.map((truck) => '${truck.registrationNumber} ${truck.compartment}')
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList():truckItems
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -1110,22 +1102,22 @@ class _MakeOrderState extends State<MakeOrder> {
                         );
                       }).toList(),
                     ),
-                    SizedBox(width: 5),
-                    Text(
-                      'Select bank',
+                    const SizedBox(width: 5),
+                    const Text(
+                      'Select bank account',
                       style: TextStyle(color: Colors.black),
                     ),
                     DropdownButtonFormField<String>(
-                      //value: selectedDriver,
+                      //value: selectedBankAccount,
                       dropdownColor: Colors.white,
                       style: bodyTextSmall,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
-                        labelText: 'Select the bank',
+                        labelText: 'Select the bank account',
                         labelStyle:
                             bodyTextSmall.copyWith(color: Colors.grey[500]),
-                        suffixIcon: Icon(
+                        suffixIcon: const Icon(
                           Icons.keyboard_arrow_down_sharp,
                           color: Colors.grey,
                         ),
@@ -1153,26 +1145,19 @@ class _MakeOrderState extends State<MakeOrder> {
                       ),
                       onChanged: (String? newValue) {
                         setState(() {
-                          selectedDriver = newValue!;
+                          selectedBankAccount = newValue!;
                         });
                       },
-                      items: driverModels.isNotEmpty
-                          ? driverModels
-                              .map((driver) =>
-                                  driver.id.toString() +
-                                  ' ' +
-                                  driver.fullName +
-                                  ' ' +
-                                  driver.idNumber +
-                                  ' ' +
-                                  driver.phoneNumber)
+                      items: bankModels.isNotEmpty
+                          ? bankModels
+                              .map((bankAccount) =>  '${bankAccount.bankName} ${bankAccount.accountNumber}')
                               .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(value),
                               );
                             }).toList()
-                          : driverItems
+                          : bankAccountItems
                               .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
@@ -1306,11 +1291,7 @@ class _MakeOrderState extends State<MakeOrder> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Number Plate:',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            Text(
-                              'Truck Compartments:',
+                              'Truck Details:',
                               style: TextStyle(color: Colors.grey),
                             ),
                           ],
@@ -1321,10 +1302,7 @@ class _MakeOrderState extends State<MakeOrder> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              '${truckNumberPlate}',
-                              style: TextStyle(color: Colors.black),
-                            ),
+
                             Text(
                               '${selectedTruck}',
                               style: TextStyle(color: Colors.black),
@@ -1347,11 +1325,7 @@ class _MakeOrderState extends State<MakeOrder> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Bank:',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            Text(
-                              'Account number:',
+                              'Bank Account number:',
                               style: TextStyle(color: Colors.grey),
                             ),
                           ],
@@ -1363,11 +1337,7 @@ class _MakeOrderState extends State<MakeOrder> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'EQUITY BANK',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            Text(
-                              '01601719776507',
+                              selectedBankAccount,
                               style: TextStyle(color: Colors.black),
                             ),
                           ],
