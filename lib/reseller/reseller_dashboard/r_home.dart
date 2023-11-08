@@ -1,6 +1,7 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
@@ -28,6 +29,13 @@ class ResellerHome extends StatefulWidget {
 class _ResellerHomeState extends State<ResellerHome> {
   // Initial Selected Value
   String dropdownvalue = 'Weekly';
+  String formatDate(String dateString) {
+    final inputFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    final outputFormat = DateFormat('d MMM y');
+
+    final DateTime date = inputFormat.parse(dateString);
+    return outputFormat.format(date);
+  }
 
   // List of items in our dropdown menu
   var items = [
@@ -449,29 +457,15 @@ class _ResellerHomeState extends State<ResellerHome> {
                             title: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      '${order.invoiceNumber}',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                    Text(
-                                      '| ${order.createdAt}',
-                                      // '| 12 Sept 2023',
-                                      style: displaySmallerLightGrey.copyWith(
-                                          fontSize: 12),
-                                    ),
-                                    Text('')
-                                  ],
-                                ),
-                                // Text(
-                                //   'Shell Limited | 12 Sept 2023',
-                                //   style: TextStyle(color: Colors.black),
-                                // ),
                                 Text(
-                                  '${order.payableAmount}',
-                                  style: displayTitle,
-                                )
+                                  '${order.invoiceNumber}',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                Text(
+                                  '${order.createdAt!}',
+                                  style: displaySmallerLightGrey.copyWith(
+                                      fontSize: 12),
+                                ),
                               ],
                             ),
                             subtitle: Padding(
@@ -493,14 +487,17 @@ class _ResellerHomeState extends State<ResellerHome> {
                                       // ),
                                     ],
                                   ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        'Status',
-                                        // '#12345678h',
-                                        style: TextStyle(color: Colors.grey),
+                                        'KES ${order.payableAmount}',
+                                        style: displayTitle.copyWith(
+                                            color: primaryDarkColor),
                                       ),
                                       Container(
                                         decoration: BoxDecoration(

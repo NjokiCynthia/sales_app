@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
@@ -19,6 +20,10 @@ class ResellerOrders extends StatefulWidget {
 class _ResellerOrdersState extends State<ResellerOrders> {
   bool fetchingOrders = true;
   List<Order> orders = [];
+  String formatDateTime(DateTime dateTime) {
+    final outputFormat = DateFormat('d MMM y');
+    return outputFormat.format(dateTime);
+  }
 
   _fetchOrders(BuildContext context) async {
     setState(() {
@@ -241,11 +246,19 @@ class _ResellerOrdersState extends State<ResellerOrders> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            order.orderCreatedAt
-                                                .toLocal()
-                                                .toString(),
-                                            style: greyText,
+                                            '${order.orderCreatedAt}',
+                                            // '${formatDateTime(order.orderCreatedAt)}',
+                                            style: displaySmallerLightGrey
+                                                .copyWith(fontSize: 12),
                                           ),
+
+                                          // Text(
+                                          //   // '${formatDate(order.orderCreatedAt!)}',
+                                          //   order.orderCreatedAt
+                                          //       .toLocal()
+                                          //       .toString(),
+                                          //   style: greyText,
+                                          // ),
                                           SizedBox(
                                             height: 10,
                                           ),
