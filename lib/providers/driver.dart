@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/foundation.dart';
 import 'package:petropal/models/driver.dart';
 
@@ -12,17 +10,17 @@ class DriverProvider with ChangeNotifier {
   List<DriverModel> get drivers => _drivers;
 
   // Method to add drivers to the list.
-  void addDrivers(List<DriverModel> drivers){
+  void addDrivers(List<DriverModel> drivers) {
     _drivers.addAll(drivers);
     notifyListeners();
   }
 
-  void startLoading(){
+  void startLoading() {
     _isLoading = true;
     notifyListeners();
   }
 
-  void stopLoading(){
+  void stopLoading() {
     _isLoading = false;
     notifyListeners();
   }
@@ -32,5 +30,4 @@ class DriverProvider with ChangeNotifier {
     _drivers.add(driver);
     notifyListeners();
   }
-
 }
