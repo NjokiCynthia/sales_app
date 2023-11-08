@@ -1,16 +1,13 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/authentication/signup.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_dashboard.dart';
 
-import 'package:petropal/widgets/buttons.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -65,9 +62,6 @@ class _LoginState extends State<Login> {
           companyPhone: userData['companyPhone'],
         );
 
-        // Create an instance of the UserProvider
-        print('My token is here : $token');
-
         // Set the user in the provider
         userProvider.setUser(user);
 
@@ -78,9 +72,7 @@ class _LoginState extends State<Login> {
           ),
         );
 
-        // Navigate to the dashboard or perform any other desired action.
-        print('Login successful');
-        print(response.body);
+
       } else {
         setState(() {
           errorText = message;
@@ -98,11 +90,6 @@ class _LoginState extends State<Login> {
           errorText = 'Check your internet connection';
         });
       }
-      // Handle errors or failed login
-      print('Login failed');
-      // Print status code and response body for debugging
-      print('Response status code: ${response.statusCode}');
-      print('Response body: ${response.body}');
     }
   }
 
@@ -118,11 +105,11 @@ class _LoginState extends State<Login> {
           child: Column(children: [
             SafeArea(
               child: Padding(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 100,
                     ),
                     Center(
@@ -252,9 +239,9 @@ class _LoginState extends State<Login> {
                           onPressed: () {
                             login();
                           },
-                          child: Text('Login')),
+                          child: const Text('Login')),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 40,
                     ),
                     GestureDetector(
@@ -270,9 +257,9 @@ class _LoginState extends State<Login> {
                         padding: const EdgeInsets.only(bottom: 20),
                         child: Center(
                           child: RichText(
-                            text: TextSpan(
+                            text: const TextSpan(
                               text: "Don't have an account yet? ",
-                              style: const TextStyle(color: Colors.black),
+                              style: TextStyle(color: Colors.black),
                               children: <TextSpan>[
                                 TextSpan(
                                   text: 'Signup',
