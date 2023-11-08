@@ -71,7 +71,7 @@ class _ResellerHomeState extends State<ResellerHome> {
     };
 
     await apiClient
-        .post('/order/fetch/complete', postData, headers: headers)
+        .post('/order/query-completed-orders', postData, headers: headers)
         .then((response) {
       print('Response for the completed orders is here: $response');
       if (response['data'] != null) {
@@ -79,22 +79,17 @@ class _ResellerHomeState extends State<ResellerHome> {
           orders = (response['data'] as List).map((orderData) {
             return CompletedOrdersModel(
               id: orderData['id'] as int,
-              invoiceNumber: orderData['invoice_number'] as String,
-              orderProductId: orderData['order_product_id'] as int?,
-              volume: orderData['volume'],
-              payableAmount: orderData['payable_amount'] as num,
-              invoiceDocument: orderData['invoice_document'] as String,
-              loadingOrder: orderData['loading_order'] as int?,
-              driverId: orderData['driver_id'] as int?,
-              truckId: orderData['truck_id'] as int?,
-              commissionEarned: orderData['commission_earned'],
-              accountId: orderData['account_id'] as int?,
-              status: orderData['status'] as int,
-              orderExpireTime: orderData['order_expire_time'] as String?,
-              createdBy: orderData['created_by'] as int?,
-              paymentBankOption: orderData['payment_bank_option'] as String,
-              createdAt: orderData['createdAt'] as String?,
-              updatedAt: orderData['updatedAt'] as String?,
+              orderStatus: orderData['orderStatus'] as int,
+              orderCreatedAt: orderData['orderCreatedAt'] as String,
+              orderPayableAmount: orderData['orderPayableAmount'] as int,
+              orderVolume: orderData['orderVolume'],
+              orderInvoiceNumber: orderData['orderInvoiceNumber'] as String,
+              orderExpiryTime: orderData['orderExpiryTime'] as String,
+              orderReceiptDocument:
+                  orderData['orderReceiptDocument'] as String? ?? '',
+              vendorName: orderData['vendorName'] as String,
+              vendorEmail: orderData['vendorEmail'] as String,
+              vendorPhone: orderData['vendorPhone'] as String,
             );
           }).toList();
         });
@@ -262,6 +257,9 @@ class _ResellerHomeState extends State<ResellerHome> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
+                                        SizedBox(
+                                          height: 10,
+                                        ),
                                         Padding(
                                           padding: EdgeInsets.only(left: 10),
                                           child: Text(
@@ -273,35 +271,35 @@ class _ResellerHomeState extends State<ResellerHome> {
                                         Padding(
                                           padding: EdgeInsets.only(left: 10),
                                           child: Text(
-                                            'Kes 91.30',
+                                            'Kes 201.30',
                                             style: m_title,
                                           ),
                                         ),
                                       ],
                                     ),
-                                    DropdownButton<String>(
-                                      value: dropdownvalue,
-                                      dropdownColor: Colors.white,
-                                      icon: const Icon(
-                                        Icons.keyboard_arrow_down,
-                                        color: primaryDarkColor,
-                                      ),
-                                      items: items.map((String item) {
-                                        return DropdownMenuItem<String>(
-                                          value: item,
-                                          child: Text(
-                                            item,
-                                            style: const TextStyle(
-                                                color: primaryDarkColor),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          dropdownvalue = newValue!;
-                                        });
-                                      },
-                                    ),
+                                    // DropdownButton<String>(
+                                    //   value: dropdownvalue,
+                                    //   dropdownColor: Colors.white,
+                                    //   icon: const Icon(
+                                    //     Icons.keyboard_arrow_down,
+                                    //     color: primaryDarkColor,
+                                    //   ),
+                                    //   items: items.map((String item) {
+                                    //     return DropdownMenuItem<String>(
+                                    //       value: item,
+                                    //       child: Text(
+                                    //         item,
+                                    //         style: const TextStyle(
+                                    //             color: primaryDarkColor),
+                                    //       ),
+                                    //     );
+                                    //   }).toList(),
+                                    //   onChanged: (String? newValue) {
+                                    //     setState(() {
+                                    //       dropdownvalue = newValue!;
+                                    //     });
+                                    //   },
+                                    // ),
                                   ],
                                 ),
                                 SizedBox(
@@ -466,12 +464,13 @@ class _ResellerHomeState extends State<ResellerHome> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            '${order.invoiceNumber}',
+                                            '${order.vendorName}',
                                             style:
                                                 TextStyle(color: Colors.black),
                                           ),
                                           Text(
-                                            '${order.createdAt!}',
+                                            // '10 Jan 2023',
+                                            '${order.orderCreatedAt!}',
                                             style: displaySmallerLightGrey
                                                 .copyWith(fontSize: 12),
                                           ),
@@ -489,7 +488,8 @@ class _ResellerHomeState extends State<ResellerHome> {
                                                       .spaceBetween,
                                               children: [
                                                 Text(
-                                                  '${order.paymentBankOption}',
+                                                  '${order.orderInvoiceNumber}',
+                                                  // '${order.paymentBankOption}',
                                                   style: TextStyle(
                                                       color: Colors.grey),
                                                 ),
@@ -508,7 +508,8 @@ class _ResellerHomeState extends State<ResellerHome> {
                                                       .spaceBetween,
                                               children: [
                                                 Text(
-                                                  'KES ${order.payableAmount}',
+                                                  'KES ${order.orderPayableAmount}',
+                                                  //${order.payableAmount}',
                                                   style: displayTitle.copyWith(
                                                       color: primaryDarkColor),
                                                 ),
