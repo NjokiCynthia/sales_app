@@ -572,8 +572,6 @@ class _OrderDocumentsState extends State<OrderDocuments> {
     ).then((response){
       print(response);
       String filename = response.data['name'].toString();
-
-      //!order_id || !transaction_code || !payment_mode || !payment_date
       return dio.post(
         url2.toString(),
         data: {

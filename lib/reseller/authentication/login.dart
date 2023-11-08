@@ -41,42 +41,63 @@ class _LoginState extends State<Login> {
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
 
-      final userData = responseData['user'];
-      final token = responseData['api_token'] as String;
-      final isActivated = userData['is_activated'] as bool;
+      final status = responseData['status'];
+      final message = responseData['message'];
 
-      final user = User(
-        id: userData['id'],
-        email: userData['email'],
-        password: '',
-        token: token,
-        first_name: userData['first_name'],
-        last_name: userData['last_name'],
-        phone: userData['phone'],
-        isActivated: isActivated,
-        account_id: userData['account_id'],
-        companyAddress: userData['companyAddress'],
-        companyName: userData['companyName'],
-        companyPhone: userData['companyPhone'],
-      );
+      if(status == 1){
+        final userData = responseData['user'];
 
-      // Create an instance of the UserProvider
-      print('My token is here : $token');
+        final token = responseData['api_token'] as String;
+        final isActivated = userData['is_activated'] as bool;
 
-      // Set the user in the provider
-      userProvider.setUser(user);
+        final user = User(
+          id: userData['id'],
+          email: userData['email'],
+          password: '',
+          token: token,
+          first_name: userData['first_name'],
+          last_name: userData['last_name'],
+          phone: userData['phone'],
+          isActivated: isActivated,
+          account_id: userData['account_id'],
+          companyAddress: userData['companyAddress'],
+          companyName: userData['companyName'],
+          companyPhone: userData['companyPhone'],
+        );
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ResellerDasboard(),
-        ),
-      );
+        // Create an instance of the UserProvider
+        print('My token is here : $token');
 
-      // Navigate to the dashboard or perform any other desired action.
-      print('Login successful');
-      print(response.body); // You can parse the response JSON here if needed.
+        // Set the user in the provider
+        userProvider.setUser(user);
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ResellerDasboard(),
+          ),
+        );
+
+        // Navigate to the dashboard or perform any other desired action.
+        print('Login successful');
+        print(response.body);
+      } else {
+        setState(() {
+          errorText = message;
+        });
+      }
+         // You can parse the response JSON here if needed.
     } else {
+
+      if(response.statusCode == 500){
+        setState(() {
+          errorText = 'System under maintenance. Please try later';
+        });
+      } else {
+        setState(() {
+          errorText = 'Check your internet connection';
+        });
+      }
       // Handle errors or failed login
       print('Login failed');
       // Print status code and response body for debugging
