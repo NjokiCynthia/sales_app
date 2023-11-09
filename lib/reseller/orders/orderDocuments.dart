@@ -521,7 +521,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'KES ${product.elementAt(index).productDocuments!.pricePerProduct ?? 'N/A'}',
+                                    'KES ${product.elementAt(index).productDocuments!.purchasePricePerUnit ?? 'N/A'}',
                                     style: TextStyle(color: Colors.grey),
                                   ),
                                   Text(

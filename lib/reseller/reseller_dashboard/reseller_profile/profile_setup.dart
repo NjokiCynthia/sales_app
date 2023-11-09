@@ -856,11 +856,12 @@ class _ProfileSetUpState extends State<ProfileSetUp>
               width: double.infinity,
               height: 48,
               child: ElevatedButton(
+                style:
+                    ElevatedButton.styleFrom(backgroundColor: primaryDarkColor),
                 onPressed: () {
-                  // Call the function to send the form data when the button is pressed
                   sendFormData();
                 },
-                child: Text('Submit'), // You can customize the button text here
+                child: Text('Submit'),
               ),
             )
           ]),

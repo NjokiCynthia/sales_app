@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/models/location.dart';
 import 'package:petropal/models/user_details.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/authentication/login.dart';
@@ -42,6 +44,8 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
   String secondPagePhoneNumber = '';
   String password = '';
   String confrimPassword = '';
+  String selectedLocation = 'Select Location';
+  int selectedLocationIndex = -1;
 
   String phone_number_inpt = '';
   String initialCountry = 'KE';
@@ -53,6 +57,11 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
   UserDetails? userDetails;
 
   int currentTab = 0;
+
+  List<LocationsModel> locations = [];
+
+  List<String> locationsDropdownList = [];
+  List<String> locationItems = ['Select location'];
 
   void validateSignupInputs() {
     if (first_name_ctrl.text == '') {
@@ -108,12 +117,75 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
     });
   }
 
+  bool fetchingLocations = true;
+  void _fetchLocations(BuildContext context) async {
+    setState(() {
+      fetchingLocations = true;
+    });
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final token = userProvider.user?.token;
+
+    final postData = {};
+    final apiClient = ApiClient();
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      final response = await apiClient.post(
+        '/location/get-all-locations',
+        postData,
+        headers: headers,
+      );
+
+      print('This is my locations Response: $response');
+      //Rprint();
+
+      setState(() {
+        locations = [];
+        locationsDropdownList = [];
+      });
+
+      if (response['status'] == 1 && response['data'] != null) {
+        final data = List<Map<String, dynamic>>.from(response['data']);
+        final tempLocationModels = data.map((locationData) {
+          return LocationsModel(
+            id: int.parse(locationData['id'].toString()),
+            name: locationData['name'].toString(),
+            code: locationData['code'].toString(),
+            description: locationData['description'].toString(),
+            createdOn: locationData['createdOn'].toString(),
+          );
+        }).toList();
+
+        setState(() {
+          locations = tempLocationModels;
+          selectedLocation = '${locations[0].id}';
+          locationsDropdownList =
+              tempLocationModels.map((location) => '${location.name}').toList();
+        });
+      } else {
+        print('No or invalid locations found in the response');
+        // Handle the case when 'status' is not 1 or 'cartProductsListing' is null
+      }
+    } catch (error) {
+      print('Locations Fetch By ID User Id: $error');
+      // Handle the error
+    }
+
+    setState(() {
+      fetchingLocations = false;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    _tabController.addListener(_handleTabChange); // Add listener for tab change
-    validateSignupInputs();
+    _tabController.addListener(_handleTabChange);
+    _fetchLocations(context);
   }
 
   void _handleTabChange() {
@@ -128,22 +200,6 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
     _tabController.dispose();
     super.dispose();
   }
-
-  String dropdownvalue = 'Nairobi';
-  var locations = [
-    'Eldoret',
-    'Kisumu',
-    'Konza',
-    'Mombasa',
-    'Nairobi',
-    'Nakuru',
-    'Nanyuki',
-  ];
-
-  var users = [
-    'Oil Marketing Company',
-    'Reseller',
-  ];
 
   bool agreedToTerms = false;
 
@@ -167,7 +223,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
+    // final userProvider = Provider.of<UserProvider>(context);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.grey[50],
     ));
@@ -476,7 +532,17 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                 lastName = last_name_ctrl.text;
                 firstPagePhoneNumber = phone_number_inpt;
                 email = email_ctrl.text;
-                _tabController.animateTo(1);
+
+                if (first_name_ctrl.text.isEmpty ||
+                    last_name_ctrl.text.isEmpty ||
+                    phone_number_inpt.isEmpty ||
+                    email_ctrl.text.isEmpty)
+                  Text(
+                    'Please enter all fields',
+                    style: TextStyle(color: Colors.red),
+                  );
+                else
+                  _tabController.animateTo(1);
               },
               child: Align(
                 alignment: Alignment.bottomRight,
@@ -507,55 +573,55 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            DropdownButtonFormField<String>(
-              value: userItems,
-              dropdownColor: Colors.white,
-              iconDisabledColor: primaryDarkColor,
-              iconEnabledColor: primaryDarkColor,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Colors.grey,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.grey.shade300,
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Colors.grey,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              items: users.map((String item) {
-                return DropdownMenuItem<String>(
-                  value: item,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          item,
-                          style: const TextStyle(color: primaryDarkColor),
-                        ),
-                      ]),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                setState(() {
-                  userItems = newValue!;
-                });
-              },
-            ),
+            // DropdownButtonFormField<String>(
+            //   value: userItems,
+            //   dropdownColor: Colors.white,
+            //   iconDisabledColor: primaryDarkColor,
+            //   iconEnabledColor: primaryDarkColor,
+            //   decoration: InputDecoration(
+            //     filled: true,
+            //     fillColor: Colors.white,
+            //     border: OutlineInputBorder(
+            //       borderSide: const BorderSide(
+            //         color: Colors.grey,
+            //         width: 1.0,
+            //       ),
+            //       borderRadius: BorderRadius.circular(8.0),
+            //     ),
+            //     enabledBorder: OutlineInputBorder(
+            //       borderSide: BorderSide(
+            //         color: Colors.grey.shade300,
+            //         width: 2.0,
+            //       ),
+            //       borderRadius: BorderRadius.circular(8.0),
+            //     ),
+            //     focusedBorder: OutlineInputBorder(
+            //       borderSide: const BorderSide(
+            //         color: Colors.grey,
+            //         width: 1.0,
+            //       ),
+            //       borderRadius: BorderRadius.circular(8.0),
+            //     ),
+            //   ),
+            //   items: users.map((String item) {
+            //     return DropdownMenuItem<String>(
+            //       value: item,
+            //       child: Row(
+            //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //           children: [
+            //             Text(
+            //               item,
+            //               style: const TextStyle(color: primaryDarkColor),
+            //             ),
+            //           ]),
+            //     );
+            //   }).toList(),
+            //   onChanged: (String? newValue) {
+            //     setState(() {
+            //       userItems = newValue!;
+            //     });
+            //   },
+            // ),
             const SizedBox(height: 20),
             TextFormField(
               controller: nameController,
@@ -593,13 +659,17 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
             SizedBox(
               width: double.infinity,
               child: DropdownButtonFormField<String>(
-                value: dropdownvalue,
                 dropdownColor: Colors.white,
-                iconDisabledColor: primaryDarkColor,
-                iconEnabledColor: primaryDarkColor,
+                style: bodyTextSmall,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
+                  labelText: 'Select your location',
+                  labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
+                  suffixIcon: const Icon(
+                    Icons.keyboard_arrow_down_sharp,
+                    color: Colors.grey,
+                  ),
                   border: OutlineInputBorder(
                     borderSide: const BorderSide(
                       color: Colors.grey,
@@ -610,7 +680,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.grey.shade300,
-                      width: 2.0,
+                      width: 1.0,
                     ),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
@@ -622,24 +692,28 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
-                items: locations.map((String item) {
-                  return DropdownMenuItem<String>(
-                    value: item,
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            item,
-                            style: const TextStyle(color: primaryDarkColor),
-                          ),
-                        ]),
-                  );
-                }).toList(),
                 onChanged: (String? newValue) {
                   setState(() {
-                    dropdownvalue = newValue!;
+                    selectedLocation = newValue!;
+                    selectedLocationIndex =
+                        locationsDropdownList.indexOf(selectedLocation);
                   });
                 },
+                items: locationsDropdownList.isNotEmpty
+                    ? locationsDropdownList
+                        .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList()
+                    : locationItems
+                        .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
               ),
             ),
             SizedBox(
@@ -745,12 +819,17 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
             const SizedBox(height: 30),
             GestureDetector(
               onTap: () {
-                userItems = userItems;
                 organizationName = nameController.text;
-                organizationLocation = dropdownvalue;
+                organizationLocation = selectedLocation;
                 organizationEmail = emailController.text;
                 secondPagePhoneNumber = phoneController.text;
-                _tabController.animateTo(2);
+                if (organizationName.isEmpty ||
+                    organizationLocation.isEmpty ||
+                    organizationEmail.isEmpty ||
+                    secondPagePhoneNumber.isEmpty)
+                  Text('Please fill in all fields');
+                else
+                  _tabController.animateTo(2);
               },
               child: Align(
                 alignment: Alignment.bottomRight,
@@ -931,13 +1010,17 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                     "first_name": first_name_ctrl.text,
                     "is_verified": false,
                     "last_name": last_name_ctrl.text,
-                    "location": dropdownvalue,
+                    "location": selectedLocationIndex != -1
+                        ? locations[selectedLocationIndex].id
+                        : 0,
                     "password": passwordController.text,
                     "phone_number": phone_number_ctrl.text,
                     "role_id": 3,
                   }
                 },
                 onSuccess: (res) {
+                  print('This is my selected location value');
+                  print(locations[selectedLocationIndex].id);
                   print('Signup Response: $res');
                   final isSuccessful = res['isSuccessful'] as bool;
                   final message = res['message'];

@@ -37,7 +37,9 @@ class _ResellerProductsState extends State<ResellerProducts> {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final token = userProvider.user?.token;
 
-    final postData = {};
+    final postData = {
+      "queryParams": {"pageSize": 100000},
+    };
     final apiClient = ApiClient();
     final headers = {
       'Authorization': 'Bearer $token',

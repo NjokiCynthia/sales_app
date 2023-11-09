@@ -41,7 +41,9 @@ class _ResellerOrdersState extends State<ResellerOrders> {
       return;
     }
 
-    final postData = {};
+    final postData = {
+      "queryParams": {"pageSize": 100000},
+    };
     final apiClient = ApiClient();
     final headers = {
       'Authorization': 'Bearer $token',

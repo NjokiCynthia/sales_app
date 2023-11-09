@@ -416,7 +416,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Transactions',
+                      'Completed Orders',
                       style: TextStyle(color: Colors.black),
                     ),
                     GestureDetector(

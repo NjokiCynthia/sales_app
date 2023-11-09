@@ -9,7 +9,6 @@ import 'package:petropal/models/driver.dart';
 import 'package:petropal/models/product.dart';
 import 'package:petropal/models/truck.dart';
 import 'package:petropal/reseller/orders/order_details.dart';
-import 'package:petropal/reseller/orders/success_orders.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_orders.dart';
 import 'package:petropal/models/order_product.dart';
 import 'package:petropal/widgets/buttons.dart';
@@ -1413,25 +1412,11 @@ class _MakeOrderState extends State<MakeOrder> {
                               backgroundColor: primaryDarkColor),
                           onPressed: () {
                             placeOrder();
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => OrdersSuccess(
-
-                            //         )));
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ResellerOrders(
-                                    
-                                  )),
-                              (Route<dynamic> route) => false,
-                            );
-                            // Navigator.pushReplacement(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) =>
-                            //             const ResellerOrders()));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ResellerOrders()));
                           },
                           child: const Text('Confirm Order'))
                     ],

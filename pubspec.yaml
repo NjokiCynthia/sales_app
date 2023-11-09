@@ -108,6 +108,7 @@ flutter:
     - assets/illustrations/transactions.png
     - assets/illustrations/orders.png
     - assets/illustrations/products.png
+    - assets/illustrations/success.png
     - assets/images/icons/avatar.png
     - assets/images/bank.png
     - assets/images/users.png
