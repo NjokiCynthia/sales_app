@@ -56,6 +56,7 @@ class _LoginState extends State<Login> {
       });
     } else if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
+      print(responseData);
 
       final status = responseData['status'];
       final message = responseData['message'];
@@ -81,7 +82,6 @@ class _LoginState extends State<Login> {
           companyPhone: userData['companyPhone'],
         );
 
-        // Set the user in the provider
         userProvider.setUser(user);
 
         Navigator.push(
@@ -159,10 +159,9 @@ class _LoginState extends State<Login> {
                         filled: true,
                         fillColor: Colors.white,
                         labelText: 'Enter email address',
-                        errorText:
-                            emailAddress.text.isEmpty && errorText != ' '
-                                ? 'Email is required'
-                                : null,
+                        errorText: emailAddress.text.isEmpty && errorText != ' '
+                            ? 'Email is required'
+                            : null,
                         labelStyle: TextStyle(color: Colors.grey[500]),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(

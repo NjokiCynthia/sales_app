@@ -1022,10 +1022,11 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                   print('This is my selected location value');
                   print(locations[selectedLocationIndex].id);
                   print('Signup Response: $res');
-                  final isSuccessful = res['isSuccessful'] as bool;
+                  //final isSuccessful = res['isSuccessful'] as bool;
                   final message = res['message'];
+                  final status = res['status'];
 
-                  if (isSuccessful) {
+                  if (status == 1) {
                     final data = res['data'] as Map<String, dynamic>?;
 
                     if (data != null) {

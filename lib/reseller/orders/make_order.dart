@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:petropal/constants/color_contants.dart';
@@ -169,10 +168,10 @@ class _MakeOrderState extends State<MakeOrder> {
 
           _fetchDrivers(context);
 
-          setState(() {
-            selectedDriver =
-                responseData['full_name'] + ' ' + responseData['id_number'];
-          });
+          // setState(() {
+          //   selectedDriver =
+          //       responseData['full_name'] + ' ' + responseData['id_number'];
+          // });
 
           // Close the dialog
           Navigator.of(context).pop(); // You can access specific data here.
@@ -234,11 +233,11 @@ class _MakeOrderState extends State<MakeOrder> {
 
           _fetchTrucks(context);
 
-          setState(() {
-            selectedTruck = responseData['registration_number'].toString() +
-                ' ' +
-                responseData['compartment'].toString();
-          });
+          // setState(() {
+          //   selectedTruck = responseData['registration_number'].toString() +
+          //       ' ' +
+          //       responseData['compartment'].toString();
+          // });
           Navigator.pop(context);
 
           // You can access specific data here.
@@ -268,7 +267,6 @@ class _MakeOrderState extends State<MakeOrder> {
       // Handle the case where the user or token is null, e.g., show an error message.
       return;
     }
-
 
     showDialog<void>(
       context: context,
@@ -1415,9 +1413,7 @@ class _MakeOrderState extends State<MakeOrder> {
                             Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ResellerOrders(
-                                    
-                                  )),
+                                  builder: (context) => ResellerOrders()),
                               (Route<dynamic> route) => false,
                             );
                             // Navigator.pushReplacement(

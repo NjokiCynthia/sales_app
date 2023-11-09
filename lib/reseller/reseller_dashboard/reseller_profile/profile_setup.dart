@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http_parser/http_parser.dart';
+
 import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:petropal/constants/color_contants.dart';
@@ -395,7 +395,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
       statusBarColor: Colors.grey[50],
     ));
     return DefaultTabController(
-      length: 5,
+      length: 4,
       child: Scaffold(
         backgroundColor: Colors.grey[50],
         body: SafeArea(
@@ -431,7 +431,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                       ),
                       Tab(text: "Bank"),
                       Tab(text: "Contact"),
-                      Tab(text: "Password"),
+                      // Tab(text: "Password"),
                       Tab(text: "Profile"),
                     ],
                   ),
@@ -443,7 +443,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                       buildFirstPage(),
                       buildSecondPage(),
                       buildThirdPage(),
-                      buildFourthPage(),
+                      // buildFourthPage(),
                       buildFifthPage(),
                     ],
                   ),
@@ -1277,178 +1277,178 @@ class _ProfileSetUpState extends State<ProfileSetUp>
     );
   }
 
-  Widget buildFourthPage() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.all(15),
-        child: Column(
-          children: [
-            TextFormField(
-              keyboardType: TextInputType.text,
-              //obscureText: true,
-              obscureText: _obscurePassword,
-              style: bodyText,
-              controller: passwordController,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                labelText: 'Current password',
-                labelStyle: TextStyle(color: Colors.grey[500]),
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Colors.grey,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.grey.shade300,
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Colors.grey,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _obscurePassword = !_obscurePassword;
-                    });
-                  },
-                  icon: Icon(
-                    _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              "Forgot password?",
-              style: TextStyle(color: primaryDarkColor),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              keyboardType: TextInputType.text,
-              //obscureText: true,
-              obscureText: _obscurePassword,
-              style: bodyText,
-              controller: confirmController,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                labelText: 'New password',
-                labelStyle: TextStyle(color: Colors.grey[500]),
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Colors.grey,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.grey.shade300,
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Colors.grey,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _obscurePassword = !_obscurePassword;
-                    });
-                  },
-                  icon: Icon(
-                    _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              keyboardType: TextInputType.text,
-              //obscureText: true,
-              obscureText: _obscurePassword,
-              style: bodyText,
-              controller: verifyController,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                labelText: 'Verify password',
-                labelStyle: TextStyle(color: Colors.grey[500]),
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Colors.grey,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.grey.shade300,
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Colors.grey,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _obscurePassword = !_obscurePassword;
-                    });
-                  },
-                  icon: Icon(
-                    _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                style:
-                    ElevatedButton.styleFrom(backgroundColor: primaryDarkColor),
-                child: const Text('Confirm'),
-                onPressed: () {},
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget buildFourthPage() {
+  //   return SingleChildScrollView(
+  //     child: Padding(
+  //       padding: EdgeInsets.all(15),
+  //       child: Column(
+  //         children: [
+  //           TextFormField(
+  //             keyboardType: TextInputType.text,
+  //             //obscureText: true,
+  //             obscureText: _obscurePassword,
+  //             style: bodyText,
+  //             controller: passwordController,
+  //             decoration: InputDecoration(
+  //               filled: true,
+  //               fillColor: Colors.white,
+  //               labelText: 'Current password',
+  //               labelStyle: TextStyle(color: Colors.grey[500]),
+  //               border: OutlineInputBorder(
+  //                 borderSide: const BorderSide(
+  //                   color: Colors.grey,
+  //                   width: 1.0,
+  //                 ),
+  //                 borderRadius: BorderRadius.circular(8.0),
+  //               ),
+  //               enabledBorder: OutlineInputBorder(
+  //                 borderSide: BorderSide(
+  //                   color: Colors.grey.shade300,
+  //                   width: 2.0,
+  //                 ),
+  //                 borderRadius: BorderRadius.circular(8.0),
+  //               ),
+  //               focusedBorder: OutlineInputBorder(
+  //                 borderSide: const BorderSide(
+  //                   color: Colors.grey,
+  //                   width: 1.0,
+  //                 ),
+  //                 borderRadius: BorderRadius.circular(8.0),
+  //               ),
+  //               suffixIcon: IconButton(
+  //                 onPressed: () {
+  //                   setState(() {
+  //                     _obscurePassword = !_obscurePassword;
+  //                   });
+  //                 },
+  //                 icon: Icon(
+  //                   _obscurePassword ? Icons.visibility_off : Icons.visibility,
+  //                   color: Colors.grey,
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //           SizedBox(
+  //             height: 10,
+  //           ),
+  //           Text(
+  //             "Forgot password?",
+  //             style: TextStyle(color: primaryDarkColor),
+  //           ),
+  //           SizedBox(
+  //             height: 20,
+  //           ),
+  //           TextFormField(
+  //             keyboardType: TextInputType.text,
+  //             //obscureText: true,
+  //             obscureText: _obscurePassword,
+  //             style: bodyText,
+  //             controller: confirmController,
+  //             decoration: InputDecoration(
+  //               filled: true,
+  //               fillColor: Colors.white,
+  //               labelText: 'New password',
+  //               labelStyle: TextStyle(color: Colors.grey[500]),
+  //               border: OutlineInputBorder(
+  //                 borderSide: const BorderSide(
+  //                   color: Colors.grey,
+  //                   width: 1.0,
+  //                 ),
+  //                 borderRadius: BorderRadius.circular(8.0),
+  //               ),
+  //               enabledBorder: OutlineInputBorder(
+  //                 borderSide: BorderSide(
+  //                   color: Colors.grey.shade300,
+  //                   width: 2.0,
+  //                 ),
+  //                 borderRadius: BorderRadius.circular(8.0),
+  //               ),
+  //               focusedBorder: OutlineInputBorder(
+  //                 borderSide: const BorderSide(
+  //                   color: Colors.grey,
+  //                   width: 1.0,
+  //                 ),
+  //                 borderRadius: BorderRadius.circular(8.0),
+  //               ),
+  //               suffixIcon: IconButton(
+  //                 onPressed: () {
+  //                   setState(() {
+  //                     _obscurePassword = !_obscurePassword;
+  //                   });
+  //                 },
+  //                 icon: Icon(
+  //                   _obscurePassword ? Icons.visibility_off : Icons.visibility,
+  //                   color: Colors.grey,
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //           SizedBox(
+  //             height: 20,
+  //           ),
+  //           TextFormField(
+  //             keyboardType: TextInputType.text,
+  //             //obscureText: true,
+  //             obscureText: _obscurePassword,
+  //             style: bodyText,
+  //             controller: verifyController,
+  //             decoration: InputDecoration(
+  //               filled: true,
+  //               fillColor: Colors.white,
+  //               labelText: 'Verify password',
+  //               labelStyle: TextStyle(color: Colors.grey[500]),
+  //               border: OutlineInputBorder(
+  //                 borderSide: const BorderSide(
+  //                   color: Colors.grey,
+  //                   width: 1.0,
+  //                 ),
+  //                 borderRadius: BorderRadius.circular(8.0),
+  //               ),
+  //               enabledBorder: OutlineInputBorder(
+  //                 borderSide: BorderSide(
+  //                   color: Colors.grey.shade300,
+  //                   width: 2.0,
+  //                 ),
+  //                 borderRadius: BorderRadius.circular(8.0),
+  //               ),
+  //               focusedBorder: OutlineInputBorder(
+  //                 borderSide: const BorderSide(
+  //                   color: Colors.grey,
+  //                   width: 1.0,
+  //                 ),
+  //                 borderRadius: BorderRadius.circular(8.0),
+  //               ),
+  //               suffixIcon: IconButton(
+  //                 onPressed: () {
+  //                   setState(() {
+  //                     _obscurePassword = !_obscurePassword;
+  //                   });
+  //                 },
+  //                 icon: Icon(
+  //                   _obscurePassword ? Icons.visibility_off : Icons.visibility,
+  //                   color: Colors.grey,
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //           SizedBox(
+  //             height: 20,
+  //           ),
+  //           SizedBox(
+  //             width: double.infinity,
+  //             height: 50,
+  //             child: ElevatedButton(
+  //               style:
+  //                   ElevatedButton.styleFrom(backgroundColor: primaryDarkColor),
+  //               child: const Text('Confirm'),
+  //               onPressed: () {},
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget buildFifthPage() {
     return SingleChildScrollView(
