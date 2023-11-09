@@ -149,44 +149,41 @@ class _LoginState extends State<Login> {
                     const SizedBox(
                       height: 10,
                     ),
-                    SizedBox(
-                      height: 48,
-                      child: TextFormField(
-                        controller: emailAddress,
-                        style: bodyText,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.email),
-                          prefixIconColor: Colors.grey,
-                          filled: true,
-                          fillColor: Colors.white,
-                          labelText: 'Enter email address',
-                          errorText:
-                              emailAddress.text.isEmpty && errorText != ' '
-                                  ? 'Email is required'
-                                  : null,
-                          labelStyle: TextStyle(color: Colors.grey[500]),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: primaryDarkColor.withOpacity(0.1),
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
+                    TextFormField(
+                      controller: emailAddress,
+                      style: bodyText,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.email),
+                        prefixIconColor: Colors.grey,
+                        filled: true,
+                        fillColor: Colors.white,
+                        labelText: 'Enter email address',
+                        errorText:
+                            emailAddress.text.isEmpty && errorText != ' '
+                                ? 'Email is required'
+                                : null,
+                        labelStyle: TextStyle(color: Colors.grey[500]),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: primaryDarkColor.withOpacity(0.1),
+                            width: 1.0,
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: primaryDarkColor.withOpacity(0.1),
-                              width: 2.0,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: primaryDarkColor.withOpacity(0.1),
+                            width: 2.0,
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: primaryDarkColor,
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: primaryDarkColor,
+                            width: 1.0,
                           ),
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
                       ),
                     ),
@@ -196,56 +193,53 @@ class _LoginState extends State<Login> {
                     const SizedBox(
                       height: 10,
                     ),
-                    SizedBox(
-                      height: 48,
-                      child: TextFormField(
-                        controller: password,
-                        style: bodyText,
-                        keyboardType: TextInputType.text,
-                        obscureText: _isObscured,
-                        decoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.lock),
-                          prefixIconColor: Colors.grey,
-                          filled: true,
-                          fillColor: Colors.white,
-                          labelText: 'Enter password',
-                          errorText: password.text.isEmpty && errorText != ' '
-                              ? 'Password is required'
-                              : null,
-                          labelStyle: TextStyle(color: Colors.grey[500]),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: primaryDarkColor.withOpacity(0.1),
-                              width: 0.5,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
+                    TextFormField(
+                      controller: password,
+                      style: bodyText,
+                      keyboardType: TextInputType.text,
+                      obscureText: _isObscured,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.lock),
+                        prefixIconColor: Colors.grey,
+                        filled: true,
+                        fillColor: Colors.white,
+                        labelText: 'Enter password',
+                        errorText: password.text.isEmpty && errorText != ' '
+                            ? 'Password is required'
+                            : null,
+                        labelStyle: TextStyle(color: Colors.grey[500]),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: primaryDarkColor.withOpacity(0.1),
+                            width: 0.5,
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: primaryDarkColor.withOpacity(0.1),
-                              width: 2.0,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: primaryDarkColor.withOpacity(0.1),
+                            width: 2.0,
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: primaryDarkColor,
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: primaryDarkColor,
+                            width: 1.0,
                           ),
-                          suffixIcon: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _isObscured = !_isObscured;
-                              });
-                            },
-                            child: Icon(
-                              _isObscured
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                              color: primaryDarkColor.withOpacity(0.7),
-                            ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _isObscured = !_isObscured;
+                            });
+                          },
+                          child: Icon(
+                            _isObscured
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: primaryDarkColor.withOpacity(0.7),
                           ),
                         ),
                       ),

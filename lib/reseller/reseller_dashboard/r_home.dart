@@ -79,9 +79,9 @@ class _ResellerHomeState extends State<ResellerHome> {
           orders = (response['data'] as List).map((orderData) {
             return CompletedOrdersModel(
               id: orderData['id'] as int,
-              orderStatus: orderData['orderStatus'] as int,
+              orderStatus: orderData['orderStatus'].toString() as int,
               orderCreatedAt: orderData['orderCreatedAt'] as String,
-              orderPayableAmount: orderData['orderPayableAmount'] as int,
+              orderPayableAmount: orderData['orderPayableAmount'].toString() as int,
               orderVolume: orderData['orderVolume'],
               orderInvoiceNumber: orderData['orderInvoiceNumber'] as String,
               orderExpiryTime: orderData['orderExpiryTime'] as String,
