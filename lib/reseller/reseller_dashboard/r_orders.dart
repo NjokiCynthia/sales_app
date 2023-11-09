@@ -42,7 +42,7 @@ class _ResellerOrdersState extends State<ResellerOrders> {
     }
 
     final postData = {
-      "queryParams": {"pageSize": 100000},
+      "queryParams": {"pageSize": 100},
     };
     final apiClient = ApiClient();
     final headers = {

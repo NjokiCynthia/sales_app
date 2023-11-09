@@ -38,7 +38,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
     final token = userProvider.user?.token;
 
     final postData = {
-      "queryParams": {"pageSize": 100000},
+      // "queryParams": {"pageSize": 100},
     };
     final apiClient = ApiClient();
     final headers = {
