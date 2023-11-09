@@ -10,6 +10,7 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/providers/user_provider.dart';
+import 'package:petropal/reseller/orders/success.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_dashboard.dart';
 import 'package:petropal/widgets/buttons.dart';
 import 'package:provider/provider.dart';
@@ -55,20 +56,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
   final List<String> kenyanBanks = [
     'KCB Bank',
     'Equity Bank',
-    'Cooperative Bank',
-    'Standard Chartered Bank',
-    'Barclays Bank',
-    'Absa Bank',
-    'National Bank of Kenya',
-    'CfC Stanbic Bank',
-    'Family Bank',
-    'NIC Bank',
-    'Sidian Bank',
-    'Diamond Trust Bank',
-    'Chase Bank',
-    'Ecobank',
-    'HFC Bank',
-    'Credit Bank',
+    'Cooperative Bank'
   ];
   final Map<String, List<String>> bankBranches = {
     'KCB Bank': [
@@ -336,7 +324,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(_handleTabChange);
 
     fetchBanks();
@@ -573,41 +561,41 @@ class _ProfileSetUpState extends State<ProfileSetUp>
             const SizedBox(
               height: 10,
             ),
-            TextFormField(
-              onChanged: (text) {
-                //validateOrganisationInputs();
-              },
-              keyboardType: TextInputType.text,
-              style: bodyText,
-              controller: minVolController,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                labelText: 'Minimum volume per order',
-                labelStyle: TextStyle(color: Colors.grey[500]),
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Colors.grey,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.grey.shade300,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Colors.grey,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-            ),
+            // TextFormField(
+            //   onChanged: (text) {
+            //     //validateOrganisationInputs();
+            //   },
+            //   keyboardType: TextInputType.text,
+            //   style: bodyText,
+            //   controller: minVolController,
+            //   decoration: InputDecoration(
+            //     filled: true,
+            //     fillColor: Colors.white,
+            //     labelText: 'Minimum volume per order',
+            //     labelStyle: TextStyle(color: Colors.grey[500]),
+            //     border: OutlineInputBorder(
+            //       borderSide: const BorderSide(
+            //         color: Colors.grey,
+            //         width: 1.0,
+            //       ),
+            //       borderRadius: BorderRadius.circular(8.0),
+            //     ),
+            //     enabledBorder: OutlineInputBorder(
+            //       borderSide: BorderSide(
+            //         color: Colors.grey.shade300,
+            //         width: 1.0,
+            //       ),
+            //       borderRadius: BorderRadius.circular(8.0),
+            //     ),
+            //     focusedBorder: OutlineInputBorder(
+            //       borderSide: const BorderSide(
+            //         color: Colors.grey,
+            //         width: 1.0,
+            //       ),
+            //       borderRadius: BorderRadius.circular(8.0),
+            //     ),
+            //   ),
+            // ),
             const SizedBox(
               height: 10,
             ),
@@ -1638,10 +1626,13 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                       backgroundColor: primaryDarkColor),
                   child: const Text('Confirm Details'),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: ((context) => ResellerDasboard())));
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => Success()),
+                      (Route<dynamic> route) => false,
+                    );
+                    // Navigator.pushAndRemoveUntil(context,
+                    //     MaterialPageRoute(builder: ((context) => Success())));
                   },
                 ),
               )

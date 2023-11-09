@@ -159,6 +159,8 @@ class _ResellerOrdersState extends State<ResellerOrders> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.grey[50],
     ));
+    // Create a NumberFormat instance for Kenyan Shillings (KES)
+    final NumberFormat kesFormat = NumberFormat.currency(symbol: 'KES');
     return Scaffold(
         backgroundColor: Colors.grey[50],
         appBar: AppBar(
@@ -304,7 +306,8 @@ class _ResellerOrdersState extends State<ResellerOrders> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        'KES ${order.orderPayableAmount}',
+                                        '${_formatCurrency(order.orderPayableAmount)}',
+                                        // 'KES ${order.orderPayableAmount}',
                                         style: boldText.copyWith(
                                             color: primaryDarkColor),
                                       ),
@@ -363,4 +366,12 @@ class _ResellerOrdersState extends State<ResellerOrders> {
           ),
         ));
   }
+}
+
+String _formatCurrency(String amountString) {
+  final currencyFormat = NumberFormat.currency(locale: 'en_KES', symbol: 'KES');
+  final double amount =
+      double.tryParse(amountString) ?? 0.0; // Convert to double
+  return currencyFormat
+      .format(amount); // Format with KES symbol and thousand separators
 }

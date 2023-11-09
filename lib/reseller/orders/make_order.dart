@@ -5,6 +5,7 @@ import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/bank.dart';
 import 'package:petropal/models/driver.dart';
 import 'package:petropal/models/truck.dart';
+import 'package:petropal/reseller/orders/reseller_order.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_orders.dart';
 import 'package:petropal/models/order_product.dart';
 import 'package:provider/provider.dart';
@@ -1410,17 +1411,17 @@ class _MakeOrderState extends State<MakeOrder> {
                             //         builder: (context) => OrdersSuccess(
 
                             //         )));
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ResellerOrders()),
-                              (Route<dynamic> route) => false,
-                            );
-                            // Navigator.pushReplacement(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) =>
-                            //             const ResellerOrders()));
+                            // Navigator.pushAndRemoveUntil(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) => ResellerOrders()),
+                            //   (Route<dynamic> route) => false,
+                            // );
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ResellerOrder()));
                           },
                           child: const Text('Confirm Order'))
                     ],

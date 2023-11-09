@@ -79,9 +79,9 @@ class _ResellerHomeState extends State<ResellerHome> {
           orders = (response['data'] as List).map((orderData) {
             return CompletedOrdersModel(
               id: orderData['id'] as int,
-              orderStatus: orderData['orderStatus'].toString() as int,
+              orderStatus: orderData['orderStatus'],
               orderCreatedAt: orderData['orderCreatedAt'] as String,
-              orderPayableAmount: orderData['orderPayableAmount'].toString() as int,
+              orderPayableAmount: orderData['orderPayableAmount'],
               orderVolume: orderData['orderVolume'],
               orderInvoiceNumber: orderData['orderInvoiceNumber'] as String,
               orderExpiryTime: orderData['orderExpiryTime'] as String,
@@ -513,7 +513,9 @@ class _ResellerHomeState extends State<ResellerHome> {
                                                       .spaceBetween,
                                               children: [
                                                 Text(
-                                                  'KES ${order.orderPayableAmount}',
+                                                  formatAmountAsKES(
+                                                      order.orderPayableAmount),
+                                                  //'${order.orderPayableAmount}',
                                                   //${order.payableAmount}',
                                                   style: displayTitle.copyWith(
                                                       color: primaryDarkColor),
@@ -570,14 +572,17 @@ class _ResellerHomeState extends State<ResellerHome> {
                         : Center(
                             child: Column(children: [
                               Image.asset(
-                                  'assets/illustrations/transactions.png'),
+                                'assets/illustrations/transactions.png',
+                                height: 50,
+                                width: 50,
+                              ),
                               Text(
                                 'No completed orders at the moment',
                                 style: displayTitle,
                               )
                             ]),
                           ),
-              ))
+              )),
             ])));
   }
 }
@@ -662,4 +667,13 @@ Widget buildCard(int index) {
       ),
     ),
   );
+}
+
+String formatAmountAsKES(int? amount) {
+  if (amount == null) {
+    return 'KES 0.00';
+  }
+  final currencyFormat = NumberFormat.currency(locale: 'en_KES', symbol: 'KES');
+  final double amountDouble = amount.toDouble(); // Convert int to double
+  return currencyFormat.format(amountDouble);
 }

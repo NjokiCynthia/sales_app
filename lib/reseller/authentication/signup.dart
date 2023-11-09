@@ -1022,15 +1022,15 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                   print('This is my selected location value');
                   print(locations[selectedLocationIndex].id);
                   print('Signup Response: $res');
-                  //final isSuccessful = res['isSuccessful'] as bool;
+                  final isSuccessful = res['isSuccessful'] as bool;
                   final message = res['message'];
-                  final status = res['status'];
+                  //final status = res['status'];
 
-                  if (status == 1) {
+                  if (isSuccessful) {
                     final data = res['data'] as Map<String, dynamic>?;
 
                     if (data != null) {
-                      //final userData = data['user'] as Map<String, dynamic>?;
+                      final userData = data['user'] as Map<String, dynamic>?;
 
                       print(message);
                       Navigator.pushReplacement(
