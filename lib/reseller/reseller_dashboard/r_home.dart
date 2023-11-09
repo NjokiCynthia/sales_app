@@ -176,24 +176,29 @@ class _ResellerHomeState extends State<ResellerHome> {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text("Activation Required"),
+            backgroundColor: Colors.white,
+            title: Text(
+              "Activation Required",
+              style: TextStyle(color: primaryDarkColor),
+            ),
             content: Text(
-                "Your account is not activated. Please complete your profile to activate your account"),
+              "Your account is not activated. Please complete your profile to activate your account",
+              style: TextStyle(color: Colors.grey),
+            ),
             actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: ((context) => Login())));
-                },
-                child: Text('No'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ProfileSetUp()));
-                },
-                child: Text('Yes'),
-              ),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: primaryDarkColor.withOpacity(0.7)),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProfileSetUp()));
+                  },
+                  child: Text(
+                    'Activate Now',
+                    style: TextStyle(color: primaryDarkColor),
+                  )),
             ],
           ),
         );

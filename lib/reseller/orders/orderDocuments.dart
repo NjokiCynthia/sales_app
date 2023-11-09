@@ -99,7 +99,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
               driverIdNumber: data['driverIdNumber'].toString() ?? '',
               driverLicenceNumber: data['driverLicenceNumber'].toString() ?? '',
               driverEpraLicenceNumber:
-                  data['driverEpraLicenceNumber'].toString() ?? '',
+                  data['driverEPRALicenceNumber'].toString() ?? '',
               truckNumber: data['truckNumber'].toString() ?? '',
               truckCompartment: data['truckCompartment'].toString(),
               proformaInvoiceDoc: data['proformaInvoiceDoc'].toString() ?? '',
@@ -430,7 +430,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                         height: 5,
                       ),
                       Text(
-                        '${orderDocuments!.driverEpraLicenceNumber ?? ''}',
+                        '${orderDocuments!.driverEpraLicenceNumber.toString() ?? ''}',
                         style: TextStyle(color: Colors.grey),
                       ),
                       SizedBox(

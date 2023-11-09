@@ -30,6 +30,7 @@ class _LoginState extends State<Login> {
       errorText = '';
     });
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+
     final response = await http.post(
       Uri.parse('https://petropal.sandbox.co.ke:8040/user/login'),
       body: {
@@ -37,11 +38,11 @@ class _LoginState extends State<Login> {
         'password': password.text,
       },
     );
-    final bool emailValid =
-    RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+    final bool emailValid = RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(emailAddress.text);
 
-    if(emailAddress.text.isEmpty) {
+    if (emailAddress.text.isEmpty) {
       setState(() {
         errorText = 'Please enter your email address';
       });
@@ -59,7 +60,7 @@ class _LoginState extends State<Login> {
       final status = responseData['status'];
       final message = responseData['message'];
 
-      if(status == 1){
+      if (status == 1) {
         final userData = responseData['user'];
 
         final token = responseData['api_token'] as String;
@@ -89,17 +90,14 @@ class _LoginState extends State<Login> {
             builder: (context) => ResellerDasboard(),
           ),
         );
-
-
       } else {
         setState(() {
           errorText = message;
         });
       }
-         // You can parse the response JSON here if needed.
+      // You can parse the response JSON here if needed.
     } else {
-
-      if(response.statusCode == 500){
+      if (response.statusCode == 500) {
         setState(() {
           errorText = 'System under maintenance. Please try later';
         });
@@ -163,7 +161,10 @@ class _LoginState extends State<Login> {
                           filled: true,
                           fillColor: Colors.white,
                           labelText: 'Enter email address',
-                          errorText: emailAddress.text.isEmpty && errorText!=' '?'Email is required':null,
+                          errorText:
+                              emailAddress.text.isEmpty && errorText != ' '
+                                  ? 'Email is required'
+                                  : null,
                           labelStyle: TextStyle(color: Colors.grey[500]),
                           border: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -208,7 +209,9 @@ class _LoginState extends State<Login> {
                           filled: true,
                           fillColor: Colors.white,
                           labelText: 'Enter password',
-                          errorText: password.text.isEmpty && errorText!=' '?'Password is required':null,
+                          errorText: password.text.isEmpty && errorText != ' '
+                              ? 'Password is required'
+                              : null,
                           labelStyle: TextStyle(color: Colors.grey[500]),
                           border: OutlineInputBorder(
                             borderSide: BorderSide(

@@ -3,7 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/reseller/authentication/signup.dart';
+import 'package:petropal/reseller/authentication/login.dart';
+
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/bank_account_details.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/change_pass.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/contact_details.dart';
@@ -43,7 +44,7 @@ class _ResellerProfileState extends State<ResellerProfile> {
             TextButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: ((context) => Signup())));
+                    MaterialPageRoute(builder: ((context) => Login())));
 
                 //Navigator.of(context).pop();
               },

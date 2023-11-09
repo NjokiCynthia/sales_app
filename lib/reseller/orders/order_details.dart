@@ -24,7 +24,7 @@ class _OrderDetailsState extends State<OrderDetails> {
   double minimumVolumePerOrder = 0.0;
   final double pricePerLiter = 200.0;
   bool fetchingDetails = true;
-  List<ProductListing> products = [];
+  List<ProductListing> productList = [];
   List<TextEditingController> orderVolume = [];
   List<OrderProductModel> orderedProducts = [];
   Future<void> _fetchDetails(BuildContext context) async {
@@ -91,7 +91,7 @@ class _OrderDetailsState extends State<OrderDetails> {
         }).toList();
 
         setState(() {
-          products = productModels;
+          productList = productModels;
         });
 
         setState(() {
@@ -129,9 +129,9 @@ class _OrderDetailsState extends State<OrderDetails> {
   }
 
   String checkMinimumMaximumVolume(String value, int index) {
-    double minimumVolume = double.parse(products[index].minVol.toString());
+    double minimumVolume = double.parse(productList[index].minVol.toString());
     double maximumVolume =
-        double.parse(products[index].availableVolume.toString());
+        double.parse(productList[index].availableVolume.toString());
     if (value.isNotEmpty) {
       double currentVolume = double.parse(value);
       if (currentVolume < minimumVolume) {
@@ -154,10 +154,10 @@ class _OrderDetailsState extends State<OrderDetails> {
         orderedProducts.add(OrderProductModel(
             id: 0,
             orderId: 0,
-            productId: products[index].productId,
-            price: products[index].sellingPrice,
+            productId: productList[index].productId,
+            price: productList[index].sellingPrice,
             volume: currentVolume,
-            productName: products[index].productName));
+            productName: productList[index].productName));
       }
     }
   }
@@ -263,12 +263,12 @@ class _OrderDetailsState extends State<OrderDetails> {
               ),
               fetchingDetails
                   ? Center(child: CircularProgressIndicator())
-                  : products.isNotEmpty
+                  : productList.isNotEmpty
                       ? Expanded(
                           child: ListView.builder(
-                            itemCount: products.length,
+                            itemCount: productList.length,
                             itemBuilder: (BuildContext context, int index) {
-                              final product = products[index];
+                              final product = productList[index];
 
                               return Column(
                                 mainAxisAlignment:
@@ -283,7 +283,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            '${widget.product.product}',
+                                            '${product.productName}',
                                             style: textBolderSmall,
                                           ),
                                           SizedBox(
@@ -301,7 +301,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                                 TextStyle(color: Colors.black),
                                           ),
                                           Text(
-                                            '${widget.product.minimumVolume} litres',
+                                            '${product.minVol} litres',
                                             style:
                                                 TextStyle(color: Colors.grey),
                                           ),
@@ -323,7 +323,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                               children: [
                                                 TextSpan(
                                                   text:
-                                                      'KES ${widget.product.sellingPrice}/',
+                                                      'KES ${product.sellingPrice}/',
                                                   style: TextStyle(
                                                     color: Colors.black,
                                                   ),
@@ -339,7 +339,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                             height: 5,
                                           ),
                                           Text(
-                                            '${widget.product.availableVolume} litres',
+                                            '${product.availableVolume} litres',
                                             style: textBolderSmall,
                                           ),
                                           SizedBox(height: 5),
@@ -349,7 +349,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                                 TextStyle(color: Colors.black),
                                           ),
                                           Text(
-                                            '${widget.product.maximumVolume} litres',
+                                            '${product.maxVol} litres',
                                             style:
                                                 TextStyle(color: Colors.grey),
                                           ),
@@ -432,7 +432,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                       ),
                                     ],
                                   ),
-                                  if (index < products.length - 1)
+                                  if (index < productList.length - 1)
                                     Divider(
                                       color: Colors.black,
                                     ),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/reseller/authentication/signup.dart';
+
 import 'package:petropal/reseller/authentication/login.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
         PageViewModel(
           title: "Petropal: Energizing Strong Connections",
           body:
-              "Welcome to Petropal Oil Management System. Streamline your oil operations with our user-friendly platform. Let's get started!",
+              "Welcome to Petropal Petroleum Management System. Streamline your operations with our user-friendly platform. Let's get started!",
           image: Image.asset(
             'assets/images/icons/petropal_logo.png',
           ),
@@ -47,9 +47,9 @@ class _HomePageState extends State<HomePage> {
           decoration: pageDecoration(),
         ),
         PageViewModel(
-          title: "Efficient Oil Inventory and Pricing Control",
+          title: "Efficient Petroleum Inventory and Pricing Control",
           body:
-              "Effortlessly manage your oil inventory, pricing, and deliveries from anywhere. Discover the power of efficient oil management.",
+              "Effortlessly manage your inventory, pricing, and deliveries from anywhere. Discover the power of efficient petroleum management.",
           image: Padding(
             padding: EdgeInsets.only(top: 80),
             child: Image.asset(
@@ -60,9 +60,9 @@ class _HomePageState extends State<HomePage> {
           decoration: pageDecoration(),
         ),
         PageViewModel(
-          title: "Join Us for Streamlined Oil Management",
+          title: "Join Us for Streamlined Petroleum Management",
           body:
-              "Join thousands of satisfied users who trust Petropal for their oil management needs. Sign in or create an account to experience it for yourself.",
+              "Join thousands of satisfied users who trust Petropal for their management needs. Sign in or create an account to experience it for yourself.",
           image: Padding(
             padding: EdgeInsets.only(top: 80),
             child: Image.asset('assets/images/icons/manage.png'),
@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Signup()),
+                MaterialPageRoute(builder: (context) => Login()),
               );
             },
             style: ElevatedButton.styleFrom(

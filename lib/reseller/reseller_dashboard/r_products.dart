@@ -309,6 +309,14 @@ class _ResellerProductsState extends State<ResellerProducts> {
                                               height: 5,
                                             ),
                                             Text(
+                                              "Product price",
+                                              style:
+                                                  TextStyle(color: Colors.grey),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
                                               "Depot",
                                               style:
                                                   TextStyle(color: Colors.grey),
@@ -341,6 +349,13 @@ class _ResellerProductsState extends State<ResellerProducts> {
                                             Text(
                                               product
                                                   .dealerName!, // Actual dealer name
+                                              style: boldText,
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              'KES ${product.sellingPrice!.toString()}',
                                               style: boldText,
                                             ),
                                             SizedBox(
