@@ -44,11 +44,14 @@ class _ResellerOrdersState extends State<ResellerOrders> {
     final postData = {
       "queryParams": {"pageSize": 100},
     };
+
     final apiClient = ApiClient();
     final headers = {
       'Authorization': 'Bearer $token',
       'Content-Type': 'application/json',
     };
+
+    print(postData);
 
     await apiClient
         .post('/order/query', postData, headers: headers)

@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -6,17 +5,12 @@ import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/bank.dart';
 import 'package:petropal/models/driver.dart';
-import 'package:petropal/models/product.dart';
 import 'package:petropal/models/truck.dart';
-import 'package:petropal/reseller/orders/order_details.dart';
-import 'package:petropal/reseller/orders/success_orders.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_orders.dart';
 import 'package:petropal/models/order_product.dart';
-import 'package:petropal/widgets/buttons.dart';
 import 'package:provider/provider.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/constants/api.dart';
-import 'package:http/http.dart' as http;
 
 class MakeOrder extends StatefulWidget {
   final double totalVolume;
@@ -274,8 +268,7 @@ class _MakeOrderState extends State<MakeOrder> {
       // Handle the case where the user or token is null, e.g., show an error message.
       return;
     }
-    final token = user.token;
-    final user_id = user.id;
+
 
     showDialog<void>(
       context: context,
