@@ -25,9 +25,30 @@ class _ResellerProductsState extends State<ResellerProducts> {
   String? selectedDealer;
   String? selectedProduct;
   double? selectedPrice;
+  TextEditingController _searchController = TextEditingController();
+  List<ProductModel> filteredProducts = [];
+  List<ProductModel> products = [];
+  void _filterProducts(String searchTerm) {
+    if (searchTerm.isEmpty) {
+      setState(() {
+        // If search term is empty, show all products
+        filteredProducts = List.from(products);
+      });
+    } else {
+      // Filter products based on the search term
+      List<ProductModel> filteredList = products
+          .where((product) =>
+              product.product!.toLowerCase().contains(searchTerm.toLowerCase()))
+          .toList();
+
+      setState(() {
+        filteredProducts = filteredList;
+      });
+    }
+  }
 
   bool fetchingProducts = true;
-  List<ProductModel> products = [];
+  bool initialFetchComplete = false;
 
   _fetchProducts(BuildContext context) async {
     setState(() {
@@ -79,6 +100,9 @@ class _ResellerProductsState extends State<ResellerProducts> {
 
           setState(() {
             products = productModels;
+            filteredProducts =
+                List.from(products); // Initialize filteredProducts
+            initialFetchComplete = true; // Set the flag
           });
         } catch (e) {
           print('Error parsing product data: $e');
@@ -110,6 +134,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.grey[50],
     ));
@@ -152,7 +177,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
           if (fetchingProducts) {
             // Show loading indicator while fetching products
             return Center(child: CircularProgressIndicator());
-          } else if (products.isEmpty) {
+          } else if (!initialFetchComplete || products.isEmpty) {
             // Show a message when there are no products
             return Center(
               child: Column(children: [
@@ -171,7 +196,12 @@ class _ResellerProductsState extends State<ResellerProducts> {
                   SizedBox(
                     height: 42,
                     child: TextFormField(
+                      controller: _searchController,
                       style: TextStyle(color: Colors.black),
+                      onChanged: (value) {
+                        _filterProducts(value);
+                      },
+
                       decoration: InputDecoration(
                           prefixIcon: Icon(
                             Icons.search,
@@ -232,16 +262,38 @@ class _ResellerProductsState extends State<ResellerProducts> {
 
                           return GestureDetector(
                             onTap: () {
-                              PersistentNavBarNavigator.pushNewScreen(
-                                context,
-                                screen: OrderDetails(
-                                  product: product,
-                                ),
-                                pageTransitionAnimation:
-                                    PageTransitionAnimation.cupertino,
-                                withNavBar: false,
-                              );
-                              print(product);
+                              if (userProvider.user?.isActivated == true) {
+                                PersistentNavBarNavigator.pushNewScreen(
+                                  context,
+                                  screen: OrderDetails(
+                                    product: product,
+                                  ),
+                                  pageTransitionAnimation:
+                                      PageTransitionAnimation.cupertino,
+                                  withNavBar: false,
+                                );
+                                print(product);
+                              } else {
+                                // User is not activated, show a popup
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('Cannot Make an Order'),
+                                      content: Text(
+                                          'Your account is not activated. Please contact support.'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text('OK'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
                             },
                             child: Container(
                               margin: const EdgeInsets.only(bottom: 10),
@@ -403,8 +455,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                             ),
                           );
                         },
-                        itemCount: products
-                            .length, // Use the actual product list length
+                        itemCount: filteredProducts.length,
                       ),
                     ),
                   ),

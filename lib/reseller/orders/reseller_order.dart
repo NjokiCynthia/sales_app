@@ -318,7 +318,9 @@ class _ResellerOrderState extends State<ResellerOrder> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          'KES ${order.orderPayableAmount}',
+                                          formatAmountAsKES(
+                                              order.orderPayableAmount),
+                                          //'KES ${order.orderPayableAmount}',
                                           style: boldText.copyWith(
                                               color: primaryDarkColor),
                                         ),
@@ -379,4 +381,14 @@ class _ResellerOrderState extends State<ResellerOrder> {
           )),
     );
   }
+}
+
+String formatAmountAsKES(String? amountString) {
+  if (amountString == null) {
+    return 'KES 0.00';
+  }
+  final currencyFormat = NumberFormat.currency(locale: 'en_KES', symbol: 'KES');
+  final double amount =
+      double.tryParse(amountString) ?? 0.0; // Convert to double
+  return currencyFormat.format(amount);
 }

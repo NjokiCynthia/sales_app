@@ -111,7 +111,7 @@ class _ResellerHomeState extends State<ResellerHome> {
   String getStatusText(int status) {
     switch (status) {
       case 1:
-        return 'Awaiting Payment';
+        return 'Awaiting Payment Confirmation';
       case 2:
         return 'Awaiting Confirmation';
       case 3:

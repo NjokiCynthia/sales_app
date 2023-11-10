@@ -93,7 +93,7 @@ class _ResellerOrdersState extends State<ResellerOrders> {
   String getStatusText(int status) {
     switch (status) {
       case 1:
-        return 'Awaiting Payment';
+        return 'Awaiting Payment Confirmation';
       case 2:
         return 'Awaiting Confirmation';
       case 3:
@@ -227,86 +227,63 @@ class _ResellerOrdersState extends State<ResellerOrders> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "#${order.orderInvoiceNumber}",
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            "${order.vendorName}",
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                          ),
-                                        ],
+                                      Text(
+                                        "${order.vendorName}",
+                                        style: TextStyle(color: Colors.black),
                                       ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            '${order.orderCreatedAt}',
-                                            // '${formatDateTime(order.orderCreatedAt)}',
-                                            style: displaySmallerLightGrey
-                                                .copyWith(fontSize: 12),
-                                          ),
-
-                                          // Text(
-                                          //   // '${formatDate(order.orderCreatedAt!)}',
-                                          //   order.orderCreatedAt
-                                          //       .toLocal()
-                                          //       .toString(),
-                                          //   style: greyText,
-                                          // ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                color: getStatusContainerColor(
-                                                    order.orderStatus),
-                                                // color: Color.fromRGBO(
-                                                //     255, 226, 229, 1.0),
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            child: Padding(
-                                              padding: EdgeInsets.only(
-                                                  top: 4,
-                                                  bottom: 4,
-                                                  left: 8,
-                                                  right: 8),
-                                              child: Text(
-                                                getStatusText(
-                                                    order.orderStatus),
-                                                style: TextStyle(
-                                                  color: getStatusColor(
-                                                      order.orderStatus),
-                                                  fontSize: 16,
-                                                ),
-                                              ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color: getStatusContainerColor(
+                                                order.orderStatus),
+                                            // color: Color.fromRGBO(
+                                            //     255, 226, 229, 1.0),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                              top: 4,
+                                              bottom: 4,
+                                              left: 8,
+                                              right: 8),
+                                          child: Text(
+                                            getStatusText(order.orderStatus),
+                                            style: TextStyle(
+                                              color: getStatusColor(
+                                                  order.orderStatus),
+                                              fontSize: 16,
                                             ),
                                           ),
-                                          SizedBox(
-                                            height: 20,
-                                          ),
-                                        ],
+                                        ),
                                       ),
                                     ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
                                   ),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        '${_formatCurrency(order.orderPayableAmount)}',
+                                        "#${order.orderInvoiceNumber}",
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                      Text(
+                                        '${formatDateTime(order.orderCreatedAt)}',
+                                        style: displaySmallerLightGrey.copyWith(
+                                            fontSize: 12),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        ' ${_formatCurrency(order.orderPayableAmount)}',
                                         // 'KES ${order.orderPayableAmount}',
                                         style: boldText.copyWith(
                                             color: primaryDarkColor),
@@ -374,4 +351,9 @@ String _formatCurrency(String amountString) {
       double.tryParse(amountString) ?? 0.0; // Convert to double
   return currencyFormat
       .format(amount); // Format with KES symbol and thousand separators
+}
+
+String formatDateTime(DateTime dateTime) {
+  final outputFormat = DateFormat('d MMM y');
+  return outputFormat.format(dateTime);
 }

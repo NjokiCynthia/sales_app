@@ -939,495 +939,497 @@ class _MakeOrderState extends State<MakeOrder> {
               style: m_title,
             ),
           ),
-          body: Stepper(
-              currentStep: currentStep,
-              onStepTapped: (index) {
-                setState(() => currentStep = index);
-              },
-              steps: [
-                Step(
-                  isActive: currentStep >= 0,
-                  title: Text(
-                    'Delivery Details',
-                    style: bodyGrey.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  content: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Row(
-                            children: [
-                              Icon(
-                                Icons.drive_eta_outlined,
-                                color: primaryDarkColor,
+          body: SingleChildScrollView(
+            child: Stepper(
+                currentStep: currentStep,
+                onStepTapped: (index) {
+                  setState(() => currentStep = index);
+                },
+                steps: [
+                  Step(
+                    isActive: currentStep >= 0,
+                    title: Text(
+                      'Delivery Details',
+                      style: bodyGrey.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    content: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Row(
+                              children: [
+                                Icon(
+                                  Icons.drive_eta_outlined,
+                                  color: primaryDarkColor,
+                                ),
+                                SizedBox(width: 5),
+                                Text(
+                                  'Select a Driver',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ],
+                            ),
+                            Text(
+                              'or',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            Row(children: [
+                              const Icon(
+                                Icons.add,
+                                color: Colors.grey,
                               ),
-                              SizedBox(width: 5),
-                              Text(
-                                'Select a Driver',
-                                style: TextStyle(color: Colors.black),
+                              const SizedBox(width: 5),
+                              GestureDetector(
+                                onTap: () {
+                                  _showDriverDialog(context);
+                                },
+                                child: const Text(
+                                  'Add new Driver',
+                                  style: TextStyle(color: Colors.black),
+                                ),
                               ),
-                            ],
-                          ),
-                          Text(
-                            'or',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          Row(children: [
-                            const Icon(
-                              Icons.add,
-                              color: Colors.grey,
-                            ),
-                            const SizedBox(width: 5),
-                            GestureDetector(
-                              onTap: () {
-                                _showDriverDialog(context);
-                              },
-                              child: const Text(
-                                'Add new Driver',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ),
-                          ])
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      DropdownButtonFormField<String>(
-                        //value: selectedDriver,
-                        dropdownColor: Colors.white,
-                        style: bodyTextSmall,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          labelText: 'Select the driver',
-                          labelStyle:
-                              bodyTextSmall.copyWith(color: Colors.grey[500]),
-                          suffixIcon: const Icon(
-                            Icons.keyboard_arrow_down_sharp,
-                            color: Colors.grey,
-                          ),
-                          border: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Colors.grey,
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.grey.shade300,
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Colors.grey,
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
+                            ])
+                          ],
                         ),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedDriver = newValue!;
-                            selectedDriverIndex = driverModelsDropdownList
-                                .indexOf(selectedDriver);
-                          });
-                        },
-                        items: driverModelsDropdownList.isNotEmpty
-                            ? driverModelsDropdownList
-                                .map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList()
-                            : driverItems
-                                .map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.fire_truck_outlined,
-                                color: primaryDarkColor,
-                              ),
-                              SizedBox(width: 5),
-                              Text(
-                                'Select truck',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            'or',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          Row(children: [
-                            Icon(
-                              Icons.add,
-                              color: Colors.grey,
-                            ),
-                            SizedBox(width: 5),
-                            GestureDetector(
-                              onTap: () {
-                                _showTruckDialog(context);
-                              },
-                              child: Text(
-                                'Add new Truck',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ),
-                          ])
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      DropdownButtonFormField<String>(
-                        dropdownColor: Colors.white,
-                        //value: selectedTruck,
-                        style: bodyTextSmall,
-                        decoration: InputDecoration(
-                          suffixIcon: const Icon(
-                            Icons.keyboard_arrow_down_sharp,
-                            color: Colors.grey,
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
-                          labelText: 'Select truck compartments',
-                          labelStyle:
-                              bodyTextSmall.copyWith(color: Colors.grey[500]),
-                          border: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Colors.grey,
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.grey.shade300,
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Colors.grey,
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
+                        const SizedBox(
+                          height: 10,
                         ),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedTruck = newValue!;
-                            selectedTruckIndex =
-                                truckModelDropdownList.indexOf(selectedTruck);
-                          });
-                        },
-                        items: truckModelDropdownList.isNotEmpty
-                            ? truckModelDropdownList
-                                .map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList()
-                            : truckItems
-                                .map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                      ),
-                      const SizedBox(width: 5),
-                      const Text(
-                        'Select bank account',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      DropdownButtonFormField<String>(
-                        //value: selectedBankAccount,
-                        dropdownColor: Colors.white,
-                        style: bodyTextSmall,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          labelText: 'Select the bank account',
-                          labelStyle:
-                              bodyTextSmall.copyWith(color: Colors.grey[500]),
-                          suffixIcon: const Icon(
-                            Icons.keyboard_arrow_down_sharp,
-                            color: Colors.grey,
-                          ),
-                          border: OutlineInputBorder(
-                            borderSide: const BorderSide(
+                        DropdownButtonFormField<String>(
+                          isExpanded: true,
+                          //value: selectedDriver,
+                          dropdownColor: Colors.white,
+                          style: bodyTextSmall,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            labelText: 'Select the driver',
+                            labelStyle:
+                                bodyTextSmall.copyWith(color: Colors.grey[500]),
+                            suffixIcon: const Icon(
+                              Icons.keyboard_arrow_down_sharp,
                               color: Colors.grey,
-                              width: 1.0,
                             ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.grey.shade300,
-                              width: 1.0,
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Colors.grey,
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
                             ),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Colors.grey,
-                              width: 1.0,
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
                             ),
-                            borderRadius: BorderRadius.circular(8.0),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Colors.grey,
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
                           ),
-                        ),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedBankAccount = newValue!;
-                            selectedBankAccountIndex = bankModelsDropdownList
-                                .indexOf(selectedBankAccount);
-                          });
-                        },
-                        items: bankModelsDropdownList.isNotEmpty
-                            ? bankModelsDropdownList
-                                .map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList()
-                            : bankAccountItems
-                                .map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                      ),
-                    ],
-                  ),
-                ),
-                Step(
-                  isActive: currentStep >= 1,
-                  title: Text(
-                    'Confirm Order Details',
-                    style: bodyGrey.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  content: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Product Details: ${widget.orderProducts.length}',
-                          style: bodyGrey),
-                      SizedBox(
-                        height: 180.0,
-                        child: ListView.builder(
-                            itemCount: widget.orderProducts.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              final orderedProduct =
-                                  widget.orderProducts[index];
-                              return Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            orderedProduct.productName,
-                                            style:
-                                                TextStyle(color: Colors.green),
-                                          ),
-                                          Text(
-                                            'Price: ${orderedProduct.price.toStringAsFixed(2)}',
-                                            style:
-                                                TextStyle(color: Colors.blue),
-                                          ),
-                                          Text(
-                                            'Volume Ordered: ${orderedProduct.volume.toStringAsFixed(2)}',
-                                            style:
-                                                TextStyle(color: Colors.grey),
-                                          ),
-                                          Text(
-                                            'Sub Total: ${(orderedProduct.volume * orderedProduct.price).toStringAsFixed(2)}',
-                                            style:
-                                                TextStyle(color: Colors.grey),
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              );
-                            }),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        'Total: KES ${calculateTotal(widget.orderProducts).toStringAsFixed(2)}, ',
-                        style: const TextStyle(color: Colors.black),
-                      ),
-                      const SizedBox(height: 5),
-                      Text(
-                        'Delivery Details:',
-                        style: bodyGrey,
-                      ),
-                      const SizedBox(height: 5),
-                      Row(
-                        children: [
-                          const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Driver Name:',
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                              Text(
-                                'Phone Number:',
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                              Text(
-                                'EPRA License Number: ',
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                              Text(
-                                'Driving License Number: ',
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${selectedDriver}',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              Text(
-                                '${driverPhoneNumber}',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              Text(
-                                '${driverEpraLicense}',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              Text(
-                                '${driverDrivingLicense}',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      Text('Truck Details:', style: bodyGrey),
-                      const SizedBox(height: 5),
-                      Row(
-                        children: [
-                          const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Truck Details:',
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${selectedTruck}',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                          'Amount payable: KES ${calculateTotal(widget.orderProducts).toStringAsFixed(2)}',
-                          style: bodyGrey),
-                      Text('Payment Details:', style: bodyGrey),
-                      const SizedBox(height: 5),
-                      Row(
-                        children: [
-                          const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Bank Account number:',
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                selectedBankAccount,
-                                style: const TextStyle(color: Colors.black),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: primaryDarkColor),
-                          onPressed: () {
-                            placeOrder();
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => OrdersSuccess(
-
-                            //         )));
-                            // Navigator.pushAndRemoveUntil(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //       builder: (context) => ResellerOrders()),
-                            //   (Route<dynamic> route) => false,
-                            // );
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ResellerOrder()));
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedDriver = newValue!;
+                              selectedDriverIndex = driverModelsDropdownList
+                                  .indexOf(selectedDriver);
+                            });
                           },
-                          child: const Text('Confirm Order'))
-                    ],
+                          items: driverModelsDropdownList.isNotEmpty
+                              ? driverModelsDropdownList
+                                  .map<DropdownMenuItem<String>>(
+                                      (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList()
+                              : driverItems.map<DropdownMenuItem<String>>(
+                                  (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.fire_truck_outlined,
+                                  color: primaryDarkColor,
+                                ),
+                                SizedBox(width: 5),
+                                Text(
+                                  'Select truck',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ],
+                            ),
+                            Text(
+                              'or',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            Row(children: [
+                              Icon(
+                                Icons.add,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(width: 5),
+                              GestureDetector(
+                                onTap: () {
+                                  _showTruckDialog(context);
+                                },
+                                child: Text(
+                                  'Add new Truck',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ),
+                            ])
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        DropdownButtonFormField<String>(
+                          dropdownColor: Colors.white,
+                          isExpanded: true,
+                          //value: selectedTruck,
+                          style: bodyTextSmall,
+                          decoration: InputDecoration(
+                            suffixIcon: const Icon(
+                              Icons.keyboard_arrow_down_sharp,
+                              color: Colors.grey,
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                            labelText: 'Select truck compartments',
+                            labelStyle:
+                                bodyTextSmall.copyWith(color: Colors.grey[500]),
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Colors.grey,
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Colors.grey,
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          ),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedTruck = newValue!;
+                              selectedTruckIndex =
+                                  truckModelDropdownList.indexOf(selectedTruck);
+                            });
+                          },
+                          items: truckModelDropdownList.isNotEmpty
+                              ? truckModelDropdownList
+                                  .map<DropdownMenuItem<String>>(
+                                      (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList()
+                              : truckItems.map<DropdownMenuItem<String>>(
+                                  (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                        ),
+                        const SizedBox(width: 5),
+                        const Text(
+                          'Select bank account',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        DropdownButtonFormField<String>(
+                          //value: selectedBankAccount,
+                          isExpanded: true,
+                          dropdownColor: Colors.white,
+                          style: bodyTextSmall,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            labelText: 'Select the bank account',
+                            labelStyle:
+                                bodyTextSmall.copyWith(color: Colors.grey[500]),
+                            suffixIcon: const Icon(
+                              Icons.keyboard_arrow_down_sharp,
+                              color: Colors.grey,
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Colors.grey,
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300,
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Colors.grey,
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          ),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedBankAccount = newValue!;
+                              selectedBankAccountIndex = bankModelsDropdownList
+                                  .indexOf(selectedBankAccount);
+                            });
+                          },
+                          items: bankModelsDropdownList.isNotEmpty
+                              ? bankModelsDropdownList
+                                  .map<DropdownMenuItem<String>>(
+                                      (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList()
+                              : bankAccountItems.map<DropdownMenuItem<String>>(
+                                  (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ])),
+                  Step(
+                    isActive: currentStep >= 1,
+                    title: Text(
+                      'Confirm Order Details',
+                      style: bodyGrey.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    content: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Product Details: ${widget.orderProducts.length}',
+                            style: bodyGrey),
+                        SizedBox(
+                          height: 180.0,
+                          child: ListView.builder(
+                              itemCount: widget.orderProducts.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final orderedProduct =
+                                    widget.orderProducts[index];
+                                return Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              orderedProduct.productName,
+                                              style: TextStyle(
+                                                  color: Colors.green),
+                                            ),
+                                            Text(
+                                              'Price: ${orderedProduct.price.toStringAsFixed(2)}',
+                                              style:
+                                                  TextStyle(color: Colors.blue),
+                                            ),
+                                            Text(
+                                              'Volume Ordered: ${orderedProduct.volume.toStringAsFixed(2)}',
+                                              style:
+                                                  TextStyle(color: Colors.grey),
+                                            ),
+                                            Text(
+                                              'Sub Total: ${(orderedProduct.volume * orderedProduct.price).toStringAsFixed(2)}',
+                                              style:
+                                                  TextStyle(color: Colors.grey),
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                );
+                              }),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          'Total: KES ${calculateTotal(widget.orderProducts).toStringAsFixed(2)}, ',
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          'Delivery Details:',
+                          style: bodyGrey,
+                        ),
+                        const SizedBox(height: 5),
+                        Row(
+                          children: [
+                            const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Driver Name:',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                Text(
+                                  'Phone Number:',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                Text(
+                                  'EPRA License Number: ',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                Text(
+                                  'Driving License Number: ',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${selectedDriver}',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                Text(
+                                  '${driverPhoneNumber}',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                Text(
+                                  '${driverEpraLicense}',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                Text(
+                                  '${driverDrivingLicense}',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        Text('Truck Details:', style: bodyGrey),
+                        const SizedBox(height: 5),
+                        Row(
+                          children: [
+                            const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Truck Details:',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${selectedTruck}',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                            'Amount payable: KES ${calculateTotal(widget.orderProducts).toStringAsFixed(2)}',
+                            style: bodyGrey),
+                        Text('Payment Details:', style: bodyGrey),
+                        const SizedBox(height: 5),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Bank Account Details:',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              selectedBankAccount,
+                              style: const TextStyle(color: Colors.black),
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: primaryDarkColor),
+                            onPressed: () {
+                              placeOrder();
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) => OrdersSuccess(
+
+                              //         )));
+                              // Navigator.pushAndRemoveUntil(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => ResellerOrders()),
+                              //   (Route<dynamic> route) => false,
+                              // );
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ResellerOrder()));
+                            },
+                            child: const Text('Confirm Order'))
+                      ],
+                    ),
+                  ),
+                ]),
+          )),
     );
   }
 }

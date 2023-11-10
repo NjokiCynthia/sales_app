@@ -329,7 +329,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                             onTap: () => launchUrl(Uri.parse(
                                 orderDocuments?.loadingOrder.toString() ?? '')),
                             child: const Text(
-                              'Download Receipt',
+                              'Download Loading order',
                               style: TextStyle(
                                   decoration: TextDecoration.underline,
                                   color: Colors.blue),
