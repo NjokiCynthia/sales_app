@@ -21,10 +21,24 @@ class ResellerProducts extends StatefulWidget {
 
 class _ResellerProductsState extends State<ResellerProducts> {
   // List<ProductModel>? products
-  String? selectedLocation;
+
   String? selectedDealer;
-  String? selectedProduct;
+
   double? selectedPrice;
+
+  String? selectedOMC;
+  String? selectedLocation;
+  String? selectedProduct;
+  String? selectedSort;
+  String? selectedItem;
+  List<String>? currentItems;
+
+  Map<String, List<String>> allItems = {
+    'OMC': ['OMC1', 'OMC2', 'OMC3'],
+    'Location': ['Location1', 'Location2', 'Location3'],
+    'Product': ['Product1', 'Product2', 'Product3'],
+    'Sort': ['Sort1', 'Sort2', 'Sort3'],
+  };
 
   bool fetchingProducts = true;
   List<ProductModel> products = [];
@@ -38,7 +52,15 @@ class _ResellerProductsState extends State<ResellerProducts> {
     final token = userProvider.user?.token;
 
     final postData = {
-      //"queryParams": {"pageSize": 100},
+      // "queryParams": {
+      //   "pageSize": 100,
+      //   "pageNumber": 1,
+      //   "sortOption": 1,
+      //   "account_id": 0,
+      //   "location_id": 0,
+      //   "depot_id": 0,
+      //   "product": 0,
+      // },
     };
     final apiClient = ApiClient();
     final headers = {
@@ -101,239 +123,13 @@ class _ResellerProductsState extends State<ResellerProducts> {
   void initState() {
     super.initState();
     _fetchProducts(context);
+    selectedItem = 'OMC';
+    currentItems = allItems['OMC']!;
   }
 
   Future<void> _refreshProducts(BuildContext context) async {
     // Fetch orders data here
     await _fetchProducts(context);
-  }
-
-  void _showDropdownDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            'Select filter Option',
-            style: m_title.copyWith(color: primaryDarkColor),
-          ),
-          backgroundColor: Colors.white,
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              DropdownButtonFormField<String>(
-                dropdownColor: Colors.white,
-                style: bodyTextSmall,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelText: 'Location',
-                  labelStyle: TextStyle(color: Colors.grey[500]),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.grey.shade300,
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  suffixIcon: Icon(
-                    Icons.keyboard_arrow_down,
-                    color: primaryDarkColor,
-                  ),
-                ),
-                items: ['Option 1', 'Option 2'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? value) {
-                  print('OMC selected: $value');
-                },
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              DropdownButtonFormField<String>(
-                dropdownColor: Colors.white,
-                style: bodyTextSmall,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelText: 'Depot',
-                  labelStyle: TextStyle(color: Colors.grey[500]),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.grey.shade300,
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  suffixIcon: Icon(
-                    Icons.keyboard_arrow_down,
-                    color: primaryDarkColor,
-                  ),
-                ),
-                items: ['Location 1', 'Location 2'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? value) {
-                  print('Location selected: $value');
-                },
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              DropdownButtonFormField<String>(
-                dropdownColor: Colors.white,
-                style: bodyTextSmall,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelText: 'Product',
-                  labelStyle: TextStyle(color: Colors.grey[500]),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.grey.shade300,
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  suffixIcon: Icon(
-                    Icons.keyboard_arrow_down,
-                    color: primaryDarkColor,
-                  ),
-                ),
-                items: ['Depot 1', 'Depot 2'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? value) {
-                  print('Depot selected: $value');
-                },
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              DropdownButtonFormField<String>(
-                dropdownColor: Colors.white,
-                style: bodyTextSmall,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelText: 'OMC',
-                  labelStyle: TextStyle(color: Colors.grey[500]),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.grey.shade300,
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  suffixIcon: Icon(
-                    Icons.keyboard_arrow_down,
-                    color: primaryDarkColor,
-                  ),
-                ),
-                items: ['Product 1', 'Product 2'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? value) {
-                  print('Products selected: $value');
-                },
-              ),
-            ],
-          ),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: primaryDarkColor.withOpacity(0.1)),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Close'),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: primaryDarkColor),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Filter'),
-                )
-              ],
-            )
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -396,64 +192,112 @@ class _ResellerProductsState extends State<ResellerProducts> {
               padding: const EdgeInsets.all(10),
               child: Column(
                 children: [
-                  ElevatedButton.icon(
-                      onPressed: () {
-                        _showDropdownDialog(context);
-                      },
-                      icon: Icon(
-                        Icons.filter_alt_off_outlined,
-                        color: primaryDarkColor,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 10),
+                          child: DropdownButtonFormField<String>(
+                            dropdownColor: Colors.white,
+                            style: bodyTextSmall,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              labelText: 'Select an item',
+                              labelStyle: TextStyle(color: Colors.grey[500]),
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Colors.grey,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.grey.shade300,
+                                  width: 2.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Colors.grey,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),
+                            value: selectedItem,
+                            items: allItems.keys.map((item) {
+                              return DropdownMenuItem<String>(
+                                value: item,
+                                child: Text(item),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                selectedItem = value!;
+                                currentItems = allItems[value]!;
+                              });
+                            },
+                          ),
+                        ),
                       ),
-                      label: Text('Filter')),
-                  // SizedBox(
-                  //   height: 42,
-                  //   child: TextFormField(
-                  //     style: TextStyle(color: Colors.black),
-                  //     decoration: InputDecoration(
-                  //         prefixIcon: Icon(
-                  //           Icons.search,
-                  //           color: primaryDarkColor,
-                  //           weight: 1,
-                  //         ),
-                  //         filled: true,
-                  //         fillColor: Colors.white,
-                  //         labelText: 'Search products',
-                  //         labelStyle: TextStyle(color: Colors.grey[500]),
-                  //         border: OutlineInputBorder(
-                  //           borderSide: const BorderSide(
-                  //             color: Colors.grey,
-                  //             width: 1.0,
-                  //           ),
-                  //           borderRadius: BorderRadius.circular(8.0),
-                  //         ),
-                  //         enabledBorder: OutlineInputBorder(
-                  //           borderSide: BorderSide(
-                  //             color: Colors.grey.shade300,
-                  //             width: 1.0,
-                  //           ),
-                  //           borderRadius: BorderRadius.circular(8.0),
-                  //         ),
-                  //         focusedBorder: OutlineInputBorder(
-                  //           borderSide: const BorderSide(
-                  //             color: Colors.grey,
-                  //             width: 1.0,
-                  //           ),
-                  //           borderRadius: BorderRadius.circular(8.0),
-                  //         ),
-                  //         hintStyle: bodyGrey,
-                  //         suffixIcon: Icon(
-                  //           Icons.filter_alt_off_outlined,
-                  //           color: primaryDarkColor,
-                  //         )),
-                  //     // decoration: InputDecoration(
-                  //     //   prefixIcon: Icon(Icons.search),
-                  //     //   border: OutlineInputBorder(),
-                  //     //   hintText: 'Search products',
-                  //     //   hintStyle: bodyGrey,
-                  //     //   labelStyle: TextStyle(color: Colors.black),
-                  //     // ),
-                  //   ),
-                  // ),
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 10),
+                          child: DropdownButtonFormField<String>(
+                            dropdownColor: Colors.white,
+                            style: bodyTextSmall,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              labelText: 'Select a ${selectedItem ?? 'item'}',
+                              labelStyle: TextStyle(color: Colors.grey[500]),
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Colors.grey,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.grey.shade300,
+                                  width: 2.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Colors.grey,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),
+                            // decoration: InputDecoration(
+                            //   labelText: 'Select a ${selectedItem ?? 'item'}',
+                            //   border: OutlineInputBorder(),
+                            // ),
+                            value: currentItems!.isNotEmpty
+                                ? currentItems![0]
+                                : null,
+                            items: currentItems!.map((item) {
+                              return DropdownMenuItem<String>(
+                                value: item,
+                                child: Text(item),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              // Handle the selected value for the current item type
+                              print('Selected $selectedItem: $value');
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   SizedBox(
                     height: 10,
                   ),
