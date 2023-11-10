@@ -474,11 +474,20 @@ class _ResellerHomeState extends State<ResellerHome> {
                                                 TextStyle(color: Colors.black),
                                           ),
                                           Text(
-                                            // '10 Jan 2023',
-                                            '${order.orderCreatedAt!}',
+                                            DateFormat('d MMM y').format(
+                                                DateTime.parse(
+                                                    order.orderCreatedAt!)),
                                             style: displaySmallerLightGrey
                                                 .copyWith(fontSize: 12),
                                           ),
+
+                                          // Text(
+                                          //   // '10 Jan 2023',
+
+                                          //   '${order.orderCreatedAt!}',
+                                          //   style: displaySmallerLightGrey
+                                          //       .copyWith(fontSize: 12),
+                                          // ),
                                         ],
                                       ),
                                       subtitle: Padding(

@@ -8,7 +8,7 @@ import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/orders.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/orders/orderDocuments.dart';
-import 'package:petropal/reseller/reseller_dashboard/r_products.dart';
+
 import 'package:provider/provider.dart';
 
 class ResellerOrder extends StatefulWidget {
@@ -263,19 +263,11 @@ class _ResellerOrderState extends State<ResellerOrder> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              '${order.orderCreatedAt}',
-                                              // '${formatDateTime(order.orderCreatedAt)}',
+                                              formatDateTime(
+                                                  order.orderCreatedAt),
                                               style: displaySmallerLightGrey
                                                   .copyWith(fontSize: 12),
                                             ),
-
-                                            // Text(
-                                            //   // '${formatDate(order.orderCreatedAt!)}',
-                                            //   order.orderCreatedAt
-                                            //       .toLocal()
-                                            //       .toString(),
-                                            //   style: greyText,
-                                            // ),
                                             SizedBox(
                                               height: 10,
                                             ),
