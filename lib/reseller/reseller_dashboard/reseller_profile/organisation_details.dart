@@ -262,44 +262,6 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                     validateOrganisationInputs();
                   },
                   keyboardType: TextInputType.text,
-                  style: bodyText,
-                  controller: volume_ctrl,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    labelText: 'Minimum volume per order',
-                    labelStyle: TextStyle(color: Colors.grey[500]),
-                    border: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.grey,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.grey.shade300,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.grey,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  onChanged: (text) {
-                    validateOrganisationInputs();
-                  },
-                  keyboardType: TextInputType.text,
                   //obscureText: true,
 
                   style: bodyText,

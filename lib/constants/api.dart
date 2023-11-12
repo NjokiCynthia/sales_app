@@ -7,12 +7,10 @@ import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/driver.dart';
 import 'package:petropal/models/omc_product.dart';
-import 'package:petropal/models/completedOrders.dart';
 import 'package:petropal/models/product.dart';
 import 'package:petropal/models/truck.dart';
 import 'package:petropal/providers/driver.dart';
 import 'package:petropal/providers/omc_product.dart';
-import 'package:petropal/providers/order.dart';
 import 'package:petropal/providers/products.dart';
 import 'package:petropal/providers/truck.dart';
 

@@ -11,6 +11,9 @@ import 'package:petropal/models/completedOrders.dart';
 import 'package:petropal/models/orders.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/authentication/login.dart';
+import 'package:petropal/reseller/orders/all_completed_orders.dart';
+import 'package:petropal/reseller/orders/completed_orders_documents.dart';
+import 'package:petropal/reseller/orders/orderDocuments.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/profile_setup.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_transactions.dart';
 import 'package:petropal/screens/superadmin_dashboard/chart_data.dart';
@@ -164,6 +167,21 @@ class _ResellerHomeState extends State<ResellerHome> {
     }
   }
 
+  String _getGreeting() {
+    var hour = DateTime.now().hour;
+    String greeting = '';
+
+    if (hour < 12) {
+      greeting = 'Good Morning,';
+    } else if (hour < 17) {
+      greeting = 'Good Afternoon,';
+    } else {
+      greeting = 'Good Evening,';
+    }
+
+    return '$greeting';
+  }
+
   @override
   void initState() {
     super.initState();
@@ -237,6 +255,28 @@ class _ResellerHomeState extends State<ResellerHome> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
+              Padding(
+                padding: EdgeInsets.all(5),
+                child: Row(
+                  children: [
+                    Text(
+                      _getGreeting(),
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 12,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                        Provider.of<UserProvider>(context).user?.first_name ??
+                            'User',
+                        style: TextStyle(color: primaryDarkColor)),
+                  ],
+                ),
+              ),
               Column(children: [
                 Container(
                     color: Colors.grey[50],
@@ -423,7 +463,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                       onTap: () {
                         PersistentNavBarNavigator.pushNewScreen(
                           context,
-                          screen: ResellerTransactions(),
+                          screen: AllCompletedOrders(),
                           withNavBar: false,
                           pageTransitionAnimation:
                               PageTransitionAnimation.cupertino,
@@ -431,7 +471,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                       },
                       child: Text(
                         'See all',
-                        style: bodyText.copyWith(color: Colors.white),
+                        style: bodyText.copyWith(color: primaryDarkColor),
                       ),
                     )
                   ],
@@ -450,117 +490,131 @@ class _ResellerHomeState extends State<ResellerHome> {
                                     orders[index]; // Define 'order' here
                                 return Column(
                                   children: <Widget>[
-                                    ListTile(
-                                      leading: Container(
-                                        decoration: BoxDecoration(
-                                          color:
-                                              primaryDarkColor.withOpacity(0.1),
-                                          shape: BoxShape.circle,
-                                        ),
-                                        padding: const EdgeInsets.all(8),
-                                        child: const Icon(
-                                          Icons.arrow_outward,
-                                          color: primaryDarkColor,
-                                          size: 15,
-                                        ),
-                                      ),
-                                      title: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            '${order.vendorName}',
-                                            style:
-                                                TextStyle(color: Colors.black),
+                                    GestureDetector(
+                                      onTap: () {
+                                        PersistentNavBarNavigator.pushNewScreen(
+                                          context,
+                                          screen: CompletedDocuments(
+                                              orders: orders[index]),
+                                          pageTransitionAnimation:
+                                              PageTransitionAnimation.cupertino,
+                                          withNavBar: false,
+                                        );
+                                      },
+                                      child: ListTile(
+                                        leading: Container(
+                                          decoration: BoxDecoration(
+                                            color: primaryDarkColor
+                                                .withOpacity(0.1),
+                                            shape: BoxShape.circle,
                                           ),
-                                          Text(
-                                            DateFormat('d MMM y').format(
-                                                DateTime.parse(
-                                                    order.orderCreatedAt!)),
-                                            style: displaySmallerLightGrey
-                                                .copyWith(fontSize: 12),
+                                          padding: const EdgeInsets.all(8),
+                                          child: const Icon(
+                                            Icons.arrow_outward,
+                                            color: primaryDarkColor,
+                                            size: 15,
                                           ),
-
-                                          // Text(
-                                          //   // '10 Jan 2023',
-
-                                          //   '${order.orderCreatedAt!}',
-                                          //   style: displaySmallerLightGrey
-                                          //       .copyWith(fontSize: 12),
-                                          // ),
-                                        ],
-                                      ),
-                                      subtitle: Padding(
-                                        padding: const EdgeInsets.only(top: 10),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                        ),
+                                        title: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  '${order.orderInvoiceNumber}',
-                                                  // '${order.paymentBankOption}',
-                                                  style: TextStyle(
-                                                      color: Colors.grey),
-                                                ),
-                                                // Text(
-                                                //   '12 Sept 2023',
-                                                //   style: displaySmallerLightGrey,
-                                                // ),
-                                              ],
+                                            Text(
+                                              '${order.vendorName}',
+                                              style: TextStyle(
+                                                  color: Colors.black),
                                             ),
-                                            SizedBox(
-                                              height: 5,
+                                            Text(
+                                              DateFormat('d MMM y').format(
+                                                  DateTime.parse(
+                                                      order.orderCreatedAt!)),
+                                              style: displaySmallerLightGrey
+                                                  .copyWith(fontSize: 12),
                                             ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  formatAmountAsKES(
-                                                      order.orderPayableAmount),
-                                                  //'${order.orderPayableAmount}',
-                                                  //${order.payableAmount}',
-                                                  style: displayTitle.copyWith(
-                                                      color: primaryDarkColor),
-                                                ),
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                      color:
-                                                          const Color.fromRGBO(
-                                                              201,
-                                                              247,
-                                                              245,
+
+                                            // Text(
+                                            //   // '10 Jan 2023',
+
+                                            //   '${order.orderCreatedAt!}',
+                                            //   style: displaySmallerLightGrey
+                                            //       .copyWith(fontSize: 12),
+                                            // ),
+                                          ],
+                                        ),
+                                        subtitle: Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 10),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    '${order.orderInvoiceNumber}',
+                                                    // '${order.paymentBankOption}',
+                                                    style: TextStyle(
+                                                        color: Colors.grey),
+                                                  ),
+                                                  // Text(
+                                                  //   '12 Sept 2023',
+                                                  //   style: displaySmallerLightGrey,
+                                                  // ),
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    formatAmountAsKES(order
+                                                        .orderPayableAmount),
+                                                    //'${order.orderPayableAmount}',
+                                                    //${order.payableAmount}',
+                                                    style: displayTitle.copyWith(
+                                                        color:
+                                                            primaryDarkColor),
+                                                  ),
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                        color: const Color
+                                                            .fromRGBO(
+                                                            201, 247, 245, 1.0),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8)),
+                                                    child: const Padding(
+                                                      padding: EdgeInsets.only(
+                                                          left: 8,
+                                                          top: 4,
+                                                          bottom: 4,
+                                                          right: 8),
+                                                      child: Text(
+                                                        "Completed",
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 12,
+                                                          color: Color.fromRGBO(
+                                                              27,
+                                                              197,
+                                                              189,
                                                               1.0),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8)),
-                                                  child: const Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 8,
-                                                        top: 4,
-                                                        bottom: 4,
-                                                        right: 8),
-                                                    child: Text(
-                                                      "Completed",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontSize: 12,
-                                                        color: Color.fromRGBO(
-                                                            27, 197, 189, 1.0),
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -576,7 +630,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                                 );
                               }
                             },
-                            itemCount: orders.length + 1,
+                            itemCount: orders.length > 5 ? 5 : orders.length,
                           )
                         : Center(
                             child: Column(children: [

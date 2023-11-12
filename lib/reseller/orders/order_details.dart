@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
@@ -109,6 +110,11 @@ class _OrderDetailsState extends State<OrderDetails> {
     setState(() {
       fetchingDetails = false;
     });
+  }
+
+  String formatVolume(double volume) {
+    final formatter = NumberFormat('#,###.##');
+    return formatter.format(volume);
   }
 
   @override
@@ -301,7 +307,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                                 TextStyle(color: Colors.black),
                                           ),
                                           Text(
-                                            '${product.minVol} litres',
+                                            '${formatVolume(product.minVol)}litres',
                                             style:
                                                 TextStyle(color: Colors.grey),
                                           ),
@@ -339,7 +345,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                             height: 5,
                                           ),
                                           Text(
-                                            '${product.availableVolume} litres',
+                                            '${formatVolume(product.availableVolume)}  litres',
                                             style: textBolderSmall,
                                           ),
                                           SizedBox(height: 5),
@@ -349,7 +355,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                                 TextStyle(color: Colors.black),
                                           ),
                                           Text(
-                                            '${product.maxVol} litres',
+                                            '${formatVolume(product.maxVol)}litres',
                                             style:
                                                 TextStyle(color: Colors.grey),
                                           ),
@@ -449,7 +455,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                 width: double.infinity,
                 height: 48,
                 child: Text(
-                  'Volume: ${totalValue}',
+                  'Volume:  ${formatVolume(totalValue)} liters',
                   style: textBolder,
                 ),
               ),
@@ -457,7 +463,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                 width: double.infinity,
                 height: 48,
                 child: Text(
-                  'Minimum Volume: ${minimumVolumePerOrder}',
+                  'Minimum Volume: ${formatVolume(minimumVolumePerOrder)} litres',
                   style: textBolderSmall,
                 ),
               ),
@@ -466,7 +472,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                 height: 48,
                 child: (totalValue < minimumVolumePerOrder)
                     ? Text(
-                        'Volume is less than the minimum value required per order: ${minimumVolumePerOrder}',
+                        'Volume is less than the minimum value required per order: ${minimumVolumePerOrder} liters',
                         style: const TextStyle(color: Colors.red),
                       )
                     : null,
@@ -479,10 +485,19 @@ class _OrderDetailsState extends State<OrderDetails> {
                     backgroundColor: primaryDarkColor,
                     disabledBackgroundColor: Theme.of(context)
                         .primaryColor
-                        .withOpacity(.8), // Background Color
-                    disabledForegroundColor: Colors.white70, //Text Color
+                        .withOpacity(.3), // Background Color
+                    disabledForegroundColor: Colors.white70, // Text Color
                   ),
-                  onPressed: totalValue >= minimumVolumePerOrder
+                  onPressed: totalValue >= minimumVolumePerOrder &&
+                          productList.every((product) =>
+                              orderVolume[productList.indexOf(product)]
+                                  .text
+                                  .isEmpty ||
+                              checkMinimumMaximumVolume(
+                                      orderVolume[productList.indexOf(product)]
+                                          .text,
+                                      productList.indexOf(product))
+                                  .isEmpty)
                       ? () {
                           updateOrderProducts();
                           Navigator.push(

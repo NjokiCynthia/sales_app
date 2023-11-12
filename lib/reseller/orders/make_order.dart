@@ -1406,18 +1406,7 @@ class _MakeOrderState extends State<MakeOrder> {
                                 backgroundColor: primaryDarkColor),
                             onPressed: () {
                               placeOrder();
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => OrdersSuccess(
 
-                              //         )));
-                              // Navigator.pushAndRemoveUntil(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //       builder: (context) => ResellerOrders()),
-                              //   (Route<dynamic> route) => false,
-                              // );
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(

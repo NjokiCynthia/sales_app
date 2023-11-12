@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/authentication/login.dart';
 
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/bank_account_details.dart';
@@ -11,6 +12,7 @@ import 'package:petropal/reseller/reseller_dashboard/reseller_profile/contact_de
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/organisation_details.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/organisation_profile.dart';
 import 'package:petropal/widgets/widget.dart';
+import 'package:provider/provider.dart';
 
 class ResellerProfile extends StatefulWidget {
   const ResellerProfile({Key? key}) : super(key: key);
@@ -64,21 +66,22 @@ class _ResellerProfileState extends State<ResellerProfile> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Colors.grey[50] // Set the desired color
         ));
+    final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       backgroundColor: Colors.grey[50], // Very light shade of grey
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: EdgeInsets.all(10),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  margin: const EdgeInsets.only(bottom: 20),
+                  margin: EdgeInsets.only(bottom: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const CircleAvatar(
+                      CircleAvatar(
                         backgroundColor: Colors.white,
                         backgroundImage:
                             AssetImage('assets/images/icons/avatar.png'),
@@ -100,7 +103,7 @@ class _ResellerProfileState extends State<ResellerProfile> {
                       border: Border.all(color: Colors.grey.shade200),
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8)),
-                  child: const ListTile(
+                  child: ListTile(
                     leading: CircleAvatar(
                       backgroundColor: Colors.white,
                       backgroundImage:
@@ -112,7 +115,7 @@ class _ResellerProfileState extends State<ResellerProfile> {
                         top: 10,
                       ),
                       child: Text(
-                        'Digital Vision Resellers',
+                        userProvider.user?.username ?? '',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black, // Text color
@@ -122,7 +125,7 @@ class _ResellerProfileState extends State<ResellerProfile> {
                     subtitle: Padding(
                       padding: EdgeInsets.only(top: 20, bottom: 10),
                       child: Text(
-                        'reseller@example.com',
+                        userProvider.user?.email ?? '',
                         style: TextStyle(
                           color: Colors.black, // Text color
                         ),

@@ -16,6 +16,7 @@ class User {
   final String companyName;
   final String companyAddress;
   final String companyPhone;
+  String get username => '$first_name $last_name';
 
   User({
     required this.id,
