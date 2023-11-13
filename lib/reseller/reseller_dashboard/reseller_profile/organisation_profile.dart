@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/r_profile.dart';
+import 'package:provider/provider.dart';
 
 class OrganisationProfile extends StatefulWidget {
   const OrganisationProfile({super.key});
@@ -13,27 +15,60 @@ class OrganisationProfile extends StatefulWidget {
 }
 
 class _OrganisationProfileState extends State<OrganisationProfile> {
-  final TextEditingController email_ctrl = TextEditingController();
-  final TextEditingController phone_controller = TextEditingController();
   String phone_number_inpt = '';
   String initialCountry = 'KE';
-
+  final TextEditingController ONameontroller = TextEditingController();
+  final TextEditingController OAddressontroller = TextEditingController();
+  final TextEditingController OPhoneontroller = TextEditingController();
+  final TextEditingController OEmailController = TextEditingController();
   PhoneNumber number = PhoneNumber(isoCode: 'KE');
 
   bool buttonError = true;
   String buttonErrorMessage = 'Enter all inputs';
   void validateProfileInputs() {
-    if (email_ctrl == '') {
+    if (OEmailController == '') {
       return setState(() {
         buttonError = true;
         buttonErrorMessage = 'Enter phone number';
       });
     }
-    if (phone_controller == '') {
+    if (OPhoneontroller == '') {
       return setState(() {
         buttonError = true;
         buttonErrorMessage = 'Enter phone number';
       });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Access the UserProvider and retrieve the user data
+    final userProvider = context.read<UserProvider>();
+    final user = userProvider.user;
+
+    if (user != null) {
+      // Use the user data in your form fields and for debugging
+      print('User first name is : ${user.first_name}');
+      print('User last name is: ${user.last_name}');
+
+      print('User email is: ${user.email}');
+      print('User phone number is: ${user.phone}');
+      print('User account id is: ${user.account_id}');
+      print('My company email is: ${user.companyAddress}');
+      print('My company name is: ${user.companyName}');
+      print('My company phone is: ${user.companyPhone}');
+      print('My company password is: ${user.password}');
+      print('User token is: ${user.token}');
+
+      // emailController.text = user.email;
+      // numberController.text = user.phone;
+      // nameController.text = user.first_name;
+      // phoneController.text = user.phone;
+      // passwordController.text = user.password;
+      OEmailController.text = user.companyAddress;
+      ONameontroller.text = user.companyName;
+      OPhoneontroller.text = user.companyPhone;
     }
   }
 
@@ -43,235 +78,233 @@ class _OrganisationProfileState extends State<OrganisationProfile> {
       statusBarColor: Colors.grey[50],
     ));
     return Scaffold(
-      backgroundColor: Colors.grey[50],
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.all(15),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Icon(
-                        Icons.arrow_back_ios,
-                        color: primaryDarkColor,
+        backgroundColor: Colors.grey[50],
+        body: SingleChildScrollView(
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.all(15),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(
+                          Icons.arrow_back_ios,
+                          color: primaryDarkColor,
+                        ),
                       ),
-                    ),
-                    Text(
-                      'Organisation Profile Details',
-                      style: m_title,
-                    ),
-                    Container(
-                      width: 30,
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  onChanged: (text) {
-                    validateProfileInputs();
-                  },
-                  keyboardType: TextInputType.text,
-                  style: bodyText,
-                  controller: email_ctrl,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    labelText: 'Organisation Name',
-                    labelStyle: TextStyle(color: Colors.grey[500]),
-                    border: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.grey,
-                        width: 1.0,
+                      Text(
+                        'Organisation Profile Details',
+                        style: m_title,
                       ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.grey.shade300,
-                        width: 1.0,
+                      Container(
+                        width: 30,
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.text,
+                    style: bodyText,
+                    controller: ONameontroller,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelText: 'Organisation Name',
+                      labelStyle: TextStyle(color: Colors.grey[500]),
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.grey,
-                        width: 1.0,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
-                      borderRadius: BorderRadius.circular(8.0),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  onChanged: (text) {
-                    validateProfileInputs();
-                  },
-                  keyboardType: TextInputType.text,
-                  style: bodyText,
-                  controller: email_ctrl,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    labelText: 'Organisation address',
-                    labelStyle: TextStyle(color: Colors.grey[500]),
-                    border: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.grey,
-                        width: 1.0,
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.text,
+                    style: bodyText,
+                    controller: OEmailController,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelText: 'Organisation address',
+                      labelStyle: TextStyle(color: Colors.grey[500]),
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.grey.shade300,
-                        width: 1.0,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.grey,
-                        width: 1.0,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
-                      borderRadius: BorderRadius.circular(8.0),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                InternationalPhoneNumberInput(
-                  onInputChanged: (PhoneNumber number) {
-                    setState(() {
-                      phone_number_inpt = number.phoneNumber ?? '';
-                    });
-                    validateProfileInputs();
-                  },
-                  onInputValidated: (bool value) {},
-                  selectorConfig: const SelectorConfig(
-                    selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
-                    setSelectorButtonAsPrefixIcon: true,
-                    leadingPadding: 10,
+                  SizedBox(
+                    height: 20,
                   ),
-                  textStyle: bodyText,
-                  ignoreBlank: false,
-                  autoValidateMode: AutovalidateMode.disabled,
-                  selectorTextStyle: const TextStyle(color: Colors.black),
-                  initialValue: number,
-                  textAlignVertical: TextAlignVertical.top,
-                  textFieldController: phone_controller,
-                  formatInput: false,
-                  keyboardType: const TextInputType.numberWithOptions(
-                    signed: true,
-                    decimal: true,
-                  ),
-                  maxLength: 10,
-                  inputBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  inputDecoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    labelText: 'Phone number',
-                    labelStyle: TextStyle(color: Colors.grey[500]),
-                    //labelStyle: bodyTextSmall,
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.grey.shade300,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.grey.shade300,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.grey,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                  onSaved: (PhoneNumber number) {},
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  onChanged: (text) {
-                    validateProfileInputs();
-                  },
-                  keyboardType: TextInputType.text,
-                  style: bodyText,
-                  controller: email_ctrl,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    labelText: 'Organisation Email',
-                    labelStyle: TextStyle(color: Colors.grey[500]),
-                    border: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.grey,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.grey.shade300,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.grey,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryDarkColor),
-                    child: const Text('Confirm Details'),
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const ResellerProfile()));
+                  InternationalPhoneNumberInput(
+                    onInputChanged: (PhoneNumber number) {
+                      setState(() {
+                        phone_number_inpt = number.phoneNumber ?? '';
+                      });
                     },
+                    onInputValidated: (bool value) {},
+                    selectorConfig: const SelectorConfig(
+                      selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                      setSelectorButtonAsPrefixIcon: true,
+                      leadingPadding: 10,
+                    ),
+                    textStyle: bodyText,
+                    ignoreBlank: false,
+                    autoValidateMode: AutovalidateMode.disabled,
+                    selectorTextStyle: const TextStyle(color: Colors.black),
+                    initialValue: number,
+                    textAlignVertical: TextAlignVertical.top,
+                    textFieldController: OPhoneontroller,
+                    formatInput: false,
+                    keyboardType: const TextInputType.numberWithOptions(
+                      signed: true,
+                      decimal: true,
+                    ),
+                    maxLength: 10,
+                    inputBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    inputDecoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelText: 'Phone number',
+                      labelStyle: TextStyle(color: Colors.grey[500]),
+                      //labelStyle: bodyTextSmall,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    onSaved: (PhoneNumber number) {},
                   ),
-                )
-              ],
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.text,
+                    style: bodyText,
+                    controller: OEmailController,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      labelText: 'Organisation Email',
+                      labelStyle: TextStyle(color: Colors.grey[500]),
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: primaryDarkColor),
+                      child: const Text('Confirm Details'),
+                      onPressed: () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ResellerProfile()),
+                          (Route<dynamic> route) => false,
+                        );
+                        // Navigator.pushAndRemoveUntil(context,
+                        //     MaterialPageRoute(builder: ((context) => Success())));
+                      },
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

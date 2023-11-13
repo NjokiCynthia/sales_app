@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
@@ -784,23 +785,65 @@ class _ResellerProductsState extends State<ResellerProducts> {
                                             SizedBox(
                                               height: 5,
                                             ),
-                                            Text(
-                                              '${product.availableVolume} litres',
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.normal,
-                                              ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  // Format the volume with a thousands separator
+                                                  NumberFormat.decimalPattern()
+                                                      .format(product
+                                                          .availableVolume),
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'litres',
+                                                  style: TextStyle(
+                                                      color: Colors.black),
+                                                )
+                                              ],
                                             ),
+
+                                            // Text(
+                                            //   '${product.availableVolume} litres',
+                                            //   style: TextStyle(
+                                            //     color: Colors.black,
+                                            //     fontWeight: FontWeight.normal,
+                                            //   ),
+                                            // ),
                                             SizedBox(
                                               height: 5,
                                             ),
-                                            Text(
-                                              '${product.minimumVolume} litres',
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.normal,
-                                              ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  // Format the volume with a thousands separator
+                                                  NumberFormat.decimalPattern()
+                                                      .format(product
+                                                          .minimumVolume),
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'litres',
+                                                  style: TextStyle(
+                                                      color: Colors.black),
+                                                )
+                                              ],
                                             ),
+
+                                            // Text(
+                                            //   '${product.minimumVolume} litres',
+                                            //   style: TextStyle(
+                                            //     color: Colors.black,
+                                            //     fontWeight: FontWeight.normal,
+                                            //   ),
+                                            // ),
                                             SizedBox(
                                               height: 5,
                                             ),

@@ -250,7 +250,7 @@ class _ResellerOrdersState extends State<ResellerOrders> {
                                             style: TextStyle(
                                               color: getStatusColor(
                                                   order.orderStatus),
-                                              fontSize: 16,
+                                              fontSize: 12,
                                             ),
                                           ),
                                         ),

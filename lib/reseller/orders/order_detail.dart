@@ -4,23 +4,24 @@ import 'package:intl/intl.dart';
 import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/models/product.dart';
+import 'package:petropal/models/best_prices.dart';
+
 import 'package:petropal/models/product_details.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/orders/make_order.dart';
 import 'package:provider/provider.dart';
 import 'package:petropal/models/order_product.dart';
 
-class OrderDetails extends StatefulWidget {
-  final ProductModel product;
+class OrderDetail extends StatefulWidget {
+  final BestPrices price;
 
-  const OrderDetails({super.key, required this.product});
+  const OrderDetail({super.key, required this.price});
 
   @override
-  State<OrderDetails> createState() => _OrderDetailsState();
+  State<OrderDetail> createState() => _OrderDetailState();
 }
 
-class _OrderDetailsState extends State<OrderDetails> {
+class _OrderDetailState extends State<OrderDetail> {
   double totalValue = 0.0;
   double minimumVolumePerOrder = 0.0;
   final double pricePerLiter = 200.0;
@@ -37,14 +38,14 @@ class _OrderDetailsState extends State<OrderDetails> {
     final token = userProvider.user?.token;
 
     final postData = {
-      'productId': '${widget.product.id}',
+      'productId': '${widget.price.id}',
     };
     final apiClient = ApiClient();
     final headers = {
       'Authorization': 'Bearer $token',
       'Content-Type': 'application/json',
     };
-    print('${widget.product.id}');
+    print('${widget.price.id}');
 
     try {
       final response = await apiClient.post(
@@ -227,11 +228,11 @@ class _OrderDetailsState extends State<OrderDetails> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '${widget.product.dealerName}',
+                            '${widget.price.dealer}',
                             style: textBolderSmall,
                           ),
                           Text(
-                            '${widget.product.location}',
+                            '${widget.price.location}',
                             style: TextStyle(color: Colors.black),
                           ),
                         ],
@@ -248,7 +249,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                             style: TextStyle(color: Colors.grey),
                           ),
                           Text(
-                            '${widget.product.depot}',
+                            '${widget.price.depot}',
                             style: TextStyle(color: Colors.grey),
                           ),
                         ],
@@ -506,8 +507,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                               builder: ((context) => MakeOrder(
                                     totalVolume: totalValue,
                                     orderProducts: orderedProducts,
-                                    depotName: widget.product.depot!,
-                                    depotLocation: widget.product.location!,
+                                    depotName: widget.price.depot!,
+                                    depotLocation: widget.price.location!,
                                   )),
                             ),
                           );

@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_dashboard.dart';
-import 'package:petropal/reseller/reseller_dashboard/r_home.dart';
 
 class ResellerTransactions extends StatefulWidget {
   const ResellerTransactions({Key? key}) : super(key: key);

@@ -275,7 +275,7 @@ class _LoginState extends State<Login> {
                           child: RichText(
                             text: const TextSpan(
                               text: "Don't have an account yet? ",
-                              style: TextStyle(color: Colors.black),
+                              style: TextStyle(color: Colors.grey),
                               children: <TextSpan>[
                                 TextSpan(
                                   text: 'Signup',

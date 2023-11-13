@@ -8,7 +8,7 @@ import 'package:petropal/models/location.dart';
 import 'package:petropal/models/user_details.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/authentication/login.dart';
-import 'package:petropal/reseller/reseller_dashboard/r_dashboard.dart';
+
 import 'package:petropal/widgets/buttons.dart';
 import 'package:provider/provider.dart';
 
@@ -217,7 +217,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
   void validateAndMoveToNextPage(GlobalKey<FormState> currentPageKey) {
     if (currentPageKey.currentState!.validate()) {
       // Move to the next page
-      _tabController.animateTo(_tabController!.index + 1);
+      _tabController.animateTo(_tabController.index + 1);
     }
   }
 
@@ -863,7 +863,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
     print('Organization Location: $organizationLocation');
     print('Organization Email: $organizationEmail');
     print('Second Page Phone Number: $secondPagePhoneNumber');
-    final userProvider = Provider.of<UserProvider>(context);
+    //final userProvider = Provider.of<UserProvider>(context);
     return Padding(
       padding: EdgeInsets.all(20),
       child: SingleChildScrollView(
