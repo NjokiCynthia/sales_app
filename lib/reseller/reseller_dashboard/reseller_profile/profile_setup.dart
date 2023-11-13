@@ -7,8 +7,11 @@ import 'package:flutter/services.dart';
 
 import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/models/banks_model.dart';
+import 'package:petropal/models/branches.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/orders/success.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_dashboard.dart';
@@ -25,8 +28,6 @@ class ProfileSetUp extends StatefulWidget {
 
 class _ProfileSetUpState extends State<ProfileSetUp>
     with SingleTickerProviderStateMixin {
-  String? selectedBranch;
-
   late TabController _tabController;
   final TextEditingController ONameontroller = TextEditingController();
   final TextEditingController OAddressontroller = TextEditingController();
@@ -53,35 +54,6 @@ class _ProfileSetUpState extends State<ProfileSetUp>
   final TextEditingController certController = TextEditingController();
   final TextEditingController certUpload = TextEditingController();
 
-  final List<String> kenyanBanks = [
-    'KCB Bank',
-    'Equity Bank',
-    'Cooperative Bank'
-  ];
-  final Map<String, List<String>> bankBranches = {
-    'KCB Bank': [
-      'KCB Nairobi Branch',
-      'KCB Mombasa Branch',
-      'KCB Kisumu Branch',
-      'KCB Nakuru Branch',
-      'KCB Eldoret Branch',
-      // Add more KCB branches...
-    ],
-    'Equity Bank': [
-      'Head Office, Equity Centre Branch NAIROBI',
-      'CORPORATE Branch, NAIROBI',
-      'FOURWAYS Branch, NAIROBI',
-      'KANGEMA Branch, KANGEMA',
-      'KARATINA Branch, KARATINA',
-      'KIRIAINI Branch, KIRIANI',
-      'MURARANDIA Branch, MURARANDIA',
-      'HARAMBEE A Branch, NAIROBI',
-      'KIMATHI ST Branch, NAIROBI',
-    ],
-    'Cooperative Bank': ['Branch X', 'Branch Y', 'Branch Z'],
-    // Add more branches...
-  };
-
   String capitalize(String input) {
     List<String> words = input.split(' ');
     for (int i = 0; i < words.length; i++) {
@@ -91,7 +63,6 @@ class _ProfileSetUpState extends State<ProfileSetUp>
   }
 
   List<String> bankNames = [];
-  String? selectedBank;
 
   DateTime selectedDate = DateTime.now();
 
@@ -284,53 +255,154 @@ class _ProfileSetUpState extends State<ProfileSetUp>
     }
   }
 
-  // Future<void> sendBankData() async {
-  //   print('sendBankData() called');
-  //   final userProvider = UserProvider();
-  //   final token = userProvider.user?.token;
-
-  //   if (token == null) {
-  //     return;
-  //   }
-
-  //   final url = Uri.parse(
-  //       'https://petropal.sandbox.co.ke:8040/account/update/bank_details');
-
-  //   // Define the form data
-  //   final formData = {
-  //     'account_id': '9',
-  //     'bank_details':
-  //         '[{"bank_name": $selectedBank,"bank_code": "123","bank_branch": $selectedBranch,"account_number": $accountController}]',
-  //   };
-
-  //   final response = await http.post(
-  //     url,
-  //     headers: {
-  //       'Authorization': 'Bearer $token',
-  //       'Content-Type': 'application/x-www-form-urlencoded',
-  //     },
-  //     body: formData,
-  //   );
-
-  //   if (response.statusCode == 200) {
-  //     // Request was successful
-  //     print('Request was successful');
-  //     print(response);
-  //     _tabController.animateTo(2);
-  //   } else {
-  //     // Request failed
-  //     print('Request failed with status code: ${response.statusCode}');
-  //   }
-  // }
-
   int currentTab = 0;
+  bool fetchingBanks = true;
+  List<Bank> banks = [];
+  int selectedBankIndex = -1;
+
+  List<String> banksDropdownList = [];
+  List<String> bankItems = ['Select bank'];
+  String selectedBank = 'Select Bank';
+  void _fetchbanks(BuildContext context) async {
+    setState(() {
+      fetchingBanks = true;
+    });
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final token = userProvider.user?.token;
+
+    final postData = {};
+    final apiClient = ApiClient();
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      final response = await apiClient.post(
+        '/bank/get-all',
+        postData,
+        headers: headers,
+      );
+
+      print('This is my banks Response: $response');
+
+      setState(() {
+        banks = [];
+        banksDropdownList = [];
+      });
+
+      if (response['status'] == 1 && response['data'] != null) {
+        final data = List<Map<String, dynamic>>.from(response['data']);
+        final tempBankModels = data.map((bankData) {
+          return Bank(
+            id: int.parse(bankData['id'].toString()),
+            name: bankData['name'].toString(),
+            active: bankData['active'] as bool?,
+            bankCode: bankData['bank_code'],
+            bankId: bankData['bank_id'] as int?,
+            createdAt: bankData['createdAt'] as String?,
+            updatedAt: bankData['updatedAt'] as String?,
+          );
+        }).toList();
+
+        setState(() {
+          banks = tempBankModels;
+          selectedBank = '${banks[0].id}';
+          banksDropdownList =
+              tempBankModels.map((bank) => '${bank.name}').toList();
+        });
+      } else {
+        print('No or invalid bankss found in the response');
+        // Handle the case when 'status' is not 1 or 'cartProductsListing' is null
+      }
+    } catch (error) {
+      print('Banks Fetch By ID User Id: $error');
+      // Handle the error
+    }
+
+    setState(() {
+      fetchingBanks = false;
+    });
+  }
+
+  bool fetchingBranches = false;
+  List<Branch> branches = [];
+  List<String> branchesDropdownList = [];
+  String selectedBranch = 'Select Branch';
+  void _fetchbranches(BuildContext context, String bankId) async {
+    setState(() {
+      fetchingBranches = true;
+    });
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final token = userProvider.user?.token;
+
+    final postData = {
+      "queryParams": bankId,
+    };
+    print('This is the bank id i am passing');
+    print(bankId);
+    final apiClient = ApiClient();
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      final response = await apiClient.post(
+        '/bank-branch/get-all',
+        postData,
+        headers: headers,
+      );
+
+      print('This is my branches Response: $response');
+
+      setState(() {
+        branches = [];
+        branchesDropdownList = [];
+      });
+
+      if (response['status'] == 1 && response['data'] != null) {
+        final data = List<Map<String, dynamic>>.from(response['data']);
+        final tempBranchModels = data.map((branchData) {
+          return Branch(
+            id: int.parse(branchData['id'].toString()),
+            bankId: branchData['bank_id'].toString(),
+            code: branchData['code'].toString(),
+            name: branchData['name'].toString(),
+            active: branchData['active'] as bool?,
+            createdAt: branchData['createdAt']?.toString(),
+            updatedAt: branchData['updatedAt']?.toString(),
+          );
+        }).toList();
+
+        setState(() {
+          branches = tempBranchModels;
+          selectedBranch = '${branches[0].id}';
+          branchesDropdownList =
+              tempBranchModels.map((branch) => '${branch.name}').toList();
+        });
+      } else {
+        print('No or invalid branches found in the response');
+        // Handle the case when 'status' is not 1 or 'cartProductsListing' is null
+      }
+    } catch (error) {
+      print('Banks Fetch By ID User Id: $error');
+      // Handle the error
+    }
+
+    setState(() {
+      fetchingBranches = false;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(_handleTabChange);
-
-    fetchBanks();
+    _fetchbanks(context);
 
     // Access the UserProvider and retrieve the user data
     final userProvider = context.read<UserProvider>();
@@ -365,19 +437,6 @@ class _ProfileSetUpState extends State<ProfileSetUp>
     setState(() {
       currentTab = _tabController.index;
     });
-  }
-
-  Future<void> fetchBanks() async {
-    final baseUrl = 'https://petropal.sandbox.co.ke:8040';
-    final response = await http.get(Uri.parse('$baseUrl/bank/get-all'));
-
-    if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
-      setState(() {
-        // Map data to a list of bank names
-        bankNames = data.map((bank) => bank['name'].toString()).toList();
-      });
-    }
   }
 
   @override
@@ -874,24 +933,97 @@ class _ProfileSetUpState extends State<ProfileSetUp>
               height: 20,
             ),
             DropdownButtonFormField<String>(
-              value: selectedBank,
+              isExpanded: true,
               dropdownColor: Colors.white,
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedBank = newValue;
+              style: bodyTextSmall,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                labelText: 'Select your bank',
+                labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
+                suffixIcon: const Icon(
+                  Icons.keyboard_arrow_down_sharp,
+                  color: Colors.grey,
+                ),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.grey.shade300,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              onChanged: (String? newValue) async{
+                setState(() async {
+                  selectedBank = newValue!;
+                  selectedBranch = 'Select Branch';
+                  branchesDropdownList = [];
+                  // Find the selected bank object
+                  Bank selectedBankObject = banks.firstWhere(
+                    (bank) => bank.name == selectedBank,
+                  );
+                  await Future.delayed(Duration(seconds: 2));
+
+                  // Pass the bank ID to _fetchbranches
+                  _fetchbranches(context, selectedBankObject.bankId.toString());
+
+                  selectedBankIndex = banksDropdownList.indexOf(selectedBank);
+
+                  // _fetchbranches(context, selectedBank);
+                  //selectedBankIndex = banksDropdownList.indexOf(selectedBank);
                 });
               },
-              items: kenyanBanks.map((String bank) {
-                return DropdownMenuItem<String>(
-                  value: bank,
-                  child: Text(capitalize(bank)), // Use the capitalize function
-                );
-              }).toList(),
+              items: banksDropdownList.isNotEmpty
+                  ? banksDropdownList
+                      .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList()
+                  : bankItems.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+            ),
+            const SizedBox(height: 10),
+            DropdownButtonFormField<String>(
+              dropdownColor: Colors.white,
+              value: selectedBranch,
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedBranch = newValue!;
+                });
+              },
+              items: branches.isNotEmpty
+                  ? branches.map<DropdownMenuItem<String>>((Branch branch) {
+                      return DropdownMenuItem<String>(
+                        value: branch.id.toString(),
+                        child: Text(branch.name!),
+                      );
+                    }).toList()
+                  : [],
               style: const TextStyle(color: Colors.black),
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
-                labelText: 'Bank Name',
+                labelText: 'Bank Branch',
                 labelStyle: TextStyle(color: Colors.grey[500]),
                 border: OutlineInputBorder(
                   borderSide: const BorderSide(
@@ -920,56 +1052,6 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                 ),
               ),
             ),
-            const SizedBox(height: 10),
-            // Second Dropdown for Branches
-            if (selectedBank != null && selectedBank == 'KCB Bank')
-              DropdownButtonFormField<String>(
-                dropdownColor: Colors.white,
-                value: selectedBranch,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedBranch = newValue;
-                  });
-                },
-                items: bankBranches[selectedBank]!.map((String branch) {
-                  return DropdownMenuItem<String>(
-                    value: branch,
-                    child: Text(branch),
-                  );
-                }).toList(),
-                style: const TextStyle(color: Colors.black),
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelText: 'Bank Branch',
-                  labelStyle: TextStyle(color: Colors.grey[500]),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.grey.shade300,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  suffixIcon: Icon(
-                    Icons.keyboard_arrow_down,
-                    color: primaryDarkColor,
-                  ),
-                ),
-              ),
             const SizedBox(height: 20),
             TextFormField(
               onChanged: (text) {
@@ -1044,7 +1126,6 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                 ),
               ),
             ),
-
             const SizedBox(
               height: 20,
             ),
