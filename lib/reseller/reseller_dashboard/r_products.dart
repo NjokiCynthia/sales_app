@@ -36,6 +36,8 @@ class _ResellerProductsState extends State<ResellerProducts> {
   List<ListModel> omcs = [];
   List<ListModel> productTypes = [];
 
+
+
   _fetchProducts(BuildContext context) async {
     setState(() {
       fetchingProducts = true;
@@ -44,8 +46,35 @@ class _ResellerProductsState extends State<ResellerProducts> {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final token = userProvider.user?.token;
 
-    final postData = {
-      //"queryParams": {"pageSize": 100},
+    List<String> dealerList = omcs.map((e) => e.name).toList();
+    List<String> productList = productTypes.map((e) => e.name).toList();
+    List<String> locationList = locations.map((e) => e.name).toList();
+
+    int dealerIndex = -1,productIndex = -1,locationIndex = -1;
+
+
+
+    if(selectedDealer!=null){
+      dealerIndex = dealerList.indexOf(selectedDealer??'');
+    }
+    if(selectedProduct!=null){
+      productIndex = productList.indexOf(selectedProduct??'');
+    }
+    if(selectedLocation!=null){
+      locationIndex = locationList.indexOf(selectedLocation??'');
+    }
+
+    var postData = {
+      "queryParams": {
+        //"pageSize": 100,
+        "filter":
+        {
+          "account_id":selectedDealer!=null?omcs[dealerIndex].id:0,
+          "location_id":selectedLocation!=null?locations[locationIndex].id:0,
+          "product":selectedProduct!=null?productTypes[productIndex].id:0,
+        },
+
+      },
     };
     final apiClient = ApiClient();
     final headers = {
@@ -255,7 +284,9 @@ class _ResellerProductsState extends State<ResellerProducts> {
               DropdownButtonFormField<String>(
                 dropdownColor: Colors.white,
                 style: bodyTextSmall,
+
                 decoration: InputDecoration(
+
                   filled: true,
                   fillColor: Colors.white,
                   labelText: 'Location',
@@ -293,6 +324,9 @@ class _ResellerProductsState extends State<ResellerProducts> {
                   );
                 }).toList(),
                 onChanged: (String? value) {
+                  setState(() {
+                    selectedLocation = value;
+                  });
                   print('OMC selected: $value');
                 },
               ),
@@ -387,6 +421,9 @@ class _ResellerProductsState extends State<ResellerProducts> {
                   );
                 }).toList(),
                 onChanged: (String? value) {
+                  setState(() {
+                    selectedProduct = value;
+                  });
                   print('Depot selected: $value');
                 },
               ),
@@ -434,6 +471,10 @@ class _ResellerProductsState extends State<ResellerProducts> {
                   );
                 }).toList(),
                 onChanged: (String? value) {
+
+                  setState(() {
+                    selectedDealer = value;
+                  });
                   print('Products selected: $value');
                 },
               ),
@@ -455,6 +496,8 @@ class _ResellerProductsState extends State<ResellerProducts> {
                   style: ElevatedButton.styleFrom(
                       backgroundColor: primaryDarkColor),
                   onPressed: () {
+
+                    _refreshProducts(context);
                     Navigator.of(context).pop();
                   },
                   child: Text('Filter'),
