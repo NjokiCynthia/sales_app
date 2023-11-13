@@ -586,18 +586,31 @@ class _ResellerProductsState extends State<ResellerProducts> {
               padding: const EdgeInsets.all(10),
               child: Column(
                 children: [
-                  OutlinedButton.icon(
-                      onPressed: () {
-                        _showDropdownDialog(context);
-                      },
-                      icon: Icon(
-                        Icons.filter_alt_off_outlined,
-                        color: primaryDarkColor,
-                      ),
-                      label: Text(
-                        'Filter Products',
-                        style: TextStyle(color: primaryDarkColor),
-                      )),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                        onPressed: () {
+                          _showDropdownDialog(context);
+                        },
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(
+                            color: primaryDarkColor, // Outline color
+                            width: 2.0, // Outline width
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                8.0), // Adjust the border radius as needed
+                          ),
+                        ),
+                        icon: Icon(
+                          Icons.filter_alt_off_outlined,
+                          color: primaryDarkColor,
+                        ),
+                        label: Text(
+                          'Filter Products',
+                          style: TextStyle(color: primaryDarkColor),
+                        )),
+                  ),
                   SizedBox(
                     height: 10,
                   ),

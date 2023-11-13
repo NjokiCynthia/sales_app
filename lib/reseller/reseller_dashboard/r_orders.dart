@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/api.dart';
@@ -110,7 +111,7 @@ class _ResellerOrdersState extends State<ResellerOrders> {
   Color getStatusColor(int status) {
     switch (status) {
       case 1:
-        return const Color.fromARGB(255, 35, 31, 31);
+        return Color.fromARGB(255, 10, 9, 9);
       case 2:
         return Colors.orange;
       case 3:
@@ -127,8 +128,9 @@ class _ResellerOrdersState extends State<ResellerOrders> {
   Color getStatusContainerColor(int status) {
     switch (status) {
       case 1:
-        return const Color.fromARGB(
-            255, 245, 245, 245); // Lighter shade of blue
+        return primaryDarkColor.withOpacity(0.5);
+      // const Color.fromARGB(
+      //     255, 245, 245, 245); // Lighter shade of blue
       case 2:
         return const Color.fromARGB(255, 255, 224, 178);
       //const Color.fromARGB(255, 255, 249, 196);
@@ -245,14 +247,36 @@ class _ResellerOrdersState extends State<ResellerOrders> {
                                               bottom: 4,
                                               left: 8,
                                               right: 8),
-                                          child: Text(
-                                            getStatusText(order.orderStatus),
-                                            style: TextStyle(
-                                              color: getStatusColor(
-                                                  order.orderStatus),
-                                              fontSize: 12,
-                                            ),
-                                          ),
+                                          child: order.orderStatus == 1
+                                              ? CountdownTimer(
+                                                  endTime: order.orderCreatedAt
+                                                      .add(Duration(
+                                                          hours: 3,
+                                                          minutes: 30))
+                                                      .millisecondsSinceEpoch,
+                                                  textStyle: TextStyle(
+                                                    color: getStatusColor(
+                                                        order.orderStatus),
+                                                    fontSize: 12,
+                                                  ),
+                                                )
+                                              : Text(
+                                                  getStatusText(
+                                                      order.orderStatus),
+                                                  style: TextStyle(
+                                                    color: getStatusColor(
+                                                        order.orderStatus),
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                          // Text(
+                                          //   getStatusText(order.orderStatus),
+                                          //   style: TextStyle(
+                                          //     color: getStatusColor(
+                                          //         order.orderStatus),
+                                          //     fontSize: 12,
+                                          //   ),
+                                          // ),
                                         ),
                                       ),
                                     ],

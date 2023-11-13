@@ -300,14 +300,14 @@ class _ResellerHomeState extends State<ResellerHome> {
   Widget buildCard(BestPrices price, int index) {
     return GestureDetector(
       onTap: () {
-        PersistentNavBarNavigator.pushNewScreen(
-          context,
-          screen: ResellerProducts(
-              // price: price,
-              ),
-          pageTransitionAnimation: PageTransitionAnimation.cupertino,
-          withNavBar: true,
-        );
+        // PersistentNavBarNavigator.pushNewScreen(
+        //   context,
+        //   screen: ResellerProducts(
+        //       // price: price,
+        //       ),
+        //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+        //   withNavBar: true,
+        // );
         //print(price);
       },
       child: AnimatedContainer(
