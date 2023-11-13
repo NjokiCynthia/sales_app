@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
@@ -28,6 +29,21 @@ class OrderDocuments extends StatefulWidget {
 class _OrderDocumentsState extends State<OrderDocuments> {
   bool fetchingOrderDocuments = true;
   OrderDocumentsModel? orderDocuments;
+  String convertCurrency(String amountString) {
+    // Try to parse the amountString to double, or return '0.0' if parsing fails
+    final double amount = double.tryParse(amountString) ?? 0.0;
+
+    // Format the amount with a thousands separator and the KES symbol
+    final NumberFormat currencyFormat =
+        NumberFormat.currency(locale: 'en_KES', symbol: 'KES');
+    return currencyFormat.format(amount);
+  }
+
+  String convertVolume(String volumeString) {
+    final double volume = double.tryParse(volumeString) ?? 0.0;
+    final NumberFormat volumeFormat = NumberFormat.decimalPattern();
+    return volumeFormat.format(volume);
+  }
 
   _fetchOrderDocuments(BuildContext context) async {
     setState(() {
@@ -496,7 +512,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                                 ],
                               ),
                               Text(
-                                '${product?.elementAt(index).productDocuments!.orderVolume ?? 'N/A'} liters ',
+                                '${convertVolume(product?.elementAt(index).productDocuments!.orderVolume?.toString() ?? '0.0')} liters',
                                 style: TextStyle(color: Colors.black),
                               ),
                             ],
@@ -521,11 +537,13 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'KES ${product.elementAt(index).productDocuments!.purchasePricePerUnit ?? 'N/A'}',
+                                    '${convertCurrency(product.elementAt(index).productDocuments!.purchasePricePerUnit?.toString() ?? 'N/A')}',
                                     style: TextStyle(color: Colors.grey),
                                   ),
                                   Text(
-                                    'KES ${product.elementAt(index).productDocuments!.productPrice ?? 'N/A'}',
+                                    '${convertCurrency(product.elementAt(index).productDocuments!.productPrice?.toString() ?? '0.0')}',
+
+                                    // 'KES ${product.elementAt(index).productDocuments!.productPrice ?? 'N/A'}',
                                     style: TextStyle(color: Colors.grey),
                                   ),
                                 ],
@@ -538,9 +556,17 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                 ),
               ),
               Center(
-                child: Text(
-                  'The total amount payable is: KES ${widget.orders.orderPayableAmount}',
-                  style: m_title.copyWith(color: primaryDarkColor),
+                child: Column(
+                  children: [
+                    Text(
+                      'The total amount payable is:',
+                      style: m_title.copyWith(color: Colors.black),
+                    ),
+                    Text(
+                      '${convertCurrency(widget.orders.orderPayableAmount)}',
+                      style: m_title.copyWith(color: primaryDarkColor),
+                    ),
+                  ],
                 ),
               ),
             ]),

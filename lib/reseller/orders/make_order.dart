@@ -6,7 +6,7 @@ import 'package:petropal/models/bank.dart';
 import 'package:petropal/models/driver.dart';
 import 'package:petropal/models/truck.dart';
 import 'package:petropal/reseller/orders/reseller_order.dart';
-import 'package:petropal/reseller/reseller_dashboard/r_orders.dart';
+
 import 'package:petropal/models/order_product.dart';
 import 'package:provider/provider.dart';
 import 'package:petropal/providers/user_provider.dart';

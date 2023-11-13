@@ -56,35 +56,31 @@ class _OrderDetailState extends State<OrderDetail> {
 
       print('Response: $response');
 
-      if (response['status'] == 1 && response['cartProductsListing'] != null) {
+      if (response['status'] == 1 && response['data'] != null) {
         final data =
             List<Map<String, dynamic>>.from(response['cartProductsListing']);
         final productModels = data.map((productData) {
           minimumVolumePerOrder =
               double.parse(productData['minimum_volume_per_order'].toString());
-          return ProductListing(
-            productId: int.parse(productData['product_id'].toString() ?? ''),
-            productName: productData['product_name'].toString(),
-            depotName: productData['depot_name'].toString(),
+          return BestPrices(
+            id: int.parse(productData['id'].toString()),
+            product: productData['product'].toString(),
+            depot: productData['depot'].toString(),
             location: productData['location'].toString(),
-            productCode: productData['product_code'].toString(),
-            depotCode: productData['depot_code'].toString(),
-            companyId: int.parse(productData['company_id'].toString() ?? ''),
-            companyName: productData['company_name'].toString(),
-            companyEmail: productData['company_email'].toString(),
-            companyPhone: productData['company_phone'].toString(),
-            minimumVolumePerOrder: double.parse(
-                productData['minimum_volume_per_order'].toString()),
-            pricePer: double.parse(productData['price_per'].toString()),
-            sellingPrice: double.parse(productData['selling_price'].toString()),
-            stockVolume: double.parse(productData['stock_volume'].toString()),
-            availableVolume:
-                double.parse(productData['available_volume'].toString()),
-            minVol: double.parse(productData['min_vol'].toString()),
-            maxVol: double.parse(productData['max_vol'].toString()),
-            status: int.parse(productData['status'].toString()),
-            commissionRate:
-                double.parse(productData['commission_rate'].toString()),
+            sellingPrice: int.parse(productData['selling_price'].toString()),
+            volume: productData['volume'] != null
+                ? int.parse(productData['volume'].toString())
+                : null,
+            availableVolume: productData['available_volume'] != null
+                ? int.parse(productData['available_volume'].toString())
+                : null,
+            dealer: productData['dealer'].toString(),
+            remainingVolume: productData['remaining_volume'] != null
+                ? int.parse(productData['remaining_volume'].toString())
+                : null,
+            ordersApproved:
+                int.parse(productData['orders_approved'].toString()),
+            ordersPending: int.parse(productData['orders_pending'].toString()),
           );
         }).toList();
 
@@ -93,7 +89,7 @@ class _OrderDetailState extends State<OrderDetail> {
         }).toList();
 
         setState(() {
-          productList = productModels;
+          productList = productModels.cast<ProductListing>();
         });
 
         setState(() {
