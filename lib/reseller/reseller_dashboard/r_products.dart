@@ -37,8 +37,6 @@ class _ResellerProductsState extends State<ResellerProducts> {
   List<ListModel> omcs = [];
   List<ListModel> productTypes = [];
 
-
-
   _fetchProducts(BuildContext context) async {
     setState(() {
       fetchingProducts = true;
@@ -51,30 +49,28 @@ class _ResellerProductsState extends State<ResellerProducts> {
     List<String> productList = productTypes.map((e) => e.name).toList();
     List<String> locationList = locations.map((e) => e.name).toList();
 
-    int dealerIndex = -1,productIndex = -1,locationIndex = -1;
+    int dealerIndex = -1, productIndex = -1, locationIndex = -1;
 
-
-
-    if(selectedDealer!=null){
-      dealerIndex = dealerList.indexOf(selectedDealer??'');
+    if (selectedDealer != null) {
+      dealerIndex = dealerList.indexOf(selectedDealer ?? '');
     }
-    if(selectedProduct!=null){
-      productIndex = productList.indexOf(selectedProduct??'');
+    if (selectedProduct != null) {
+      productIndex = productList.indexOf(selectedProduct ?? '');
     }
-    if(selectedLocation!=null){
-      locationIndex = locationList.indexOf(selectedLocation??'');
+    if (selectedLocation != null) {
+      locationIndex = locationList.indexOf(selectedLocation ?? '');
     }
 
     var postData = {
       "queryParams": {
         //"pageSize": 100,
-        "filter":
-        {
-          "account_id":selectedDealer!=null?omcs[dealerIndex].id:0,
-          "location_id":selectedLocation!=null?locations[locationIndex].id:0,
-          "product":selectedProduct!=null?productTypes[productIndex].id:0,
+        "filter": {
+          "account_id": selectedDealer != null ? omcs[dealerIndex].id : 0,
+          "location_id":
+              selectedLocation != null ? locations[locationIndex].id : 0,
+          "product":
+              selectedProduct != null ? productTypes[productIndex].id : 0,
         },
-
       },
     };
     final apiClient = ApiClient();
@@ -116,6 +112,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
 
           setState(() {
             products = productModels;
+            filtersApplied = true;
           });
         } catch (e) {
           print('Error parsing product data: $e');
@@ -252,10 +249,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
     setState(() {
       fetchingOptions = false;
     });
-
   }
-
-
 
   @override
   void initState() {
@@ -285,9 +279,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
               DropdownButtonFormField<String>(
                 dropdownColor: Colors.white,
                 style: bodyTextSmall,
-
                 decoration: InputDecoration(
-
                   filled: true,
                   fillColor: Colors.white,
                   labelText: 'Location',
@@ -318,7 +310,8 @@ class _ResellerProductsState extends State<ResellerProducts> {
                     color: primaryDarkColor,
                   ),
                 ),
-                items: locations.map((l)=>l.name.toString()).map((String value) {
+                items:
+                    locations.map((l) => l.name.toString()).map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
@@ -472,7 +465,6 @@ class _ResellerProductsState extends State<ResellerProducts> {
                   );
                 }).toList(),
                 onChanged: (String? value) {
-
                   setState(() {
                     selectedDealer = value;
                   });
@@ -487,17 +479,18 @@ class _ResellerProductsState extends State<ResellerProducts> {
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: primaryDarkColor.withOpacity(0.1)),
+                    backgroundColor: Colors.red,
+                  ),
                   onPressed: () {
+                    _clearFilters();
                     Navigator.of(context).pop();
                   },
-                  child: Text('Close'),
+                  child: Text('Clear Filters'),
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: primaryDarkColor),
                   onPressed: () {
-
                     _refreshProducts(context);
                     Navigator.of(context).pop();
                   },
@@ -510,6 +503,8 @@ class _ResellerProductsState extends State<ResellerProducts> {
       },
     );
   }
+
+  bool filtersApplied = false;
 
   @override
   Widget build(BuildContext context) {
@@ -555,7 +550,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
           if (fetchingProducts) {
             // Show loading indicator while fetching products
             return Center(child: CircularProgressIndicator());
-          } else if (products.isEmpty) {
+          } else if (products.isEmpty && !filtersApplied) {
             // Show a message when there are no products
             return Center(
               child: Column(children: [
@@ -566,12 +561,32 @@ class _ResellerProductsState extends State<ResellerProducts> {
                 )
               ]),
             );
+          } else if (products.isEmpty && filtersApplied) {
+            // Show a message when there are no products
+            return Center(
+              child: Column(children: [
+                //Image.asset('assets/illustrations/products.png'),
+                Text(
+                  'No products available',
+                  style: displayTitle,
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: primaryDarkColor),
+                  onPressed: () {
+                    // Clear filters when the button is pressed
+                    _clearFilters();
+                  },
+                  child: Text('Clear Filters'),
+                ),
+              ]),
+            );
           } else {
             return Padding(
               padding: const EdgeInsets.all(10),
               child: Column(
                 children: [
-                  ElevatedButton.icon(
+                  OutlinedButton.icon(
                       onPressed: () {
                         _showDropdownDialog(context);
                       },
@@ -579,56 +594,10 @@ class _ResellerProductsState extends State<ResellerProducts> {
                         Icons.filter_alt_off_outlined,
                         color: primaryDarkColor,
                       ),
-                      label: Text('Filter')),
-                  // SizedBox(
-                  //   height: 42,
-                  //   child: TextFormField(
-                  //     style: TextStyle(color: Colors.black),
-                  //     decoration: InputDecoration(
-                  //         prefixIcon: Icon(
-                  //           Icons.search,
-                  //           color: primaryDarkColor,
-                  //           weight: 1,
-                  //         ),
-                  //         filled: true,
-                  //         fillColor: Colors.white,
-                  //         labelText: 'Search products',
-                  //         labelStyle: TextStyle(color: Colors.grey[500]),
-                  //         border: OutlineInputBorder(
-                  //           borderSide: const BorderSide(
-                  //             color: Colors.grey,
-                  //             width: 1.0,
-                  //           ),
-                  //           borderRadius: BorderRadius.circular(8.0),
-                  //         ),
-                  //         enabledBorder: OutlineInputBorder(
-                  //           borderSide: BorderSide(
-                  //             color: Colors.grey.shade300,
-                  //             width: 1.0,
-                  //           ),
-                  //           borderRadius: BorderRadius.circular(8.0),
-                  //         ),
-                  //         focusedBorder: OutlineInputBorder(
-                  //           borderSide: const BorderSide(
-                  //             color: Colors.grey,
-                  //             width: 1.0,
-                  //           ),
-                  //           borderRadius: BorderRadius.circular(8.0),
-                  //         ),
-                  //         hintStyle: bodyGrey,
-                  //         suffixIcon: Icon(
-                  //           Icons.filter_alt_off_outlined,
-                  //           color: primaryDarkColor,
-                  //         )),
-                  //     // decoration: InputDecoration(
-                  //     //   prefixIcon: Icon(Icons.search),
-                  //     //   border: OutlineInputBorder(),
-                  //     //   hintText: 'Search products',
-                  //     //   hintStyle: bodyGrey,
-                  //     //   labelStyle: TextStyle(color: Colors.black),
-                  //     // ),
-                  //   ),
-                  // ),
+                      label: Text(
+                        'Filter Products',
+                        style: TextStyle(color: primaryDarkColor),
+                      )),
                   SizedBox(
                     height: 10,
                   ),
@@ -869,5 +838,15 @@ class _ResellerProductsState extends State<ResellerProducts> {
         },
       ),
     );
+  }
+
+  // Method to clear filters
+  void _clearFilters() {
+    setState(() {
+      selectedLocation = null;
+      selectedDealer = null;
+      selectedProduct = null;
+    });
+    _fetchProducts(context);
   }
 }
