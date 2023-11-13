@@ -206,14 +206,17 @@ class _ProfileSetUpState extends State<ProfileSetUp>
       final formData = FormData.fromMap({
         'kra_certificate_number': kraController.text,
         'epra_license_number': licenseController.text,
-        'epra_license_expiry_date': selectedDate.toLocal().toString(),
+        'epra_license_expiry_date':
+            DateFormat('yyyy-MM-dd').format(selectedDate.toLocal()),
+
+        //'epra_license_expiry_date': selectedDate.toLocal().toString(),
         'certificate_of_incorporation_number': certController.text,
         'email': emailController.text,
         'phone': numberController.text,
         'firstname': user?.first_name ?? '',
         'lastname': user?.last_name ?? '',
         'account_id': user?.account_id.toString() ?? '',
-        'minimum_volume_per_order': minVolController.text,
+        'minimum_volume_per_order': 0.0,
         'pic': '',
       });
 
