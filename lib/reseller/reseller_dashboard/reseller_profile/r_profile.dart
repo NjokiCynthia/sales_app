@@ -348,46 +348,38 @@ class _ResellerProfileState extends State<ResellerProfile> {
                 const SizedBox(
                   height: 10,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    PersistentNavBarNavigator.pushNewScreen(context,
-                        screen: ChangePassword(),
-                        withNavBar: false,
-                        pageTransitionAnimation:
-                            PageTransitionAnimation.cupertino);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.grey.shade100),
-                        borderRadius: BorderRadius.circular(8)),
-                    child: ListTile(
-                      leading: Container(
-                        decoration: BoxDecoration(
-                          color: primaryDarkColor.withOpacity(0.1),
-                          shape: BoxShape.circle,
-                        ),
-                        padding: const EdgeInsets.all(8),
-                        child: const Icon(
-                          Icons.lock,
-                          color: primaryDarkColor,
-                        ),
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.grey.shade100),
+                      borderRadius: BorderRadius.circular(8)),
+                  child: ListTile(
+                    leading: Container(
+                      decoration: BoxDecoration(
+                        color: primaryDarkColor.withOpacity(0.1),
+                        shape: BoxShape.circle,
                       ),
-                      title: Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: Text(
-                          'Change Password',
-                          style: bodyGrey,
-                        ),
-                      ),
-                      trailing: const Icon(
-                        Icons.arrow_forward_ios,
+                      padding: const EdgeInsets.all(8),
+                      child: const Icon(
+                        Icons.lock,
                         color: primaryDarkColor,
-                        size: 20,
                       ),
+                    ),
+                    title: Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Text(
+                        'Change Password',
+                        style: bodyGrey,
+                      ),
+                    ),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios,
+                      color: primaryDarkColor,
+                      size: 20,
                     ),
                   ),
                 ),
+
                 const SizedBox(
                   height: 20,
                 ),

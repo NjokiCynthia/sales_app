@@ -987,6 +987,8 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                     // _fetchbranches(context, selectedBank);
                     //selectedBankIndex = banksDropdownList.indexOf(selectedBank);
                   });
+                  print('This is my selected banks index');
+                  print(selectedBankIndex);
                 });
               },
               items: banksDropdownList.isNotEmpty
@@ -1013,6 +1015,8 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                   selectedBranch = newValue!;
                   selectedBranchIndex =
                       branchesDropdownList.indexOf(selectedBranch);
+                  print('This is my selected branches index');
+                  print(selectedBranchIndex);
                 });
               },
               items: branches.isNotEmpty

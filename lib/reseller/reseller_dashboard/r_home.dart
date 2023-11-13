@@ -6,6 +6,7 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/models/best_prices.dart';
 import 'package:petropal/models/completedOrders.dart';
 import 'package:petropal/models/completedOrders.dart';
 import 'package:petropal/models/orders.dart';
@@ -14,6 +15,7 @@ import 'package:petropal/reseller/authentication/login.dart';
 import 'package:petropal/reseller/orders/all_completed_orders.dart';
 import 'package:petropal/reseller/orders/completed_orders_documents.dart';
 import 'package:petropal/reseller/orders/orderDocuments.dart';
+import 'package:petropal/reseller/orders/order_detail.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/profile_setup.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_transactions.dart';
 import 'package:petropal/screens/superadmin_dashboard/chart_data.dart';
@@ -40,11 +42,6 @@ class _ResellerHomeState extends State<ResellerHome> {
     return outputFormat.format(date);
   }
 
-  // List of items in our dropdown menu
-  var items = [
-    'Weekly',
-    'Monthly',
-  ];
   final SwiperController _swiperController = SwiperController();
 
   int _currentgraph = 0;
@@ -108,6 +105,62 @@ class _ResellerHomeState extends State<ResellerHome> {
 
     setState(() {
       fetchingCompletedOrders = false;
+    });
+  }
+
+  bool fetchingBestPrices = true;
+  List<BestPrices> prices = [];
+  _fetchcBestPrices(BuildContext context) async {
+    setState(() {
+      fetchingBestPrices = true;
+    });
+
+    // Retrieve user information from the provider
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final token = userProvider.user?.token;
+
+    final postData = {};
+    final apiClient = ApiClient();
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    await apiClient
+        .post('/product/get-cheapest-price-per-product', postData,
+            headers: headers)
+        .then((response) {
+      print('Response for the BEST PRICES IS HERE is here: $response');
+      if (response['data'] != null) {
+        setState(() {
+          prices = (response['data'] as List).map((priceData) {
+            return BestPrices(
+              id: priceData['id'] as int?,
+              product: priceData['product'] as String?,
+              depot: priceData['depot'] as String?,
+              location: priceData['location'] as String?,
+              sellingPrice: priceData['selling_price'] as int?,
+              volume: priceData['volume'] as int?,
+              availableVolume: priceData['available_volume'] as int?,
+              dealer: priceData['dealer'] as String?,
+              remainingVolume: priceData['remaining_volume'] as int?,
+              ordersApproved: priceData['orders_approved'] as int?,
+              ordersPending: priceData['orders_pending'] as int?,
+            );
+          }).toList();
+        });
+      } else {
+        // Handle the case where 'data' is null or not present in the response.
+        print('No orders found in the response');
+      }
+    }).catchError((error) {
+      // Handle the error
+      print('error');
+      print(error);
+    });
+
+    setState(() {
+      fetchingBestPrices = false;
     });
   }
 
@@ -223,6 +276,7 @@ class _ResellerHomeState extends State<ResellerHome> {
       });
     }
     _fetchCompleteOrders(context);
+    _fetchcBestPrices(context);
     data = [
       ChartData(17, 200),
       ChartData(18, 205),
@@ -240,6 +294,101 @@ class _ResellerHomeState extends State<ResellerHome> {
   Future<void> _refreshCompletedOrders(BuildContext context) async {
     // Fetch orders data here
     await _fetchCompleteOrders(context);
+  }
+
+  Widget buildCard(BestPrices price, int index) {
+    return GestureDetector(
+      onTap: () {
+        PersistentNavBarNavigator.pushNewScreen(
+          context,
+          screen: OrderDetail(
+            price: price,
+          ),
+          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+          withNavBar: false,
+        );
+        print(price);
+      },
+      child: AnimatedContainer(
+        height: 100,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            gradient: const LinearGradient(
+              colors: [Color(0xffd6e0f0), Color(0xfff4eadc)],
+              stops: [0.2, 0.75],
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+            ),
+            border: Border.all(color: (Colors.grey[100])!)),
+        duration: Duration(seconds: 2),
+        width: double.infinity,
+        child: SizedBox(
+          height: 50.0,
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: const Color.fromRGBO(238, 229, 255, 1.0),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: const Padding(
+                    padding: EdgeInsets.all(4),
+                    child: Text(
+                      "Best price!!",
+                      style: TextStyle(color: Color.fromRGBO(137, 80, 252, 1)),
+                    ),
+                  ),
+                ),
+              ),
+              ListTile(
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        price.dealer ?? '',
+                        style: bodyGrey,
+                      ),
+                      Text(
+                        price.depot! ?? '',
+                        style: greyT,
+                      ),
+                    ],
+                  ),
+                  subtitle: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            price.product! ?? '',
+                            style: greyT,
+                          ),
+                          Text(
+                            formatAmountAsKES(price.sellingPrice),
+                            //'KES 200',
+                            style: bodyGrey,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: primaryDarkColor.withOpacity(0.1),
+                              shape: BoxShape.circle,
+                            ),
+                            padding: const EdgeInsets.all(4),
+                            child: const Icon(
+                              Icons.shopping_cart,
+                              color: primaryDarkColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -322,29 +471,6 @@ class _ResellerHomeState extends State<ResellerHome> {
                                         ),
                                       ],
                                     ),
-                                    // DropdownButton<String>(
-                                    //   value: dropdownvalue,
-                                    //   dropdownColor: Colors.white,
-                                    //   icon: const Icon(
-                                    //     Icons.keyboard_arrow_down,
-                                    //     color: primaryDarkColor,
-                                    //   ),
-                                    //   items: items.map((String item) {
-                                    //     return DropdownMenuItem<String>(
-                                    //       value: item,
-                                    //       child: Text(
-                                    //         item,
-                                    //         style: const TextStyle(
-                                    //             color: primaryDarkColor),
-                                    //       ),
-                                    //     );
-                                    //   }).toList(),
-                                    //   onChanged: (String? newValue) {
-                                    //     setState(() {
-                                    //       dropdownvalue = newValue!;
-                                    //     });
-                                    //   },
-                                    // ),
                                   ],
                                 ),
                                 SizedBox(
@@ -437,7 +563,11 @@ class _ResellerHomeState extends State<ResellerHome> {
                 height: 10,
               ),
               CarouselSlider(
-                items: List.generate(3, (index) => buildCard(index)),
+                items: prices.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final price = entry.value;
+                  return buildCard(price, index);
+                }).toList(),
                 options: CarouselOptions(
                   height: 120,
                   autoPlay: true,
@@ -648,88 +778,6 @@ class _ResellerHomeState extends State<ResellerHome> {
               )),
             ])));
   }
-}
-
-Widget buildCard(int index) {
-  List<String> title = ['Petrol', 'Diesel', 'Kerosene'];
-  return AnimatedContainer(
-    height: 100,
-    decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        gradient: const LinearGradient(
-          colors: [Color(0xffd6e0f0), Color(0xfff4eadc)],
-          stops: [0.2, 0.75],
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-        ),
-        border: Border.all(color: (Colors.grey[100])!)),
-    duration: Duration(seconds: 2),
-    width: double.infinity,
-    child: SizedBox(
-      height: 50.0,
-      child: Column(
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: Container(
-              decoration: BoxDecoration(
-                  color: const Color.fromRGBO(238, 229, 255, 1.0),
-                  borderRadius: BorderRadius.circular(10)),
-              child: const Padding(
-                padding: EdgeInsets.all(4),
-                child: Text(
-                  "Best price!!",
-                  style: TextStyle(color: Color.fromRGBO(137, 80, 252, 1)),
-                ),
-              ),
-            ),
-          ),
-          ListTile(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Shell Limited',
-                    style: bodyGrey,
-                  ),
-                  Text(
-                    'Nairobi',
-                    style: greyT,
-                  ),
-                ],
-              ),
-              subtitle: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        title[index],
-                        style: greyT,
-                      ),
-                      Text(
-                        'KES 200',
-                        style: bodyGrey,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: primaryDarkColor.withOpacity(0.1),
-                          shape: BoxShape.circle,
-                        ),
-                        padding: const EdgeInsets.all(4),
-                        child: const Icon(
-                          Icons.shopping_cart,
-                          color: primaryDarkColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              )),
-        ],
-      ),
-    ),
-  );
 }
 
 String formatAmountAsKES(int? amount) {
