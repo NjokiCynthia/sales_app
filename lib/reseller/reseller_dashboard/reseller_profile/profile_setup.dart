@@ -259,6 +259,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
   bool fetchingBanks = true;
   List<Bank> banks = [];
   int selectedBankIndex = -1;
+  int selectedBranchIndex = -1;
 
   List<String> banksDropdownList = [];
   List<String> bankItems = ['Select bank'];
@@ -967,8 +968,8 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              onChanged: (String? newValue) async{
-                setState(() async {
+              onChanged: (String? newValue) {
+                setState(() {
                   selectedBank = newValue!;
                   selectedBranch = 'Select Branch';
                   branchesDropdownList = [];
@@ -976,15 +977,16 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                   Bank selectedBankObject = banks.firstWhere(
                     (bank) => bank.name == selectedBank,
                   );
-                  await Future.delayed(Duration(seconds: 2));
+                  Future.delayed(Duration(seconds: 2), () {
+                    // Pass the bank ID to _fetchbranches
+                    _fetchbranches(
+                        context, selectedBankObject.bankId.toString());
 
-                  // Pass the bank ID to _fetchbranches
-                  _fetchbranches(context, selectedBankObject.bankId.toString());
+                    selectedBankIndex = banksDropdownList.indexOf(selectedBank);
 
-                  selectedBankIndex = banksDropdownList.indexOf(selectedBank);
-
-                  // _fetchbranches(context, selectedBank);
-                  //selectedBankIndex = banksDropdownList.indexOf(selectedBank);
+                    // _fetchbranches(context, selectedBank);
+                    //selectedBankIndex = banksDropdownList.indexOf(selectedBank);
+                  });
                 });
               },
               items: banksDropdownList.isNotEmpty
@@ -1009,6 +1011,8 @@ class _ProfileSetUpState extends State<ProfileSetUp>
               onChanged: (String? newValue) {
                 setState(() {
                   selectedBranch = newValue!;
+                  selectedBranchIndex =
+                      branchesDropdownList.indexOf(selectedBranch);
                 });
               },
               items: branches.isNotEmpty
@@ -1137,11 +1141,20 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                 body: {
                   "account_number": accountController.text,
                   "account_name": accountName.text,
-                  "bank_id": 50,
-                  "branch_id": 1592,
+                  "bank_id": selectedBankIndex != -1
+                      ? banks[selectedBankIndex].bankId
+                      : 0,
+                  "branch_id": selectedBranchIndex != -1
+                      ? branches[selectedBranchIndex].id
+                      : 0,
                   "account_id": user?.account_id.toString() ?? '',
                 },
                 onSuccess: (res) {
+                  print('This is my selected bank value');
+                  print(banks[selectedBankIndex].bankId);
+                  print('This is my selected branch value');
+                  print(branches[selectedBranchIndex].id);
+
                   print('This is my response');
                   print(res);
 
