@@ -16,6 +16,7 @@ import 'package:petropal/reseller/orders/all_completed_orders.dart';
 import 'package:petropal/reseller/orders/completed_orders_documents.dart';
 import 'package:petropal/reseller/orders/orderDocuments.dart';
 import 'package:petropal/reseller/orders/order_detail.dart';
+import 'package:petropal/reseller/reseller_dashboard/my_productstest.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/profile_setup.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_transactions.dart';
 import 'package:petropal/screens/superadmin_dashboard/chart_data.dart';
@@ -301,13 +302,13 @@ class _ResellerHomeState extends State<ResellerHome> {
       onTap: () {
         PersistentNavBarNavigator.pushNewScreen(
           context,
-          screen: OrderDetail(
-            price: price,
-          ),
+          screen: ResellerProducts(
+              // price: price,
+              ),
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
-          withNavBar: false,
+          withNavBar: true,
         );
-        print(price);
+        //print(price);
       },
       child: AnimatedContainer(
         height: 100,
