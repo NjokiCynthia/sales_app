@@ -264,7 +264,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
   List<String> banksDropdownList = [];
   List<String> bankItems = ['Select bank'];
   String selectedBank = 'Select Bank';
-  void _fetchbanks(BuildContext context) async {
+  void _fetchBanks(BuildContext context) async {
     setState(() {
       fetchingBanks = true;
     });
@@ -280,43 +280,43 @@ class _ProfileSetUpState extends State<ProfileSetUp>
     };
 
     try {
-      final response = await apiClient.post(
+      apiClient.post(
         '/bank/get-all',
         postData,
         headers: headers,
-      );
+      ).then((response) {
 
-      print('This is my banks Response: $response');
+          print('This is my banks Response: $response');
+          setState(() {
+              banks = [];
+              banksDropdownList = [];
+            });
 
-      setState(() {
-        banks = [];
-        banksDropdownList = [];
+          if (response['status'] == 1 && response['data'] != null) {
+            final data = List<Map<String, dynamic>>.from(response['data']);
+            final tempBankModels = data.map((bankData) {
+                return Bank(
+                id: int.parse(bankData['id'].toString()),
+                name: bankData['name'].toString(),
+                active: bankData['active'] as bool?,
+                bankCode: bankData['bank_code'],
+                bankId: bankData['bank_id'] as int?,
+                createdAt: bankData['createdAt'] as String?,
+                updatedAt: bankData['updatedAt'] as String?,
+                );
+              }).toList();
+
+            setState(() {
+              banks = tempBankModels;
+              selectedBank = '${banks[0].id}';
+              banksDropdownList = tempBankModels.map((bank) => '${bank.name}').toList();
+            });
+          } else {
+            print('No or invalid bankss found in the response');
+            // Handle the case when 'status' is not 1 or 'cartProductsListing' is null
+          }
       });
 
-      if (response['status'] == 1 && response['data'] != null) {
-        final data = List<Map<String, dynamic>>.from(response['data']);
-        final tempBankModels = data.map((bankData) {
-          return Bank(
-            id: int.parse(bankData['id'].toString()),
-            name: bankData['name'].toString(),
-            active: bankData['active'] as bool?,
-            bankCode: bankData['bank_code'],
-            bankId: bankData['bank_id'] as int?,
-            createdAt: bankData['createdAt'] as String?,
-            updatedAt: bankData['updatedAt'] as String?,
-          );
-        }).toList();
-
-        setState(() {
-          banks = tempBankModels;
-          selectedBank = '${banks[0].id}';
-          banksDropdownList =
-              tempBankModels.map((bank) => '${bank.name}').toList();
-        });
-      } else {
-        print('No or invalid bankss found in the response');
-        // Handle the case when 'status' is not 1 or 'cartProductsListing' is null
-      }
     } catch (error) {
       print('Banks Fetch By ID User Id: $error');
       // Handle the error
@@ -331,7 +331,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
   List<Branch> branches = [];
   List<String> branchesDropdownList = [];
   String selectedBranch = 'Select Branch';
-  void _fetchbranches(BuildContext context, String bankId) async {
+  void _fetchBankBranches(BuildContext context, String bankId) async {
     setState(() {
       fetchingBranches = true;
     });
@@ -401,9 +401,10 @@ class _ProfileSetUpState extends State<ProfileSetUp>
   @override
   void initState() {
     super.initState();
+    _fetchBanks(context);
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(_handleTabChange);
-    _fetchbanks(context);
+
 
     // Access the UserProvider and retrieve the user data
     final userProvider = context.read<UserProvider>();
@@ -979,7 +980,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                   );
                   Future.delayed(Duration(seconds: 2), () {
                     // Pass the bank ID to _fetchbranches
-                    _fetchbranches(
+                    _fetchBankBranches(
                         context, selectedBankObject.bankId.toString());
 
                     selectedBankIndex = banksDropdownList.indexOf(selectedBank);
@@ -1013,10 +1014,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
               onChanged: (String? newValue) {
                 setState(() {
                   selectedBranch = newValue!;
-                  selectedBranchIndex =
-                      branchesDropdownList.indexOf(selectedBranch);
-                  print('This is my selected branches index');
-                  print(selectedBranchIndex);
+
                 });
               },
               items: branches.isNotEmpty
@@ -1148,8 +1146,8 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                   "bank_id": selectedBankIndex != -1
                       ? banks[selectedBankIndex].bankId
                       : 0,
-                  "branch_id": selectedBranchIndex != -1
-                      ? branches[selectedBranchIndex].id
+                  "branch_id": selectedBranch != -1
+                      ? selectedBranch
                       : 0,
                   "account_id": user?.account_id.toString() ?? '',
                 },
