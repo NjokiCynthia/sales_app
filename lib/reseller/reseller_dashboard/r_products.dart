@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/models/ListModel.dart';
 import 'package:petropal/models/product.dart';
 import 'package:petropal/providers/products.dart';
 import 'package:petropal/reseller/orders/order_details.dart';
@@ -27,7 +28,13 @@ class _ResellerProductsState extends State<ResellerProducts> {
   double? selectedPrice;
 
   bool fetchingProducts = true;
+  bool fetchingOptions = true;
   List<ProductModel> products = [];
+
+  List<ListModel> sortOptions = [];
+  List<ListModel> locations = [];
+  List<ListModel> omcs = [];
+  List<ListModel> productTypes = [];
 
   _fetchProducts(BuildContext context) async {
     setState(() {
@@ -97,10 +104,134 @@ class _ResellerProductsState extends State<ResellerProducts> {
     });
   }
 
+  _fetchOptions(BuildContext context) async {
+    setState(() {
+      fetchingOptions = true;
+    });
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final token = userProvider.user?.token;
+
+    final postData = {
+      "queryParams": {"pageSize": 100},
+    };
+    final apiClient = ApiClient();
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    //get locations
+    await apiClient
+        .post('/location/query', postData, headers: headers)
+        .then((response) {
+      print('Locations Response: $response');
+      if (response['data'] != null) {
+        try {
+          final data = List<Map<String, dynamic>>.from(response['data']);
+          final locationModels = data.map((data) {
+            return ListModel(
+              id: int.parse(data['id'].toString()),
+              name: data['name'].toString(),
+            );
+          }).toList();
+
+          setState(() {
+            locations = locationModels;
+          });
+        } catch (e) {
+          print('Error parsing locations data: $e');
+        }
+      } else {
+        // Handle the case where 'data' is null or not present in the response.
+        print('No locations found in the response');
+      }
+    }).catchError((error) {
+      // Handle the error
+      print('Error: $error');
+    });
+
+    setState(() {
+      fetchingProducts = false;
+    });
+
+    //get product types
+    await apiClient
+        .post('/product-category/query', postData, headers: headers)
+        .then((response) {
+      print('Product types Response: $response');
+      if (response['data'] != null) {
+        try {
+          final data = List<Map<String, dynamic>>.from(response['data']);
+          final productTypeModels = data.map((data) {
+            return ListModel(
+              id: int.parse(data['id'].toString()),
+              name: data['product_name'].toString(),
+            );
+          }).toList();
+
+          setState(() {
+            productTypes = productTypeModels;
+          });
+        } catch (e) {
+          print('Error parsing locations data: $e');
+        }
+      } else {
+        // Handle the case where 'data' is null or not present in the response.
+        print('No locations found in the response');
+      }
+    }).catchError((error) {
+      // Handle the error
+      print('Error: $error');
+    });
+
+    setState(() {
+      fetchingProducts = false;
+    });
+
+    //get omcs
+    await apiClient
+        .post('/account/fetch/all/omcs', postData, headers: headers)
+        .then((response) {
+      print('Omcs Response: $response');
+      if (response['data'] != null) {
+        try {
+          final data = List<Map<String, dynamic>>.from(response['data']);
+          final omcModels = data.map((data) {
+            return ListModel(
+              id: int.parse(data['id'].toString()),
+              name: data['company_name'].toString(),
+            );
+          }).toList();
+
+          setState(() {
+            omcs = omcModels;
+          });
+        } catch (e) {
+          print('Error parsing omcs data: $e');
+        }
+      } else {
+        // Handle the case where 'data' is null or not present in the response.
+        print('No omcs found in the response');
+      }
+    }).catchError((error) {
+      // Handle the error
+      print('Error: $error');
+    });
+
+    setState(() {
+      fetchingOptions = false;
+    });
+
+  }
+
+
+
   @override
   void initState() {
     super.initState();
     _fetchProducts(context);
+    _fetchOptions(context);
   }
 
   Future<void> _refreshProducts(BuildContext context) async {
@@ -155,7 +286,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                     color: primaryDarkColor,
                   ),
                 ),
-                items: ['Option 1', 'Option 2'].map((String value) {
+                items: locations.map((l)=>l.name.toString()).map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
@@ -165,53 +296,53 @@ class _ResellerProductsState extends State<ResellerProducts> {
                   print('OMC selected: $value');
                 },
               ),
-              SizedBox(
-                height: 10,
-              ),
-              DropdownButtonFormField<String>(
-                dropdownColor: Colors.white,
-                style: bodyTextSmall,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelText: 'Depot',
-                  labelStyle: TextStyle(color: Colors.grey[500]),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.grey.shade300,
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  suffixIcon: Icon(
-                    Icons.keyboard_arrow_down,
-                    color: primaryDarkColor,
-                  ),
-                ),
-                items: ['Location 1', 'Location 2'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? value) {
-                  print('Location selected: $value');
-                },
-              ),
+              // SizedBox(
+              //   height: 10,
+              // ),
+              // DropdownButtonFormField<String>(
+              //   dropdownColor: Colors.white,
+              //   style: bodyTextSmall,
+              //   decoration: InputDecoration(
+              //     filled: true,
+              //     fillColor: Colors.white,
+              //     labelText: 'Depot',
+              //     labelStyle: TextStyle(color: Colors.grey[500]),
+              //     border: OutlineInputBorder(
+              //       borderSide: const BorderSide(
+              //         color: Colors.grey,
+              //         width: 1.0,
+              //       ),
+              //       borderRadius: BorderRadius.circular(8.0),
+              //     ),
+              //     enabledBorder: OutlineInputBorder(
+              //       borderSide: BorderSide(
+              //         color: Colors.grey.shade300,
+              //         width: 2.0,
+              //       ),
+              //       borderRadius: BorderRadius.circular(8.0),
+              //     ),
+              //     focusedBorder: OutlineInputBorder(
+              //       borderSide: const BorderSide(
+              //         color: Colors.grey,
+              //         width: 1.0,
+              //       ),
+              //       borderRadius: BorderRadius.circular(8.0),
+              //     ),
+              //     suffixIcon: Icon(
+              //       Icons.keyboard_arrow_down,
+              //       color: primaryDarkColor,
+              //     ),
+              //   ),
+              //   items: locations.map((e) => e.name.toString()).map((String value) {
+              //     return DropdownMenuItem<String>(
+              //       value: value,
+              //       child: Text(value),
+              //     );
+              //   }).toList(),
+              //   onChanged: (String? value) {
+              //     print('Location selected: $value');
+              //   },
+              // ),
               SizedBox(
                 height: 10,
               ),
@@ -249,7 +380,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                     color: primaryDarkColor,
                   ),
                 ),
-                items: ['Depot 1', 'Depot 2'].map((String value) {
+                items: productTypes.map((e) => e.name).map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
@@ -296,7 +427,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                     color: primaryDarkColor,
                   ),
                 ),
-                items: ['Product 1', 'Product 2'].map((String value) {
+                items: omcs.map((e) => e.name).map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
