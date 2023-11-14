@@ -280,43 +280,44 @@ class _ProfileSetUpState extends State<ProfileSetUp>
     };
 
     try {
-      apiClient.post(
+      apiClient
+          .post(
         '/bank/get-all',
         postData,
         headers: headers,
-      ).then((response) {
+      )
+          .then((response) {
+        print('This is my banks Response: $response');
+        setState(() {
+          banks = [];
+          banksDropdownList = [];
+        });
 
-          print('This is my banks Response: $response');
+        if (response['status'] == 1 && response['data'] != null) {
+          final data = List<Map<String, dynamic>>.from(response['data']);
+          final tempBankModels = data.map((bankData) {
+            return Bank(
+              id: int.parse(bankData['id'].toString()),
+              name: bankData['name'].toString(),
+              active: bankData['active'] as bool?,
+              bankCode: bankData['bank_code'],
+              bankId: bankData['bank_id'] as int?,
+              createdAt: bankData['createdAt'] as String?,
+              updatedAt: bankData['updatedAt'] as String?,
+            );
+          }).toList();
+
           setState(() {
-              banks = [];
-              banksDropdownList = [];
-            });
-
-          if (response['status'] == 1 && response['data'] != null) {
-            final data = List<Map<String, dynamic>>.from(response['data']);
-            final tempBankModels = data.map((bankData) {
-                return Bank(
-                id: int.parse(bankData['id'].toString()),
-                name: bankData['name'].toString(),
-                active: bankData['active'] as bool?,
-                bankCode: bankData['bank_code'],
-                bankId: bankData['bank_id'] as int?,
-                createdAt: bankData['createdAt'] as String?,
-                updatedAt: bankData['updatedAt'] as String?,
-                );
-              }).toList();
-
-            setState(() {
-              banks = tempBankModels;
-              selectedBank = '${banks[0].id}';
-              banksDropdownList = tempBankModels.map((bank) => '${bank.name}').toList();
-            });
-          } else {
-            print('No or invalid bankss found in the response');
-            // Handle the case when 'status' is not 1 or 'cartProductsListing' is null
-          }
+            banks = tempBankModels;
+            selectedBank = '${banks[0].id}';
+            banksDropdownList =
+                tempBankModels.map((bank) => '${bank.name}').toList();
+          });
+        } else {
+          print('No or invalid bankss found in the response');
+          // Handle the case when 'status' is not 1 or 'cartProductsListing' is null
+        }
       });
-
     } catch (error) {
       print('Banks Fetch By ID User Id: $error');
       // Handle the error
@@ -405,7 +406,6 @@ class _ProfileSetUpState extends State<ProfileSetUp>
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(_handleTabChange);
 
-
     // Access the UserProvider and retrieve the user data
     final userProvider = context.read<UserProvider>();
     final user = userProvider.user;
@@ -446,6 +446,9 @@ class _ProfileSetUpState extends State<ProfileSetUp>
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.grey[50],
     ));
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final token = userProvider.user?.token;
+
     return DefaultTabController(
       length: 4,
       child: Scaffold(
@@ -925,6 +928,9 @@ class _ProfileSetUpState extends State<ProfileSetUp>
   Widget buildSecondPage() {
     final userProvider = context.read<UserProvider>();
     final user = userProvider.user;
+    final token = userProvider.user?.token;
+    print('Here is my token');
+    print(token);
     return SingleChildScrollView(
       child: SafeArea(
           child: Padding(
@@ -1014,7 +1020,6 @@ class _ProfileSetUpState extends State<ProfileSetUp>
               onChanged: (String? newValue) {
                 setState(() {
                   selectedBranch = newValue!;
-
                 });
               },
               items: branches.isNotEmpty
@@ -1139,23 +1144,25 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                 url: '/account/update/bank_details',
                 method: 'POST',
                 buttonText: 'Confirm',
-                headers: {},
+                headers: {
+                  'Authorization': 'Bearer $token',
+                  'Content-Type': 'application/json',
+                },
                 body: {
                   "account_number": accountController.text,
                   "account_name": accountName.text,
                   "bank_id": selectedBankIndex != -1
                       ? banks[selectedBankIndex].bankId
                       : 0,
-                  "branch_id": selectedBranch != -1
-                      ? selectedBranch
-                      : 0,
+                  "branch_id": selectedBranch != -1 ? selectedBranch : 0,
                   "account_id": user?.account_id.toString() ?? '',
+                  "is_petropal_account": 0,
                 },
                 onSuccess: (res) {
                   print('This is my selected bank value');
                   print(banks[selectedBankIndex].bankId);
                   print('This is my selected branch value');
-                  print(branches[selectedBranchIndex].id);
+                  print(selectedBranch);
 
                   print('This is my response');
                   print(res);
@@ -1182,6 +1189,8 @@ class _ProfileSetUpState extends State<ProfileSetUp>
   Widget buildThirdPage() {
     final userProvider = context.read<UserProvider>();
     final user = userProvider.user;
+
+    final token = userProvider.user?.token;
     return SingleChildScrollView(
       child: SafeArea(
         child: Padding(

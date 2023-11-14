@@ -10,6 +10,7 @@ import 'package:petropal/models/profile.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/r_profile.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OrganisationDetails extends StatefulWidget {
   const OrganisationDetails({super.key});
@@ -421,7 +422,6 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                 TextFormField(
                   controller: _dateController,
                   style: bodyText,
-                  // initialValue: '${profile!.epraLicenseExpiryDate}',
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
@@ -487,6 +487,16 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                       style: bodyText,
                     ),
                 ]),
+                InkWell(
+                  onTap: () => launchUrl(
+                      Uri.parse(profile!.epraLicensePhoto.toString() ?? '')),
+                  child: const Text(
+                    'Download Epra License',
+                    style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Colors.blue),
+                  ),
+                ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -553,6 +563,16 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                       style: bodyText,
                     ),
                 ]),
+                InkWell(
+                  onTap: () => launchUrl(
+                      Uri.parse(profile!.kraCertificatePhoto.toString() ?? '')),
+                  child: const Text(
+                    'Download KRA Certificate',
+                    style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Colors.blue),
+                  ),
+                ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -620,6 +640,17 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                       style: bodyText,
                     ),
                 ]),
+                InkWell(
+                  onTap: () => launchUrl(Uri.parse(
+                      profile!.certificateOfIncorporationPhoto.toString() ??
+                          '')),
+                  child: const Text(
+                    'Download Certificate of Incooporation',
+                    style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Colors.blue),
+                  ),
+                ),
                 const SizedBox(
                   height: 10,
                 ),
