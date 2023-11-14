@@ -10,6 +10,7 @@ import 'package:petropal/models/best_prices.dart';
 import 'package:petropal/models/completedOrders.dart';
 import 'package:petropal/models/completedOrders.dart';
 import 'package:petropal/models/orders.dart';
+import 'package:petropal/providers/products.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/authentication/login.dart';
 import 'package:petropal/reseller/orders/all_completed_orders.dart';
@@ -242,6 +243,8 @@ class _ResellerHomeState extends State<ResellerHome> {
     bool isActivated =
         Provider.of<UserProvider>(context, listen: false).isActivated;
     print('The status of my account is ........ $isActivated');
+    Provider.of<ProductProvider>(context, listen: false);
+    print('These are my products in roduct provider');
 
     if (!isActivated) {
       Future.delayed(Duration(seconds: 1), () {

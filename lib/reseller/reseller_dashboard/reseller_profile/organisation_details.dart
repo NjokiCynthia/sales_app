@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/models/profile.dart';
+import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/r_profile.dart';
+import 'package:provider/provider.dart';
 
 class OrganisationDetails extends StatefulWidget {
   const OrganisationDetails({super.key});
@@ -116,6 +120,103 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
         buttonErrorMessage = 'Enter phone number';
       });
     }
+  }
+
+  bool fetchingProfile = true;
+  Profile? profile;
+
+  _fetchProfile(BuildContext context) async {
+    setState(() {
+      fetchingProfile = true;
+    });
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    final token = userProvider.user?.token;
+    final accountId = userProvider.user?.account_id;
+    if (token == null) {
+      print('Token is null.');
+      setState(() {
+        fetchingProfile = false;
+      });
+      return;
+    }
+
+    final apiClient = ApiClient();
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+    final postData = {
+      'id': accountId,
+    };
+    print('Request postData:');
+    print(postData);
+    print('This is my account id');
+    print(accountId);
+    if (accountId == null) {
+      // Handle the case where account ID is null
+      return;
+    }
+
+    print('Fetching profile');
+
+    await apiClient
+        .post('/account/get-by-id', postData, headers: headers)
+        .then((response) {
+      print('Profile Response: $response');
+      if (response['data'] != null) {
+        setState(() {
+          profile = Profile(
+            id: response['data']['id'],
+            companyName: response['data']['company_name'],
+            companyEmail: response['data']['company_email'],
+            companyPhone: response['data']['company_phone'],
+            businessPermitNumber: response['data']['business_permit_number'],
+            businessPermitPhoto: response['data']['business_permit_photo'],
+            kraCertificateNumber: response['data']['kra_certificate_number'],
+            kraCertificatePhoto: response['data']['kra_certificate_photo'],
+            epraLicenseNumber: response['data']['epra_license_number'],
+            isVerified: response['data']['is_verified'],
+            epraLicenseExpiryDate: response['data']['epra_license_expiry_date'],
+            epraLicensePhoto: response['data']['epra_license_photo'],
+            certificateOfIncorporationNumber: response['data']
+                ['certificate_of_incorporation_number'],
+            certificateOfIncorporationPhoto: response['data']
+                ['certificate_of_incorporation_photo'],
+            minimumVolumePerOrder: response['data']['minimum_volume_per_order'],
+            isActivated: response['data']['is_activated'],
+            accountType: response['data']['account_type'],
+          );
+        });
+      } else {
+        // Handle the case where 'data' is null or not present in the response.
+        print('No profile found in the response');
+      }
+    }).catchError((error) {
+      // Handle the error
+      print('Error fetching profile');
+      print(error);
+    });
+
+    setState(() {
+      fetchingProfile = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchProfile(context);
+    final TextEditingController numberController = TextEditingController();
+    final TextEditingController eController = TextEditingController();
+    final TextEditingController minVolController = TextEditingController();
+    final TextEditingController licenseController = TextEditingController();
+    final TextEditingController licensedate = TextEditingController();
+    final TextEditingController kraController = TextEditingController();
+    final TextEditingController kraDocument = TextEditingController();
+    final TextEditingController certController = TextEditingController();
+    final TextEditingController certUpload = TextEditingController();
   }
 
   @override
