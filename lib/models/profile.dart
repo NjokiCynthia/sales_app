@@ -3,8 +3,6 @@ class Profile {
   String? companyName;
   String? companyEmail;
   String? companyPhone;
-  Null? businessPermitNumber;
-  String? businessPermitPhoto;
   String? kraCertificateNumber;
   String? kraCertificatePhoto;
   String? epraLicenseNumber;
@@ -22,8 +20,6 @@ class Profile {
       this.companyName,
       this.companyEmail,
       this.companyPhone,
-      this.businessPermitNumber,
-      this.businessPermitPhoto,
       this.kraCertificateNumber,
       this.kraCertificatePhoto,
       this.epraLicenseNumber,

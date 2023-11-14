@@ -51,7 +51,8 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
-        _dateController.text = DateFormat('dd MMM yyyy').format(picked);
+        // Format the date received from the server
+        _dateController.text = DateFormat('d MMM y').format(selectedDate);
       });
     }
   }
@@ -155,7 +156,6 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
     print('This is my account id');
     print(accountId);
     if (accountId == null) {
-      // Handle the case where account ID is null
       return;
     }
 
@@ -168,25 +168,27 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
       if (response['data'] != null) {
         setState(() {
           profile = Profile(
-            id: response['data']['id'],
-            companyName: response['data']['company_name'],
-            companyEmail: response['data']['company_email'],
-            companyPhone: response['data']['company_phone'],
-            businessPermitNumber: response['data']['business_permit_number'],
-            businessPermitPhoto: response['data']['business_permit_photo'],
-            kraCertificateNumber: response['data']['kra_certificate_number'],
-            kraCertificatePhoto: response['data']['kra_certificate_photo'],
-            epraLicenseNumber: response['data']['epra_license_number'],
-            isVerified: response['data']['is_verified'],
-            epraLicenseExpiryDate: response['data']['epra_license_expiry_date'],
-            epraLicensePhoto: response['data']['epra_license_photo'],
-            certificateOfIncorporationNumber: response['data']
-                ['certificate_of_incorporation_number'],
-            certificateOfIncorporationPhoto: response['data']
-                ['certificate_of_incorporation_photo'],
-            minimumVolumePerOrder: response['data']['minimum_volume_per_order'],
-            isActivated: response['data']['is_activated'],
-            accountType: response['data']['account_type'],
+            id: response['data']['id'] ?? '',
+            companyName: response['data']['company_name'] ?? '',
+            companyEmail: response['data']['company_email'] ?? '',
+            companyPhone: response['data']['company_phone'] ?? '',
+            kraCertificateNumber:
+                response['data']['kra_certificate_number'] ?? '',
+            kraCertificatePhoto:
+                response['data']['kra_certificate_photo'] ?? '',
+            epraLicenseNumber: response['data']['epra_license_number'] ?? '',
+            isVerified: response['data']['is_verified'] ?? "",
+            epraLicenseExpiryDate:
+                response['data']['epra_license_expiry_date'] ?? '',
+            epraLicensePhoto: response['data']['epra_license_photo'] ?? '',
+            certificateOfIncorporationNumber:
+                response['data']['certificate_of_incorporation_number'] ?? "",
+            certificateOfIncorporationPhoto:
+                response['data']['certificate_of_incorporation_photo'] ?? '',
+            minimumVolumePerOrder:
+                response['data']['minimum_volume_per_order'] ?? '',
+            isActivated: response['data']['is_activated'] ?? '',
+            accountType: response['data']['account_type'] ?? '',
           );
         });
       } else {
@@ -207,16 +209,24 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
   @override
   void initState() {
     super.initState();
-    _fetchProfile(context);
-    final TextEditingController numberController = TextEditingController();
-    final TextEditingController eController = TextEditingController();
-    final TextEditingController minVolController = TextEditingController();
-    final TextEditingController licenseController = TextEditingController();
-    final TextEditingController licensedate = TextEditingController();
-    final TextEditingController kraController = TextEditingController();
-    final TextEditingController kraDocument = TextEditingController();
-    final TextEditingController certController = TextEditingController();
-    final TextEditingController certUpload = TextEditingController();
+    _fetchProfile(context).then((_) {
+      // Access profile data only after it has been fetched
+      if (profile != null) {
+        email_ctrl.text = '${profile!.companyEmail}';
+        phone_number_ctrl.text = '${profile!.companyPhone}';
+        epra_ctrl.text = '${profile!.epraLicenseNumber}';
+        expiry_ctrl.text = '${profile!.epraLicenseExpiryDate}';
+        kra_ctrl.text = '${profile!.kraCertificatePhoto}';
+        krapin_ctrl.text = '${profile!.kraCertificateNumber}';
+        cert_ctrl.text = '${profile!.certificateOfIncorporationNumber}';
+        _dateController.text = '${profile!.epraLicenseExpiryDate}';
+      }
+      print('${profile?.companyName}');
+      print('${profile?.companyPhone}');
+      print(('${profile?.epraLicenseExpiryDate}'));
+      print(('${profile!.kraCertificateNumber}'));
+    });
+    print('object are my fetched details');
   }
 
   @override
@@ -224,6 +234,14 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.grey[50],
     ));
+    // Check if profile is still being fetched
+    if (fetchingProfile) {
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(), // Display a loading indicator
+        ),
+      );
+    }
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(context).pop();
@@ -290,7 +308,7 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                   inputDecoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    labelText: 'Phone number',
+                    labelText: 'Company phone',
                     labelStyle: TextStyle(color: Colors.grey[500]),
                     //labelStyle: bodyTextSmall,
                     border: OutlineInputBorder(
@@ -327,11 +345,12 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                   keyboardType: TextInputType.text,
                   style: bodyText,
                   controller: email_ctrl,
+                  //initialValue: '${profile!.companyEmail}',
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    labelText: 'Enter Email Address',
-                    labelStyle: TextStyle(color: Colors.grey[500]),
+                    labelText: 'Company email',
+                    labelStyle: TextStyle(color: Colors.black),
                     border: OutlineInputBorder(
                       borderSide: const BorderSide(
                         color: Colors.grey,
@@ -359,6 +378,7 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                   height: 10,
                 ),
                 TextFormField(
+                  //initialValue: '${profile!.epraLicenseNumber}',
                   onChanged: (text) {
                     validateOrganisationInputs();
                   },
@@ -370,8 +390,8 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    labelText: 'EPRA License Number',
-                    labelStyle: TextStyle(color: Colors.grey[500]),
+                    labelText: 'Epra license number',
+                    labelStyle: TextStyle(color: Colors.black),
                     border: OutlineInputBorder(
                       borderSide: const BorderSide(
                         color: Colors.grey,
@@ -401,10 +421,11 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                 TextFormField(
                   controller: _dateController,
                   style: bodyText,
+                  // initialValue: '${profile!.epraLicenseExpiryDate}',
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    labelText: 'Select expriry Date',
+                    labelText: 'Expiry date',
                     suffixIcon: IconButton(
                       icon: const Icon(
                         Icons.calendar_today,
@@ -476,10 +497,11 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                   keyboardType: TextInputType.text,
                   style: bodyText,
                   controller: krapin_ctrl,
+                  //initialValue: '${profile!.kraCertificateNumber}',
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    labelText: 'KRA PIN',
+                    labelText: 'KRA PIN ',
                     labelStyle: TextStyle(color: Colors.grey[500]),
                     border: OutlineInputBorder(
                       borderSide: const BorderSide(
@@ -541,7 +563,9 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                   keyboardType: TextInputType.text,
                   style: bodyText,
                   controller: cert_ctrl,
+                  // initialValue: '${profile!.certificateOfIncorporationNumber!}',
                   decoration: InputDecoration(
+                    //hintText: '${profile!.certificateOfIncorporationNumber!}',
                     filled: true,
                     fillColor: Colors.white,
                     labelText: 'Cerificate of Incoporation',
@@ -609,7 +633,7 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => const ResellerProfile()));
                         },
-                        child: const Text('Confirm')))
+                        child: const Text('Confirm'))),
               ]),
             ),
           ),
