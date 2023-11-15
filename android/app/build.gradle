@@ -29,8 +29,10 @@ android {
         applicationId "com.company.petropal"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
-        versionCode flutterVersionCode
-        versionName flutterVersionName
+        //versionCode flutterVersionCode
+        //versionName flutterVersionName
+        versionCode 2
+        versionName "1.0.1"
     }
 
     // Load keystore properties from local.properties file
