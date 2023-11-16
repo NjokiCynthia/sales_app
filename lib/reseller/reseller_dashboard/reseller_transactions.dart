@@ -22,9 +22,9 @@ class _ResellerTransactionsState extends State<ResellerTransactions> {
         leading: GestureDetector(
           onTap: () {
             Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => ResellerDasboard()));
+                MaterialPageRoute(builder: (context) => const ResellerDashboard()));
           },
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back_ios,
             color: primaryDarkColor,
           ),
@@ -77,7 +77,7 @@ class _ResellerTransactionsState extends State<ResellerTransactions> {
                         children: [
                           Row(
                             children: [
-                              Text(
+                              const Text(
                                 'Shell Limited ',
                                 style: TextStyle(color: Colors.black),
                               ),
@@ -86,7 +86,7 @@ class _ResellerTransactionsState extends State<ResellerTransactions> {
                                 style: displaySmallerLightGrey.copyWith(
                                     fontSize: 12),
                               ),
-                              Text('')
+                              const Text('')
                             ],
                           ),
                           // Text(
@@ -104,7 +104,7 @@ class _ResellerTransactionsState extends State<ResellerTransactions> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
+                            const Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
@@ -120,7 +120,7 @@ class _ResellerTransactionsState extends State<ResellerTransactions> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
+                                const Text(
                                   '#12345678h',
                                   style: TextStyle(color: Colors.grey),
                                 ),

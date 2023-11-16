@@ -41,6 +41,7 @@ class UserProvider extends ChangeNotifier {
   bool _isActivated = true;
 
   bool get isActivated => _isActivated;
+  String? get token => _user?.token;
 
   void setUser(User user) {
     _user = user;

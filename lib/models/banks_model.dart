@@ -3,7 +3,7 @@ class Bank {
   String? name;
   String? slug;
   bool? active;
-  Null? bankCode;
+ // Null bankCode;
   int? bankId;
   String? createdAt;
   String? updatedAt;
@@ -13,7 +13,7 @@ class Bank {
       this.name,
       this.slug,
       this.active,
-      this.bankCode,
+     // this.bankCode,
       this.bankId,
       this.createdAt,
       this.updatedAt});

@@ -1,5 +1,6 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
@@ -179,7 +180,7 @@ class _OrderDetailsState extends State<OrderDetails> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(15),
+          padding: const EdgeInsets.all(15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -218,7 +219,7 @@ class _OrderDetailsState extends State<OrderDetails> {
               Container(
                 decoration: BoxDecoration(color: Colors.grey[100]),
                 child: Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -232,7 +233,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                           ),
                           Text(
                             '${widget.product.location}',
-                            style: TextStyle(color: Colors.black),
+                            style: const TextStyle(color: Colors.black),
                           ),
                         ],
                       ),
@@ -249,7 +250,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                           ),
                           Text(
                             '${widget.product.depot}',
-                            style: TextStyle(color: Colors.grey),
+                            style: const TextStyle(color: Colors.grey),
                           ),
                         ],
                       ),
@@ -257,18 +258,18 @@ class _OrderDetailsState extends State<OrderDetails> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Text(
                 'Products Available',
                 style: textBolder,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               fetchingDetails
-                  ? Center(child: CircularProgressIndicator())
+                  ? const Center(child: CircularProgressIndicator())
                   : productList.isNotEmpty
                       ? Expanded(
                           child: ListView.builder(
@@ -289,35 +290,35 @@ class _OrderDetailsState extends State<OrderDetails> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            '${product.productName}',
+                                            product.productName,
                                             style: textBolderSmall,
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 5,
                                           ),
-                                          Text(
+                                          const Text(
                                             'Available volume:',
                                             style:
                                                 TextStyle(color: Colors.black),
                                           ),
-                                          SizedBox(height: 5),
-                                          Text(
+                                          const SizedBox(height: 5),
+                                          const Text(
                                             'Minimum volume',
                                             style:
                                                 TextStyle(color: Colors.black),
                                           ),
                                           Text(
                                             '${formatVolume(product.minVol)}litres',
-                                            style:
-                                                TextStyle(color: Colors.grey),
+                                            style: const TextStyle(
+                                                color: Colors.grey),
                                           ),
-                                          SizedBox(height: 10),
-                                          Text(
+                                          const SizedBox(height: 10),
+                                          const Text(
                                             'Specify the Volume:',
                                             style:
                                                 TextStyle(color: Colors.grey),
                                           ),
-                                          SizedBox(height: 10),
+                                          const SizedBox(height: 10),
                                         ],
                                       ),
                                       Column(
@@ -330,7 +331,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                                 TextSpan(
                                                   text:
                                                       'KES ${product.sellingPrice}/',
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                     color: Colors.black,
                                                   ),
                                                 ),
@@ -341,32 +342,32 @@ class _OrderDetailsState extends State<OrderDetails> {
                                               ],
                                             ),
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 5,
                                           ),
                                           Text(
                                             '${formatVolume(product.availableVolume)}  litres',
                                             style: textBolderSmall,
                                           ),
-                                          SizedBox(height: 5),
-                                          Text(
+                                          const SizedBox(height: 5),
+                                          const Text(
                                             'Maximum volume',
                                             style:
                                                 TextStyle(color: Colors.black),
                                           ),
                                           Text(
                                             '${formatVolume(product.maxVol)}litres',
-                                            style:
-                                                TextStyle(color: Colors.grey),
+                                            style: const TextStyle(
+                                                color: Colors.grey),
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 10,
                                           ),
                                           SizedBox(
                                             width: 200,
                                             child: TextFormField(
                                               controller: orderVolume[index],
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   color: Colors.black),
                                               keyboardType:
                                                   TextInputType.number,
@@ -431,7 +432,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                               ),
                                             ),
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 10,
                                           ),
                                         ],
@@ -439,7 +440,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                     ],
                                   ),
                                   if (index < productList.length - 1)
-                                    Divider(
+                                    const Divider(
                                       color: Colors.black,
                                     ),
                                 ],
@@ -447,7 +448,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                             },
                           ),
                         )
-                      : Text(
+                      : const Text(
                           'No products available',
                           style: TextStyle(color: primaryDarkColor),
                         ),
@@ -472,7 +473,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                 height: 48,
                 child: (totalValue < minimumVolumePerOrder)
                     ? Text(
-                        'Volume is less than the minimum value required per order: ${minimumVolumePerOrder} liters',
+                        'Volume is less than the minimum value required per order: $minimumVolumePerOrder liters',
                         style: const TextStyle(color: Colors.red),
                       )
                     : null,

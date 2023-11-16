@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
@@ -12,6 +14,7 @@ import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/banks_model.dart';
 import 'package:petropal/models/branches.dart';
+import 'package:petropal/models/positions_model.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/orders/success.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_dashboard.dart';
@@ -53,6 +56,74 @@ class _ProfileSetUpState extends State<ProfileSetUp>
   final TextEditingController kraDocument = TextEditingController();
   final TextEditingController certController = TextEditingController();
   final TextEditingController certUpload = TextEditingController();
+
+  String selectedPosition = 'Select Location';
+  int selectedPositionIndex = -1;
+  List<PositionModel> positions = [];
+
+  List<String> positionsDropdownList = [];
+  List<String> positionItems = ['Select location'];
+
+  bool fetchingPositions = true;
+  void _fetchPositions(BuildContext context) async {
+    setState(() {
+      fetchingPositions = true;
+    });
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final token = userProvider.user?.token;
+
+    final postData = {};
+    final apiClient = ApiClient();
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      final response = await apiClient.post(
+        '/position/get-all',
+        postData,
+        headers: headers,
+      );
+
+      print('This is my positions Response: $response');
+      //Rprint();
+
+      setState(() {
+        positions = [];
+        positionsDropdownList = [];
+      });
+
+      if (response['status'] == 1 && response['data'] != null) {
+        final data = List<Map<String, dynamic>>.from(response['data']);
+        final tempPositionModels = data.map((positionData) {
+          return PositionModel(
+            id: int.parse(positionData['id'].toString()),
+            name: positionData['name'].toString(),
+            description: positionData['description'].toString(),
+          );
+        }).toList();
+
+        setState(() {
+          positions = tempPositionModels;
+          selectedPosition = '${positions[0].id}';
+          positionsDropdownList =
+              tempPositionModels.map((position) => '${position.name}').toList();
+        });
+      } else {
+        print('No or invalid positions found in the response');
+        // Handle the case when 'status' is not 1 or 'cartProductsListing' is null
+      }
+    } catch (error) {
+      print('Positions Fetch By ID User Id: $error');
+      // Handle the error
+    }
+
+    setState(() {
+      fetchingPositions = false;
+    });
+  }
 
   String capitalize(String input) {
     List<String> words = input.split(' ');
@@ -159,8 +230,10 @@ class _ProfileSetUpState extends State<ProfileSetUp>
   PhoneNumber number = PhoneNumber(isoCode: 'KE');
 
   Future<void> sendFormData() async {
+    // final url =
+    //     Uri.parse('https://app.petropal.africa:8050/user/update-profile');
     final url =
-        Uri.parse('https://app.petropal.africa:8050/user/update-profile');
+        Uri.parse('https://petropal.sandbox.co.ke:8040/user/update-profile');
     final userProvider = context.read<UserProvider>();
     final user = userProvider.user;
 
@@ -300,7 +373,6 @@ class _ProfileSetUpState extends State<ProfileSetUp>
               id: int.parse(bankData['id'].toString()),
               name: bankData['name'].toString(),
               active: bankData['active'] as bool?,
-              bankCode: bankData['bank_code'],
               bankId: bankData['bank_id'] as int?,
               createdAt: bankData['createdAt'] as String?,
               updatedAt: bankData['updatedAt'] as String?,
@@ -403,6 +475,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
   void initState() {
     super.initState();
     _fetchBanks(context);
+    _fetchPositions(context);
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(_handleTabChange);
 
@@ -455,11 +528,11 @@ class _ProfileSetUpState extends State<ProfileSetUp>
         backgroundColor: Colors.grey[50],
         body: SafeArea(
           child: Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 50,
                 ),
                 const SizedBox(
@@ -473,14 +546,14 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                   height: 10,
                 ),
                 Padding(
-                  padding: EdgeInsets.all(0),
+                  padding: const EdgeInsets.all(0),
                   child: TabBar(
                     controller: _tabController,
                     indicatorColor: primaryDarkColor,
                     labelStyle: displaySmaller,
                     labelColor: primaryDarkColor,
                     unselectedLabelColor: Colors.black,
-                    tabs: [
+                    tabs: const [
                       Tab(
                         text: "Organisation",
                       ),
@@ -916,7 +989,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                 onPressed: () {
                   sendFormData();
                 },
-                child: Text('Submit'),
+                child: const Text('Submit'),
               ),
             )
           ]),
@@ -984,16 +1057,16 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                   Bank selectedBankObject = banks.firstWhere(
                     (bank) => bank.name == selectedBank,
                   );
-                  Future.delayed(Duration(seconds: 2), () {
-                    // Pass the bank ID to _fetchbranches
-                    _fetchBankBranches(
-                        context, selectedBankObject.bankId.toString());
 
-                    selectedBankIndex = banksDropdownList.indexOf(selectedBank);
+                  // Pass the bank ID to _fetchbranches
+                  _fetchBankBranches(
+                      context, selectedBankObject.bankId.toString());
 
-                    // _fetchbranches(context, selectedBank);
-                    //selectedBankIndex = banksDropdownList.indexOf(selectedBank);
-                  });
+                  selectedBankIndex = banksDropdownList.indexOf(selectedBank);
+
+                  // _fetchbranches(context, selectedBank);
+                  //selectedBankIndex = banksDropdownList.indexOf(selectedBank);
+
                   print('This is my selected banks index');
                   print(selectedBankIndex);
                 });
@@ -1057,7 +1130,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                   ),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
-                suffixIcon: Icon(
+                suffixIcon: const Icon(
                   Icons.keyboard_arrow_down,
                   color: primaryDarkColor,
                 ),
@@ -1099,7 +1172,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             TextFormField(
@@ -1197,7 +1270,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
           padding: const EdgeInsets.all(15),
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               TextFormField(
@@ -1232,7 +1305,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               InternationalPhoneNumberInput(
@@ -1297,7 +1370,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                 ),
                 onSaved: (PhoneNumber number) {},
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               TextFormField(
@@ -1339,7 +1412,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                   url: '/contact-persons/create',
                   method: 'POST',
                   buttonText: 'Add details',
-                  headers: {},
+                  headers: const {},
                   body: {
                     "name": nameController.text,
                     "phone": phoneController.text,
@@ -1550,10 +1623,10 @@ class _ProfileSetUpState extends State<ProfileSetUp>
     return SingleChildScrollView(
       child: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(15),
+          padding: const EdgeInsets.all(15),
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               TextFormField(
@@ -1588,7 +1661,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               TextFormField(
@@ -1623,7 +1696,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               InternationalPhoneNumberInput(
@@ -1688,7 +1761,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                 ),
                 onSaved: (PhoneNumber number) {},
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               TextFormField(
@@ -1723,7 +1796,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               SizedBox(
@@ -1736,7 +1809,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => Success()),
+                      MaterialPageRoute(builder: (context) => const Success()),
                       (Route<dynamic> route) => false,
                     );
                     // Navigator.pushAndRemoveUntil(context,

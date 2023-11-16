@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -5,7 +7,7 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/models/completedOrders.dart';
+import 'package:petropal/models/completed_orders.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/orders/completed_orders_documents.dart';
 import 'package:provider/provider.dart';
@@ -156,7 +158,7 @@ class _AllCompletedOrdersState extends State<AllCompletedOrders> {
           onTap: () {
             Navigator.pop(context);
           },
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back_ios,
             color: primaryDarkColor,
           ),
@@ -185,11 +187,11 @@ class _AllCompletedOrdersState extends State<AllCompletedOrders> {
         elevation: 0,
       ),
       body: Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: RefreshIndicator(
             onRefresh: () => _refreshCompletedOrders(context),
             child: fetchingCompletedOrders
-                ? Center(child: CircularProgressIndicator())
+                ? const Center(child: CircularProgressIndicator())
                 : orders.isNotEmpty
                     ? ListView.builder(
                         itemBuilder: (context, index) {
@@ -228,7 +230,7 @@ class _AllCompletedOrdersState extends State<AllCompletedOrders> {
                                       children: [
                                         Text(
                                           '${order.vendorName}',
-                                          style: TextStyle(color: Colors.black),
+                                          style: const TextStyle(color: Colors.black),
                                         ),
                                         Text(
                                           DateFormat('d MMM y').format(
@@ -260,7 +262,7 @@ class _AllCompletedOrdersState extends State<AllCompletedOrders> {
                                               Text(
                                                 '${order.orderInvoiceNumber}',
                                                 // '${order.paymentBankOption}',
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     color: Colors.grey),
                                               ),
                                               // Text(
@@ -269,7 +271,7 @@ class _AllCompletedOrdersState extends State<AllCompletedOrders> {
                                               // ),
                                             ],
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 5,
                                           ),
                                           Row(
@@ -318,7 +320,7 @@ class _AllCompletedOrdersState extends State<AllCompletedOrders> {
                                 ),
                                 if (index < 5)
                                   Padding(
-                                    padding: EdgeInsets.all(8),
+                                    padding: const EdgeInsets.all(8),
                                     child: Divider(
                                       color: Colors.grey[100],
                                       thickness: 1,
@@ -327,6 +329,7 @@ class _AllCompletedOrdersState extends State<AllCompletedOrders> {
                               ],
                             );
                           }
+                          return null;
                         },
                         itemCount: orders.length > 5 ? 5 : orders.length,
                       )

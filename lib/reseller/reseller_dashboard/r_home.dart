@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,19 +9,12 @@ import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/best_prices.dart';
-import 'package:petropal/models/completedOrders.dart';
-import 'package:petropal/models/completedOrders.dart';
-import 'package:petropal/models/orders.dart';
+import 'package:petropal/models/completed_orders.dart';
 import 'package:petropal/providers/products.dart';
 import 'package:petropal/providers/user_provider.dart';
-import 'package:petropal/reseller/authentication/login.dart';
 import 'package:petropal/reseller/orders/all_completed_orders.dart';
 import 'package:petropal/reseller/orders/completed_orders_documents.dart';
-import 'package:petropal/reseller/orders/orderDocuments.dart';
-import 'package:petropal/reseller/orders/order_detail.dart';
-import 'package:petropal/reseller/reseller_dashboard/my_productstest.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/profile_setup.dart';
-import 'package:petropal/reseller/reseller_dashboard/reseller_transactions.dart';
 import 'package:petropal/screens/superadmin_dashboard/chart_data.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
@@ -234,7 +229,7 @@ class _ResellerHomeState extends State<ResellerHome> {
       greeting = 'Good Evening,';
     }
 
-    return '$greeting';
+    return greeting;
   }
 
   @override
@@ -247,16 +242,16 @@ class _ResellerHomeState extends State<ResellerHome> {
     print('These are my products in roduct provider');
 
     if (!isActivated) {
-      Future.delayed(Duration(seconds: 1), () {
+      Future.delayed(const Duration(seconds: 1), () {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
             backgroundColor: Colors.white,
-            title: Text(
+            title: const Text(
               "Activation Required",
               style: TextStyle(color: primaryDarkColor),
             ),
-            content: Text(
+            content: const Text(
               "Your account is not activated. Please complete your profile to activate your account",
               style: TextStyle(color: Colors.grey),
             ),
@@ -268,9 +263,9 @@ class _ResellerHomeState extends State<ResellerHome> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ProfileSetUp()));
+                            builder: (context) => const ProfileSetUp()));
                   },
-                  child: Text(
+                  child: const Text(
                     'Activate Now',
                     style: TextStyle(color: primaryDarkColor),
                   )),
@@ -324,7 +319,7 @@ class _ResellerHomeState extends State<ResellerHome> {
               end: Alignment.bottomLeft,
             ),
             border: Border.all(color: (Colors.grey[100])!)),
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
         width: double.infinity,
         child: SizedBox(
           height: 50.0,
@@ -409,24 +404,24 @@ class _ResellerHomeState extends State<ResellerHome> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
               Padding(
-                padding: EdgeInsets.all(5),
+                padding: const EdgeInsets.all(5),
                 child: Row(
                   children: [
                     Text(
                       _getGreeting(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 12,
                         fontWeight: FontWeight.normal,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 5,
                     ),
                     Text(
                         Provider.of<UserProvider>(context).user?.first_name ??
                             'User',
-                        style: TextStyle(color: primaryDarkColor)),
+                        style: const TextStyle(color: primaryDarkColor)),
                   ],
                 ),
               ),
@@ -455,11 +450,11 @@ class _ResellerHomeState extends State<ResellerHome> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 10,
                                         ),
                                         Padding(
-                                          padding: EdgeInsets.only(left: 10),
+                                          padding: const EdgeInsets.only(left: 10),
                                           child: Text(
                                             'Current average price for ${titles[index]}',
                                             style: const TextStyle(
@@ -467,7 +462,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                                           ),
                                         ),
                                         Padding(
-                                          padding: EdgeInsets.only(left: 10),
+                                          padding: const EdgeInsets.only(left: 10),
                                           child: Text(
                                             'Kes 201.30',
                                             style: m_title,
@@ -505,7 +500,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                                           yValueMapper: (ChartData data, _) =>
                                               data.price,
                                           splineType: SplineType.natural,
-                                          gradient: LinearGradient(
+                                          gradient: const LinearGradient(
                                             colors: [
                                               // primaryDarkColor.withOpacity(0.5),
                                               secondaryDarkColor,
@@ -548,7 +543,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                   children: List.generate(
                     3,
                     (index) => Padding(
-                      padding: EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.only(bottom: 10),
                       child: Container(
                         width: 10,
                         height: 10,
@@ -563,7 +558,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                   ),
                 ),
               ]),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               CarouselSlider(
@@ -575,21 +570,21 @@ class _ResellerHomeState extends State<ResellerHome> {
                 options: CarouselOptions(
                   height: 120,
                   autoPlay: true,
-                  autoPlayInterval: Duration(seconds: 2),
-                  autoPlayAnimationDuration: Duration(milliseconds: 800),
+                  autoPlayInterval: const Duration(seconds: 2),
+                  autoPlayAnimationDuration: const Duration(milliseconds: 800),
                   enableInfiniteScroll: true,
                   enlargeCenterPage: true,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Padding(
-                padding: EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'Completed Orders',
                       style: TextStyle(color: Colors.black),
                     ),
@@ -597,7 +592,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                       onTap: () {
                         PersistentNavBarNavigator.pushNewScreen(
                           context,
-                          screen: AllCompletedOrders(),
+                          screen: const AllCompletedOrders(),
                           withNavBar: false,
                           pageTransitionAnimation:
                               PageTransitionAnimation.cupertino,
@@ -615,7 +610,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                   child: RefreshIndicator(
                 onRefresh: () => _refreshCompletedOrders(context),
                 child: fetchingCompletedOrders
-                    ? Center(child: CircularProgressIndicator())
+                    ? const Center(child: CircularProgressIndicator())
                     : orders.isNotEmpty
                         ? ListView.builder(
                             itemBuilder: (context, index) {
@@ -655,7 +650,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                                           children: [
                                             Text(
                                               '${order.vendorName}',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   color: Colors.black),
                                             ),
                                             Text(
@@ -690,7 +685,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                                                   Text(
                                                     '${order.orderInvoiceNumber}',
                                                     // '${order.paymentBankOption}',
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         color: Colors.grey),
                                                   ),
                                                   // Text(
@@ -699,7 +694,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                                                   // ),
                                                 ],
                                               ),
-                                              SizedBox(
+                                              const SizedBox(
                                                 height: 5,
                                               ),
                                               Row(
@@ -754,7 +749,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                                     ),
                                     if (index < 5)
                                       Padding(
-                                        padding: EdgeInsets.all(8),
+                                        padding: const EdgeInsets.all(8),
                                         child: Divider(
                                           color: Colors.grey[100],
                                           thickness: 1,

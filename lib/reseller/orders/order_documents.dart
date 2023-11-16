@@ -1,4 +1,4 @@
-import 'dart:convert';
+// ignore_for_file: avoid_print
 
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
@@ -8,7 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/models/completedOrders.dart';
 import 'package:petropal/models/order_documents.dart';
 import 'package:petropal/models/orders.dart';
 import 'package:petropal/models/product.dart';
@@ -16,7 +15,6 @@ import 'package:petropal/models/product_document.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../widgets/buttons.dart';
 
 class OrderDocuments extends StatefulWidget {
   final Order orders;
@@ -55,7 +53,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
 
     final apiClient = ApiClient();
     final postData = {
-      'id': '${widget.orders.id}',
+      'id': widget.orders.id,
     };
     final headers = {
       'Authorization': 'Bearer $token',
@@ -101,31 +99,29 @@ class _OrderDocumentsState extends State<OrderDocuments> {
               vendorName: data['vendorName'].toString(),
               vendorEmail: data['vendorEmail'].toString(),
               vendorPhone: data['vendorPhone'].toString(),
-              vendorAccountName: data['vendorAccountName'].toString() ?? '',
-              vendorAccountNumber: data['vendorAccountNumber'].toString() ?? '',
-              vendorBankName: data['vendorBankName'].toString() ?? '',
-              vendorBranchName: data['vendorBranchName'].toString() ?? '',
-              resellerName: data['resellerName'].toString() ?? '',
-              resellerEmail: data['resellerEmail'].toString() ?? '',
-              resellerPhone: data['resellerPhone'].toString() ?? '',
-              depot: data['depot'].toString() ?? '',
-              location: data['location'].toString() ?? '',
-              driverName: data['driverName'].toString() ?? '',
-              driverPhoneNumber: data['driverPhoneNumber'].toString() ?? '',
-              driverIdNumber: data['driverIdNumber'].toString() ?? '',
-              driverLicenceNumber: data['driverLicenceNumber'].toString() ?? '',
+              vendorAccountName: data['vendorAccountName'].toString(),
+              vendorAccountNumber: data['vendorAccountNumber'].toString(),
+              vendorBankName: data['vendorBankName'].toString(),
+              vendorBranchName: data['vendorBranchName'].toString(),
+              resellerName: data['resellerName'].toString(),
+              resellerEmail: data['resellerEmail'].toString(),
+              resellerPhone: data['resellerPhone'].toString(),
+              depot: data['depot'].toString(),
+              location: data['location'].toString(),
+              driverName: data['driverName'].toString(),
+              driverPhoneNumber: data['driverPhoneNumber'].toString(),
+              driverIdNumber: data['driverIdNumber'].toString(),
+              driverLicenceNumber: data['driverLicenceNumber'].toString(),
               driverEpraLicenceNumber:
-                  data['driverEPRALicenceNumber'].toString() ?? '',
-              truckNumber: data['truckNumber'].toString() ?? '',
+                  data['driverEPRALicenceNumber'].toString(),
+              truckNumber: data['truckNumber'].toString(),
               truckCompartment: data['truckCompartment'].toString(),
-              proformaInvoiceDoc: data['proformaInvoiceDoc'].toString() ?? '',
-              resellerProofOfPayment:
-                  data['resellerProofOfPayment'].toString() ?? '',
-              purchaseOrder: data['purchaseOrder'].toString() ?? '',
-              receipt: data['receipt'].toString() ?? '',
-              loadingOrder: data['loadingOrder'].toString() ?? '',
-              invoiceOrderDocument:
-                  data['invoiceOrderDocument'].toString() ?? '',
+              proformaInvoiceDoc: data['proformaInvoiceDoc'].toString(),
+              resellerProofOfPayment: data['resellerProofOfPayment'].toString(),
+              purchaseOrder: data['purchaseOrder'].toString(),
+              receipt: data['receipt'].toString(),
+              loadingOrder: data['loadingOrder'].toString(),
+              invoiceOrderDocument: data['invoiceOrderDocument'].toString(),
             );
 
             setState(() {
@@ -155,9 +151,9 @@ class _OrderDocumentsState extends State<OrderDocuments> {
     _fetchOrderDocuments(context);
   }
 
-  Future<void> _refreshOrderDocuments(BuildContext context) async {
-    await _fetchOrderDocuments(context);
-  }
+  // Future<void> _refreshOrderDocuments(BuildContext context) async {
+  //   await _fetchOrderDocuments(context);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -179,7 +175,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
               onTap: () {
                 Navigator.pop(context);
               },
-              child: Icon(
+              child: const Icon(
                 Icons.arrow_back_ios,
                 color: primaryDarkColor,
               ),
@@ -209,7 +205,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
           ),
           body: SafeArea(
               child: Padding(
-            padding: EdgeInsets.all(15),
+            padding: const EdgeInsets.all(15),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               if (status == 1)
@@ -220,7 +216,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                       'Please upload proof of payment',
                       style: m_title,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     GestureDetector(
@@ -232,7 +228,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                             color: primaryDarkColor,
                             border: Border.all(color: primaryDarkColor),
                             borderRadius: BorderRadius.circular(10)),
-                        child: Padding(
+                        child: const Padding(
                           padding: EdgeInsets.all(5),
                           child: Text(
                             "Upload Proof of Payment",
@@ -250,13 +246,13 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                     ),
                   ],
                 ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Container(
                   decoration: BoxDecoration(color: Colors.grey[100]),
                   child: Padding(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -264,33 +260,33 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            const Text(
                               'Invoice Number',
                               style: TextStyle(color: Colors.black),
                             ),
                             Text(
-                              '${widget.orders.orderInvoiceNumber}',
-                              style: TextStyle(color: Colors.black),
+                              widget.orders.orderInvoiceNumber,
+                              style: const TextStyle(color: Colors.black),
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            const Text(
                               'Loading Depot',
                               style: TextStyle(color: Colors.grey),
                             ),
                             Text(
-                              '${orderDocuments!.depot.toString()}',
-                              style: TextStyle(color: Colors.grey),
+                              orderDocuments!.depot.toString(),
+                              style: const TextStyle(color: Colors.grey),
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         // ... conditionally show/hide document links ...
@@ -306,7 +302,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                                   color: Colors.blue),
                             ),
                           ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         if (hasProofOfPayment)
@@ -322,7 +318,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                                   color: Colors.blue),
                             ),
                           ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         if (hasReceipt)
@@ -337,7 +333,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                             ),
                           ),
 
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         if (hasLoadingOrder)
@@ -354,14 +350,14 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                       ],
                     ),
                   )),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Text(
                 'Transporter Details',
                 style: m_title,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Row(
@@ -374,49 +370,49 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                         'Driver Name',
                         style: textBolderSmall,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
                         'ID Number',
                         style: textBolderSmall,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
                         'Phone number',
                         style: textBolderSmall,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
                         'Epra Licence Number	',
                         style: textBolderSmall,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
                         'License Number',
                         style: textBolderSmall,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
                         'Truck registration number',
                         style: textBolderSmall,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
                         'Truck Compartments',
                         style: textBolderSmall,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                     ],
@@ -425,66 +421,66 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${orderDocuments?.driverName ?? 'No driver'}',
-                        style: TextStyle(color: Colors.grey),
+                        orderDocuments?.driverName ?? 'No driver',
+                        style: const TextStyle(color: Colors.grey),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
-                        '${orderDocuments!.driverIdNumber ?? ''}',
-                        style: TextStyle(color: Colors.grey),
+                        orderDocuments!.driverIdNumber ?? '',
+                        style: const TextStyle(color: Colors.grey),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
-                        '${orderDocuments!.driverPhoneNumber ?? ''}',
-                        style: TextStyle(color: Colors.grey),
+                        orderDocuments!.driverPhoneNumber,
+                        style: const TextStyle(color: Colors.grey),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
-                        '${orderDocuments!.driverEpraLicenceNumber.toString() ?? ''}',
-                        style: TextStyle(color: Colors.grey),
+                        orderDocuments!.driverEpraLicenceNumber.toString(),
+                        style: const TextStyle(color: Colors.grey),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
-                        '${orderDocuments!.driverLicenceNumber ?? ''}',
-                        style: TextStyle(color: Colors.grey),
+                        orderDocuments!.driverLicenceNumber,
+                        style: const TextStyle(color: Colors.grey),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
-                        '${orderDocuments!.truckNumber ?? ''}',
-                        style: TextStyle(color: Colors.grey),
+                        orderDocuments!.truckNumber ?? '',
+                        style: const TextStyle(color: Colors.grey),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
-                        '${orderDocuments!.truckCompartment ?? ''}',
-                        style: TextStyle(color: Colors.grey),
+                        orderDocuments!.truckCompartment,
+                        style: const TextStyle(color: Colors.grey),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                     ],
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Text(
                 'Item/s ordered',
                 style: m_title,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Expanded(
@@ -499,28 +495,35 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                               Row(
                                 children: [
                                   Text(
-                                    '${product?.elementAt(index).productDocuments!.productCategoryName ?? 'N/A'}',
-                                    style: TextStyle(color: Colors.black),
+                                    product
+                                        .elementAt(index)
+                                        .productDocuments!
+                                        .productCategoryName,
+                                    style: const TextStyle(color: Colors.black),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 10,
                                   ),
                                   Text(
-                                    '${product?.elementAt(index).productDocuments!.productCategoryCode ?? 'N/A'}',
-                                    style: TextStyle(color: Colors.black),
+                                    product
+                                            ?.elementAt(index)
+                                            .productDocuments!
+                                            .productCategoryCode ??
+                                        'N/A',
+                                    style: const TextStyle(color: Colors.black),
                                   ),
                                 ],
                               ),
                               Text(
-                                '${convertVolume(product?.elementAt(index).productDocuments!.orderVolume?.toString() ?? '0.0')} liters',
-                                style: TextStyle(color: Colors.black),
+                                '${convertVolume(product.elementAt(index).productDocuments!.orderVolume.toString())} liters',
+                                style: const TextStyle(color: Colors.black),
                               ),
                             ],
                           ),
                           subtitle: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Column(
+                              const Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
@@ -537,14 +540,24 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '${convertCurrency(product.elementAt(index).productDocuments!.purchasePricePerUnit?.toString() ?? 'N/A')}',
-                                    style: TextStyle(color: Colors.grey),
+                                    convertCurrency(product
+                                            .elementAt(index)
+                                            .productDocuments!
+                                            .purchasePricePerUnit
+                                            ?.toString() ??
+                                        'N/A'),
+                                    style: const TextStyle(color: Colors.grey),
                                   ),
                                   Text(
-                                    '${convertCurrency(product.elementAt(index).productDocuments!.productPrice?.toString() ?? '0.0')}',
+                                    convertCurrency(product
+                                            .elementAt(index)
+                                            .productDocuments!
+                                            .productPrice
+                                            ?.toString() ??
+                                        '0.0'),
 
                                     // 'KES ${product.elementAt(index).productDocuments!.productPrice ?? 'N/A'}',
-                                    style: TextStyle(color: Colors.grey),
+                                    style: const TextStyle(color: Colors.grey),
                                   ),
                                 ],
                               ),
@@ -563,7 +576,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                       style: m_title.copyWith(color: Colors.black),
                     ),
                     Text(
-                      '${convertCurrency(widget.orders.orderPayableAmount)}',
+                      convertCurrency(widget.orders.orderPayableAmount),
                       style: m_title.copyWith(color: primaryDarkColor),
                     ),
                   ],
@@ -572,7 +585,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
             ]),
           )));
     } else {
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(),
       );
     }
@@ -609,10 +622,14 @@ class _OrderDocumentsState extends State<OrderDocuments> {
           uploadedFile!.path.toString(),
           filename: uploadedFile!.name,
         )));
-
     final url =
-        Uri.parse('https://app.petropal.africa:8050/order/upload-receipt');
-    final url2 = Uri.parse('https://app.petropal.africa:8050/payment/record');
+        Uri.parse('https://petropal.sandbox.co.ke:8040/order/upload-receipt');
+    final url2 =
+        Uri.parse('https://petropal.sandbox.co.ke:8040/payment/record');
+
+    // final url =
+    //     Uri.parse('https://app.petropal.africa:8050/order/upload-receipt');
+    // final url2 = Uri.parse('https://app.petropal.africa:8050/payment/record');
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final token = userProvider.user?.token;
 
@@ -643,7 +660,6 @@ class _OrderDocumentsState extends State<OrderDocuments> {
       ).then((response2) {
         Navigator.of(context).pop(); // Close the dialog
       });
-      ;
     });
   }
 
@@ -664,7 +680,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Row(
+                const Row(
                   children: [
                     Icon(
                       Icons.comment_bank,
@@ -710,7 +726,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Column(children: [
@@ -733,7 +749,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                   ),
                   if (selectedProofOfPaymentName != null)
                     Text(
-                      '$selectedProofOfPaymentName',
+                      selectedProofOfPaymentName,
                       style: bodyText,
                     ),
                 ]),
@@ -745,7 +761,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
@@ -754,7 +770,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                     transactionCodeController.text, selectedProofOfPayment);
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text('Upload'),
+              child: const Text('Upload'),
             ),
           ],
         );

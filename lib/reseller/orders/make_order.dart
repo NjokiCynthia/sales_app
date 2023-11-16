@@ -1,5 +1,8 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/bank.dart';
@@ -283,7 +286,7 @@ class _MakeOrderState extends State<MakeOrder> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Row(
+                const Row(
                   children: [
                     Icon(
                       Icons.person_outline_sharp,
@@ -326,10 +329,10 @@ class _MakeOrderState extends State<MakeOrder> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Row(
+                const Row(
                   children: [
                     Icon(
                       Icons.phone,
@@ -555,7 +558,7 @@ class _MakeOrderState extends State<MakeOrder> {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Row(
+                const Row(
                   children: [
                     Icon(
                       Icons.confirmation_number_outlined,
@@ -604,10 +607,10 @@ class _MakeOrderState extends State<MakeOrder> {
                     truckNumberPlate = value;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Row(
+                const Row(
                   children: [
                     Icon(
                       Icons.fire_truck_sharp,
@@ -656,7 +659,7 @@ class _MakeOrderState extends State<MakeOrder> {
                     truckCompartments = value;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
               ],
@@ -669,7 +672,7 @@ class _MakeOrderState extends State<MakeOrder> {
                       onPressed: () {
                         addTruck();
                       },
-                      child: Text('Add truck')))
+                      child: const Text('Add truck')))
             ],
           );
         });
@@ -899,6 +902,27 @@ class _MakeOrderState extends State<MakeOrder> {
     _fetchBanks(context);
   }
 
+  String _formatCurrency(String amountString) {
+    final currencyFormat =
+        NumberFormat.currency(locale: 'en_KES', symbol: 'KES');
+    final double amount =
+        double.tryParse(amountString) ?? 0.0; // Convert to double
+    return currencyFormat
+        .format(amount); // Format with KES symbol and thousand separators
+  }
+
+  // double convertVolume(double volume, String fromUnit, String toUnit) {
+  //   if (fromUnit == 'liters' && toUnit == 'gallons') {
+  //     return volume * 0.264172; // 1 liter = 0.264172 gallons
+  //   }
+  //   return volume;
+  // }
+  String convertVolume(String volumeString) {
+    final double volume = double.tryParse(volumeString) ?? 0.0;
+    final NumberFormat volumeFormat = NumberFormat.decimalPattern();
+    return volumeFormat.format(volume);
+  }
+
   double calculateTotal(orderProducts) {
     double total = 0.0;
     for (int i = 0; i < orderProducts.length; i++) {
@@ -971,7 +995,7 @@ class _MakeOrderState extends State<MakeOrder> {
                                 ),
                               ],
                             ),
-                            Text(
+                            const Text(
                               'or',
                               style: TextStyle(color: Colors.black),
                             ),
@@ -1057,11 +1081,11 @@ class _MakeOrderState extends State<MakeOrder> {
                                   );
                                 }).toList(),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
+                            const Row(
                               children: [
                                 Icon(
                                   Icons.fire_truck_outlined,
@@ -1074,21 +1098,21 @@ class _MakeOrderState extends State<MakeOrder> {
                                 ),
                               ],
                             ),
-                            Text(
+                            const Text(
                               'or',
                               style: TextStyle(color: Colors.black),
                             ),
                             Row(children: [
-                              Icon(
+                              const Icon(
                                 Icons.add,
                                 color: Colors.grey,
                               ),
-                              SizedBox(width: 5),
+                              const SizedBox(width: 5),
                               GestureDetector(
                                 onTap: () {
                                   _showTruckDialog(context);
                                 },
-                                child: Text(
+                                child: const Text(
                                   'Add new Truck',
                                   style: TextStyle(color: Colors.black),
                                 ),
@@ -1158,7 +1182,9 @@ class _MakeOrderState extends State<MakeOrder> {
                                   );
                                 }).toList(),
                         ),
-                        const SizedBox(width: 5),
+                        const SizedBox(
+                          height: 15,
+                        ),
                         const Text(
                           'Select bank account',
                           style: TextStyle(color: Colors.black),
@@ -1255,23 +1281,23 @@ class _MakeOrderState extends State<MakeOrder> {
                                           children: [
                                             Text(
                                               orderedProduct.productName,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   color: Colors.green),
                                             ),
                                             Text(
-                                              'Price: ${orderedProduct.price.toStringAsFixed(2)}',
+                                              'Price: ${_formatCurrency(orderedProduct.price.toStringAsFixed(2))}',
                                               style:
-                                                  TextStyle(color: Colors.blue),
+                                                  const TextStyle(color: Colors.blue),
                                             ),
                                             Text(
-                                              'Volume Ordered: ${orderedProduct.volume.toStringAsFixed(2)}',
+                                              'Volume Ordered: ${convertVolume(orderedProduct.volume.toStringAsFixed(2))} litres',
                                               style:
-                                                  TextStyle(color: Colors.grey),
+                                                  const TextStyle(color: Colors.grey),
                                             ),
                                             Text(
-                                              'Sub Total: ${(orderedProduct.volume * orderedProduct.price).toStringAsFixed(2)}',
+                                              'Sub Total: ${_formatCurrency((orderedProduct.volume * orderedProduct.price).toStringAsFixed(2))}',
                                               style:
-                                                  TextStyle(color: Colors.grey),
+                                                  const TextStyle(color: Colors.grey),
                                             ),
                                             const SizedBox(
                                               height: 10,
@@ -1288,7 +1314,7 @@ class _MakeOrderState extends State<MakeOrder> {
                           height: 5,
                         ),
                         Text(
-                          'Total: KES ${calculateTotal(widget.orderProducts).toStringAsFixed(2)}, ',
+                          'Total: ${_formatCurrency(calculateTotal(widget.orderProducts).toStringAsFixed(2))}, ',
                           style: const TextStyle(color: Colors.black),
                         ),
                         const SizedBox(height: 5),
@@ -1327,20 +1353,20 @@ class _MakeOrderState extends State<MakeOrder> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${selectedDriver}',
-                                  style: TextStyle(color: Colors.black),
+                                  selectedDriver,
+                                  style: const TextStyle(color: Colors.black),
                                 ),
                                 Text(
-                                  '${driverPhoneNumber}',
-                                  style: TextStyle(color: Colors.black),
+                                  driverPhoneNumber,
+                                  style: const TextStyle(color: Colors.black),
                                 ),
                                 Text(
-                                  '${driverEpraLicense}',
-                                  style: TextStyle(color: Colors.black),
+                                  driverEpraLicense,
+                                  style: const TextStyle(color: Colors.black),
                                 ),
                                 Text(
-                                  '${driverDrivingLicense}',
-                                  style: TextStyle(color: Colors.black),
+                                  driverDrivingLicense,
+                                  style: const TextStyle(color: Colors.black),
                                 ),
                               ],
                             ),
@@ -1367,8 +1393,8 @@ class _MakeOrderState extends State<MakeOrder> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${selectedTruck}',
-                                  style: TextStyle(color: Colors.black),
+                                  selectedTruck,
+                                  style: const TextStyle(color: Colors.black),
                                 ),
                               ],
                             ),
@@ -1378,18 +1404,18 @@ class _MakeOrderState extends State<MakeOrder> {
                           height: 10,
                         ),
                         Text(
-                            'Amount payable: KES ${calculateTotal(widget.orderProducts).toStringAsFixed(2)}',
+                            'Amount payable: ${_formatCurrency(calculateTotal(widget.orderProducts).toStringAsFixed(2))}',
                             style: bodyGrey),
                         Text('Payment Details:', style: bodyGrey),
                         const SizedBox(height: 5),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Bank Account Details:',
                               style: TextStyle(color: Colors.grey),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Text(

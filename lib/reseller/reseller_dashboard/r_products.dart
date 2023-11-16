@@ -1,4 +1,4 @@
-import 'dart:math';
+// ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -305,7 +305,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                     ),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                  suffixIcon: Icon(
+                  suffixIcon: const Icon(
                     Icons.keyboard_arrow_down,
                     color: primaryDarkColor,
                   ),
@@ -371,7 +371,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
               //     print('Location selected: $value');
               //   },
               // ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               DropdownButtonFormField<String>(
@@ -403,7 +403,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                     ),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                  suffixIcon: Icon(
+                  suffixIcon: const Icon(
                     Icons.keyboard_arrow_down,
                     color: primaryDarkColor,
                   ),
@@ -421,7 +421,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                   print('Depot selected: $value');
                 },
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               DropdownButtonFormField<String>(
@@ -453,7 +453,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                     ),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                  suffixIcon: Icon(
+                  suffixIcon: const Icon(
                     Icons.keyboard_arrow_down,
                     color: primaryDarkColor,
                   ),
@@ -485,7 +485,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                     _clearFilters();
                     Navigator.of(context).pop();
                   },
-                  child: Text('Clear Filters'),
+                  child: const Text('Clear Filters'),
                 ),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -494,7 +494,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                     _refreshProducts(context);
                     Navigator.of(context).pop();
                   },
-                  child: Text('Filter'),
+                  child: const Text('Filter'),
                 )
               ],
             )
@@ -515,8 +515,12 @@ class _ResellerProductsState extends State<ResellerProducts> {
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         leading: GestureDetector(
-          onTap: () {},
-          child: Icon(
+          onTap: () {
+            // Navigate back to the home screen
+            Navigator.popUntil(context, (route) => true);
+            bottomNavigationController.jumpToTab(0);
+          },
+          child: const Icon(
             Icons.arrow_back_ios,
             color: primaryDarkColor,
           ),
@@ -549,7 +553,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
         builder: (context, child) {
           if (fetchingProducts) {
             // Show loading indicator while fetching products
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (products.isEmpty && !filtersApplied) {
             // Show a message when there are no products
             return Center(
@@ -577,7 +581,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                     // Clear filters when the button is pressed
                     _clearFilters();
                   },
-                  child: Text('Clear Filters'),
+                  child: const Text('Clear Filters'),
                 ),
               ]),
             );
@@ -593,25 +597,24 @@ class _ResellerProductsState extends State<ResellerProducts> {
                           _showDropdownDialog(context);
                         },
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(
-                            color: primaryDarkColor, // Outline color
-                            width: 2.0, // Outline width
+                          side: const BorderSide(
+                            color: primaryDarkColor,
+                            width: 2.0,
                           ),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                8.0), // Adjust the border radius as needed
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
                         ),
-                        icon: Icon(
-                          Icons.filter_alt_off_outlined,
+                        icon: const Icon(
+                          Icons.search,
                           color: primaryDarkColor,
                         ),
-                        label: Text(
+                        label: const Text(
                           'Filter Products',
                           style: TextStyle(color: primaryDarkColor),
                         )),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Expanded(
@@ -635,7 +638,6 @@ class _ResellerProductsState extends State<ResellerProducts> {
                                     PageTransitionAnimation.cupertino,
                                 withNavBar: false,
                               );
-                              print(product);
                             },
                             child: Container(
                               margin: const EdgeInsets.only(bottom: 10),
@@ -683,7 +685,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                                     color: Colors.grey,
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       bottom: 15,
                                       left: 15,
                                       right: 15,
@@ -692,7 +694,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Column(
+                                        const Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
@@ -747,24 +749,24 @@ class _ResellerProductsState extends State<ResellerProducts> {
                                                   .dealerName!, // Actual dealer name
                                               style: boldText,
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 5,
                                             ),
                                             Text(
                                               'KES ${product.sellingPrice!.toString()}',
                                               style: boldText,
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 5,
                                             ),
                                             Text(
                                               product.depot!,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.normal,
                                               ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 5,
                                             ),
                                             Row(
@@ -774,13 +776,13 @@ class _ResellerProductsState extends State<ResellerProducts> {
                                                   NumberFormat.decimalPattern()
                                                       .format(product
                                                           .availableVolume),
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                     color: Colors.black,
                                                     fontWeight:
                                                         FontWeight.normal,
                                                   ),
                                                 ),
-                                                Text(
+                                                const Text(
                                                   'litres',
                                                   style: TextStyle(
                                                       color: Colors.black),
@@ -795,7 +797,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                                             //     fontWeight: FontWeight.normal,
                                             //   ),
                                             // ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 5,
                                             ),
                                             Row(
@@ -805,13 +807,13 @@ class _ResellerProductsState extends State<ResellerProducts> {
                                                   NumberFormat.decimalPattern()
                                                       .format(product
                                                           .minimumVolume),
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                     color: Colors.black,
                                                     fontWeight:
                                                         FontWeight.normal,
                                                   ),
                                                 ),
-                                                Text(
+                                                const Text(
                                                   'litres',
                                                   style: TextStyle(
                                                       color: Colors.black),
@@ -826,7 +828,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                                             //     fontWeight: FontWeight.normal,
                                             //   ),
                                             // ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 5,
                                             ),
                                           ],

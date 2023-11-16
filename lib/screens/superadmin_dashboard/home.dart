@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -163,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     yValueMapper: (ChartData data, _) =>
                                         data.price,
                                     splineType: SplineType.natural,
-                                    gradient: LinearGradient(
+                                    gradient: const LinearGradient(
                                       colors: [
                                         Color.fromARGB(133, 233, 176, 92),
                                         Color.fromARGB(0, 255, 255, 255)
@@ -203,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: List.generate(
                     3,
                     (index) => Padding(
-                      padding: EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.only(bottom: 10),
                       child: Container(
                         width: 10,
                         height: 10,
@@ -220,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ]),
             ),
             Padding(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -228,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       'Summary',
                       style: m_title,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     SingleChildScrollView(
@@ -369,7 +371,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ]),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 10, right: 10),
+              padding: const EdgeInsets.only(left: 10, right: 10),
               child: Text(
                 card_titles[selectedCardIndex],
                 style: m_title,

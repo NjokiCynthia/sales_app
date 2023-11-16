@@ -176,7 +176,7 @@ class _OrderDetailState extends State<OrderDetail> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(15),
+          padding: const EdgeInsets.all(15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -215,7 +215,7 @@ class _OrderDetailState extends State<OrderDetail> {
               Container(
                 decoration: BoxDecoration(color: Colors.grey[100]),
                 child: Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -229,7 +229,7 @@ class _OrderDetailState extends State<OrderDetail> {
                           ),
                           Text(
                             '${widget.price.location}',
-                            style: TextStyle(color: Colors.black),
+                            style: const TextStyle(color: Colors.black),
                           ),
                         ],
                       ),
@@ -246,7 +246,7 @@ class _OrderDetailState extends State<OrderDetail> {
                           ),
                           Text(
                             '${widget.price.depot}',
-                            style: TextStyle(color: Colors.grey),
+                            style: const TextStyle(color: Colors.grey),
                           ),
                         ],
                       ),
@@ -254,18 +254,18 @@ class _OrderDetailState extends State<OrderDetail> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Text(
                 'Products Available',
                 style: textBolder,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               fetchingDetails
-                  ? Center(child: CircularProgressIndicator())
+                  ? const Center(child: CircularProgressIndicator())
                   : productList.isNotEmpty
                       ? Expanded(
                           child: ListView.builder(
@@ -289,16 +289,16 @@ class _OrderDetailState extends State<OrderDetail> {
                                             '${product.productName}',
                                             style: textBolderSmall,
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 5,
                                           ),
-                                          Text(
+                                          const Text(
                                             'Available volume:',
                                             style:
                                                 TextStyle(color: Colors.black),
                                           ),
-                                          SizedBox(height: 5),
-                                          Text(
+                                          const SizedBox(height: 5),
+                                          const Text(
                                             'Minimum volume',
                                             style:
                                                 TextStyle(color: Colors.black),
@@ -306,15 +306,15 @@ class _OrderDetailState extends State<OrderDetail> {
                                           Text(
                                             '${formatVolume(product.minVol)}litres',
                                             style:
-                                                TextStyle(color: Colors.grey),
+                                                const TextStyle(color: Colors.grey),
                                           ),
-                                          SizedBox(height: 10),
-                                          Text(
+                                          const SizedBox(height: 10),
+                                          const Text(
                                             'Specify the Volume:',
                                             style:
                                                 TextStyle(color: Colors.grey),
                                           ),
-                                          SizedBox(height: 10),
+                                          const SizedBox(height: 10),
                                         ],
                                       ),
                                       Column(
@@ -327,7 +327,7 @@ class _OrderDetailState extends State<OrderDetail> {
                                                 TextSpan(
                                                   text:
                                                       'KES ${product.sellingPrice}/',
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                     color: Colors.black,
                                                   ),
                                                 ),
@@ -338,15 +338,15 @@ class _OrderDetailState extends State<OrderDetail> {
                                               ],
                                             ),
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 5,
                                           ),
                                           Text(
                                             '${formatVolume(product.availableVolume)}  litres',
                                             style: textBolderSmall,
                                           ),
-                                          SizedBox(height: 5),
-                                          Text(
+                                          const SizedBox(height: 5),
+                                          const Text(
                                             'Maximum volume',
                                             style:
                                                 TextStyle(color: Colors.black),
@@ -354,16 +354,16 @@ class _OrderDetailState extends State<OrderDetail> {
                                           Text(
                                             '${formatVolume(product.maxVol)}litres',
                                             style:
-                                                TextStyle(color: Colors.grey),
+                                                const TextStyle(color: Colors.grey),
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 10,
                                           ),
                                           SizedBox(
                                             width: 200,
                                             child: TextFormField(
                                               controller: orderVolume[index],
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   color: Colors.black),
                                               keyboardType:
                                                   TextInputType.number,
@@ -428,7 +428,7 @@ class _OrderDetailState extends State<OrderDetail> {
                                               ),
                                             ),
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 10,
                                           ),
                                         ],
@@ -436,7 +436,7 @@ class _OrderDetailState extends State<OrderDetail> {
                                     ],
                                   ),
                                   if (index < productList.length - 1)
-                                    Divider(
+                                    const Divider(
                                       color: Colors.black,
                                     ),
                                 ],
@@ -444,7 +444,7 @@ class _OrderDetailState extends State<OrderDetail> {
                             },
                           ),
                         )
-                      : Text(
+                      : const Text(
                           'No products available',
                           style: TextStyle(color: primaryDarkColor),
                         ),

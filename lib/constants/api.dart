@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
@@ -14,8 +16,8 @@ import 'package:petropal/providers/omc_product.dart';
 import 'package:petropal/providers/products.dart';
 import 'package:petropal/providers/truck.dart';
 
-//String ipAddress = 'https://petropal.sandbox.co.ke:8040';
-String ipAddress = 'https://app.petropal.africa:8050';
+String ipAddress = 'https://petropal.sandbox.co.ke:8040';
+//String ipAddress = 'https://app.petropal.africa:8050';
 
 class ApiClient {
   final Dio _dio;
@@ -410,37 +412,41 @@ class ApiClient {
             companyEmail: element['company_email'].toString(),
             companyPhone: element['company_phone'].toString(),
             minVolumePerOrder: element['minimum_volume_per_order'].toString(),
-            pricePer:
-                double.parse(element['price_per'].replaceAll(',', '')) != null
-                    ? double.parse(element['price_per'])
-                    : 0.0,
+            pricePer: double.parse(element['price_per'].replaceAll(',', '')),
+            //!= null
+            //? double.parse(element['price_per'])
+            //  : 0.0,
             sellingPrice:
-                double.parse(element['selling_price'].replaceAll(',', '')) !=
-                        null
-                    ? double.parse(element['selling_price'])
-                    : 0.0,
+                double.parse(element['selling_price'].replaceAll(',', '')),
+            //  !=
+            //         null
+            //     ? double.parse(element['selling_price'])
+            //     : 0.0,
             stockVolume:
-                double.parse(element['stock_volume'].replaceAll(',', '')) !=
-                        null
-                    ? double.parse(element['stock_volume'])
-                    : 0.0,
+                double.parse(element['stock_volume'].replaceAll(',', '')),
+            //  !=
+            //         null
+            //     ? double.parse(element['stock_volume'])
+            //     : 0.0,
             availableVolume:
-                double.parse(element['volume'].replaceAll(',', '')) != null
-                    ? double.parse(element['volume'])
-                    : 0.0,
-            minVolume:
-                double.parse(element['min_vol'].replaceAll(',', '')) != null
-                    ? double.parse(element['min_vol'])
-                    : 0.0,
-            maxVolume:
-                double.parse(element['max_vol'].replaceAll(',', '')) != null
-                    ? double.parse(element['max_vol'])
-                    : 0.0,
+                double.parse(element['volume'].replaceAll(',', '')),
+            // != null
+            //     ? double.parse(element['volume'])
+            //     : 0.0,
+            minVolume: double.parse(element['min_vol'].replaceAll(',', '')),
+            // != null
+            //     ? double.parse(element['min_vol'])
+            //     : 0.0,
+            maxVolume: double.parse(element['max_vol'].replaceAll(',', '')),
+            //  != null
+            //     ? double.parse(element['max_vol'])
+            //     : 0.0,
             commissionRate:
-                double.parse(element['commission_rate'].replaceAll(',', '')) !=
-                        null
-                    ? double.parse(element['commission_rate'])
-                    : 0.0,
+                double.parse(element['commission_rate'].replaceAll(',', '')),
+            //  !=
+            //         null
+            //     ? double.parse(element['commission_rate'])
+            //     : 0.0,
             companyId: element['company_id'].toString(),
             location: element['location'].toString(),
             status: element['status'].toString(),

@@ -8,14 +8,14 @@ import 'package:petropal/reseller/reseller_dashboard/r_home.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_orders.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/r_profile.dart';
 
-class ResellerDasboard extends StatefulWidget {
-  const ResellerDasboard({Key? key}) : super(key: key);
+class ResellerDashboard extends StatefulWidget {
+  const ResellerDashboard({Key? key}) : super(key: key);
 
   @override
-  State<ResellerDasboard> createState() => _ResellerDasboardState();
+  State<ResellerDashboard> createState() => _ResellerDashboardState();
 }
 
-class _ResellerDasboardState extends State<ResellerDasboard> {
+class _ResellerDashboardState extends State<ResellerDashboard> {
   List<Widget> _buildScreens() {
     return [
       const ResellerHome(),
@@ -28,7 +28,7 @@ class _ResellerDasboardState extends State<ResellerDasboard> {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        icon: Icon(
+        icon: const Icon(
           CupertinoIcons.home,
         ),
         title: ("Home"),
@@ -36,19 +36,19 @@ class _ResellerDasboardState extends State<ResellerDasboard> {
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(CupertinoIcons.shopping_cart),
+        icon: const Icon(CupertinoIcons.shopping_cart),
         title: ("Products"),
         activeColorPrimary: primaryDarkColor,
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(CupertinoIcons.list_bullet),
+        icon: const Icon(CupertinoIcons.list_bullet),
         title: ("Orders"),
         activeColorPrimary: primaryDarkColor,
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(CupertinoIcons.settings),
+        icon: const Icon(CupertinoIcons.settings),
         title: ("Settings"),
         activeColorPrimary: primaryDarkColor,
         inactiveColorPrimary: Colors.grey,

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -5,6 +7,7 @@ import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/location.dart';
+import 'package:petropal/models/positions_model.dart';
 import 'package:petropal/models/user_details.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/authentication/login.dart';
@@ -186,6 +189,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(_handleTabChange);
     _fetchLocations(context);
+    
   }
 
   void _handleTabChange() {
@@ -234,11 +238,11 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
         backgroundColor: Colors.grey[50],
         body: SafeArea(
           child: Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Center(
@@ -261,7 +265,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                   height: 10,
                 ),
                 Padding(
-                  padding: EdgeInsets.all(0),
+                  padding: const EdgeInsets.all(0),
                   child: TabBar(
                     controller: _tabController,
                     indicatorColor: primaryDarkColor,
@@ -269,11 +273,11 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                     labelColor: primaryDarkColor,
                     unselectedLabelColor: Colors.black,
                     tabs: [
-                      Tab(
+                      const Tab(
                         text: "Personal details",
                       ),
-                      Tab(text: "Organisation details"),
-                      Tab(text: "Confirm Details"),
+                      const Tab(text: "Organisation details"),
+                      const Tab(text: "Confirm Details"),
                     ],
                   ),
                 ),
@@ -309,9 +313,9 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                     padding: const EdgeInsets.all(20),
                     child: Center(
                       child: RichText(
-                        text: TextSpan(
+                        text: const TextSpan(
                           text: 'Already have an account? ',
-                          style: const TextStyle(color: Colors.black),
+                          style: TextStyle(color: Colors.black),
                           children: <TextSpan>[
                             TextSpan(
                               text: 'Login',
@@ -333,13 +337,12 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
 
   Widget buildFirstPage() {
     return Padding(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 10),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             Row(
               children: [
                 Expanded(
@@ -523,7 +526,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             GestureDetector(
@@ -537,7 +540,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                     last_name_ctrl.text.isEmpty ||
                     phone_number_inpt.isEmpty ||
                     email_ctrl.text.isEmpty)
-                  Text(
+                  const Text(
                     'Please enter all fields',
                     style: TextStyle(color: Colors.red),
                   );
@@ -568,7 +571,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
 
   Widget buildSecondPage() {
     return Padding(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -716,7 +719,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                       }).toList(),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             TextFormField(
@@ -751,7 +754,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             InternationalPhoneNumberInput(
@@ -827,7 +830,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                     organizationLocation.isEmpty ||
                     organizationEmail.isEmpty ||
                     secondPagePhoneNumber.isEmpty)
-                  Text('Please fill in all fields');
+                  const Text('Please fill in all fields');
                 else
                   _tabController.animateTo(2);
               },
@@ -865,7 +868,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
     print('Second Page Phone Number: $secondPagePhoneNumber');
     //final userProvider = Provider.of<UserProvider>(context);
     return Padding(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -917,7 +920,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             TextFormField(
@@ -968,7 +971,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Row(
@@ -990,7 +993,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             CustomRequestButton(
@@ -1030,12 +1033,10 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                     final data = res['data'] as Map<String, dynamic>?;
 
                     if (data != null) {
-                      final userData = data['user'] as Map<String, dynamic>?;
-
                       print(message);
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => Login()),
+                        MaterialPageRoute(builder: (context) => const Login()),
                       );
                     } else {
                       print(message);

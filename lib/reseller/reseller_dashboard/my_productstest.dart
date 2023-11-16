@@ -1,4 +1,4 @@
-import 'dart:math';
+// ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -127,10 +127,10 @@ class _ResellerProductsState extends State<ResellerProducts> {
     currentItems = allItems['OMC']!;
   }
 
-  Future<void> _refreshProducts(BuildContext context) async {
-    // Fetch orders data here
-    await _fetchProducts(context);
-  }
+  // Future<void> _refreshProducts(BuildContext context) async {
+  //   // Fetch orders data here
+  //   await _fetchProducts(context);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +142,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () {},
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back_ios,
             color: primaryDarkColor,
           ),
@@ -175,7 +175,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
         builder: (context, child) {
           if (fetchingProducts) {
             // Show loading indicator while fetching products
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (products.isEmpty) {
             // Show a message when there are no products
             return Center(
@@ -298,7 +298,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Expanded(
@@ -370,7 +370,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                                     color: Colors.grey,
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(
+                                    padding: const EdgeInsets.only(
                                       bottom: 15,
                                       left: 15,
                                       right: 15,
@@ -379,7 +379,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Column(
+                                        const Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
@@ -434,44 +434,44 @@ class _ResellerProductsState extends State<ResellerProducts> {
                                                   .dealerName!, // Actual dealer name
                                               style: boldText,
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 5,
                                             ),
                                             Text(
                                               'KES ${product.sellingPrice!.toString()}',
                                               style: boldText,
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 5,
                                             ),
                                             Text(
                                               product.depot!,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.normal,
                                               ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 5,
                                             ),
                                             Text(
                                               '${product.availableVolume} litres',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.normal,
                                               ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 5,
                                             ),
                                             Text(
                                               '${product.minimumVolume} litres',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.normal,
                                               ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 5,
                                             ),
                                           ],

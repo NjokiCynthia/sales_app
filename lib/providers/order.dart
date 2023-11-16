@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:petropal/models/completedOrders.dart';
+import 'package:petropal/models/completed_orders.dart';
 
 class OrderProvider with ChangeNotifier {
   final List<CompletedOrdersModel> _orders = [];

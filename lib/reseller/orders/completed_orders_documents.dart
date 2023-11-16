@@ -1,4 +1,4 @@
-import 'dart:convert';
+// ignore_for_file: avoid_print
 
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
@@ -7,15 +7,13 @@ import 'package:flutter/services.dart';
 import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/models/completedOrders.dart';
+import 'package:petropal/models/completed_orders.dart';
 import 'package:petropal/models/order_documents.dart';
-import 'package:petropal/models/orders.dart';
 import 'package:petropal/models/product.dart';
 import 'package:petropal/models/product_document.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../widgets/buttons.dart';
 
 class CompletedDocuments extends StatefulWidget {
   final CompletedOrdersModel orders;
@@ -85,31 +83,29 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
               vendorName: data['vendorName'].toString(),
               vendorEmail: data['vendorEmail'].toString(),
               vendorPhone: data['vendorPhone'].toString(),
-              vendorAccountName: data['vendorAccountName'].toString() ?? '',
-              vendorAccountNumber: data['vendorAccountNumber'].toString() ?? '',
-              vendorBankName: data['vendorBankName'].toString() ?? '',
-              vendorBranchName: data['vendorBranchName'].toString() ?? '',
-              resellerName: data['resellerName'].toString() ?? '',
-              resellerEmail: data['resellerEmail'].toString() ?? '',
-              resellerPhone: data['resellerPhone'].toString() ?? '',
-              depot: data['depot'].toString() ?? '',
-              location: data['location'].toString() ?? '',
-              driverName: data['driverName'].toString() ?? '',
-              driverPhoneNumber: data['driverPhoneNumber'].toString() ?? '',
-              driverIdNumber: data['driverIdNumber'].toString() ?? '',
-              driverLicenceNumber: data['driverLicenceNumber'].toString() ?? '',
+              vendorAccountName: data['vendorAccountName'].toString(),
+              vendorAccountNumber: data['vendorAccountNumber'].toString(),
+              vendorBankName: data['vendorBankName'].toString(),
+              vendorBranchName: data['vendorBranchName'].toString(),
+              resellerName: data['resellerName'].toString(),
+              resellerEmail: data['resellerEmail'].toString(),
+              resellerPhone: data['resellerPhone'].toString(),
+              depot: data['depot'].toString(),
+              location: data['location'].toString(),
+              driverName: data['driverName'].toString(),
+              driverPhoneNumber: data['driverPhoneNumber'].toString(),
+              driverIdNumber: data['driverIdNumber'].toString(),
+              driverLicenceNumber: data['driverLicenceNumber'].toString(),
               driverEpraLicenceNumber:
-                  data['driverEPRALicenceNumber'].toString() ?? '',
-              truckNumber: data['truckNumber'].toString() ?? '',
+                  data['driverEPRALicenceNumber'].toString(),
+              truckNumber: data['truckNumber'].toString(),
               truckCompartment: data['truckCompartment'].toString(),
-              proformaInvoiceDoc: data['proformaInvoiceDoc'].toString() ?? '',
-              resellerProofOfPayment:
-                  data['resellerProofOfPayment'].toString() ?? '',
-              purchaseOrder: data['purchaseOrder'].toString() ?? '',
-              receipt: data['receipt'].toString() ?? '',
-              loadingOrder: data['loadingOrder'].toString() ?? '',
-              invoiceOrderDocument:
-                  data['invoiceOrderDocument'].toString() ?? '',
+              proformaInvoiceDoc: data['proformaInvoiceDoc'].toString(),
+              resellerProofOfPayment: data['resellerProofOfPayment'].toString(),
+              purchaseOrder: data['purchaseOrder'].toString(),
+              receipt: data['receipt'].toString(),
+              loadingOrder: data['loadingOrder'].toString(),
+              invoiceOrderDocument: data['invoiceOrderDocument'].toString(),
             );
 
             setState(() {
@@ -163,7 +159,7 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
               onTap: () {
                 Navigator.pop(context);
               },
-              child: Icon(
+              child: const Icon(
                 Icons.arrow_back_ios,
                 color: primaryDarkColor,
               ),
@@ -193,7 +189,7 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
           ),
           body: SafeArea(
               child: Padding(
-            padding: EdgeInsets.all(15),
+            padding: const EdgeInsets.all(15),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               if (status == 1)
@@ -204,7 +200,7 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
                       'Please upload proof of payment',
                       style: m_title,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     GestureDetector(
@@ -217,7 +213,7 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
                             color: primaryDarkColor,
                             border: Border.all(color: primaryDarkColor),
                             borderRadius: BorderRadius.circular(10)),
-                        child: Padding(
+                        child: const Padding(
                           padding: EdgeInsets.all(5),
                           child: Text(
                             "Upload Proof of Payment",
@@ -235,13 +231,13 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
                     ),
                   ],
                 ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Container(
                   decoration: BoxDecoration(color: Colors.grey[100]),
                   child: Padding(
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,33 +245,33 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            const Text(
                               'Invoice Number',
                               style: TextStyle(color: Colors.black),
                             ),
                             Text(
                               '${widget.orders.orderInvoiceNumber}',
-                              style: TextStyle(color: Colors.black),
+                              style: const TextStyle(color: Colors.black),
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            const Text(
                               'Loading Depot',
                               style: TextStyle(color: Colors.grey),
                             ),
                             Text(
-                              '${orderDocuments!.depot.toString()}',
-                              style: TextStyle(color: Colors.grey),
+                              orderDocuments!.depot.toString(),
+                              style: const TextStyle(color: Colors.grey),
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         // ... conditionally show/hide document links ...
@@ -291,7 +287,7 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
                                   color: Colors.blue),
                             ),
                           ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         if (hasProofOfPayment)
@@ -307,7 +303,7 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
                                   color: Colors.blue),
                             ),
                           ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         if (hasReceipt)
@@ -322,7 +318,7 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
                             ),
                           ),
 
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         if (hasLoadingOrder)
@@ -339,14 +335,14 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
                       ],
                     ),
                   )),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Text(
                 'Transporter Details',
                 style: m_title,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Row(
@@ -359,49 +355,49 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
                         'Driver Name',
                         style: textBolderSmall,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
                         'ID Number',
                         style: textBolderSmall,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
                         'Phone number',
                         style: textBolderSmall,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
                         'Epra Licence Number	',
                         style: textBolderSmall,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
                         'License Number',
                         style: textBolderSmall,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
                         'Truck registration number',
                         style: textBolderSmall,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
                         'Truck Compartments',
                         style: textBolderSmall,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                     ],
@@ -410,66 +406,66 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${orderDocuments?.driverName ?? 'No driver'}',
-                        style: TextStyle(color: Colors.grey),
+                        orderDocuments?.driverName ?? 'No driver',
+                        style: const TextStyle(color: Colors.grey),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
-                        '${orderDocuments!.driverIdNumber ?? ''}',
-                        style: TextStyle(color: Colors.grey),
+                        orderDocuments!.driverIdNumber ?? '',
+                        style: const TextStyle(color: Colors.grey),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
-                        '${orderDocuments!.driverPhoneNumber ?? ''}',
-                        style: TextStyle(color: Colors.grey),
+                        orderDocuments!.driverPhoneNumber,
+                        style: const TextStyle(color: Colors.grey),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
-                        '${orderDocuments!.driverEpraLicenceNumber.toString() ?? ''}',
-                        style: TextStyle(color: Colors.grey),
+                        orderDocuments!.driverEpraLicenceNumber.toString(),
+                        style: const TextStyle(color: Colors.grey),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
-                        '${orderDocuments!.driverLicenceNumber ?? ''}',
-                        style: TextStyle(color: Colors.grey),
+                        orderDocuments!.driverLicenceNumber,
+                        style: const TextStyle(color: Colors.grey),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
-                        '${orderDocuments!.truckNumber ?? ''}',
-                        style: TextStyle(color: Colors.grey),
+                        orderDocuments!.truckNumber ?? '',
+                        style: const TextStyle(color: Colors.grey),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
-                        '${orderDocuments!.truckCompartment ?? ''}',
-                        style: TextStyle(color: Colors.grey),
+                        orderDocuments!.truckCompartment,
+                        style: const TextStyle(color: Colors.grey),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                     ],
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Text(
                 'Item/s ordered',
                 style: m_title,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Expanded(
@@ -484,28 +480,28 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
                               Row(
                                 children: [
                                   Text(
-                                    '${product?.elementAt(index).productDocuments!.productCategoryName ?? 'N/A'}',
-                                    style: TextStyle(color: Colors.black),
+                                    product.elementAt(index).productDocuments!.productCategoryName,
+                                    style: const TextStyle(color: Colors.black),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 10,
                                   ),
                                   Text(
-                                    '${product?.elementAt(index).productDocuments!.productCategoryCode ?? 'N/A'}',
-                                    style: TextStyle(color: Colors.black),
+                                    product.elementAt(index).productDocuments!.productCategoryCode,
+                                    style: const TextStyle(color: Colors.black),
                                   ),
                                 ],
                               ),
                               Text(
-                                '${product?.elementAt(index).productDocuments!.orderVolume ?? 'N/A'} liters ',
-                                style: TextStyle(color: Colors.black),
+                                '${product.elementAt(index).productDocuments!.orderVolume} liters ',
+                                style: const TextStyle(color: Colors.black),
                               ),
                             ],
                           ),
                           subtitle: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Column(
+                              const Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
@@ -522,12 +518,12 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'KES ${product.elementAt(index).productDocuments!.purchasePricePerUnit ?? 'N/A'}',
-                                    style: TextStyle(color: Colors.grey),
+                                    'KES ${product.elementAt(index).productDocuments!.purchasePricePerUnit}',
+                                    style: const TextStyle(color: Colors.grey),
                                   ),
                                   Text(
-                                    'KES ${product.elementAt(index).productDocuments!.productPrice ?? 'N/A'}',
-                                    style: TextStyle(color: Colors.grey),
+                                    'KES ${product.elementAt(index).productDocuments!.productPrice}',
+                                    style: const TextStyle(color: Colors.grey),
                                   ),
                                 ],
                               ),
@@ -547,7 +543,7 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
             ]),
           )));
     } else {
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(),
       );
     }
@@ -585,9 +581,13 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
           filename: uploadedFile!.name,
         )));
 
+    // final url =
+    //     Uri.parse('https://app.petropal.africa:8050/order/upload-receipt');
+    // final url2 = Uri.parse('https://app.petropal.africa:8050/payment/record');
     final url =
-        Uri.parse('https://app.petropal.africa:8050/order/upload-receipt');
-    final url2 = Uri.parse('https://app.petropal.africa:8050/payment/record');
+        Uri.parse('https://petropal.sandbox.co.ke:8040/order/upload-receipt');
+    final url2 =
+        Uri.parse('https://petropal.sandbox.co.ke:8040/payment/record');
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final token = userProvider.user?.token;
 
@@ -618,7 +618,6 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
       ).then((response2) {
         Navigator.of(context).pop(); // Close the dialog
       });
-      ;
     });
   }
 
@@ -639,7 +638,7 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Row(
+                const Row(
                   children: [
                     Icon(
                       Icons.comment_bank,
@@ -685,7 +684,7 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Column(children: [
@@ -706,11 +705,10 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
                       ),
                     ),
                   ),
-                  if (selectedProofOfPaymentName != null)
-                    Text(
-                      '$selectedProofOfPaymentName',
-                      style: bodyText,
-                    ),
+                  Text(
+                    selectedProofOfPaymentName,
+                    style: bodyText,
+                  ),
                 ]),
               ],
             ),
@@ -720,7 +718,7 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
@@ -729,7 +727,7 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
                     transactionCodeController.text, selectedProofOfPayment);
                 Navigator.of(context).pop(); // Close the dialog
               },
-              child: Text('Upload'),
+              child: const Text('Upload'),
             ),
           ],
         );

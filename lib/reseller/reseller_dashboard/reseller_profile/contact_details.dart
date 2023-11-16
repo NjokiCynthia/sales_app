@@ -1,9 +1,14 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/models/positions_model.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/r_profile.dart';
+import 'package:petropal/reseller/reseller_dashboard/reseller_profile/view_staff.dart';
 import 'package:petropal/widgets/buttons.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +24,8 @@ class _ContactDetailsState extends State<ContactDetails> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController positionController = TextEditingController();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
 
   String phone_number_inpt = '';
   String initialCountry = 'KE';
@@ -26,7 +33,6 @@ class _ContactDetailsState extends State<ContactDetails> {
 
   bool buttonError = true;
   String buttonErrorMessage = 'Enter all inputs';
-  bool _obscurePassword = true;
 
   validateContactInputs() {
     if (phone_number_inpt == '') {
@@ -56,42 +62,123 @@ class _ContactDetailsState extends State<ContactDetails> {
     });
   }
 
+  String selectedPosition = 'Select Location';
+  int selectedPositionIndex = -1;
+  List<PositionModel> positions = [];
+
+  List<String> positionsDropdownList = [];
+  List<String> positionItems = ['Select location'];
+
+  bool fetchingPositions = true;
+  void _fetchPositions(BuildContext context) async {
+    setState(() {
+      fetchingPositions = true;
+    });
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final token = userProvider.user?.token;
+
+    final postData = {};
+    final apiClient = ApiClient();
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      final response = await apiClient.post(
+        '/position/get-all',
+        postData,
+        headers: headers,
+      );
+
+      print('This is my positions Response: $response');
+      //Rprint();
+
+      setState(() {
+        positions = [];
+        positionsDropdownList = [];
+      });
+
+      if (response['status'] == 1 && response['data'] != null) {
+        final data = List<Map<String, dynamic>>.from(response['data']);
+        final tempPositionModels = data.map((positionData) {
+          return PositionModel(
+            id: int.parse(positionData['id'].toString()),
+            name: positionData['name'].toString(),
+            description: positionData['description'].toString(),
+          );
+        }).toList();
+
+        setState(() {
+          positions = tempPositionModels;
+          selectedPosition = '${positions[0].id}';
+          positionsDropdownList =
+              tempPositionModels.map((position) => '${position.name}').toList();
+        });
+      } else {
+        print('No or invalid positions found in the response');
+        // Handle the case when 'status' is not 1 or 'cartProductsListing' is null
+      }
+    } catch (error) {
+      print('Positions Fetch By ID User Id: $error');
+      // Handle the error
+    }
+
+    setState(() {
+      fetchingPositions = false;
+    });
+  }
+
+  void _addContactDetails() {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    //final user = userProvider.user;
+    final token = userProvider.user?.token;
+    print('here is my token');
+    print(token);
+    final apiClient = ApiClient();
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    final postData = {
+      "first_name": firstNameController.text,
+      "is_verified": true,
+      "last_name": lastNameController.text,
+      "phone_number": phoneController.text,
+      "email": emailController.text,
+      "position_id":
+          selectedPositionIndex != -1 ? positions[selectedPositionIndex].id : 0,
+    };
+
+    print(postData);
+
+    apiClient
+        .post('/contact-persons/create', postData, headers: headers)
+        .then((response) {
+      print('Response: $response');
+    }).catchError((error) {
+      // Handle errors from the HTTP request.
+      print('Error: $error');
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     // Access the UserProvider and retrieve the user data
+    _fetchPositions(context);
     final userProvider = context.read<UserProvider>();
-    final user = userProvider.user;
-
-    if (user != null) {
-      // Use the user data in your form fields and for debugging
-      print('User first name is : ${user.first_name}');
-      print('User last name is: ${user.last_name}');
-
-      print('User email is: ${user.email}');
-      print('User phone number is: ${user.phone}');
-      print('User account id is: ${user.account_id}');
-      print('My company email is: ${user.companyAddress}');
-      print('My company name is: ${user.companyName}');
-      print('My company phone is: ${user.companyPhone}');
-      print('My company password is: ${user.password}');
-      print('User token is: ${user.token}');
-
-      emailController.text = user.email;
-      //numberController.text = user.phone;
-      nameController.text = user.first_name;
-      phoneController.text = user.phone;
-      // passwordController.text = user.password;
-      // OEmailController.text = user.companyAddress;
-      // ONameontroller.text = user.companyName;
-      // OPhoneontroller.text = user.companyPhone;
-    }
+    final token = userProvider.token;
+    print('This is my token here');
+    print(token);
   }
 
   @override
   Widget build(BuildContext context) {
     final userProvider = context.read<UserProvider>();
-    final user = userProvider.user;
+    final token = userProvider.token;
     return Scaffold(
         body: SingleChildScrollView(
       child: SafeArea(
@@ -112,7 +199,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                     ),
                   ),
                   Text(
-                    'Organisation Contact Details',
+                    'Staff Contact Details',
                     style: m_title,
                   ),
                   Container(
@@ -120,40 +207,88 @@ class _ContactDetailsState extends State<ContactDetails> {
                   )
                 ],
               ),
-              SizedBox(
-                height: 20,
+              const SizedBox(
+                height: 40,
               ),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                style: bodyText,
-                controller: nameController,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelText: 'Enter Name',
-                  labelStyle: TextStyle(color: Colors.grey[500]),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 10),
+                      child: TextFormField(
+                        onChanged: (text) {},
+                        controller: firstNameController,
+                        keyboardType: TextInputType.name,
+                        style: bodyText,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          labelText: 'First name',
+                          labelStyle: TextStyle(color: Colors.grey[500]),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.grey.shade300,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(8.0),
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.grey.shade300,
-                      width: 2.0,
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 10),
+                      child: TextFormField(
+                        onChanged: (text) {},
+                        controller: lastNameController,
+                        style: bodyText,
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          labelText: 'Last name',
+                          labelStyle: TextStyle(color: Colors.grey[500]),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.grey.shade300,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(8.0),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
+                ],
               ),
               SizedBox(
                 height: 20,
@@ -220,7 +355,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                 ),
                 onSaved: (PhoneNumber number) {},
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               TextFormField(
@@ -255,43 +390,84 @@ class _ContactDetailsState extends State<ContactDetails> {
                   ),
                 ),
               ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: DropdownButtonFormField<String>(
+                  dropdownColor: Colors.white,
+                  style: TextStyle(color: Colors.black),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'Select your location',
+                    labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
+                    suffixIcon: const Icon(
+                      Icons.keyboard_arrow_down_sharp,
+                      color: Colors.grey,
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey.shade300,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                        color: Colors.grey,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedPosition = newValue!;
+                      selectedPositionIndex =
+                          positionsDropdownList.indexOf(selectedPosition);
+                    });
+                  },
+                  items: positionsDropdownList.isNotEmpty
+                      ? positionsDropdownList
+                          .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList()
+                      : positionItems
+                          .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                ),
+              ),
               const SizedBox(
                 height: 40,
               ),
-              CustomRequestButton(
-                  url: '/contact-persons/create',
-                  method: 'POST',
-                  buttonText: 'Add details',
-                  headers: {},
-                  body: {
-                    "name": nameController.text,
-                    "phone": phoneController.text,
-                    "email": emailController.text,
-                    "position": positionController.text,
-                    "accountId": user?.account_id.toString() ??
-                        '', //account id of the reseller
-                    // "created_by": 61 // id of the logged in user
-                  },
-                  onSuccess: (res) {
-                    print('This is my response');
-                    print(res);
-
-                    final isSuccessful = res['isSuccessful'] as bool;
-
-                    final message = res['message'];
-                    if (isSuccessful) {
-                      final data = res['data'] as Map<String, dynamic>?;
-
-                      if (data != null) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: ((context) => ResellerProfile())));
-                      } else {
-                        print(message);
-                      }
-                    }
-                  })
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryDarkColor),
+                    onPressed: () {
+                      _addContactDetails();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: ((context) => ViewStaff())));
+                    },
+                    child: Text('Add Details')),
+              ),
             ],
           ),
         ),

@@ -25,7 +25,7 @@ class _SuccessState extends State<Success> {
         body: SafeArea(
           child: Center(
             child: Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -33,7 +33,7 @@ class _SuccessState extends State<Success> {
                     'You have successfully created your account',
                     style: m_title,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Text(

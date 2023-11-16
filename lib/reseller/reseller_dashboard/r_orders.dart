@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
@@ -8,7 +10,7 @@ import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/orders.dart';
 import 'package:petropal/providers/user_provider.dart';
-import 'package:petropal/reseller/orders/orderDocuments.dart';
+import 'package:petropal/reseller/orders/order_documents.dart';
 import 'package:provider/provider.dart';
 
 class ResellerOrders extends StatefulWidget {
@@ -64,15 +66,13 @@ class _ResellerOrdersState extends State<ResellerOrders> {
             return Order(
               id: orderData['id'].toString(),
               orderStatus: orderData['orderStatus'] as int,
-              orderPayableAmount:
-                  orderData['orderPayableAmount'].toString() ?? '',
-              orderVolume: orderData['orderVolume'].toString() ?? '',
-              orderInvoiceNumber:
-                  orderData['orderInvoiceNumber'].toString() ?? '',
-              vendorName: orderData['vendorName'].toString() ?? '',
-              vendorEmail: orderData['vendorEmail'].toString() ?? '',
+              orderPayableAmount: orderData['orderPayableAmount'].toString(),
+              orderVolume: orderData['orderVolume'].toString(),
+              orderInvoiceNumber: orderData['orderInvoiceNumber'].toString(),
+              vendorName: orderData['vendorName'].toString(),
+              vendorEmail: orderData['vendorEmail'].toString(),
               orderCreatedAt:
-                  DateTime.parse(orderData['orderCreatedAt'].toString() ?? ''),
+                  DateTime.parse(orderData['orderCreatedAt'].toString()),
             );
           }).toList();
         });
@@ -111,13 +111,13 @@ class _ResellerOrdersState extends State<ResellerOrders> {
   Color getStatusColor(int status) {
     switch (status) {
       case 1:
-        return Color.fromARGB(255, 10, 9, 9);
+        return const Color.fromARGB(255, 10, 9, 9);
       case 2:
         return Colors.orange;
       case 3:
         return Colors.purple;
       case 4:
-        return Color.fromRGBO(27, 197, 189, 1.0);
+        return const Color.fromRGBO(27, 197, 189, 1.0);
       case 5:
         return Colors.red;
       default:
@@ -135,9 +135,9 @@ class _ResellerOrdersState extends State<ResellerOrders> {
         return const Color.fromARGB(255, 255, 224, 178);
       //const Color.fromARGB(255, 255, 249, 196);
       case 3:
-        return Color.fromARGB(255, 252, 237, 252); // Lighter shade of grey
+        return const Color.fromARGB(255, 252, 237, 252); // Lighter shade of grey
       case 4:
-        return Color.fromRGBO(201, 247, 245, 1.0); // Lighter shade of orange
+        return const Color.fromRGBO(201, 247, 245, 1.0); // Lighter shade of orange
       case 5:
         return const Color.fromARGB(255, 255, 205, 210); // Lighter shade of red
       default:
@@ -162,13 +162,16 @@ class _ResellerOrdersState extends State<ResellerOrders> {
       statusBarColor: Colors.grey[50],
     ));
     // Create a NumberFormat instance for Kenyan Shillings (KES)
-    final NumberFormat kesFormat = NumberFormat.currency(symbol: 'KES');
     return Scaffold(
         backgroundColor: Colors.grey[50],
         appBar: AppBar(
           leading: GestureDetector(
-            onTap: () {},
-            child: Icon(
+            onTap: () {
+              // Navigate back to the home screen
+              Navigator.popUntil(context, (route) => true);
+              bottomNavigationController.jumpToTab(0);
+            },
+            child: const Icon(
               Icons.arrow_back_ios,
               color: primaryDarkColor,
             ),
@@ -197,11 +200,11 @@ class _ResellerOrdersState extends State<ResellerOrders> {
           elevation: 0,
         ),
         body: Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: RefreshIndicator(
             onRefresh: () => _refreshOrders(context),
             child: fetchingOrders
-                ? Center(child: CircularProgressIndicator())
+                ? const Center(child: CircularProgressIndicator())
                 : orders.isNotEmpty
                     ? ListView.builder(
                         itemBuilder: (context, index) {
@@ -220,9 +223,9 @@ class _ResellerOrdersState extends State<ResellerOrders> {
                               );
                             },
                             child: Container(
-                              margin: EdgeInsets.only(bottom: 10),
-                              decoration: BoxDecoration(color: Colors.white),
-                              padding: EdgeInsets.all(15),
+                              margin: const EdgeInsets.only(bottom: 10),
+                              decoration: const BoxDecoration(color: Colors.white),
+                              padding: const EdgeInsets.all(15),
                               child: Column(
                                 children: [
                                   Row(
@@ -230,8 +233,8 @@ class _ResellerOrdersState extends State<ResellerOrders> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        "${order.vendorName}",
-                                        style: TextStyle(color: Colors.black),
+                                        order.vendorName,
+                                        style: const TextStyle(color: Colors.black),
                                       ),
                                       Container(
                                         decoration: BoxDecoration(
@@ -242,7 +245,7 @@ class _ResellerOrdersState extends State<ResellerOrders> {
                                             borderRadius:
                                                 BorderRadius.circular(10)),
                                         child: Padding(
-                                          padding: EdgeInsets.only(
+                                          padding: const EdgeInsets.only(
                                               top: 4,
                                               bottom: 4,
                                               left: 8,
@@ -250,7 +253,7 @@ class _ResellerOrdersState extends State<ResellerOrders> {
                                           child: order.orderStatus == 1
                                               ? CountdownTimer(
                                                   endTime: order.orderCreatedAt
-                                                      .add(Duration(
+                                                      .add(const Duration(
                                                           hours: 3,
                                                           minutes: 30))
                                                       .millisecondsSinceEpoch,
@@ -281,7 +284,7 @@ class _ResellerOrdersState extends State<ResellerOrders> {
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                   Row(
@@ -290,16 +293,16 @@ class _ResellerOrdersState extends State<ResellerOrders> {
                                     children: [
                                       Text(
                                         "#${order.orderInvoiceNumber}",
-                                        style: TextStyle(color: Colors.black),
+                                        style: const TextStyle(color: Colors.black),
                                       ),
                                       Text(
-                                        '${formatDateTime(order.orderCreatedAt)}',
+                                        formatDateTime(order.orderCreatedAt),
                                         style: displaySmallerLightGrey.copyWith(
                                             fontSize: 12),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 20,
                                   ),
                                   Row(

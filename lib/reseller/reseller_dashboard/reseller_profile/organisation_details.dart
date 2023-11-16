@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -222,6 +224,7 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
         cert_ctrl.text = '${profile!.certificateOfIncorporationNumber}';
         _dateController.text = '${profile!.epraLicenseExpiryDate}';
       }
+
       print('${profile?.companyName}');
       print('${profile?.companyPhone}');
       print(('${profile?.epraLicenseExpiryDate}'));

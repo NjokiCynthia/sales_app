@@ -7,11 +7,10 @@ import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/authentication/login.dart';
 
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/bank_account_details.dart';
-import 'package:petropal/reseller/reseller_dashboard/reseller_profile/change_pass.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/contact_details.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/organisation_details.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/organisation_profile.dart';
-import 'package:petropal/widgets/widget.dart';
+import 'package:petropal/reseller/reseller_dashboard/reseller_profile/view_staff.dart';
 import 'package:provider/provider.dart';
 
 class ResellerProfile extends StatefulWidget {
@@ -29,7 +28,7 @@ class _ResellerProfileState extends State<ResellerProfile> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: Colors.white,
-          content: Text(
+          content: const Text(
             'Are you sure you want to logout?',
             style: TextStyle(color: Colors.black),
           ),
@@ -46,11 +45,11 @@ class _ResellerProfileState extends State<ResellerProfile> {
             TextButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: ((context) => Login())));
+                    MaterialPageRoute(builder: ((context) => const Login())));
 
                 //Navigator.of(context).pop();
               },
-              child: Text(
+              child: const Text(
                 'Confirm',
                 style: TextStyle(color: primaryDarkColor),
               ),
@@ -63,25 +62,24 @@ class _ResellerProfileState extends State<ResellerProfile> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: Colors.grey[50] // Set the desired color
-        ));
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: Colors.grey[50]));
     final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
-      backgroundColor: Colors.grey[50], // Very light shade of grey
+      backgroundColor: Colors.grey[50],
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  margin: EdgeInsets.only(bottom: 20),
+                  margin: const EdgeInsets.only(bottom: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         backgroundColor: Colors.white,
                         backgroundImage:
                             AssetImage('assets/images/icons/avatar.png'),
@@ -104,29 +102,29 @@ class _ResellerProfileState extends State<ResellerProfile> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8)),
                   child: ListTile(
-                    leading: CircleAvatar(
+                    leading: const CircleAvatar(
                       backgroundColor: Colors.white,
                       backgroundImage:
                           AssetImage('assets/images/icons/avatar.png'),
                       radius: 20,
                     ),
                     title: Padding(
-                      padding: EdgeInsets.only(
+                      padding: const EdgeInsets.only(
                         top: 10,
                       ),
                       child: Text(
                         userProvider.user?.username ?? '',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black, // Text color
                         ),
                       ),
                     ),
                     subtitle: Padding(
-                      padding: EdgeInsets.only(top: 20, bottom: 10),
+                      padding: const EdgeInsets.only(top: 20, bottom: 10),
                       child: Text(
                         userProvider.user?.email ?? '',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black, // Text color
                         ),
                       ),
@@ -141,7 +139,7 @@ class _ResellerProfileState extends State<ResellerProfile> {
                         withNavBar: false,
                         pageTransitionAnimation:
                             PageTransitionAnimation.cupertino,
-                        screen: OrganisationDetails());
+                        screen: const OrganisationDetails());
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -187,7 +185,7 @@ class _ResellerProfileState extends State<ResellerProfile> {
                 GestureDetector(
                   onTap: () {
                     PersistentNavBarNavigator.pushNewScreen(context,
-                        screen: BankAccountDetails(),
+                        screen: const BankAccountDetails(),
                         withNavBar: false,
                         pageTransitionAnimation:
                             PageTransitionAnimation.cupertino);
@@ -244,7 +242,7 @@ class _ResellerProfileState extends State<ResellerProfile> {
                 GestureDetector(
                   onTap: () {
                     PersistentNavBarNavigator.pushNewScreen(context,
-                        screen: ContactDetails(),
+                        screen: const ViewStaff(),
                         withNavBar: false,
                         pageTransitionAnimation:
                             PageTransitionAnimation.cupertino);
@@ -269,14 +267,14 @@ class _ResellerProfileState extends State<ResellerProfile> {
                       title: Padding(
                         padding: const EdgeInsets.only(top: 20),
                         child: Text(
-                          'Contact Details',
+                          'Staff management',
                           style: bodyGrey,
                         ),
                       ),
                       subtitle: Padding(
                         padding: const EdgeInsets.only(top: 20, bottom: 10),
                         child: Text(
-                          'Stay in touch with us',
+                          'Add staff who can access your account',
                           style: greyT,
                         ),
                       ),
@@ -297,7 +295,7 @@ class _ResellerProfileState extends State<ResellerProfile> {
                 GestureDetector(
                   onTap: () {
                     PersistentNavBarNavigator.pushNewScreen(context,
-                        screen: OrganisationProfile(),
+                        screen: const OrganisationProfile(),
                         withNavBar: false,
                         pageTransitionAnimation:
                             PageTransitionAnimation.cupertino);
