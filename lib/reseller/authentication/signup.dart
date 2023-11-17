@@ -12,7 +12,6 @@ import 'package:petropal/models/user_details.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/authentication/login.dart';
 
-import 'package:petropal/widgets/buttons.dart';
 import 'package:provider/provider.dart';
 
 class Signup extends StatefulWidget {
@@ -182,6 +181,111 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
       fetchingLocations = false;
     });
   }
+  // CustomRequestButton(
+  //               url: '/account/sign-up/reseller',
+  //               method: 'POST',
+  //               buttonText: 'SignUp',
+  //               headers: {},
+  //               body: {
+  //                 "user": {
+  //                   "bankDetails": [],
+  //                   "companyEmail": emailController.text,
+  //                   "companyName": nameController.text,
+  //                   "companyPhone": phoneController.text,
+  //                   "confirmPassword": passwordController.text,
+  //                   "contactDetails": [],
+  //                   "email": email_ctrl.text,
+  //                   "first_name": first_name_ctrl.text,
+  //                   "is_verified": false,
+  //                   "last_name": last_name_ctrl.text,
+  //                   "location": selectedLocationIndex != -1
+  //                       ? locations[selectedLocationIndex].id
+  //                       : 0,
+  //                   "password": passwordController.text,
+  //                   "phone_number": phone_number_ctrl.text,
+  //                   "role_id": 3,
+  //                 }
+  //               },
+  //               onSuccess: (res) {
+  //                 print('This is my selected location value');
+  //                 print(locations[selectedLocationIndex].id);
+  //                 print('Signup Response: $res');
+  //                 final isSuccessful = res['isSuccessful'] as bool;
+  //                 final message = res['message'];
+  //                 //final status = res['status'];
+
+  //                 if (isSuccessful) {
+  //                   final data = res['data'] as Map<String, dynamic>?;
+
+  //                   if (data != null) {
+  //                     print(message);
+  //                     Navigator.pushReplacement(
+  //                       context,
+  //                       MaterialPageRoute(builder: (context) => const Login()),
+  //                     );
+  //                   } else {
+  //                     print(message);
+  //                   }
+  //                 }
+  //               }),
+
+  String errorMessage = '';
+  void _signUp() {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    // final user = userProvider.user;
+    final token = userProvider.user?.token;
+
+    final apiClient = ApiClient();
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    final postData = {
+      "user": {
+        "bankDetails": [],
+        "companyEmail": emailController.text,
+        "companyName": nameController.text,
+        "companyPhone": phoneController.text,
+        "confirmPassword": passwordController.text,
+        "contactDetails": [],
+        "email": email_ctrl.text,
+        "first_name": first_name_ctrl.text,
+        "is_verified": false,
+        "last_name": last_name_ctrl.text,
+        "location": selectedLocationIndex != -1
+            ? locations[selectedLocationIndex].id
+            : 0,
+        "password": passwordController.text,
+        "phone_number": phone_number_ctrl.text,
+        "role_id": 3,
+      }
+    };
+
+    print(postData);
+
+    apiClient
+        .post('/account/sign-up/reseller', postData, headers: headers)
+        .then((response) {
+      print('Response: $response');
+
+      if (response['status'] == 1) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const Login()),
+        );
+      } else if (response['status'] == 0 && response['message'] != null) {
+        // Set the error message to display on the page
+        setState(() {
+          errorMessage = response['message'];
+        });
+        print('Error: ${response['message']}');
+      } else {
+        print('Invalid status in the response');
+        // Handle the case when 'status' is not 1
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -189,7 +293,6 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(_handleTabChange);
     _fetchLocations(context);
-    
   }
 
   void _handleTabChange() {
@@ -996,53 +1099,16 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
             const SizedBox(
               height: 30,
             ),
-            CustomRequestButton(
-                url: '/account/sign-up/reseller',
-                method: 'POST',
-                buttonText: 'SignUp',
-                headers: {},
-                body: {
-                  "user": {
-                    "bankDetails": [],
-                    "companyEmail": emailController.text,
-                    "companyName": nameController.text,
-                    "companyPhone": phoneController.text,
-                    "confirmPassword": passwordController.text,
-                    "contactDetails": [],
-                    "email": email_ctrl.text,
-                    "first_name": first_name_ctrl.text,
-                    "is_verified": false,
-                    "last_name": last_name_ctrl.text,
-                    "location": selectedLocationIndex != -1
-                        ? locations[selectedLocationIndex].id
-                        : 0,
-                    "password": passwordController.text,
-                    "phone_number": phone_number_ctrl.text,
-                    "role_id": 3,
-                  }
-                },
-                onSuccess: (res) {
-                  print('This is my selected location value');
-                  print(locations[selectedLocationIndex].id);
-                  print('Signup Response: $res');
-                  final isSuccessful = res['isSuccessful'] as bool;
-                  final message = res['message'];
-                  //final status = res['status'];
-
-                  if (isSuccessful) {
-                    final data = res['data'] as Map<String, dynamic>?;
-
-                    if (data != null) {
-                      print(message);
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const Login()),
-                      );
-                    } else {
-                      print(message);
-                    }
-                  }
-                }),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: primaryDarkColor),
+                  onPressed: () {
+                    _signUp();
+                  },
+                  child: Text('SignUp')),
+            )
           ],
         ),
       ),

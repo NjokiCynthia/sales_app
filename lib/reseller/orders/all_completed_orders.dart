@@ -230,7 +230,8 @@ class _AllCompletedOrdersState extends State<AllCompletedOrders> {
                                       children: [
                                         Text(
                                           '${order.vendorName}',
-                                          style: const TextStyle(color: Colors.black),
+                                          style: const TextStyle(
+                                              color: Colors.black),
                                         ),
                                         Text(
                                           DateFormat('d MMM y').format(

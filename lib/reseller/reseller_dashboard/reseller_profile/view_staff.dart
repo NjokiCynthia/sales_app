@@ -6,6 +6,7 @@ import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/contacts_list.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/contact_details.dart';
+import 'package:petropal/reseller/reseller_dashboard/reseller_profile/r_profile.dart';
 import 'package:provider/provider.dart';
 
 class ViewStaff extends StatefulWidget {
@@ -68,6 +69,10 @@ class _ViewStaffState extends State<ViewStaff> {
     });
   }
 
+  Future<void> _refreshContacts(BuildContext context) async {
+    await _fetchContacts(context);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -84,9 +89,14 @@ class _ViewStaffState extends State<ViewStaff> {
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         backgroundColor: Colors.grey[50],
-        leading: Icon(
-          Icons.arrow_back_ios,
-          color: primaryDarkColor,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: primaryDarkColor,
+          ),
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -117,79 +127,118 @@ class _ViewStaffState extends State<ViewStaff> {
         ),
         elevation: 0,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: fetchingContacts
-                ? Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : ListView.builder(
-                    itemCount: contactList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      _backgroundColorIndex = 1 - _backgroundColorIndex;
-                      Color tileColor = _backgroundColorIndex == 0
-                          ? Color.fromARGB(255, 255, 255, 255)
-                          : const Color.fromARGB(255, 238, 238, 238);
+      body: RefreshIndicator(
+        onRefresh: () => _refreshContacts(context),
+        child: Column(
+          children: [
+            Expanded(
+              child: fetchingContacts
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : contactList.isEmpty
+                      ? Center(
+                          child: Column(
+                            children: [
+                              Text(
+                                'No staff added at the moment',
+                                style: displayTitle,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: ((context) =>
+                                              ContactDetails())));
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.add,
+                                      color: primaryDarkColor,
+                                    ),
+                                    Text(
+                                      'Add now',
+                                      style: TextStyle(color: primaryDarkColor),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      : ListView.builder(
+                          itemCount: contactList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            _backgroundColorIndex = 1 - _backgroundColorIndex;
+                            Color tileColor = _backgroundColorIndex == 0
+                                ? Color.fromARGB(255, 255, 255, 255)
+                                : const Color.fromARGB(255, 238, 238, 238);
 
-                      ContactListing contact = contactList[index];
-                      return Column(
-                        children: [
-                          ListTile(
-                            leading: Container(
-                              decoration: BoxDecoration(
-                                color: primaryDarkColor.withOpacity(0.1),
-                                shape: BoxShape.circle,
-                              ),
-                              padding: const EdgeInsets.all(8),
-                              child: const Icon(
-                                Icons.person,
-                                color: primaryDarkColor,
-                                size: 15,
-                              ),
-                            ),
-                            title: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            ContactListing contact = contactList[index];
+                            return Column(
                               children: [
-                                Text(
-                                  '${contact.name}',
-                                  style: TextStyle(color: Colors.black),
+                                ListTile(
+                                  leading: Container(
+                                    decoration: BoxDecoration(
+                                      color: primaryDarkColor.withOpacity(0.1),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    padding: const EdgeInsets.all(8),
+                                    child: const Icon(
+                                      Icons.person,
+                                      color: primaryDarkColor,
+                                      size: 15,
+                                    ),
+                                  ),
+                                  title: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${contact.name}',
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                      Text(
+                                        contact.position ?? '',
+                                        style:
+                                            TextStyle(color: primaryDarkColor),
+                                      ),
+                                    ],
+                                  ),
+                                  subtitle: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        contact.email!,
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                      Text(
+                                        contact.phoneNumber!,
+                                        style:
+                                            const TextStyle(color: Colors.grey),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                Text(
-                                  contact.position ?? '',
-                                  style: TextStyle(color: primaryDarkColor),
+                                Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Divider(
+                                    color: Colors.grey[
+                                        300], // Change the color if needed
+                                    height: 1,
+                                    thickness: 1,
+                                  ),
                                 ),
                               ],
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  contact.email!,
-                                  style: TextStyle(color: Colors.grey),
-                                ),
-                                Text(
-                                  contact.phoneNumber!,
-                                  style: const TextStyle(color: Colors.grey),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Divider(
-                              color: Colors
-                                  .grey[300], // Change the color if needed
-                              height: 1,
-                              thickness: 1,
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-          ),
-        ],
+                            );
+                          },
+                        ),
+            ),
+          ],
+        ),
       ),
     );
   }

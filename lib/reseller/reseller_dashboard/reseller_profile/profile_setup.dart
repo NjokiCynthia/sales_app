@@ -18,7 +18,7 @@ import 'package:petropal/models/positions_model.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/orders/success.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_dashboard.dart';
-import 'package:petropal/widgets/buttons.dart';
+
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -326,6 +326,89 @@ class _ProfileSetUpState extends State<ProfileSetUp>
     } catch (err) {
       print('Error sending the request: $err');
     }
+  }
+  // CustomRequestButton(
+  //     url: '/account/update/bank_details',
+  //     method: 'POST',
+  //     buttonText: 'Confirm',
+  //     headers: {
+  //       'Authorization': 'Bearer $token',
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: {
+  //       "account_number": accountController.text,
+  //       "account_name": accountName.text,
+  //       "bank_id": selectedBankIndex != -1
+  //           ? banks[selectedBankIndex].bankId
+  //           : 0,
+  //       "branch_id": selectedBranch != -1 ? selectedBranch : 0,
+  //       "account_id": user?.account_id.toString() ?? '',
+  //       "is_petropal_account": 0,
+  //     },
+  //     onSuccess: (res) {
+  //       print('This is my selected bank value');
+  //       print(banks[selectedBankIndex].bankId);
+  //       print('This is my selected branch value');
+  //       print(selectedBranch);
+
+  //       print('This is my response');
+  //       print(res);
+
+  //       final isSuccessful = res['isSuccessful'] as bool;
+
+  //       final message = res['message'];
+  //       if (isSuccessful) {
+  //         final data = res['data'] as Map<String, dynamic>?;
+
+  //         if (data != null) {
+  //           _tabController.animateTo(2);
+  //         } else {
+  //           print(message);
+  //         }
+  //       }
+  //     })
+  String errorMessage = '';
+  void _addBanks() {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final user = userProvider.user;
+    final token = userProvider.user?.token;
+
+    final apiClient = ApiClient();
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    final postData = {
+      "account_number": accountController.text,
+      "account_name": accountName.text,
+      "bank_id": selectedBankIndex != -1 ? banks[selectedBankIndex].bankId : 0,
+      "branch_id": selectedBranch != -1 ? selectedBranch : 0,
+      "account_id": user?.account_id.toString() ?? '',
+      "is_petropal_account": 0,
+    };
+
+    print(postData);
+
+    apiClient
+        .post('/account/update/bank_details', postData, headers: headers)
+        .then((response) {
+      print('Response: $response');
+
+      if (response['status'] == 1) {
+        // Successfully added contact details, navigate to ViewStaff
+        _tabController.animateTo(2);
+      } else if (response['status'] == 0 && response['message'] != null) {
+        // Set the error message to display on the page
+        setState(() {
+          errorMessage = response['message'];
+        });
+        print('Error: ${response['message']}');
+      } else {
+        print('Invalid status in the response');
+        // Handle the case when 'status' is not 1
+      }
+    });
   }
 
   int currentTab = 0;
@@ -1016,12 +1099,12 @@ class _ProfileSetUpState extends State<ProfileSetUp>
             DropdownButtonFormField<String>(
               isExpanded: true,
               dropdownColor: Colors.white,
-              style: bodyTextSmall,
+              style: TextStyle(color: primaryDarkColor),
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
                 labelText: 'Select your bank',
-                labelStyle: bodyTextSmall.copyWith(color: Colors.grey[500]),
+                labelStyle: bodyTextSmall.copyWith(color: Colors.black),
                 suffixIcon: const Icon(
                   Icons.keyboard_arrow_down_sharp,
                   color: Colors.grey,
@@ -1213,46 +1296,65 @@ class _ProfileSetUpState extends State<ProfileSetUp>
             const SizedBox(
               height: 20,
             ),
-            CustomRequestButton(
-                url: '/account/update/bank_details',
-                method: 'POST',
-                buttonText: 'Confirm',
-                headers: {
-                  'Authorization': 'Bearer $token',
-                  'Content-Type': 'application/json',
-                },
-                body: {
-                  "account_number": accountController.text,
-                  "account_name": accountName.text,
-                  "bank_id": selectedBankIndex != -1
-                      ? banks[selectedBankIndex].bankId
-                      : 0,
-                  "branch_id": selectedBranch != -1 ? selectedBranch : 0,
-                  "account_id": user?.account_id.toString() ?? '',
-                  "is_petropal_account": 0,
-                },
-                onSuccess: (res) {
-                  print('This is my selected bank value');
-                  print(banks[selectedBankIndex].bankId);
-                  print('This is my selected branch value');
-                  print(selectedBranch);
+            if (errorMessage.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  errorMessage,
+                  style:
+                      TextStyle(color: Colors.red), // Customize the text style
+                ),
+              ),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: primaryDarkColor),
+                  onPressed: () {
+                    _addBanks();
+                  },
+                  child: Text('Confirm')),
+            )
+            // CustomRequestButton(
+            //     url: '/account/update/bank_details',
+            //     method: 'POST',
+            //     buttonText: 'Confirm',
+            //     headers: {
+            //       'Authorization': 'Bearer $token',
+            //       'Content-Type': 'application/json',
+            //     },
+            //     body: {
+            //       "account_number": accountController.text,
+            //       "account_name": accountName.text,
+            //       "bank_id": selectedBankIndex != -1
+            //           ? banks[selectedBankIndex].bankId
+            //           : 0,
+            //       "branch_id": selectedBranch != -1 ? selectedBranch : 0,
+            //       "account_id": user?.account_id.toString() ?? '',
+            //       "is_petropal_account": 0,
+            //     },
+            //     onSuccess: (res) {
+            //       print('This is my selected bank value');
+            //       print(banks[selectedBankIndex].bankId);
+            //       print('This is my selected branch value');
+            //       print(selectedBranch);
 
-                  print('This is my response');
-                  print(res);
+            //       print('This is my response');
+            //       print(res);
 
-                  final isSuccessful = res['isSuccessful'] as bool;
+            //       final isSuccessful = res['isSuccessful'] as bool;
 
-                  final message = res['message'];
-                  if (isSuccessful) {
-                    final data = res['data'] as Map<String, dynamic>?;
+            //       final message = res['message'];
+            //       if (isSuccessful) {
+            //         final data = res['data'] as Map<String, dynamic>?;
 
-                    if (data != null) {
-                      _tabController.animateTo(2);
-                    } else {
-                      print(message);
-                    }
-                  }
-                })
+            //         if (data != null) {
+            //           _tabController.animateTo(2);
+            //         } else {
+            //           print(message);
+            //         }
+            //       }
+            //     })
           ],
         ),
       )),
@@ -1408,37 +1510,42 @@ class _ProfileSetUpState extends State<ProfileSetUp>
               const SizedBox(
                 height: 40,
               ),
-              CustomRequestButton(
-                  url: '/contact-persons/create',
-                  method: 'POST',
-                  buttonText: 'Add details',
-                  headers: const {},
-                  body: {
-                    "name": nameController.text,
-                    "phone": phoneController.text,
-                    "email": emailController.text,
-                    "position": positionController.text,
-                    "accountId": user?.account_id.toString() ??
-                        '', //account id of the reseller
-                    "created_by": 61 // id of the logged in user
+              ElevatedButton(
+                  onPressed: () {
+                    _tabController.animateTo(3);
                   },
-                  onSuccess: (res) {
-                    print('This is my response');
-                    print(res);
+                  child: Text('Confirm')),
+              // CustomRequestButton(
+              //     url: '/contact-persons/create',
+              //     method: 'POST',
+              //     buttonText: 'Add details',
+              //     headers: const {},
+              //     body: {
+              //       "name": nameController.text,
+              //       "phone": phoneController.text,
+              //       "email": emailController.text,
+              //       "position": positionController.text,
+              //       "accountId": user?.account_id.toString() ??
+              //           '', //account id of the reseller
+              //       "created_by": 61 // id of the logged in user
+              //     },
+              //     onSuccess: (res) {
+              //       print('This is my response');
+              //       print(res);
 
-                    final isSuccessful = res['isSuccessful'] as bool;
+              //       final isSuccessful = res['isSuccessful'] as bool;
 
-                    final message = res['message'];
-                    if (isSuccessful) {
-                      final data = res['data'] as Map<String, dynamic>?;
+              //       final message = res['message'];
+              //       if (isSuccessful) {
+              //         final data = res['data'] as Map<String, dynamic>?;
 
-                      if (data != null) {
-                        _tabController.animateTo(3);
-                      } else {
-                        print(message);
-                      }
-                    }
-                  })
+              //         if (data != null) {
+              //           _tabController.animateTo(3);
+              //         } else {
+              //           print(message);
+              //         }
+              //       }
+              //     })
             ],
           ),
         ),

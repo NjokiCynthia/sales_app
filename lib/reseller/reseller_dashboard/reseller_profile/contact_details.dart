@@ -9,7 +9,7 @@ import 'package:petropal/models/positions_model.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/r_profile.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/view_staff.dart';
-import 'package:petropal/widgets/buttons.dart';
+
 import 'package:provider/provider.dart';
 
 class ContactDetails extends StatefulWidget {
@@ -130,12 +130,12 @@ class _ContactDetailsState extends State<ContactDetails> {
     });
   }
 
+  String errorMessage = '';
   void _addContactDetails() {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     //final user = userProvider.user;
     final token = userProvider.user?.token;
-    print('here is my token');
-    print(token);
+
     final apiClient = ApiClient();
     final headers = {
       'Authorization': 'Bearer $token',
@@ -158,9 +158,23 @@ class _ContactDetailsState extends State<ContactDetails> {
         .post('/contact-persons/create', postData, headers: headers)
         .then((response) {
       print('Response: $response');
-    }).catchError((error) {
-      // Handle errors from the HTTP request.
-      print('Error: $error');
+
+      if (response['status'] == 1) {
+        // Successfully added contact details, navigate to ViewStaff
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => ViewStaff()),
+        );
+      } else if (response['status'] == 0 && response['message'] != null) {
+        // Set the error message to display on the page
+        setState(() {
+          errorMessage = response['message'];
+        });
+        print('Error: ${response['message']}');
+      } else {
+        print('Invalid status in the response');
+        // Handle the case when 'status' is not 1
+      }
     });
   }
 
@@ -177,8 +191,6 @@ class _ContactDetailsState extends State<ContactDetails> {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = context.read<UserProvider>();
-    final token = userProvider.token;
     return Scaffold(
         body: SingleChildScrollView(
       child: SafeArea(
@@ -210,6 +222,15 @@ class _ContactDetailsState extends State<ContactDetails> {
               const SizedBox(
                 height: 40,
               ),
+              if (errorMessage.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    errorMessage,
+                    style: TextStyle(
+                        color: Colors.red), // Customize the text style
+                  ),
+                ),
               Row(
                 children: [
                   Expanded(
@@ -461,10 +482,6 @@ class _ContactDetailsState extends State<ContactDetails> {
                         backgroundColor: primaryDarkColor),
                     onPressed: () {
                       _addContactDetails();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: ((context) => ViewStaff())));
                     },
                     child: Text('Add Details')),
               ),
