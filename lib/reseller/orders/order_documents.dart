@@ -622,14 +622,14 @@ class _OrderDocumentsState extends State<OrderDocuments> {
           uploadedFile!.path.toString(),
           filename: uploadedFile!.name,
         )));
-    final url =
-        Uri.parse('https://petropal.sandbox.co.ke:8040/order/upload-receipt');
-    final url2 =
-        Uri.parse('https://petropal.sandbox.co.ke:8040/payment/record');
-
     // final url =
-    //     Uri.parse('https://app.petropal.africa:8050/order/upload-receipt');
-    // final url2 = Uri.parse('https://app.petropal.africa:8050/payment/record');
+    //     Uri.parse('https://petropal.sandbox.co.ke:8040/order/upload-receipt');
+    // final url2 =
+    //     Uri.parse('https://petropal.sandbox.co.ke:8040/payment/record');
+
+    final url =
+        Uri.parse('https://app.petropal.africa:8050/order/upload-receipt');
+    final url2 = Uri.parse('https://app.petropal.africa:8050/payment/record');
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final token = userProvider.user?.token;
 
