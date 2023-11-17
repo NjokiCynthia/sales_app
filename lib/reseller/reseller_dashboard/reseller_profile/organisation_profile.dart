@@ -49,17 +49,7 @@ class _OrganisationProfileState extends State<OrganisationProfile> {
 
     if (user != null) {
       // Use the user data in your form fields and for debugging
-      print('User first name is : ${user.first_name}');
-      print('User last name is: ${user.last_name}');
 
-      print('User email is: ${user.email}');
-      print('User phone number is: ${user.phone}');
-      print('User account id is: ${user.account_id}');
-      print('My company email is: ${user.companyAddress}');
-      print('My company name is: ${user.companyName}');
-      print('My company phone is: ${user.companyPhone}');
-      print('My company password is: ${user.password}');
-      print('User token is: ${user.token}');
 
       // emailController.text = user.email;
       // numberController.text = user.phone;
@@ -82,10 +72,10 @@ class _OrganisationProfileState extends State<OrganisationProfile> {
         body: SingleChildScrollView(
           child: SafeArea(
             child: Padding(
-              padding: EdgeInsets.all(15),
+              padding: const EdgeInsets.all(15),
               child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Row(
@@ -95,7 +85,7 @@ class _OrganisationProfileState extends State<OrganisationProfile> {
                         onTap: () {
                           Navigator.pop(context);
                         },
-                        child: Icon(
+                        child: const Icon(
                           Icons.arrow_back_ios,
                           color: primaryDarkColor,
                         ),
@@ -109,7 +99,7 @@ class _OrganisationProfileState extends State<OrganisationProfile> {
                       )
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   TextFormField(
@@ -144,7 +134,7 @@ class _OrganisationProfileState extends State<OrganisationProfile> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   TextFormField(
@@ -179,7 +169,7 @@ class _OrganisationProfileState extends State<OrganisationProfile> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   InternationalPhoneNumberInput(
@@ -244,7 +234,7 @@ class _OrganisationProfileState extends State<OrganisationProfile> {
                     ),
                     onSaved: (PhoneNumber number) {},
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   TextFormField(
@@ -279,7 +269,7 @@ class _OrganisationProfileState extends State<OrganisationProfile> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   SizedBox(
@@ -293,7 +283,7 @@ class _OrganisationProfileState extends State<OrganisationProfile> {
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => ResellerProfile()),
+                              builder: (context) => const ResellerProfile()),
                           (Route<dynamic> route) => false,
                         );
                         // Navigator.pushAndRemoveUntil(context,

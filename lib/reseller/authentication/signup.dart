@@ -7,7 +7,6 @@ import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/location.dart';
-import 'package:petropal/models/positions_model.dart';
 import 'package:petropal/models/user_details.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/authentication/login.dart';
@@ -166,7 +165,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
           locations = tempLocationModels;
           selectedLocation = '${locations[0].id}';
           locationsDropdownList =
-              tempLocationModels.map((location) => '${location.name}').toList();
+              tempLocationModels.map((location) => location.name).toList();
         });
       } else {
         print('No or invalid locations found in the response');
@@ -375,12 +374,12 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                     labelStyle: displaySmaller,
                     labelColor: primaryDarkColor,
                     unselectedLabelColor: Colors.black,
-                    tabs: [
-                      const Tab(
+                    tabs: const [
+                      Tab(
                         text: "Personal details",
                       ),
-                      const Tab(text: "Organisation details"),
-                      const Tab(text: "Confirm Details"),
+                      Tab(text: "Organisation details"),
+                      Tab(text: "Confirm Details"),
                     ],
                   ),
                 ),
@@ -642,13 +641,14 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                 if (first_name_ctrl.text.isEmpty ||
                     last_name_ctrl.text.isEmpty ||
                     phone_number_inpt.isEmpty ||
-                    email_ctrl.text.isEmpty)
+                    email_ctrl.text.isEmpty) {
                   const Text(
                     'Please enter all fields',
                     style: TextStyle(color: Colors.red),
                   );
-                else
+                } else {
                   _tabController.animateTo(1);
+                }
               },
               child: Align(
                 alignment: Alignment.bottomRight,
@@ -932,10 +932,11 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                 if (organizationName.isEmpty ||
                     organizationLocation.isEmpty ||
                     organizationEmail.isEmpty ||
-                    secondPagePhoneNumber.isEmpty)
+                    secondPagePhoneNumber.isEmpty) {
                   const Text('Please fill in all fields');
-                else
+                } else {
                   _tabController.animateTo(2);
+                }
               },
               child: Align(
                 alignment: Alignment.bottomRight,
@@ -1105,7 +1106,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                 child: Text(
                   errorMessage,
                   style:
-                      TextStyle(color: Colors.red), // Customize the text style
+                      const TextStyle(color: Colors.red), // Customize the text style
                 ),
               ),
             SizedBox(
@@ -1116,7 +1117,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
                   onPressed: () {
                     _signUp();
                   },
-                  child: Text('SignUp')),
+                  child: const Text('SignUp')),
             )
           ],
         ),

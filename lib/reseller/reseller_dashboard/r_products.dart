@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/models/ListModel.dart';
+import 'package:petropal/models/list_model.dart';
 import 'package:petropal/models/product.dart';
 import 'package:petropal/providers/products.dart';
 import 'package:petropal/reseller/orders/order_details.dart';

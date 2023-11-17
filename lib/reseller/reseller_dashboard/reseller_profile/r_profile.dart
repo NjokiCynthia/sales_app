@@ -7,7 +7,6 @@ import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/authentication/login.dart';
 
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/bank_account_details.dart';
-import 'package:petropal/reseller/reseller_dashboard/reseller_profile/contact_details.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/organisation_details.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/organisation_profile.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/view_staff.dart';

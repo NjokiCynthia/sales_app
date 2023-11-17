@@ -37,21 +37,19 @@ class _AllOrdersState extends State<AllOrders> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        child: Row(children: [
-                          Text(
-                            "#1234",
-                            style: textBolder,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "Sun, 15 Feb 2023",
-                            style: greyText,
-                          ),
-                        ]),
-                      ),
+                      Row(children: [
+                        Text(
+                          "#1234",
+                          style: textBolder,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "Sun, 15 Feb 2023",
+                          style: greyText,
+                        ),
+                      ]),
                       Container(
                         decoration: BoxDecoration(
                             color: Colors.red[100],

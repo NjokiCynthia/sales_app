@@ -32,8 +32,8 @@ class _LoginState extends State<Login> {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     final response = await http.post(
-      Uri.parse('https://app.petropal.africa:8050/user/login'),
-      //Uri.parse('https://petropal.sandbox.co.ke:8040/user/login'),
+      //Uri.parse('https://app.petropal.africa:8050/user/login'),
+      Uri.parse('https://petropal.sandbox.co.ke:8040/user/login'),
       body: {
         'email': emailAddress.text,
         'password': password.text,

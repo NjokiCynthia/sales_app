@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petropal/constants/api.dart';
@@ -6,7 +8,6 @@ import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/contacts_list.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/contact_details.dart';
-import 'package:petropal/reseller/reseller_dashboard/reseller_profile/r_profile.dart';
 import 'package:provider/provider.dart';
 
 class ViewStaff extends StatefulWidget {
@@ -93,7 +94,7 @@ class _ViewStaffState extends State<ViewStaff> {
           onTap: () {
             Navigator.pop(context);
           },
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back_ios,
             color: primaryDarkColor,
           ),
@@ -107,7 +108,7 @@ class _ViewStaffState extends State<ViewStaff> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: ((context) => ContactDetails()),
+                    builder: ((context) => const ContactDetails()),
                   ),
                 );
               },
@@ -133,13 +134,13 @@ class _ViewStaffState extends State<ViewStaff> {
           children: [
             Expanded(
               child: fetchingContacts
-                  ? Center(
+                  ? const Center(
                       child: CircularProgressIndicator(),
                     )
                   : contactList.isEmpty
                       ? Center(
                           child: Padding(
-                            padding: EdgeInsets.all(20),
+                            padding: const EdgeInsets.all(20),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -154,9 +155,9 @@ class _ViewStaffState extends State<ViewStaff> {
                                         context,
                                         MaterialPageRoute(
                                             builder: ((context) =>
-                                                ContactDetails())));
+                                                const ContactDetails())));
                                   },
-                                  child: Padding(
+                                  child: const Padding(
                                     padding: EdgeInsets.all(20),
                                     child: Row(
                                       children: [
@@ -181,9 +182,6 @@ class _ViewStaffState extends State<ViewStaff> {
                           itemCount: contactList.length,
                           itemBuilder: (BuildContext context, int index) {
                             _backgroundColorIndex = 1 - _backgroundColorIndex;
-                            Color tileColor = _backgroundColorIndex == 0
-                                ? Color.fromARGB(255, 255, 255, 255)
-                                : const Color.fromARGB(255, 238, 238, 238);
 
                             ContactListing contact = contactList[index];
                             return Column(
@@ -207,12 +205,13 @@ class _ViewStaffState extends State<ViewStaff> {
                                     children: [
                                       Text(
                                         '${contact.name}',
-                                        style: TextStyle(color: Colors.black),
+                                        style: const TextStyle(
+                                            color: Colors.black),
                                       ),
                                       Text(
                                         contact.position ?? '',
-                                        style:
-                                            TextStyle(color: primaryDarkColor),
+                                        style: const TextStyle(
+                                            color: primaryDarkColor),
                                       ),
                                     ],
                                   ),
@@ -222,7 +221,8 @@ class _ViewStaffState extends State<ViewStaff> {
                                     children: [
                                       Text(
                                         contact.email!,
-                                        style: TextStyle(color: Colors.grey),
+                                        style:
+                                            const TextStyle(color: Colors.grey),
                                       ),
                                       Text(
                                         contact.phoneNumber!,
@@ -233,7 +233,7 @@ class _ViewStaffState extends State<ViewStaff> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(10),
                                   child: Divider(
                                     color: Colors.grey[
                                         300], // Change the color if needed

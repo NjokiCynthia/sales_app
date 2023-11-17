@@ -10,6 +10,6 @@ class OmcDetails extends StatefulWidget {
 class _OmcDetailsState extends State<OmcDetails> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return const Scaffold();
   }
 }

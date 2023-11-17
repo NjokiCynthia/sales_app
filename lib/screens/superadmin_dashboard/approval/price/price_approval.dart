@@ -74,6 +74,7 @@ class ApprovedPricesScreen extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class UnapprovedPricesScreen extends StatefulWidget {
   SearchOption selectedSearchOption; // Selected search option
 
@@ -85,7 +86,7 @@ class UnapprovedPricesScreen extends StatefulWidget {
 
 class _UnapprovedPricesScreenState extends State<UnapprovedPricesScreen> {
   final TextEditingController _searchController = TextEditingController();
-  double _minAmount = 90;
+  final double _minAmount = 90;
   double _maxAmount = 95;
   List<Product> _products = [];
   List<Product> _filteredProducts = [];
@@ -198,7 +199,7 @@ class _UnapprovedPricesScreenState extends State<UnapprovedPricesScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
                 DefaultTabController.of(context)
-                    ?.animateTo(0); // Switch to the first tab.
+                    .animateTo(0); // Switch to the first tab.
               },
               child: const Text('Yes'),
             ),

@@ -8,8 +8,10 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
+import 'package:petropal/models/average_price.dart';
 import 'package:petropal/models/best_prices.dart';
 import 'package:petropal/models/completed_orders.dart';
+import 'package:petropal/models/product_categories.dart';
 import 'package:petropal/providers/products.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/orders/all_completed_orders.dart';
@@ -42,6 +44,108 @@ class _ResellerHomeState extends State<ResellerHome> {
   final SwiperController _swiperController = SwiperController();
 
   int _currentgraph = 0;
+  bool fetchingAverage = true;
+  List<Average> productAverage = [];
+  Future<void> _fetchAverage(
+      BuildContext context, int productCategoryId) async {
+    print('I am here now to see averages');
+    setState(() {
+      fetchingAverage = true;
+    });
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final token = userProvider.user?.token;
+
+    final postData = {
+      'productCategoryId': productCategoryId,
+      "year": 2023,
+    };
+    print('This is teh product category id here');
+    print(productCategoryId);
+    final apiClient = ApiClient();
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      final response = await apiClient.post(
+        '/product/get-average-price-per-week',
+        postData,
+        headers: headers,
+      );
+      print('These are the product averages i have below here');
+      print('Response: $response');
+
+      if (response['status'] == 1 && response['data'] != null) {
+        final data = List<Map<String, dynamic>>.from(response['data']);
+        final productAverages = data.map((averageData) {
+          return Average.fromJson(averageData);
+        }).toList();
+
+        setState(() {
+          productAverage = productAverages;
+        });
+      } else {
+        print('No or invalid averages found in the response');
+      }
+    } catch (error) {
+      print('Average Fetch By ID Error: $error');
+    }
+
+    setState(() {
+      fetchingAverage = false;
+    });
+  }
+
+  bool fetchingCategories = true;
+  List<ProductCategories> productCategory = [];
+  Future<void> _fetchCategories(BuildContext context) async {
+    setState(() {
+      fetchingCategories = true;
+    });
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final token = userProvider.user?.token;
+
+    final postData = {};
+    final apiClient = ApiClient();
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      final response = await apiClient.post(
+        '/product-category/query',
+        postData,
+        headers: headers,
+      );
+      print('These are the product categories i have below here');
+      print('Response: $response');
+
+      if (response['status'] == 1 && response['data'] != null) {
+        final data = List<Map<String, dynamic>>.from(response['data']);
+        final productCategories = data.map((contactData) {
+          return ProductCategories.fromJson(contactData);
+        }).toList();
+
+        setState(() {
+          productCategory = productCategories;
+        });
+      } else {
+        print('No or invalid contacts found in the response');
+        // Handle the case when 'status' is not 1 or 'cartProductsListing' is null
+      }
+    } catch (error) {
+      print('contact Fetch By ID Error: $error');
+      // Handle the error
+    }
+
+    setState(() {
+      fetchingCategories = false;
+    });
+  }
 
   List<String> titles = ['Petrol', 'Diesel', 'Kerosene'];
   List<String> title = ['Petrol', 'Diesel', 'Kerosene'];
@@ -276,18 +380,29 @@ class _ResellerHomeState extends State<ResellerHome> {
     }
     _fetchCompleteOrders(context);
     _fetchcBestPrices(context);
-    data = [
-      ChartData(17, 200),
-      ChartData(18, 205),
-      ChartData(19, 190),
-      ChartData(20, 201),
-      ChartData(21, 196),
-      ChartData(22, 206),
-      ChartData(23, 209),
-      ChartData(24, 202),
-      ChartData(25, 191),
-      ChartData(26, 195),
-    ];
+    _fetchCategories(context);
+    if (productCategory.isNotEmpty) {
+      // Fetch averages for the first product category
+      _fetchAverage(context, productCategory[0].id!);
+    }
+    // Assuming productCategory is not empty
+
+    // Fetch averages for the first product category
+    //_fetchAverage(context, productCategory[0].id!);
+
+    //_fetchAverage(context);
+    // data = [
+    //   ChartData(17, 200),
+    //   ChartData(18, 205),
+    //   ChartData(19, 190),
+    //   ChartData(20, 201),
+    //   ChartData(21, 196),
+    //   ChartData(22, 206),
+    //   ChartData(23, 209),
+    //   ChartData(24, 202),
+    //   ChartData(25, 191),
+    //   ChartData(26, 195),
+    // ];
   }
 
   Future<void> _refreshCompletedOrders(BuildContext context) async {
@@ -427,8 +542,9 @@ class _ResellerHomeState extends State<ResellerHome> {
               ),
               Column(children: [
                 Container(
-                    color: Colors.grey[50],
-                    child: Column(children: [
+                  color: Colors.grey[50],
+                  child: Column(
+                    children: [
                       SizedBox(
                         height: 210,
                         child: Swiper(
@@ -437,8 +553,10 @@ class _ResellerHomeState extends State<ResellerHome> {
                             setState(() {
                               _currentgraph = index;
                             });
+                            _fetchAverage(context, productCategory[index].id!);
                           },
                           itemBuilder: (BuildContext context, int index) {
+                            ProductCategories product = productCategory[index];
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -454,94 +572,84 @@ class _ResellerHomeState extends State<ResellerHome> {
                                           height: 10,
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.only(left: 10),
+                                          padding:
+                                              const EdgeInsets.only(left: 10),
                                           child: Text(
-                                            'Current average price for ${titles[index]}',
+                                            'Current average price for ${product.productName}',
                                             style: const TextStyle(
                                                 color: Colors.black),
                                           ),
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.only(left: 10),
-                                          child: Text(
-                                            'Kes 201.30',
-                                            style: m_title,
-                                          ),
+                                          padding:
+                                              const EdgeInsets.only(left: 10),
+                                          child: productAverage.isNotEmpty
+                                              ? Text(
+                                                  '${formatAmountAsKES(productAverage[index]?.averageSellingPrice!.toInt() ?? 0)}',
+                                                  style: m_title,
+                                                )
+                                              : CircularProgressIndicator(),
                                         ),
                                       ],
                                     ),
                                   ],
                                 ),
                                 SizedBox(
-                                  height: 150,
-                                  child: SfCartesianChart(
-                                    margin: const EdgeInsets.all(0),
-                                    borderWidth: 0,
-                                    borderColor: Colors.transparent,
-                                    plotAreaBorderWidth: 0,
-                                    primaryXAxis: NumericAxis(
-                                      minimum: 17,
-                                      maximum: 26,
-                                      isVisible: false,
-                                    ),
-                                    primaryYAxis: NumericAxis(
-                                      minimum: 188,
-                                      maximum: 211,
-                                      borderWidth: 0,
-                                      labelStyle: const TextStyle(
-                                          color: primaryDarkColor),
-                                      isVisible: false,
-                                    ),
-                                    series: <ChartSeries<ChartData, int>>[
-                                      SplineAreaSeries(
-                                          dataSource: data,
-                                          xValueMapper: (ChartData data, _) =>
-                                              data.day,
-                                          yValueMapper: (ChartData data, _) =>
-                                              data.price,
-                                          splineType: SplineType.natural,
-                                          gradient: const LinearGradient(
-                                            colors: [
-                                              // primaryDarkColor.withOpacity(0.5),
-                                              secondaryDarkColor,
-                                              //Color.fromARGB(133, 216, 161, 79),
-                                              Color.fromARGB(0, 255, 255, 255)
+                                    height: 150,
+                                    child: productAverage.isNotEmpty
+                                        ? SfCartesianChart(
+                                            margin: const EdgeInsets.all(0),
+                                            borderWidth: 0,
+                                            plotAreaBorderWidth: 0,
+                                            primaryXAxis: NumericAxis(
+                                              isVisible: false,
+                                            ),
+                                            primaryYAxis: NumericAxis(
+                                              isVisible: false,
+                                            ),
+                                            tooltipBehavior:
+                                                TooltipBehavior(enable: true),
+                                            series: <ChartSeries<Average, int>>[
+                                              SplineAreaSeries(
+                                                dataSource: productAverage,
+                                                xValueMapper:
+                                                    (Average data, _) =>
+                                                        data.day,
+                                                yValueMapper: (Average data,
+                                                        _) =>
+                                                    data.averageSellingPrice,
+                                                splineType: SplineType.natural,
+                                                gradient: const LinearGradient(
+                                                  colors: [
+                                                    secondaryDarkColor,
+                                                    Color.fromARGB(
+                                                        0, 255, 255, 255)
+                                                  ],
+                                                  stops: [0.01, 0.75],
+                                                  begin: Alignment.topCenter,
+                                                  end: Alignment.bottomCenter,
+                                                ),
+                                              ),
                                             ],
-                                            stops: [0.01, 0.75],
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
+                                          )
+                                        : Center(
+                                            child: CircularProgressIndicator(),
                                           )),
-                                      SplineSeries(
-                                        dataSource: data,
-                                        color: secondaryDarkColor,
-                                        // primaryDarkColor.withOpacity(0.02),
-                                        markerSettings: const MarkerSettings(
-                                          color: secondaryDarkColor,
-                                          borderWidth: 1,
-                                          shape: DataMarkerType.circle,
-                                          isVisible: false,
-                                        ),
-                                        xValueMapper: (ChartData data, _) =>
-                                            data.day,
-                                        yValueMapper: (ChartData data, _) =>
-                                            data.price,
-                                      ),
-                                    ],
-                                  ),
-                                ),
                               ],
                             );
                           },
-                          itemCount: 3,
+                          itemCount: productCategory.length,
                           viewportFraction: 1.0,
                           scale: 0.8,
                         ),
                       ),
-                    ])),
+                    ],
+                  ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(
-                    3,
+                    productCategory.length,
                     (index) => Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: Container(
@@ -615,8 +723,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                         ? ListView.builder(
                             itemBuilder: (context, index) {
                               if (index < orders.length) {
-                                final order =
-                                    orders[index]; // Define 'order' here
+                                final order = orders[index];
                                 return Column(
                                   children: <Widget>[
                                     GestureDetector(

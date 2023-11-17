@@ -8,7 +8,6 @@ import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/positions_model.dart';
 import 'package:petropal/providers/user_provider.dart';
-import 'package:petropal/reseller/reseller_dashboard/reseller_profile/r_profile.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/view_staff.dart';
 
 import 'package:provider/provider.dart';
@@ -136,7 +135,7 @@ class _ContactDetailsState extends State<ContactDetails> {
         // Successfully added contact details, navigate to ViewStaff
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => ViewStaff()),
+          MaterialPageRoute(builder: (context) => const ViewStaff()),
         );
       } else if (response['status'] == 0 && response['message'] != null) {
         // Set the error message to display on the page
@@ -204,7 +203,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         errorMessage,
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.red), // Customize the text style
                       ),
                     ),
@@ -288,7 +287,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   InternationalPhoneNumberInput(
@@ -393,12 +392,12 @@ class _ContactDetailsState extends State<ContactDetails> {
                     width: double.infinity,
                     child: DropdownButtonFormField<String>(
                       dropdownColor: Colors.white,
-                      style: TextStyle(color: Colors.black),
+                      style: const TextStyle(color: Colors.black),
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
                         labelText: 'Select position',
-                        labelStyle: TextStyle(color: Colors.black),
+                        labelStyle: const TextStyle(color: Colors.black),
                         suffixIcon: const Icon(
                           Icons.keyboard_arrow_down_sharp,
                           color: Colors.grey,
@@ -460,7 +459,7 @@ class _ContactDetailsState extends State<ContactDetails> {
                         onPressed: () {
                           _addContactDetails();
                         },
-                        child: Text('Add Details')),
+                        child: const Text('Add Details')),
                   ),
                 ],
               ),

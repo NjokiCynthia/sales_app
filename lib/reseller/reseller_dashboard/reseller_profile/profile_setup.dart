@@ -1,7 +1,5 @@
 // ignore_for_file: avoid_print
 
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +15,8 @@ import 'package:petropal/models/branches.dart';
 import 'package:petropal/models/positions_model.dart';
 import 'package:petropal/providers/user_provider.dart';
 import 'package:petropal/reseller/orders/success.dart';
-import 'package:petropal/reseller/reseller_dashboard/r_dashboard.dart';
 
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
 class ProfileSetUp extends StatefulWidget {
   const ProfileSetUp({super.key});
@@ -183,8 +179,6 @@ class _ProfileSetUpState extends State<ProfileSetUp>
     }
   }
 
-  bool _obscurePassword = true;
-
   PlatformFile? selectedCertificateOfIncorporationDocument; // Add this variable
 
   Future<void> openCertFilePicker() async {
@@ -230,10 +224,10 @@ class _ProfileSetUpState extends State<ProfileSetUp>
   PhoneNumber number = PhoneNumber(isoCode: 'KE');
 
   Future<void> sendFormData() async {
-    final url =
-        Uri.parse('https://app.petropal.africa:8050/user/update-profile');
     // final url =
-    //     Uri.parse('https://petropal.sandbox.co.ke:8040/user/update-profile');
+    //     Uri.parse('https://app.petropal.africa:8050/user/update-profile');
+    final url =
+        Uri.parse('https://petropal.sandbox.co.ke:8040/user/update-profile');
     final userProvider = context.read<UserProvider>();
     final user = userProvider.user;
 
@@ -563,8 +557,6 @@ class _ProfileSetUpState extends State<ProfileSetUp>
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.grey[50],
     ));
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final token = userProvider.user?.token;
 
     return DefaultTabController(
       length: 4,
@@ -1044,7 +1036,6 @@ class _ProfileSetUpState extends State<ProfileSetUp>
 
   Widget buildSecondPage() {
     final userProvider = context.read<UserProvider>();
-    final user = userProvider.user;
     final token = userProvider.user?.token;
     print('Here is my token');
     print(token);
@@ -1060,7 +1051,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
             DropdownButtonFormField<String>(
               isExpanded: true,
               dropdownColor: Colors.white,
-              style: TextStyle(color: primaryDarkColor),
+              style: const TextStyle(color: primaryDarkColor),
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
@@ -1263,7 +1254,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                 child: Text(
                   errorMessage,
                   style:
-                      TextStyle(color: Colors.red), // Customize the text style
+                      const TextStyle(color: Colors.red), // Customize the text style
                 ),
               ),
             SizedBox(
@@ -1274,7 +1265,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                   onPressed: () {
                     _addBanks();
                   },
-                  child: Text('Confirm')),
+                  child: const Text('Confirm')),
             )
             // CustomRequestButton(
             //     url: '/account/update/bank_details',
@@ -1323,10 +1314,6 @@ class _ProfileSetUpState extends State<ProfileSetUp>
   }
 
   Widget buildThirdPage() {
-    final userProvider = context.read<UserProvider>();
-    final user = userProvider.user;
-
-    final token = userProvider.user?.token;
     return SingleChildScrollView(
       child: SafeArea(
         child: Padding(
@@ -1475,7 +1462,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                   onPressed: () {
                     _tabController.animateTo(3);
                   },
-                  child: Text('Confirm')),
+                  child: const Text('Confirm')),
             ],
           ),
         ),

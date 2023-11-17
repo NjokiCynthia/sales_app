@@ -37,7 +37,7 @@ class _ChangePasswordState extends State<ChangePassword> {
           child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(15),
+            padding: const EdgeInsets.all(15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -45,7 +45,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   onTap: () {
                     Navigator.pop(context);
                   },
-                  child: Icon(
+                  child: const Icon(
                     Icons.arrow_back_ios,
                     color: primaryDarkColor,
                   ),
@@ -62,7 +62,7 @@ class _ChangePasswordState extends State<ChangePassword> {
           ),
           SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.all(15),
+              padding: const EdgeInsets.all(15),
               child: Column(
                 children: [
                   TextFormField(
@@ -115,14 +115,14 @@ class _ChangePasswordState extends State<ChangePassword> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
-                  Text(
+                  const Text(
                     "Forgot password?",
                     style: TextStyle(color: primaryDarkColor),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   TextFormField(
@@ -175,7 +175,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   TextFormField(
@@ -228,7 +228,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   SizedBox(
