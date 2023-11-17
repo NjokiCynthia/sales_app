@@ -138,34 +138,43 @@ class _ViewStaffState extends State<ViewStaff> {
                     )
                   : contactList.isEmpty
                       ? Center(
-                          child: Column(
-                            children: [
-                              Text(
-                                'No staff added at the moment',
-                                style: displayTitle,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: ((context) =>
-                                              ContactDetails())));
-                                },
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.add,
-                                      color: primaryDarkColor,
-                                    ),
-                                    Text(
-                                      'Add now',
-                                      style: TextStyle(color: primaryDarkColor),
-                                    )
-                                  ],
+                          child: Padding(
+                            padding: EdgeInsets.all(20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'No staff added at the moment',
+                                  style: displayTitle,
                                 ),
-                              )
-                            ],
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: ((context) =>
+                                                ContactDetails())));
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.all(20),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.add,
+                                          color: primaryDarkColor,
+                                        ),
+                                        Text(
+                                          'Add now',
+                                          style: TextStyle(
+                                              color: primaryDarkColor),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         )
                       : ListView.builder(

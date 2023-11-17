@@ -1099,6 +1099,15 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
             const SizedBox(
               height: 30,
             ),
+            if (errorMessage.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  errorMessage,
+                  style:
+                      TextStyle(color: Colors.red), // Customize the text style
+                ),
+              ),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(

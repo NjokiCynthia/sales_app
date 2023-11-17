@@ -327,46 +327,7 @@ class _ProfileSetUpState extends State<ProfileSetUp>
       print('Error sending the request: $err');
     }
   }
-  // CustomRequestButton(
-  //     url: '/account/update/bank_details',
-  //     method: 'POST',
-  //     buttonText: 'Confirm',
-  //     headers: {
-  //       'Authorization': 'Bearer $token',
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: {
-  //       "account_number": accountController.text,
-  //       "account_name": accountName.text,
-  //       "bank_id": selectedBankIndex != -1
-  //           ? banks[selectedBankIndex].bankId
-  //           : 0,
-  //       "branch_id": selectedBranch != -1 ? selectedBranch : 0,
-  //       "account_id": user?.account_id.toString() ?? '',
-  //       "is_petropal_account": 0,
-  //     },
-  //     onSuccess: (res) {
-  //       print('This is my selected bank value');
-  //       print(banks[selectedBankIndex].bankId);
-  //       print('This is my selected branch value');
-  //       print(selectedBranch);
 
-  //       print('This is my response');
-  //       print(res);
-
-  //       final isSuccessful = res['isSuccessful'] as bool;
-
-  //       final message = res['message'];
-  //       if (isSuccessful) {
-  //         final data = res['data'] as Map<String, dynamic>?;
-
-  //         if (data != null) {
-  //           _tabController.animateTo(2);
-  //         } else {
-  //           print(message);
-  //         }
-  //       }
-  //     })
   String errorMessage = '';
   void _addBanks() {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -1515,37 +1476,6 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                     _tabController.animateTo(3);
                   },
                   child: Text('Confirm')),
-              // CustomRequestButton(
-              //     url: '/contact-persons/create',
-              //     method: 'POST',
-              //     buttonText: 'Add details',
-              //     headers: const {},
-              //     body: {
-              //       "name": nameController.text,
-              //       "phone": phoneController.text,
-              //       "email": emailController.text,
-              //       "position": positionController.text,
-              //       "accountId": user?.account_id.toString() ??
-              //           '', //account id of the reseller
-              //       "created_by": 61 // id of the logged in user
-              //     },
-              //     onSuccess: (res) {
-              //       print('This is my response');
-              //       print(res);
-
-              //       final isSuccessful = res['isSuccessful'] as bool;
-
-              //       final message = res['message'];
-              //       if (isSuccessful) {
-              //         final data = res['data'] as Map<String, dynamic>?;
-
-              //         if (data != null) {
-              //           _tabController.animateTo(3);
-              //         } else {
-              //           print(message);
-              //         }
-              //       }
-              //     })
             ],
           ),
         ),
