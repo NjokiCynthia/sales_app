@@ -240,7 +240,7 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
     ));
     // Check if profile is still being fetched
     if (fetchingProfile) {
-      return const Scaffold(
+      return Scaffold(
         body: Center(
           child: CircularProgressIndicator(), // Display a loading indicator
         ),
@@ -354,7 +354,7 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                     filled: true,
                     fillColor: Colors.white,
                     labelText: 'Company email',
-                    labelStyle: const TextStyle(color: Colors.black),
+                    labelStyle: TextStyle(color: Colors.black),
                     border: OutlineInputBorder(
                       borderSide: const BorderSide(
                         color: Colors.grey,
@@ -395,7 +395,7 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                     filled: true,
                     fillColor: Colors.white,
                     labelText: 'Epra license number',
-                    labelStyle: const TextStyle(color: Colors.black),
+                    labelStyle: TextStyle(color: Colors.black),
                     border: OutlineInputBorder(
                       borderSide: const BorderSide(
                         color: Colors.grey,
@@ -664,8 +664,12 @@ class _OrganisationDetailsState extends State<OrganisationDetails> {
                         style: ElevatedButton.styleFrom(
                             backgroundColor: primaryDarkColor),
                         onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const ResellerProfile()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: ((context) => ResellerProfile())));
+                          // Navigator.push(MaterialPageRoute(
+                          //     builder: (context) => const ResellerProfile()));
                         },
                         child: const Text('Confirm'))),
               ]),

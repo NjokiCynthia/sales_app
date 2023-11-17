@@ -542,7 +542,7 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
               ),
               Center(
                 child: Text(
-                  'The total amount payable is: KES ${widget.orders.orderPayableAmount}',
+                  'The total cost is: KES ${widget.orders.orderPayableAmount}',
                   style: m_title.copyWith(color: primaryDarkColor),
                 ),
               ),

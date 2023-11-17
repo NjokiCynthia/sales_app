@@ -42,6 +42,7 @@ class UserProvider extends ChangeNotifier {
 
   bool get isActivated => _isActivated;
   String? get token => _user?.token;
+  bool get isLoggedIn => _user != null;
 
   void setUser(User user) {
     _user = user;

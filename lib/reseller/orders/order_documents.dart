@@ -572,7 +572,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                 child: Column(
                   children: [
                     Text(
-                      'The total amount payable is:',
+                      'The total cost is:',
                       style: m_title.copyWith(color: Colors.black),
                     ),
                     Text(

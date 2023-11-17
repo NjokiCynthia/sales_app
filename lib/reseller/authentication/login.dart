@@ -29,84 +29,75 @@ class _LoginState extends State<Login> {
     setState(() {
       errorText = '';
     });
+
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
-    final response = await http.post(
-      //Uri.parse('https://app.petropal.africa:8050/user/login'),
-      Uri.parse('https://petropal.sandbox.co.ke:8040/user/login'),
-      body: {
-        'email': emailAddress.text,
-        'password': password.text,
-      },
-    );
-    final bool emailValid = RegExp(
-            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(emailAddress.text);
+    try {
+      final response = await http.post(
+        Uri.parse('https://petropal.sandbox.co.ke:8040/user/login'),
+        body: {
+          'email': emailAddress.text,
+          'password': password.text,
+        },
+      );
 
-    if (emailAddress.text.isEmpty) {
-      setState(() {
-        errorText = 'Please enter your email address';
-      });
-    } else if (!emailValid) {
-      setState(() {
-        errorText = 'Please enter a valid email address';
-      });
-    } else if (password.text.isEmpty) {
-      setState(() {
-        errorText = 'Please enter a password';
-      });
-    } else if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      print(responseData);
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        print(responseData);
 
-      final status = responseData['status'];
-      final message = responseData['message'];
+        final status = responseData['status'];
+        final message = responseData['message'];
 
-      if (status == 1) {
-        final userData = responseData['user'];
+        if (status == 1) {
+          final userData = responseData['user'];
 
-        final token = responseData['api_token'] as String;
-        final isActivated = userData['is_activated'] as bool;
+          final token = responseData['api_token'] as String;
+          final isActivated = userData['is_activated'] as bool;
 
-        final user = User(
-          id: userData['id'],
-          email: userData['email'],
-          password: '',
-          token: token,
-          first_name: userData['first_name'],
-          last_name: userData['last_name'],
-          phone: userData['phone'],
-          isActivated: isActivated,
-          account_id: userData['account_id'],
-          companyAddress: userData['companyAddress'],
-          companyName: userData['companyName'],
-          companyPhone: userData['companyPhone'],
-        );
+          final user = User(
+            id: userData['id'],
+            email: userData['email'],
+            password: '',
+            token: token,
+            first_name: userData['first_name'],
+            last_name: userData['last_name'],
+            phone: userData['phone'],
+            isActivated: isActivated,
+            account_id: userData['account_id'],
+            companyAddress: userData['companyAddress'],
+            companyName: userData['companyName'],
+            companyPhone: userData['companyPhone'],
+          );
 
-        userProvider.setUser(user);
+          userProvider.setUser(user);
 
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ResellerDashboard(),
-          ),
-        );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ResellerDashboard(),
+            ),
+          );
+        } else {
+          setState(() {
+            errorText = message;
+          });
+        }
       } else {
-        setState(() {
-          errorText = message;
-        });
+        if (response.statusCode == 500) {
+          setState(() {
+            errorText = 'System under maintenance. Please try later';
+          });
+        } else {
+          setState(() {
+            errorText = 'Check your internet connection';
+          });
+        }
       }
-      // You can parse the response JSON here if needed.
-    } else {
-      if (response.statusCode == 500) {
-        setState(() {
-          errorText = 'System under maintenance. Please try later';
-        });
-      } else {
-        setState(() {
-          errorText = 'Check your internet connection';
-        });
-      }
+    } catch (error) {
+      print('Error during login: $error');
+      setState(() {
+        errorText = 'An error occurred during login';
+      });
     }
   }
 

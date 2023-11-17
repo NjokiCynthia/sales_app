@@ -12,7 +12,6 @@ import 'package:petropal/providers/products.dart';
 import 'package:petropal/providers/truck.dart';
 import 'package:petropal/screens/onboarding/splash.dart';
 
-
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -34,7 +33,8 @@ void main() async {
       providers: [
         ChangeNotifierProvider<UserProvider>.value(value: UserProvider()),
         ChangeNotifierProvider<DriverProvider>.value(value: DriverProvider()),
-        ChangeNotifierProvider<OmcProductProvider>.value(value: OmcProductProvider()),
+        ChangeNotifierProvider<OmcProductProvider>.value(
+            value: OmcProductProvider()),
         ChangeNotifierProvider<OrderProvider>.value(value: OrderProvider()),
         ChangeNotifierProvider<ProductProvider>.value(value: ProductProvider()),
         ChangeNotifierProvider<TruckProvider>.value(value: TruckProvider()),
@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Petropal',
       theme: MyTheme.darkTheme,
-      home: isFirstInstall ? const SplashScreen() : const Login(),
+      home: isFirstInstall ? SplashScreen() : Login(),
       debugShowCheckedModeBanner: false,
     );
   }
