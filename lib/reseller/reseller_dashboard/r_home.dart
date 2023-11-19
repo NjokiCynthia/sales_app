@@ -41,14 +41,21 @@ class _ResellerHomeState extends State<ResellerHome> {
     return outputFormat.format(date);
   }
 
-  final SwiperController _swiperController = SwiperController();
+  SwiperController _swiperController = SwiperController();
 
   int _currentgraph = 0;
   bool fetchingAverage = true;
   List<Average> productAverage = [];
+  bool _isWidgetMounted = true;
+
   Future<void> _fetchAverage(
-      BuildContext context, int productCategoryId) async {
+    BuildContext context,
+    int productCategoryId,
+    int index,
+  ) async {
     print('I am here now to see averages');
+    if (!_isWidgetMounted) return;
+
     setState(() {
       fetchingAverage = true;
     });
@@ -58,9 +65,9 @@ class _ResellerHomeState extends State<ResellerHome> {
 
     final postData = {
       'productCategoryId': productCategoryId,
-      "year": 2023,
+      'year': 2023,
     };
-    print('This is teh product category id here');
+    print('This is the product category id here');
     print(productCategoryId);
     final apiClient = ApiClient();
     final headers = {
@@ -74,7 +81,7 @@ class _ResellerHomeState extends State<ResellerHome> {
         postData,
         headers: headers,
       );
-      print('These are the product averages i have below here');
+      print('These are the product averages I have below here');
       print('Response: $response');
 
       if (response['status'] == 1 && response['data'] != null) {
@@ -82,20 +89,30 @@ class _ResellerHomeState extends State<ResellerHome> {
         final productAverages = data.map((averageData) {
           return Average.fromJson(averageData);
         }).toList();
+        print('This is the product category id: $productCategoryId');
+        print('This is the index: $index');
 
-        setState(() {
-          productAverage = productAverages;
-        });
+        // Only update if the index is still the same as when the async call was initiated
+        if (_currentgraph == index) {
+          _swiperController.move(index);
+          setState(() {
+            productAverage = productAverages;
+          });
+        } else {
+          print('Discarding data: Index has changed.');
+        }
       } else {
         print('No or invalid averages found in the response');
       }
     } catch (error) {
       print('Average Fetch By ID Error: $error');
+    } finally {
+      if (_isWidgetMounted) {
+        setState(() {
+          fetchingAverage = false;
+        });
+      }
     }
-
-    setState(() {
-      fetchingAverage = false;
-    });
   }
 
   bool fetchingCategories = true;
@@ -146,9 +163,6 @@ class _ResellerHomeState extends State<ResellerHome> {
       fetchingCategories = false;
     });
   }
-
-  List<String> titles = ['Petrol', 'Diesel', 'Kerosene'];
-  List<String> title = ['Petrol', 'Diesel', 'Kerosene'];
 
   int selectedCardIndex = 0;
   bool fetchingCompletedOrders = true;
@@ -381,10 +395,8 @@ class _ResellerHomeState extends State<ResellerHome> {
     _fetchCompleteOrders(context);
     _fetchcBestPrices(context);
     _fetchCategories(context);
-    if (productCategory.isNotEmpty) {
-      // Fetch averages for the first product category
-      _fetchAverage(context, productCategory[0].id!);
-    }
+    _isWidgetMounted = true;
+
     // Assuming productCategory is not empty
 
     // Fetch averages for the first product category
@@ -403,6 +415,12 @@ class _ResellerHomeState extends State<ResellerHome> {
     //   ChartData(25, 191),
     //   ChartData(26, 195),
     // ];
+  }
+
+  @override
+  void dispose() {
+    _isWidgetMounted = false;
+    super.dispose();
   }
 
   Future<void> _refreshCompletedOrders(BuildContext context) async {
@@ -540,132 +558,128 @@ class _ResellerHomeState extends State<ResellerHome> {
                   ],
                 ),
               ),
-              Column(children: [
-                Container(
-                  color: Colors.grey[50],
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 210,
-                        child: Swiper(
-                          controller: _swiperController,
-                          onIndexChanged: (index) {
-                            setState(() {
-                              _currentgraph = index;
-                            });
-                            _fetchAverage(context, productCategory[index].id!);
-                          },
-                          itemBuilder: (BuildContext context, int index) {
-                            ProductCategories product = productCategory[index];
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 10),
-                                          child: Text(
-                                            'Current average price for ${product.productName}',
-                                            style: const TextStyle(
-                                                color: Colors.black),
+              Column(
+                children: [
+                  Container(
+                    color: Colors.grey[50],
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 210,
+                          child: Swiper(
+                            controller: _swiperController,
+                            onIndexChanged: (index) async {
+                              if (index < productCategory.length) {
+                                final currentIndex = index;
+                                await _fetchAverage(
+                                  context,
+                                  productCategory[currentIndex].id!,
+                                  currentIndex,
+                                );
+
+                                setState(() {
+                                  _currentgraph = currentIndex;
+                                });
+                              }
+                            },
+                            itemBuilder: (BuildContext context, int index) {
+                              ProductCategories product =
+                                  productCategory[index];
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const SizedBox(
+                                            height: 10,
                                           ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 10),
-                                          child: productAverage.isNotEmpty
-                                              ? Text(
-                                                  '${formatAmountAsKES(productAverage[index]?.averageSellingPrice!.toInt() ?? 0)}',
-                                                  style: m_title,
-                                                )
-                                              : CircularProgressIndicator(),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: Text(
+                                              'Current average price for ${product.productName}',
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: productAverage.isNotEmpty
+                                                ? Text(
+                                                    formatAmountAsKES(
+                                                        productAverage[0]
+                                                                .averageSellingPrice
+                                                                ?.toInt() ??
+                                                            0),
+                                                    style: m_title,
+                                                  )
+                                                : Text(
+                                                    'No average prices set yet',
+                                                    style: TextStyle(
+                                                      color: Colors.grey,
+                                                    ),
+                                                  ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
                                     height: 150,
                                     child: productAverage.isNotEmpty
                                         ? SfCartesianChart(
-                                            margin: const EdgeInsets.all(0),
-                                            borderWidth: 0,
-                                            plotAreaBorderWidth: 0,
-                                            primaryXAxis: NumericAxis(
-                                              isVisible: false,
-                                            ),
-                                            primaryYAxis: NumericAxis(
-                                              isVisible: false,
-                                            ),
-                                            tooltipBehavior:
-                                                TooltipBehavior(enable: true),
-                                            series: <ChartSeries<Average, int>>[
-                                              SplineAreaSeries(
-                                                dataSource: productAverage,
-                                                xValueMapper:
-                                                    (Average data, _) =>
-                                                        data.day,
-                                                yValueMapper: (Average data,
-                                                        _) =>
-                                                    data.averageSellingPrice,
-                                                splineType: SplineType.natural,
-                                                gradient: const LinearGradient(
-                                                  colors: [
-                                                    secondaryDarkColor,
-                                                    Color.fromARGB(
-                                                        0, 255, 255, 255)
-                                                  ],
-                                                  stops: [0.01, 0.75],
-                                                  begin: Alignment.topCenter,
-                                                  end: Alignment.bottomCenter,
-                                                ),
-                                              ),
-                                            ],
-                                          )
+                                            // ... your chart configuration
+                                            )
                                         : Center(
-                                            child: CircularProgressIndicator(),
-                                          )),
-                              ],
-                            );
-                          },
-                          itemCount: productCategory.length,
-                          viewportFraction: 1.0,
-                          scale: 0.8,
+                                            child: Text(
+                                              'No average prices obtained yet',
+                                              style: TextStyle(
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                          ),
+                                  ),
+                                ],
+                              );
+                            },
+                            itemCount: productCategory.length,
+                            viewportFraction: 1.0,
+                            scale: 0.8,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(
-                    productCategory.length,
-                    (index) => Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: Container(
-                        width: 10,
-                        height: 10,
-                        margin: const EdgeInsets.symmetric(horizontal: 5),
-                        decoration: BoxDecoration(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      productCategory.length,
+                      (index) => Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Container(
+                          width: 10,
+                          height: 10,
+                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                          decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: _currentgraph == index
                                 ? secondaryDarkColor
-                                : secondaryDarkColor.withOpacity(0.1)),
+                                : secondaryDarkColor.withOpacity(0.1),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ]),
+                ],
+              ),
               const SizedBox(
                 height: 10,
               ),
