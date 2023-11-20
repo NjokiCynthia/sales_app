@@ -569,18 +569,24 @@ class _ResellerHomeState extends State<ResellerHome> {
                           child: Swiper(
                             controller: _swiperController,
                             onIndexChanged: (index) async {
-                              if (index < productCategory.length) {
-                                final currentIndex = index;
-                                await _fetchAverage(
-                                  context,
-                                  productCategory[currentIndex].id!,
-                                  currentIndex,
-                                );
+                              // if (index < productCategory.length) {
+                              print(
+                                  'This is my product category noted down here');
+                              print(productCategory.length);
+                              final currentIndex = index;
+                              await _fetchAverage(
+                                context,
+                                productCategory[currentIndex].id!,
+                                currentIndex,
+                              );
+                              print('I want to see this here');
+                              print(currentIndex);
+                              print(productCategory[currentIndex].id);
 
-                                setState(() {
-                                  _currentgraph = currentIndex;
-                                });
-                              }
+                              setState(() {
+                                _currentgraph = currentIndex;
+                              });
+                              // }
                             },
                             itemBuilder: (BuildContext context, int index) {
                               ProductCategories product =
@@ -615,7 +621,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                                             child: productAverage.isNotEmpty
                                                 ? Text(
                                                     formatAmountAsKES(
-                                                        productAverage[0]
+                                                        productAverage[index]
                                                                 .averageSellingPrice
                                                                 ?.toInt() ??
                                                             0),
@@ -636,8 +642,40 @@ class _ResellerHomeState extends State<ResellerHome> {
                                     height: 150,
                                     child: productAverage.isNotEmpty
                                         ? SfCartesianChart(
-                                            // ... your chart configuration
-                                            )
+                                            margin: const EdgeInsets.all(0),
+                                            borderWidth: 0,
+                                            plotAreaBorderWidth: 0,
+                                            primaryXAxis: NumericAxis(
+                                              isVisible: false,
+                                            ),
+                                            primaryYAxis: NumericAxis(
+                                              isVisible: false,
+                                            ),
+                                            tooltipBehavior:
+                                                TooltipBehavior(enable: true),
+                                            series: <ChartSeries<Average, int>>[
+                                              SplineAreaSeries(
+                                                dataSource: productAverage,
+                                                xValueMapper:
+                                                    (Average data, _) =>
+                                                        data.day,
+                                                yValueMapper: (Average data,
+                                                        _) =>
+                                                    data.averageSellingPrice,
+                                                splineType: SplineType.natural,
+                                                gradient: const LinearGradient(
+                                                  colors: [
+                                                    secondaryDarkColor,
+                                                    Color.fromARGB(
+                                                        0, 255, 255, 255)
+                                                  ],
+                                                  stops: [0.01, 0.75],
+                                                  begin: Alignment.topCenter,
+                                                  end: Alignment.bottomCenter,
+                                                ),
+                                              ),
+                                            ],
+                                          )
                                         : Center(
                                             child: Text(
                                               'No average prices obtained yet',
@@ -683,21 +721,27 @@ class _ResellerHomeState extends State<ResellerHome> {
               const SizedBox(
                 height: 10,
               ),
-              CarouselSlider(
-                items: prices.asMap().entries.map((entry) {
-                  final index = entry.key;
-                  final price = entry.value;
-                  return buildCard(price, index);
-                }).toList(),
-                options: CarouselOptions(
-                  height: 120,
-                  autoPlay: true,
-                  autoPlayInterval: const Duration(seconds: 2),
-                  autoPlayAnimationDuration: const Duration(milliseconds: 800),
-                  enableInfiniteScroll: true,
-                  enlargeCenterPage: true,
-                ),
-              ),
+              prices.isEmpty
+                  ? Text(
+                      'No best prices yet in your location',
+                      style: TextStyle(fontSize: 16, color: primaryDarkColor),
+                    )
+                  : CarouselSlider(
+                      items: prices.asMap().entries.map((entry) {
+                        final index = entry.key;
+                        final price = entry.value;
+                        return buildCard(price, index);
+                      }).toList(),
+                      options: CarouselOptions(
+                        height: 120,
+                        autoPlay: true,
+                        autoPlayInterval: const Duration(seconds: 2),
+                        autoPlayAnimationDuration:
+                            const Duration(milliseconds: 800),
+                        enableInfiniteScroll: true,
+                        enlargeCenterPage: true,
+                      ),
+                    ),
               const SizedBox(
                 height: 10,
               ),

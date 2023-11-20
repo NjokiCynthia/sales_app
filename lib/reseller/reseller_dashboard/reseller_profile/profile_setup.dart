@@ -1253,8 +1253,8 @@ class _ProfileSetUpState extends State<ProfileSetUp>
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   errorMessage,
-                  style:
-                      const TextStyle(color: Colors.red), // Customize the text style
+                  style: const TextStyle(
+                      color: Colors.red), // Customize the text style
                 ),
               ),
             SizedBox(
