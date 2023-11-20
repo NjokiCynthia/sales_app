@@ -224,10 +224,10 @@ class _ProfileSetUpState extends State<ProfileSetUp>
   PhoneNumber number = PhoneNumber(isoCode: 'KE');
 
   Future<void> sendFormData() async {
-    // final url =
-    //     Uri.parse('https://app.petropal.africa:8050/user/update-profile');
     final url =
-        Uri.parse('https://petropal.sandbox.co.ke:8040/user/update-profile');
+        Uri.parse('https://app.petropal.africa:8050/user/update-profile');
+    // final url =
+    //     Uri.parse('https://petropal.sandbox.co.ke:8040/user/update-profile');
     final userProvider = context.read<UserProvider>();
     final user = userProvider.user;
 
