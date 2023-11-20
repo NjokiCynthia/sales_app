@@ -1,4 +1,4 @@
-package com.company.petropal
+package com.petropal
 
 import io.flutter.embedding.android.FlutterActivity
 

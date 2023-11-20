@@ -8,7 +8,7 @@ def flutterVersionCode = project.hasProperty('flutter.versionCode') ? flutter.ve
 def flutterVersionName = project.hasProperty('flutter.versionName') ? flutter.versionName : "1.0"
 
 android {
-    namespace 'com.company.petropal'
+    namespace 'com.petropal'
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -26,7 +26,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.company.petropal"
+        applicationId "com.petropal"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         //versionCode flutterVersionCode
