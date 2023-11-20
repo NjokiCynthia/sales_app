@@ -252,33 +252,48 @@ class _LoginState extends State<Login> {
                     const SizedBox(
                       height: 40,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: ((context) => const Signup()),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: Center(
-                          child: RichText(
-                            text: const TextSpan(
-                              text: "Don't have an account yet? ",
-                              style: TextStyle(color: Colors.grey),
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: 'Signup',
-                                  style: TextStyle(color: primaryDarkColor),
-                                ),
-                              ],
-                            ),
-                          ),
+                    Center(child: Text("Don't have an account yet?", style: TextStyle(color: primaryDarkColor, fontSize: 16),)),
+                    SizedBox(height: 20,),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(backgroundColor: primaryDarkColor),
+                          onPressed: (){ Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: ((context) => const Signup()),
                         ),
-                      ),
+                      );}, child: Text('SignUp')),
                     ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: ((context) => const Signup()),
+                    //       ),
+                    //     );
+                    //   },
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.only(bottom: 20),
+                    //     child: Center(
+                    //       child: Text("Don't have an account yet?");
+                    //       child: RichText(
+                    //         text: const TextSpan(
+                    //           text: "Don't have an account yet?",
+                    //           style: TextStyle(color: Colors.black),
+                    //           children: <TextSpan>[
+                    //             TextSpan(
+                    //               text: 'Signup',
+                    //               style: TextStyle(color: primaryDarkColor),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
