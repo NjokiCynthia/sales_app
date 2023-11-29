@@ -34,12 +34,12 @@ class _ContactDetailsState extends State<ContactDetails> {
   bool buttonError = true;
   String buttonErrorMessage = 'Enter all inputs';
 
-  String selectedPosition = 'Select Location';
+  String selectedPosition = 'Select posiion';
   int selectedPositionIndex = -1;
   List<PositionModel> positions = [];
 
   List<String> positionsDropdownList = [];
-  List<String> positionItems = ['Select location'];
+  List<String> positionItems = ['Select position'];
 
   bool fetchingPositions = true;
   void _fetchPositions(BuildContext context) async {
