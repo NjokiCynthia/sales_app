@@ -67,16 +67,16 @@ class _OrderDetailState extends State<OrderDetail> {
             product: productData['product'].toString(),
             depot: productData['depot'].toString(),
             location: productData['location'].toString(),
-            sellingPrice: int.parse(productData['selling_price'].toString()),
+            sellingPrice: double.parse(productData['selling_price'].toString()),
             volume: productData['volume'] != null
-                ? int.parse(productData['volume'].toString())
+                ? double.parse(productData['volume'].toString())
                 : null,
             availableVolume: productData['available_volume'] != null
-                ? int.parse(productData['available_volume'].toString())
+                ? double.parse(productData['available_volume'].toString())
                 : null,
             dealer: productData['dealer'].toString(),
             remainingVolume: productData['remaining_volume'] != null
-                ? int.parse(productData['remaining_volume'].toString())
+                ? double.parse(productData['remaining_volume'].toString())
                 : null,
             ordersApproved:
                 int.parse(productData['orders_approved'].toString()),
