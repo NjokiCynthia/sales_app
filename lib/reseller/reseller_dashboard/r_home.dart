@@ -32,7 +32,10 @@ class ResellerHome extends StatefulWidget {
 
 class _ResellerHomeState extends State<ResellerHome> {
   // Initial Selected Value
-  String dropdownvalue = 'Weekly';
+  String dropDownValue = 'Weekly';
+  String token = '';
+  List<Average> averagePrices = [];
+  List<List<Average>> allAveragePrices = [];
   String formatDate(String dateString) {
     final inputFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     final outputFormat = DateFormat('d MMM y');
@@ -41,18 +44,18 @@ class _ResellerHomeState extends State<ResellerHome> {
     return outputFormat.format(date);
   }
 
-  SwiperController _swiperController = SwiperController();
+  final SwiperController _swiperController = SwiperController();
 
-  int _currentgraph = 0;
+  int _currentGraph = 0;
   bool fetchingAverage = true;
   List<Average> productAverage = [];
   bool _isWidgetMounted = true;
+  late Average productAverageItem;
 
   Future<void> _fetchAverage(
-    BuildContext context,
-    int productCategoryId,
-    int index,
-  ) async {
+      int productCategoryId,
+      int index,
+      ) async {
     print('I am here now to see averages');
     if (!_isWidgetMounted) return;
 
@@ -60,12 +63,10 @@ class _ResellerHomeState extends State<ResellerHome> {
       fetchingAverage = true;
     });
 
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final token = userProvider.user?.token;
-
+    final currentYear = DateTime.now().year;
     final postData = {
       'productCategoryId': productCategoryId,
-      'year': 2023,
+      'year': currentYear,
     };
     print('This is the product category id here');
     print(productCategoryId);
@@ -89,11 +90,9 @@ class _ResellerHomeState extends State<ResellerHome> {
         final productAverages = data.map((averageData) {
           return Average.fromJson(averageData);
         }).toList();
-        print('This is the product category id: $productCategoryId');
-        print('This is the index: $index');
 
         // Only update if the index is still the same as when the async call was initiated
-        if (_currentgraph == index) {
+        if (_currentGraph == index) {
           _swiperController.move(index);
           setState(() {
             productAverage = productAverages;
@@ -115,15 +114,65 @@ class _ResellerHomeState extends State<ResellerHome> {
     }
   }
 
+  Future<Average> _fetchAveragePrice(
+    int productCategoryId
+  ) async {
+
+    final currentYear = DateTime.now().year;
+    final postData = {
+      'productCategoryId': productCategoryId,
+      'year': currentYear,
+    };
+    print('This is the product category id here');
+    print(productCategoryId);
+    final apiClient = ApiClient();
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      final response = await apiClient.post(
+        '/product/get-average-price-per-week',
+        postData,
+        headers: headers,
+      );
+
+      if (response['status'] == 1 && response['data'] != null) {
+        final data = List<Map<String, dynamic>>.from(response['data']);
+        final productAverages = data.map((averageData) {
+          return Average.fromJson(averageData);
+        }).toList();
+
+        setState(() {
+          allAveragePrices.add(productAverages);
+
+        });
+
+        return productAverages.isNotEmpty?productAverages[0]:Average();
+      } else {
+        print('No or invalid averages found in the response');
+        return Average();
+      }
+    } catch (error) {
+      print('Average Fetch By ID Error: $error');
+      return Average();
+    } finally {
+      if (_isWidgetMounted) {
+        setState(() {
+          fetchingAverage = false;
+        });
+      }
+
+    }
+  }
+
   bool fetchingCategories = true;
   List<ProductCategories> productCategory = [];
-  Future<void> _fetchCategories(BuildContext context) async {
+  Future<void> _fetchCategories() async {
     setState(() {
       fetchingCategories = true;
     });
-
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final token = userProvider.user?.token;
 
     final postData = {};
     final apiClient = ApiClient();
@@ -150,6 +199,14 @@ class _ResellerHomeState extends State<ResellerHome> {
         setState(() {
           productCategory = productCategories;
         });
+
+        for(int x =0;x < productCategories.length; x++){
+          Average avg = await _fetchAveragePrice(productCategories[x].id ?? 0);
+          setState(() {
+            averagePrices.add(avg);
+          });
+        }
+
       } else {
         print('No or invalid contacts found in the response');
         // Handle the case when 'status' is not 1 or 'cartProductsListing' is null
@@ -169,14 +226,12 @@ class _ResellerHomeState extends State<ResellerHome> {
   List<CompletedOrdersModel> orders = [];
 
   late List<ChartData> data;
-  _fetchCompleteOrders(BuildContext context) async {
+  _fetchCompleteOrders() async {
     setState(() {
       fetchingCompletedOrders = true;
     });
 
-    // Retrieve user information from the provider
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final token = userProvider.user?.token;
+
 
     final postData = {};
     final apiClient = ApiClient();
@@ -214,7 +269,7 @@ class _ResellerHomeState extends State<ResellerHome> {
       }
     }).catchError((error) {
       // Handle the error
-      print('error');
+      print('orders fetch error');
       print(error);
     });
 
@@ -225,14 +280,10 @@ class _ResellerHomeState extends State<ResellerHome> {
 
   bool fetchingBestPrices = true;
   List<BestPrices> prices = [];
-  _fetchcBestPrices(BuildContext context) async {
+  _fetchBestPrices() async {
     setState(() {
       fetchingBestPrices = true;
     });
-
-    // Retrieve user information from the provider
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final token = userProvider.user?.token;
 
     final postData = {};
     final apiClient = ApiClient();
@@ -250,17 +301,17 @@ class _ResellerHomeState extends State<ResellerHome> {
         setState(() {
           prices = (response['data'] as List).map((priceData) {
             return BestPrices(
-              id: priceData['id'] as int?,
+              id: priceData['id'].toInt(),
               product: priceData['product'] as String?,
               depot: priceData['depot'] as String?,
               location: priceData['location'] as String?,
-              sellingPrice: priceData['selling_price'] as int?,
-              volume: priceData['volume'] as int?,
-              availableVolume: priceData['available_volume'] as int?,
+              sellingPrice: priceData['selling_price'].toDouble(),
+              volume: priceData['volume'].toDouble(),
+              availableVolume: priceData['available_volume'].toDouble(),
               dealer: priceData['dealer'] as String?,
-              remainingVolume: priceData['remaining_volume'] as int?,
-              ordersApproved: priceData['orders_approved'] as int?,
-              ordersPending: priceData['orders_pending'] as int?,
+              remainingVolume: priceData['remaining_volume'].toDouble(),
+              ordersApproved: priceData['orders_approved'].toInt(),
+              ordersPending: priceData['orders_pending'].toInt(),
             );
           }).toList();
         });
@@ -270,7 +321,7 @@ class _ResellerHomeState extends State<ResellerHome> {
       }
     }).catchError((error) {
       // Handle the error
-      print('error');
+      print('prices fetch error');
       print(error);
     });
 
@@ -355,9 +406,8 @@ class _ResellerHomeState extends State<ResellerHome> {
     super.initState();
     bool isActivated =
         Provider.of<UserProvider>(context, listen: false).isActivated;
-    print('The status of my account is ........ $isActivated');
+    token = Provider.of<UserProvider>(context, listen: false).token!;
     Provider.of<ProductProvider>(context, listen: false);
-    print('These are my products in roduct provider');
 
     if (!isActivated) {
       Future.delayed(const Duration(seconds: 1), () {
@@ -392,29 +442,10 @@ class _ResellerHomeState extends State<ResellerHome> {
         );
       });
     }
-    _fetchCompleteOrders(context);
-    _fetchcBestPrices(context);
-    _fetchCategories(context);
+    _fetchCompleteOrders();
+    _fetchBestPrices();
+    _fetchCategories();
     _isWidgetMounted = true;
-
-    // Assuming productCategory is not empty
-
-    // Fetch averages for the first product category
-    //_fetchAverage(context, productCategory[0].id!);
-
-    //_fetchAverage(context);
-    // data = [
-    //   ChartData(17, 200),
-    //   ChartData(18, 205),
-    //   ChartData(19, 190),
-    //   ChartData(20, 201),
-    //   ChartData(21, 196),
-    //   ChartData(22, 206),
-    //   ChartData(23, 209),
-    //   ChartData(24, 202),
-    //   ChartData(25, 191),
-    //   ChartData(26, 195),
-    // ];
   }
 
   @override
@@ -423,23 +454,15 @@ class _ResellerHomeState extends State<ResellerHome> {
     super.dispose();
   }
 
-  Future<void> _refreshCompletedOrders(BuildContext context) async {
+  Future<void> _refreshCompletedOrders() async {
     // Fetch orders data here
-    await _fetchCompleteOrders(context);
+    await _fetchCompleteOrders();
   }
 
   Widget buildCard(BestPrices price, int index) {
     return GestureDetector(
       onTap: () {
-        // PersistentNavBarNavigator.pushNewScreen(
-        //   context,
-        //   screen: ResellerProducts(
-        //       // price: price,
-        //       ),
-        //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
-        //   withNavBar: true,
-        // );
-        //print(price);
+
       },
       child: AnimatedContainer(
         height: 100,
@@ -454,8 +477,7 @@ class _ResellerHomeState extends State<ResellerHome> {
             border: Border.all(color: (Colors.grey[100])!)),
         duration: const Duration(seconds: 2),
         width: double.infinity,
-        child: SizedBox(
-          height: 50.0,
+        child: Expanded(
           child: Column(
             children: [
               Align(
@@ -468,7 +490,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                     padding: EdgeInsets.all(4),
                     child: Text(
                       "Best price!!",
-                      style: TextStyle(color: Color.fromRGBO(137, 80, 252, 1)),
+                      style: TextStyle(color:Color.fromRGBO(137, 80, 252, 1)),
                     ),
                   ),
                 ),
@@ -482,7 +504,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                         style: bodyGrey,
                       ),
                       Text(
-                        price.depot! ?? '',
+                        price.depot!,
                         style: greyT,
                       ),
                     ],
@@ -493,11 +515,11 @@ class _ResellerHomeState extends State<ResellerHome> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            price.product! ?? '',
+                            price.product!,
                             style: greyT,
                           ),
                           Text(
-                            formatAmountAsKES(price.sellingPrice),
+                            formatDoubleAmountAsKES(price.sellingPrice),
                             //'KES 200',
                             style: bodyGrey,
                           ),
@@ -566,26 +588,26 @@ class _ResellerHomeState extends State<ResellerHome> {
                       children: [
                         SizedBox(
                           height: 210,
-                          child: Swiper(
+                          child: productCategory.isNotEmpty
+                              ?Swiper(
                             controller: _swiperController,
                             onIndexChanged: (index) async {
                               // if (index < productCategory.length) {
-                              print(
-                                  'This is my product category noted down here');
-                              print(productCategory.length);
-                              final currentIndex = index;
-                              await _fetchAverage(
-                                context,
-                                productCategory[currentIndex].id!,
-                                currentIndex,
-                              );
-                              print('I want to see this here');
-                              print(currentIndex);
-                              print(productCategory[currentIndex].id);
+                              // print(
+                              //     'This is my product category noted down here: $index');
+                              // print(productCategory.length);
+                              // final currentIndex = index;
+                              // await _fetchAverage(
+                              //   productCategory[index].id!,
+                              //   currentIndex,
+                              // );
 
+                              print('The total average prices: ${allAveragePrices.length}');
                               setState(() {
-                                _currentgraph = currentIndex;
+                                _currentGraph = index;
+                                //productAverageItem = averagePrices[index];
                               });
+
                               // }
                             },
                             itemBuilder: (BuildContext context, int index) {
@@ -618,16 +640,16 @@ class _ResellerHomeState extends State<ResellerHome> {
                                           Padding(
                                             padding:
                                                 const EdgeInsets.only(left: 10),
-                                            child: productAverage.isNotEmpty
+                                            child: averagePrices.isNotEmpty
                                                 ? Text(
-                                                    formatAmountAsKES(
-                                                        productAverage[index]
+                                              formatDoubleAmountAsKES(
+                                                        averagePrices[index]
                                                                 .averageSellingPrice
-                                                                ?.toInt() ??
+                                                                ?.toDouble() ??
                                                             0),
                                                     style: m_title,
                                                   )
-                                                : Text(
+                                                : const Text(
                                                     'No average prices set yet',
                                                     style: TextStyle(
                                                       color: Colors.grey,
@@ -638,10 +660,9 @@ class _ResellerHomeState extends State<ResellerHome> {
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
-                                    height: 150,
-                                    child: productAverage.isNotEmpty
-                                        ? SfCartesianChart(
+                                  allAveragePrices.isNotEmpty
+                                      ? Expanded(
+                                        child: SfCartesianChart(
                                             margin: const EdgeInsets.all(0),
                                             borderWidth: 0,
                                             plotAreaBorderWidth: 0,
@@ -655,7 +676,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                                                 TooltipBehavior(enable: true),
                                             series: <ChartSeries<Average, int>>[
                                               SplineAreaSeries(
-                                                dataSource: productAverage,
+                                                dataSource: allAveragePrices[index],
                                                 xValueMapper:
                                                     (Average data, _) =>
                                                         data.day,
@@ -675,23 +696,24 @@ class _ResellerHomeState extends State<ResellerHome> {
                                                 ),
                                               ),
                                             ],
-                                          )
-                                        : Center(
-                                            child: Text(
-                                              'No average prices obtained yet',
-                                              style: TextStyle(
-                                                color: Colors.grey,
-                                              ),
+                                          ),
+                                      )
+                                      : const Center(
+                                          child: Text(
+                                            'No average prices obtained yet',
+                                            style: TextStyle(
+                                              color: Colors.grey,
                                             ),
                                           ),
-                                  ),
+                                        ),
                                 ],
                               );
                             },
                             itemCount: productCategory.length,
                             viewportFraction: 1.0,
                             scale: 0.8,
-                          ),
+                          )
+                              :null,
                         ),
                       ],
                     ),
@@ -708,7 +730,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                           margin: const EdgeInsets.symmetric(horizontal: 5),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: _currentgraph == index
+                            color: _currentGraph == index
                                 ? secondaryDarkColor
                                 : secondaryDarkColor.withOpacity(0.1),
                           ),
@@ -722,7 +744,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                 height: 10,
               ),
               prices.isEmpty
-                  ? Text(
+                  ? const Text(
                       'No best prices yet in your location',
                       style: TextStyle(fontSize: 16, color: primaryDarkColor),
                     )
@@ -774,7 +796,7 @@ class _ResellerHomeState extends State<ResellerHome> {
               ),
               Expanded(
                   child: RefreshIndicator(
-                onRefresh: () => _refreshCompletedOrders(context),
+                onRefresh: () => _refreshCompletedOrders(),
                 child: fetchingCompletedOrders
                     ? const Center(child: CircularProgressIndicator())
                     : orders.isNotEmpty
@@ -922,6 +944,8 @@ class _ResellerHomeState extends State<ResellerHome> {
                                       ), // Add a divider except for the last item
                                   ],
                                 );
+                              } else {
+                                return null;
                               }
                             },
                             itemCount: orders.length > 5 ? 5 : orders.length,
@@ -945,6 +969,15 @@ class _ResellerHomeState extends State<ResellerHome> {
 }
 
 String formatAmountAsKES(int? amount) {
+  if (amount == null) {
+    return 'KES 0.00';
+  }
+  final currencyFormat = NumberFormat.currency(locale: 'en_KES', symbol: 'KES');
+  final double amountDouble = amount.toDouble(); // Convert int to double
+  return currencyFormat.format(amountDouble);
+}
+
+String formatDoubleAmountAsKES(double? amount) {
   if (amount == null) {
     return 'KES 0.00';
   }
