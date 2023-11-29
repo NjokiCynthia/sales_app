@@ -681,7 +681,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                                               'No average prices obtained yet',
                                               style: TextStyle(
                                                 color: Colors.grey,
-                                              ),
+                                              ), 
                                             ),
                                           ),
                                   ),

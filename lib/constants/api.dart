@@ -50,8 +50,6 @@ class ApiClient {
     }
   }
 
-  // adding a driver.
-
   Future<dynamic> addDriver(String path, dynamic data,
       {Map<String, dynamic>? headers}) async {
     try {
