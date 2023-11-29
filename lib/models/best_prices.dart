@@ -3,11 +3,11 @@ class BestPrices {
   String? product;
   String? depot;
   String? location;
-  int? sellingPrice;
-  int? volume;
-  int? availableVolume;
+  double? sellingPrice;
+  double? volume;
+  double? availableVolume;
   String? dealer;
-  int? remainingVolume;
+  double? remainingVolume;
   int? ordersApproved;
   int? ordersPending;
 
