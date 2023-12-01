@@ -93,9 +93,13 @@ class _ResellerProductsState extends State<ResellerProducts> {
               createdBy: int.parse(productData['created_by'].toString()),
               product: productData['product'].toString(),
               depot: productData['depot'].toString(),
-              sellingPrice:
-                  double.parse(productData['selling_price'].toString()),
-              price: double.parse(productData['price'].toString()),
+              sellingPrice: double.parse(
+                  productData['selling_price']?.toString()?.trim() ?? '0'),
+              price:
+                  double.parse(productData['price']?.toString()?.trim() ?? '0'),
+              // sellingPrice:
+              //     double.parse(productData['selling_price'].toString().trim()),
+              // price: double.parse(productData['price'].toString()),
               location: productData['location'].toString(),
               availableVolume: double.parse(productData['volume'].toString()),
               minimumVolume: double.parse(productData['min_vol'].toString()),
@@ -115,6 +119,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
             filtersApplied = true;
           });
         } catch (e) {
+          print('Raw Response: $response');
           print('Error parsing product data: $e');
         }
       } else {
@@ -256,6 +261,15 @@ class _ResellerProductsState extends State<ResellerProducts> {
     super.initState();
     _fetchProducts(context);
     _fetchOptions(context);
+  }
+
+  void _clearFilters() {
+    setState(() {
+      selectedLocation = null;
+      selectedDealer = null;
+      selectedProduct = null;
+    });
+    _fetchProducts(context);
   }
 
   Future<void> _refreshProducts(BuildContext context) async {
@@ -458,12 +472,22 @@ class _ResellerProductsState extends State<ResellerProducts> {
                     color: primaryDarkColor,
                   ),
                 ),
-                items: omcs.map((e) => e.name).map((String value) {
+                items: omcs
+                    .where((e) => e.name != null && e.name.isNotEmpty)
+                    .map((e) => e.name)
+                    .map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
                   );
                 }).toList(),
+
+                // items: omcs.map((e) => e.name).map((String value) {
+                //   return DropdownMenuItem<String>(
+                //     value: value,
+                //     child: Text(value),
+                //   );
+                // }).toList(),
                 onChanged: (String? value) {
                   setState(() {
                     selectedDealer = value;
@@ -553,11 +577,38 @@ class _ResellerProductsState extends State<ResellerProducts> {
         builder: (context, child) {
           if (fetchingProducts) {
             // Show loading indicator while fetching products
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator());
           } else if (products.isEmpty && !filtersApplied) {
-            // Show a message when there are no products
+            
             return Center(
               child: Column(children: [
+                Padding(
+                  padding: EdgeInsets.all(20),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                        onPressed: () {
+                          _showDropdownDialog(context);
+                        },
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(
+                            color: primaryDarkColor,
+                            width: 2.0,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                        icon: const Icon(
+                          Icons.search,
+                          color: primaryDarkColor,
+                        ),
+                        label: const Text(
+                          'Filter Products',
+                          style: TextStyle(color: primaryDarkColor),
+                        )),
+                  ),
+                ),
                 Image.asset('assets/illustrations/products.png'),
                 Text(
                   'No products available at the moment',
@@ -569,9 +620,39 @@ class _ResellerProductsState extends State<ResellerProducts> {
             // Show a message when there are no products
             return Center(
               child: Column(children: [
+                Padding(
+                  padding: EdgeInsets.all(20),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                        onPressed: () {
+                          _showDropdownDialog(context);
+                        },
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(
+                            color: primaryDarkColor,
+                            width: 2.0,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                        icon: const Icon(
+                          Icons.search,
+                          color: primaryDarkColor,
+                        ),
+                        label: const Text(
+                          'Filter Products',
+                          style: TextStyle(color: primaryDarkColor),
+                        )),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
                 //Image.asset('assets/illustrations/products.png'),
                 Text(
-                  'No products available',
+                  'No products available in your location',
                   style: displayTitle,
                 ),
                 ElevatedButton(
@@ -789,14 +870,6 @@ class _ResellerProductsState extends State<ResellerProducts> {
                                                 )
                                               ],
                                             ),
-
-                                            // Text(
-                                            //   '${product.availableVolume} litres',
-                                            //   style: TextStyle(
-                                            //     color: Colors.black,
-                                            //     fontWeight: FontWeight.normal,
-                                            //   ),
-                                            // ),
                                             const SizedBox(
                                               height: 5,
                                             ),
@@ -820,14 +893,6 @@ class _ResellerProductsState extends State<ResellerProducts> {
                                                 )
                                               ],
                                             ),
-
-                                            // Text(
-                                            //   '${product.minimumVolume} litres',
-                                            //   style: TextStyle(
-                                            //     color: Colors.black,
-                                            //     fontWeight: FontWeight.normal,
-                                            //   ),
-                                            // ),
                                             const SizedBox(
                                               height: 5,
                                             ),
@@ -853,15 +918,5 @@ class _ResellerProductsState extends State<ResellerProducts> {
         },
       ),
     );
-  }
-
-  // Method to clear filters
-  void _clearFilters() {
-    setState(() {
-      selectedLocation = null;
-      selectedDealer = null;
-      selectedProduct = null;
-    });
-    _fetchProducts(context);
   }
 }

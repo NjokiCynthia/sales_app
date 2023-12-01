@@ -587,9 +587,8 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
           filename: uploadedFile!.name,
         )));
 
-    final url =
-        Uri.parse('https://app.petropal.africa:8050/order/upload-receipt');
-    final url2 = Uri.parse('https://app.petropal.africa:8050/payment/record');
+    final url = Uri.parse('https://petropal.africa:8050/order/upload-receipt');
+    final url2 = Uri.parse('https://petropal.africa:8050/payment/record');
     // final url =
     // Uri.parse('https://petropal.sandbox.co.ke:8040/order/upload-receipt');
     // final url2 =
