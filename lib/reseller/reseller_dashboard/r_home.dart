@@ -53,9 +53,9 @@ class _ResellerHomeState extends State<ResellerHome> {
   late Average productAverageItem;
 
   Future<void> _fetchAverage(
-      int productCategoryId,
-      int index,
-      ) async {
+    int productCategoryId,
+    int index,
+  ) async {
     print('I am here now to see averages');
     if (!_isWidgetMounted) return;
 
@@ -114,16 +114,13 @@ class _ResellerHomeState extends State<ResellerHome> {
     }
   }
 
-  Future<Average> _fetchAveragePrice(
-    int productCategoryId
-  ) async {
-
+  Future<Average> _fetchAveragePrice(int productCategoryId) async {
     final currentYear = DateTime.now().year;
     final postData = {
       'productCategoryId': productCategoryId,
       'year': currentYear,
     };
-    print('This is the product category id here');
+    print('This is the product category id here for the values i am fetching');
     print(productCategoryId);
     final apiClient = ApiClient();
     final headers = {
@@ -137,19 +134,27 @@ class _ResellerHomeState extends State<ResellerHome> {
         postData,
         headers: headers,
       );
+      print('These are the product average prices i have below here');
+      print('Response: $response');
 
       if (response['status'] == 1 && response['data'] != null) {
         final data = List<Map<String, dynamic>>.from(response['data']);
         final productAverages = data.map((averageData) {
           return Average.fromJson(averageData);
         }).toList();
+//         final productAverages = data.map((averageData) {
+//   final averageSellingPrice = averageData['average_selling_price'] ?? 0.0;
+//   return Average(
+//     day: averageData['day'],
+//     averageSellingPrice: averageSellingPrice.toDouble(),
+//   );
+// }).toList();
 
         setState(() {
           allAveragePrices.add(productAverages);
-
         });
 
-        return productAverages.isNotEmpty?productAverages[0]:Average();
+        return productAverages.isNotEmpty ? productAverages[0] : Average();
       } else {
         print('No or invalid averages found in the response');
         return Average();
@@ -163,7 +168,6 @@ class _ResellerHomeState extends State<ResellerHome> {
           fetchingAverage = false;
         });
       }
-
     }
   }
 
@@ -200,13 +204,12 @@ class _ResellerHomeState extends State<ResellerHome> {
           productCategory = productCategories;
         });
 
-        for(int x =0;x < productCategories.length; x++){
+        for (int x = 0; x < productCategories.length; x++) {
           Average avg = await _fetchAveragePrice(productCategories[x].id ?? 0);
           setState(() {
             averagePrices.add(avg);
           });
         }
-
       } else {
         print('No or invalid contacts found in the response');
         // Handle the case when 'status' is not 1 or 'cartProductsListing' is null
@@ -230,8 +233,6 @@ class _ResellerHomeState extends State<ResellerHome> {
     setState(() {
       fetchingCompletedOrders = true;
     });
-
-
 
     final postData = {};
     final apiClient = ApiClient();
@@ -461,9 +462,7 @@ class _ResellerHomeState extends State<ResellerHome> {
 
   Widget buildCard(BestPrices price, int index) {
     return GestureDetector(
-      onTap: () {
-
-      },
+      onTap: () {},
       child: AnimatedContainer(
         height: 100,
         decoration: BoxDecoration(
@@ -490,7 +489,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                     padding: EdgeInsets.all(4),
                     child: Text(
                       "Best price!!",
-                      style: TextStyle(color:Color.fromRGBO(137, 80, 252, 1)),
+                      style: TextStyle(color: Color.fromRGBO(137, 80, 252, 1)),
                     ),
                   ),
                 ),
@@ -589,131 +588,148 @@ class _ResellerHomeState extends State<ResellerHome> {
                         SizedBox(
                           height: 210,
                           child: productCategory.isNotEmpty
-                              ?Swiper(
-                            controller: _swiperController,
-                            onIndexChanged: (index) async {
-                              // if (index < productCategory.length) {
-                              // print(
-                              //     'This is my product category noted down here: $index');
-                              // print(productCategory.length);
-                              // final currentIndex = index;
-                              // await _fetchAverage(
-                              //   productCategory[index].id!,
-                              //   currentIndex,
-                              // );
+                              ? Swiper(
+                                  controller: _swiperController,
+                                  onIndexChanged: (index) async {
+                                    // if (index < productCategory.length) {
+                                    // print(
+                                    //     'This is my product category noted down here: $index');
+                                    // print(productCategory.length);
+                                    // final currentIndex = index;
+                                    // await _fetchAverage(
+                                    //   productCategory[index].id!,
+                                    //   currentIndex,
+                                    // );
 
-                              print('The total average prices: ${allAveragePrices.length}');
-                              setState(() {
-                                _currentGraph = index;
-                                //productAverageItem = averagePrices[index];
-                              });
+                                    print(
+                                        'The total average prices: ${allAveragePrices.length}');
+                                    setState(() {
+                                      _currentGraph = index;
+                                      //productAverageItem = averagePrices[index];
+                                    });
 
-                              // }
-                            },
-                            itemBuilder: (BuildContext context, int index) {
-                              ProductCategories product =
-                                  productCategory[index];
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 10),
-                                            child: Text(
-                                              'Current average price for ${product.productName}',
-                                              style: const TextStyle(
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 10),
-                                            child: averagePrices.isNotEmpty
-                                                ? Text(
-                                              formatDoubleAmountAsKES(
-                                                        averagePrices[index]
-                                                                .averageSellingPrice
-                                                                ?.toDouble() ??
-                                                            0),
-                                                    style: m_title,
-                                                  )
-                                                : const Text(
-                                                    'No average prices set yet',
-                                                    style: TextStyle(
-                                                      color: Colors.grey,
+                                    // }
+                                  },
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    ProductCategories product =
+                                        productCategory[index];
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 10),
+                                                  child: Text(
+                                                    'Current average price for ${product.productName}',
+                                                    style: const TextStyle(
+                                                      color: Colors.black,
                                                     ),
                                                   ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  allAveragePrices.isNotEmpty
-                                      ? Expanded(
-                                        child: SfCartesianChart(
-                                            margin: const EdgeInsets.all(0),
-                                            borderWidth: 0,
-                                            plotAreaBorderWidth: 0,
-                                            primaryXAxis: NumericAxis(
-                                              isVisible: false,
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 10),
+                                                  child: averagePrices
+                                                          .isNotEmpty
+                                                      ? Text(
+                                                          formatDoubleAmountAsKES(
+                                                              averagePrices[
+                                                                          index]
+                                                                      .averageSellingPrice
+                                                                      ?.toDouble() ??
+                                                                  0),
+                                                          style: m_title,
+                                                        )
+                                                      : const Text(
+                                                          'No average prices set yet',
+                                                          style: TextStyle(
+                                                            color: Colors.grey,
+                                                          ),
+                                                        ),
+                                                ),
+                                              ],
                                             ),
-                                            primaryYAxis: NumericAxis(
-                                              isVisible: false,
-                                            ),
-                                            tooltipBehavior:
-                                                TooltipBehavior(enable: true),
-                                            series: <ChartSeries<Average, int>>[
-                                              SplineAreaSeries(
-                                                dataSource: allAveragePrices[index],
-                                                xValueMapper:
-                                                    (Average data, _) =>
-                                                        data.day,
-                                                yValueMapper: (Average data,
-                                                        _) =>
-                                                    data.averageSellingPrice,
-                                                splineType: SplineType.natural,
-                                                gradient: const LinearGradient(
-                                                  colors: [
-                                                    secondaryDarkColor,
-                                                    Color.fromARGB(
-                                                        0, 255, 255, 255)
+                                          ],
+                                        ),
+                                        allAveragePrices.isNotEmpty
+                                            ? Expanded(
+                                                child: SfCartesianChart(
+                                                  margin:
+                                                      const EdgeInsets.all(0),
+                                                  borderWidth: 0,
+                                                  plotAreaBorderWidth: 0,
+                                                  primaryXAxis: NumericAxis(
+                                                    isVisible: false,
+                                                  ),
+                                                  primaryYAxis: NumericAxis(
+                                                    isVisible: false,
+                                                  ),
+                                                  tooltipBehavior:
+                                                      TooltipBehavior(
+                                                          enable: true),
+                                                  series: <ChartSeries<Average,
+                                                      int>>[
+                                                    SplineAreaSeries(
+                                                      dataSource:
+                                                          allAveragePrices[
+                                                              index],
+                                                      xValueMapper:
+                                                          (Average data, _) =>
+                                                              data.day,
+                                                      yValueMapper: (Average
+                                                                  data,
+                                                              _) =>
+                                                          data.averageSellingPrice,
+                                                      splineType:
+                                                          SplineType.natural,
+                                                      gradient:
+                                                          const LinearGradient(
+                                                        colors: [
+                                                          secondaryDarkColor,
+                                                          Color.fromARGB(
+                                                              0, 255, 255, 255)
+                                                        ],
+                                                        stops: [0.01, 0.75],
+                                                        begin:
+                                                            Alignment.topCenter,
+                                                        end: Alignment
+                                                            .bottomCenter,
+                                                      ),
+                                                    ),
                                                   ],
-                                                  stops: [0.01, 0.75],
-                                                  begin: Alignment.topCenter,
-                                                  end: Alignment.bottomCenter,
+                                                ),
+                                              )
+                                            : const Center(
+                                                child: Text(
+                                                  'No average prices obtained yet',
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                  ),
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                      )
-                                      : const Center(
-                                          child: Text(
-                                            'No average prices obtained yet',
-                                            style: TextStyle(
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                        ),
-                                ],
-                              );
-                            },
-                            itemCount: productCategory.length,
-                            viewportFraction: 1.0,
-                            scale: 0.8,
-                          )
-                              :null,
+                                      ],
+                                    );
+                                  },
+                                  itemCount: productCategory.length,
+                                  viewportFraction: 1.0,
+                                  scale: 0.8,
+                                )
+                              : null,
                         ),
                       ],
                     ),

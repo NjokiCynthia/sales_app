@@ -7,3 +7,5 @@ String _formatCurrency(String amountString) {
   return currencyFormat
       .format(amount); // Format with KES symbol and thousand separators
 }
+
+final currencyFormat = new NumberFormat("#,##0.00", "en_KE");
