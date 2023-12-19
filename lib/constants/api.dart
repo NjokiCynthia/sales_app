@@ -16,7 +16,7 @@ import 'package:petropal/providers/omc_product.dart';
 import 'package:petropal/providers/products.dart';
 import 'package:petropal/providers/truck.dart';
 
-// String ipAddress = 'https://petropal.sandbox.co.ke:8040';
+//String ipAddress = 'https://petropal.sandbox.co.ke:8040';
 String ipAddress = 'https://petropal.africa:8050';
 
 class ApiClient {

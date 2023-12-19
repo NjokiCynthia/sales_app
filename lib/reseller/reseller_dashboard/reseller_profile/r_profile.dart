@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/providers/user_provider.dart';
@@ -11,6 +14,7 @@ import 'package:petropal/reseller/reseller_dashboard/reseller_profile/organisati
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/organisation_profile.dart';
 import 'package:petropal/reseller/reseller_dashboard/reseller_profile/view_staff.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class ResellerProfile extends StatefulWidget {
   const ResellerProfile({Key? key}) : super(key: key);
@@ -20,6 +24,160 @@ class ResellerProfile extends StatefulWidget {
 }
 
 class _ResellerProfileState extends State<ResellerProfile> {
+  String errorText = '';
+
+  Future<void> deleteAccount(String password) async {
+    print('I am here to delete my account');
+    setState(() {
+      errorText = '';
+    });
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final token = userProvider.user?.token;
+
+    if (token == null) {
+      print('Token is null.');
+      return;
+    }
+
+    final postData = {
+      "password": password,
+    }; // Use the passed password parameter
+
+    final apiClient = ApiClient();
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    print('Request Data: $postData');
+
+    try {
+      final response =
+          await apiClient.post('/user/delete-user', postData, headers: headers);
+      print('Response IS HERE now: $response');
+
+      final Map<String, dynamic> responseData = response;
+      print('Response Data: $responseData');
+
+      final status = responseData['status'];
+      final message = responseData['message'];
+
+      if (status == 0) {
+        // Account deleted successfully
+        // Perform any additional actions if needed
+        print('Account deleted successfully');
+      } else {
+        setState(() {
+          errorText = message ?? 'An error occurred while deleting the account';
+        });
+      }
+    } catch (e) {
+      // Handle network errors or unexpected exceptions
+      print('Error: $e');
+      setState(() {
+        errorText = 'An error occurred. Please try again later.';
+      });
+    }
+  }
+
+  final TextEditingController _textController = TextEditingController();
+
+  void _showDialog(BuildContext context) {
+    bool isObscured = true;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: Text(
+            'Please confirm you want to delete your account',
+            style: bodyText,
+          ),
+          content: TextFormField(
+            controller: _textController,
+            style: bodyText,
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
+              labelText: 'Enter your password.',
+              labelStyle: TextStyle(color: Colors.grey[500]),
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.grey,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.grey.shade300,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.grey,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isObscured = !isObscured;
+                  });
+                },
+                child: Icon(
+                  isObscured ? Icons.visibility_off : Icons.visibility,
+                  color: primaryDarkColor.withOpacity(0.7),
+                ),
+              ),
+            ),
+            obscureText: isObscured,
+          ),
+          actions: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                OutlinedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(width: 1.0, color: primaryDarkColor),
+                  ),
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(color: primaryDarkColor),
+                  ),
+                ),
+                Text(
+                  errorText,
+                  style: TextStyle(color: Colors.red),
+                ),
+                ElevatedButton(
+                  child: Text('Confirm'),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: primaryDarkColor),
+                  onPressed: () {
+                    // Close the dialog
+
+                    // Call the deleteAccount function with the entered password
+                    deleteAccount(_textController.text);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: ((context) => Login())));
+                  },
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   // Function to show the logout confirmation dialog.
   Future<void> _showLogoutDialog(BuildContext context) async {
     return showDialog(
@@ -345,34 +503,47 @@ class _ResellerProfileState extends State<ResellerProfile> {
                 const SizedBox(
                   height: 10,
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.grey.shade100),
-                      borderRadius: BorderRadius.circular(8)),
-                  child: ListTile(
-                    leading: Container(
-                      decoration: BoxDecoration(
-                        color: primaryDarkColor.withOpacity(0.1),
-                        shape: BoxShape.circle,
+
+                GestureDetector(
+                  onTap: (() {
+                    _showDialog(context);
+                  }),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.grey.shade100),
+                        borderRadius: BorderRadius.circular(8)),
+                    child: ListTile(
+                      leading: Container(
+                        decoration: BoxDecoration(
+                          color: primaryDarkColor.withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        padding: const EdgeInsets.all(8),
+                        child: const Icon(
+                          Icons.lock,
+                          color: primaryDarkColor,
+                        ),
                       ),
-                      padding: const EdgeInsets.all(8),
-                      child: const Icon(
-                        Icons.lock,
+                      title: Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Text(
+                          'Manage Account',
+                          style: bodyGrey,
+                        ),
+                      ),
+                      subtitle: Padding(
+                        padding: const EdgeInsets.only(top: 20, bottom: 10),
+                        child: Text(
+                          "Delete your profile",
+                          style: greyT,
+                        ),
+                      ),
+                      trailing: const Icon(
+                        Icons.arrow_forward_ios,
                         color: primaryDarkColor,
+                        size: 20,
                       ),
-                    ),
-                    title: Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Text(
-                        'Change Password',
-                        style: bodyGrey,
-                      ),
-                    ),
-                    trailing: const Icon(
-                      Icons.arrow_forward_ios,
-                      color: primaryDarkColor,
-                      size: 20,
                     ),
                   ),
                 ),
