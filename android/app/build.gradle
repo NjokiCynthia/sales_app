@@ -31,8 +31,8 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         //versionCode flutterVersionCode
         //versionName flutterVersionName
-        versionCode 9
-        versionName "1.0.8"
+        versionCode 10
+        versionName "1.0.9"
     }
 
     // Load keystore properties from local.properties file
