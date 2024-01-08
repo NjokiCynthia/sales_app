@@ -135,9 +135,9 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
     _fetchOrderDocuments(context);
   }
 
-  Future<void> _refreshOrderDocuments(BuildContext context) async {
-    await _fetchOrderDocuments(context);
-  }
+  // Future<void> _refreshOrderDocuments(BuildContext context) async {
+  //   await _fetchOrderDocuments(context);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -413,7 +413,7 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
                         height: 5,
                       ),
                       Text(
-                        orderDocuments!.driverIdNumber ?? '',
+                        orderDocuments!.driverIdNumber ,
                         style: const TextStyle(color: Colors.grey),
                       ),
                       const SizedBox(
@@ -441,7 +441,7 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
                         height: 5,
                       ),
                       Text(
-                        orderDocuments!.truckNumber ?? '',
+                        orderDocuments!.truckNumber ,
                         style: const TextStyle(color: Colors.grey),
                       ),
                       const SizedBox(
@@ -590,9 +590,9 @@ class _CompletedDocumentsState extends State<CompletedDocuments> {
     final url = Uri.parse('https://petropal.africa:8050/order/upload-receipt');
      final url2 = Uri.parse('https://petropal.africa:8050/payment/record');
     // final url =
-    // Uri.parse('https://petropal.sandbox.co.ke:8040/order/upload-receipt');
+    //     Uri.parse('https://petropal.sandbox.co.ke:8040/order/upload-receipt');
     // final url2 =
-    // Uri.parse('https://petropal.sandbox.co.ke:8040/payment/record');
+    //     Uri.parse('https://petropal.sandbox.co.ke:8040/payment/record');
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final token = userProvider.user?.token;
 

@@ -3,7 +3,7 @@ class CompletedOrdersModel {
   int? orderStatus;
   String? orderCreatedAt;
   int? orderPayableAmount;
-  Null? orderVolume;
+  Null orderVolume;
   String? orderInvoiceNumber;
   String? orderExpiryTime;
   String? orderReceiptDocument;

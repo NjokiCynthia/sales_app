@@ -146,19 +146,19 @@ class _ResellerProfileState extends State<ResellerProfile> {
                     Navigator.pop(context);
                   },
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(width: 1.0, color: primaryDarkColor),
+                    side: const BorderSide(width: 1.0, color: primaryDarkColor),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Cancel',
                     style: TextStyle(color: primaryDarkColor),
                   ),
                 ),
                 Text(
                   errorText,
-                  style: TextStyle(color: Colors.red),
+                  style: const TextStyle(color: Colors.red),
                 ),
                 ElevatedButton(
-                  child: Text('Confirm'),
+                  child: const Text('Confirm'),
                   style: ElevatedButton.styleFrom(
                       backgroundColor: primaryDarkColor),
                   onPressed: () {
@@ -167,7 +167,7 @@ class _ResellerProfileState extends State<ResellerProfile> {
                     // Call the deleteAccount function with the entered password
                     deleteAccount(_textController.text);
                     Navigator.push(context,
-                        MaterialPageRoute(builder: ((context) => Login())));
+                        MaterialPageRoute(builder: ((context) => const Login())));
                   },
                 ),
               ],

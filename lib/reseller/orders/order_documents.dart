@@ -428,7 +428,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                         height: 5,
                       ),
                       Text(
-                        orderDocuments!.driverIdNumber ?? '',
+                        orderDocuments!.driverIdNumber,
                         style: const TextStyle(color: Colors.grey),
                       ),
                       const SizedBox(
@@ -456,7 +456,7 @@ class _OrderDocumentsState extends State<OrderDocuments> {
                         height: 5,
                       ),
                       Text(
-                        orderDocuments!.truckNumber ?? '',
+                        orderDocuments!.truckNumber,
                         style: const TextStyle(color: Colors.grey),
                       ),
                       const SizedBox(

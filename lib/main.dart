@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Petropal',
       theme: MyTheme.darkTheme,
-      home: isFirstInstall ? SplashScreen() : Login(),
+      home: isFirstInstall ? const SplashScreen() : const Login(),
       debugShowCheckedModeBanner: false,
     );
   }

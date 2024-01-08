@@ -1,7 +1,6 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
@@ -267,7 +266,7 @@ class _MakeOrderState extends State<MakeOrder> {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final user = userProvider.user;
     // final token = userProvider.user?.token;
-    if (user == null || user.token == null) {
+    if (user == null) {
       // Handle the case where the user or token is null, e.g., show an error message.
       return;
     }

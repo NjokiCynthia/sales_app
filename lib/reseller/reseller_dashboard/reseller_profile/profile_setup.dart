@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, non_constant_identifier_names
 
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';

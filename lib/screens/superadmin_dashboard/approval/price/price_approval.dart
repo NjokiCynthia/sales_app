@@ -86,7 +86,6 @@ class UnapprovedPricesScreen extends StatefulWidget {
 
 class _UnapprovedPricesScreenState extends State<UnapprovedPricesScreen> {
   final TextEditingController _searchController = TextEditingController();
-  final double _minAmount = 90;
   double _maxAmount = 95;
   List<Product> _products = [];
   List<Product> _filteredProducts = [];

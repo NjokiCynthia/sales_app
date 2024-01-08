@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/providers/user_provider.dart';
+import 'package:petropal/reseller/authentication/forgot_password/forgot_password.dart';
 import 'package:petropal/reseller/authentication/signup.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_dashboard.dart';
 
@@ -253,19 +254,61 @@ class _LoginState extends State<Login> {
                     const SizedBox(
                       height: 40,
                     ),
-                    Center(child: Text("Don't have an account yet?", style: TextStyle(color: primaryDarkColor, fontSize: 16),)),
-                    SizedBox(height: 20,),
+                    const Center(
+                        child: Text(
+                      "Don't have an account yet?",
+                      style: TextStyle(color: primaryDarkColor, fontSize: 16),
+                    )),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     SizedBox(
                       width: double.infinity,
                       height: 48,
                       child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(backgroundColor: primaryDarkColor),
-                          onPressed: (){ Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: ((context) => const Signup()),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: primaryDarkColor),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: ((context) => const Signup()),
+                              ),
+                            );
+                          },
+                          child: const Text('SignUp')),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: ((context) => const ForgotPassword()),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Center(
+                          child: RichText(
+                            text: const TextSpan(
+                              text: 'Forgot your password? ',
+                              style: TextStyle(color: Colors.black),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: 'Reset here',
+                                  style: TextStyle(
+                                      color: primaryDarkColor,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      );}, child: Text('SignUp')),
+                      ),
                     ),
                     // GestureDetector(
                     //   onTap: () {

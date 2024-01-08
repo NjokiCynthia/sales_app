@@ -29,9 +29,7 @@ class ApiClient {
     try {
       final response = await _dio.post('$ipAddress$path',
           data: data, options: Options(headers: headers));
-      // print('Raw post data ');
-      // print(path);
-      // print(response);
+     
       return response.data;
     } on DioException catch (error) {
       return error.response?.data;
