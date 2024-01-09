@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/color_contants.dart';
+import 'package:petropal/constants/currency_convertor.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/product.dart';
 import 'package:petropal/providers/products.dart';
@@ -438,7 +439,8 @@ class _ResellerProductsState extends State<ResellerProducts> {
                                               height: 5,
                                             ),
                                             Text(
-                                              'KES ${product.sellingPrice!.toString()}',
+                                              'KES ${currencyFormat.format(product.sellingPrice)}',
+                                              // 'KES ${product.sellingPrice!.toString()}',
                                               style: boldText,
                                             ),
                                             const SizedBox(

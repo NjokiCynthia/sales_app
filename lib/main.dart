@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:petropal/reseller/authentication/login.dart';
+import 'package:petropal/reseller/reseller_dashboard/r_dashboard.dart';
+import 'package:petropal/screens/onboarding/intro_screens.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:petropal/constants/theme.dart';
@@ -52,10 +54,33 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Petropal',
+      title: 'PetroPal',
       theme: MyTheme.darkTheme,
-      home: isFirstInstall ? const SplashScreen() : const Login(),
+      home: isFirstInstall ? const HomePage() : _getInitialScreen(context),
       debugShowCheckedModeBanner: false,
     );
+  }
+
+  Widget _getInitialScreen(BuildContext context) {
+    final UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+
+    print('Is first install: $isFirstInstall');
+    print('Is logged in: ${userProvider.isLoggedIn}');
+    print('Is activated: ${userProvider.isActivated}');
+
+    if (isFirstInstall) {
+      return const SplashScreen();
+    } else {
+      if (userProvider.isLoggedIn && userProvider.isActivated) {
+        // User is logged in and activated, navigate to the dashboard
+        print('Navigating to ResellerDashboard');
+        return const ResellerDashboard();
+      } else {
+        // User is not logged in or not activated, navigate to login
+        print('Navigating to Login');
+        return const Login();
+      }
+    }
   }
 }

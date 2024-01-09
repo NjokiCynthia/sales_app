@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
+import 'package:petropal/constants/currency_convertor.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/product.dart';
 import 'package:petropal/models/product_details.dart';
@@ -330,7 +331,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                               children: [
                                                 TextSpan(
                                                   text:
-                                                      'KES ${product.sellingPrice}/',
+                                                      'KES ${currencyFormat.format(product.sellingPrice)}/',
                                                   style: const TextStyle(
                                                     color: Colors.black,
                                                   ),

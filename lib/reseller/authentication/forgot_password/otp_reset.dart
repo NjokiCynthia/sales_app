@@ -19,9 +19,14 @@ class _OtpResetState extends State<OtpReset> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        leading: Icon(
-          Icons.arrow_back,
-          color: primaryDarkColor,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: primaryDarkColor,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         title: Text(
           'OTP Verification',

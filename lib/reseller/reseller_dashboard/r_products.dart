@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:petropal/constants/color_contants.dart';
+import 'package:petropal/constants/currency_convertor.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/list_model.dart';
 import 'package:petropal/models/product.dart';
@@ -579,7 +580,6 @@ class _ResellerProductsState extends State<ResellerProducts> {
             // Show loading indicator while fetching products
             return Center(child: CircularProgressIndicator());
           } else if (products.isEmpty && !filtersApplied) {
-            
             return Center(
               child: Column(children: [
                 Padding(
@@ -834,7 +834,7 @@ class _ResellerProductsState extends State<ResellerProducts> {
                                               height: 5,
                                             ),
                                             Text(
-                                              'KES ${product.sellingPrice!.toString()}',
+                                              'KES ${currencyFormat.format(product.sellingPrice)}',
                                               style: boldText,
                                             ),
                                             const SizedBox(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
+import 'package:petropal/constants/currency_convertor.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/models/best_prices.dart';
 
@@ -304,8 +305,8 @@ class _OrderDetailState extends State<OrderDetail> {
                                           ),
                                           Text(
                                             '${formatVolume(product.minVol)}litres',
-                                            style:
-                                                const TextStyle(color: Colors.grey),
+                                            style: const TextStyle(
+                                                color: Colors.grey),
                                           ),
                                           const SizedBox(height: 10),
                                           const Text(
@@ -325,7 +326,7 @@ class _OrderDetailState extends State<OrderDetail> {
                                               children: [
                                                 TextSpan(
                                                   text:
-                                                      'KES ${product.sellingPrice}/',
+                                                      'KES ${currencyFormat.format(product.sellingPrice)}/',
                                                   style: const TextStyle(
                                                     color: Colors.black,
                                                   ),
@@ -352,8 +353,8 @@ class _OrderDetailState extends State<OrderDetail> {
                                           ),
                                           Text(
                                             '${formatVolume(product.maxVol)}litres',
-                                            style:
-                                                const TextStyle(color: Colors.grey),
+                                            style: const TextStyle(
+                                                color: Colors.grey),
                                           ),
                                           const SizedBox(
                                             height: 10,

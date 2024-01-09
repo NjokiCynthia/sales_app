@@ -1,29 +1,90 @@
 import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
-import 'package:petropal/reseller/authentication/forgot_password/otp_reset.dart';
 import 'package:petropal/reseller/authentication/login.dart';
 
 class PasswordReset extends StatefulWidget {
-  const PasswordReset({super.key});
+  const PasswordReset({Key? key}) : super(key: key);
 
   @override
   State<PasswordReset> createState() => _PasswordResetState();
 }
 
 class _PasswordResetState extends State<PasswordReset> {
-  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
   bool _isObscured = true;
   bool _confirmObscured = true;
+
+  String? _passwordError;
+  String? _confirmPasswordError;
+
+  void _validatePassword(String value) {
+    if (value.isEmpty) {
+      setState(() {
+        _passwordError = 'Password cannot be empty';
+      });
+    } else {
+      setState(() {
+        _passwordError = null;
+      });
+    }
+  }
+
+  void _validateConfirmPassword(String value) {
+    if (value.isEmpty) {
+      setState(() {
+        _confirmPasswordError = 'Confirm password cannot be empty';
+      });
+    } else if (value != passwordController.text) {
+      setState(() {
+        _confirmPasswordError = 'Passwords do not match';
+      });
+    } else {
+      setState(() {
+        _confirmPasswordError = null;
+      });
+    }
+  }
+
+  void _resetPassword() {
+    if (passwordController.text.isEmpty) {
+      setState(() {
+        _passwordError = 'Password cannot be empty';
+      });
+    }
+
+    if (confirmPasswordController.text.isEmpty) {
+      setState(() {
+        _confirmPasswordError = 'Confirm password cannot be empty';
+      });
+    }
+
+    if (_passwordError == null &&
+        _confirmPasswordError == null &&
+        passwordController.text.isNotEmpty &&
+        confirmPasswordController.text.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: ((context) => Login())),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        leading: Icon(
-          Icons.arrow_back,
-          color: primaryDarkColor,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: primaryDarkColor,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         title: Text(
           'Password reset',
@@ -67,18 +128,19 @@ class _PasswordResetState extends State<PasswordReset> {
               height: 10,
             ),
             TextFormField(
-              controller: emailController,
+              controller: passwordController,
               style: bodyText,
               obscureText: _isObscured,
               keyboardType: TextInputType.text,
+              onChanged: _validatePassword,
               decoration: InputDecoration(
-                // prefixIcon: const Icon(Icons.email),
                 prefixIconColor: Colors.grey,
                 filled: true,
                 fillColor: Colors.white,
                 hintText: 'Password',
                 hintStyle: TextStyle(color: Colors.grey[500]),
                 labelStyle: TextStyle(color: Colors.grey[500]),
+                errorText: _passwordError,
                 border: OutlineInputBorder(
                   borderSide: BorderSide(
                     color: primaryDarkColor.withOpacity(0.1),
@@ -141,18 +203,19 @@ class _PasswordResetState extends State<PasswordReset> {
               height: 10,
             ),
             TextFormField(
-              controller: emailController,
+              controller: confirmPasswordController,
               style: bodyText,
-              obscureText: _isObscured,
+              obscureText: _confirmObscured,
               keyboardType: TextInputType.text,
+              onChanged: _validateConfirmPassword,
               decoration: InputDecoration(
-                // prefixIcon: const Icon(Icons.email),
                 prefixIconColor: Colors.grey,
                 filled: true,
                 fillColor: Colors.white,
                 hintText: 'Confirm password',
                 hintStyle: TextStyle(color: Colors.grey[500]),
                 labelStyle: TextStyle(color: Colors.grey[500]),
+                errorText: _confirmPasswordError,
                 border: OutlineInputBorder(
                   borderSide: BorderSide(
                     color: primaryDarkColor.withOpacity(0.1),
@@ -191,16 +254,16 @@ class _PasswordResetState extends State<PasswordReset> {
               height: 40,
             ),
             SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryDarkColor),
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: ((context) => Login())));
-                    },
-                    child: Text('Reset Password'))),
+              width: double.infinity,
+              height: 48,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: primaryDarkColor,
+                ),
+                onPressed: _resetPassword,
+                child: Text('Reset Password'),
+              ),
+            ),
           ],
         ),
       ),
