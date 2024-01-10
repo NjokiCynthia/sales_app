@@ -211,7 +211,7 @@ class _ResellerHomeState extends State<ResellerHome> {
           });
         }
       } else {
-        print('No or invalid contacts found in the response');
+        print('No or invalid pproduct categories found in the response');
         // Handle the case when 'status' is not 1 or 'cartProductsListing' is null
       }
     } catch (error) {

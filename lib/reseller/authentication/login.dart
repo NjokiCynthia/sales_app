@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/providers/user_provider.dart';
-import 'package:petropal/reseller/authentication/forgot_password/forgot_password.dart';
+import 'package:petropal/reseller/authentication/forgot_password/email_reset.dart';
 import 'package:petropal/reseller/authentication/signup.dart';
 import 'package:petropal/reseller/reseller_dashboard/r_dashboard.dart';
 
@@ -35,7 +35,7 @@ class _LoginState extends State<Login> {
 
     try {
       final response = await http.post(
-        // Uri.parse('https://petropal.sandbox.co.ke:8040/user/login'),
+         //Uri.parse('https://petropal.sandbox.co.ke:8040/user/login'),
         Uri.parse('https://petropal.africa:8050/user/login'),
         body: {
           'email': emailAddress.text,

@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:petropal/constants/api.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/reseller/authentication/forgot_password/otp_reset.dart';
+import 'package:http/http.dart' as http;
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -12,6 +16,70 @@ class ForgotPassword extends StatefulWidget {
 
 class _ForgotPasswordState extends State<ForgotPassword> {
   TextEditingController emailController = TextEditingController();
+  String errorText = ' ';
+  Future<int> forgotPassword() async {
+    setState(() {
+      errorText = '';
+    });
+    print('I am here to send email for reset password');
+
+    try {
+      final response = await http.post(
+        // Uri.parse(
+        //     'https://petropal.sandbox.co.ke:8040/user/forgot-password-mobile'),
+        Uri.parse(
+            'https://petropal.africa:8050/user/forgot-password-mobile'),
+        body: {
+          'email': emailController.text,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        print('This is my response here');
+        print(responseData);
+
+        final status = responseData['status'];
+        final message = responseData['message'];
+
+        if (status == 'success') {
+          final result = responseData['result'] as List;
+          final code = responseData['code'] as int;
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OtpReset(code: code),
+            ),
+          );
+          return code;
+        } else {
+          setState(() {
+            errorText = message;
+          });
+          return 0;
+        }
+      } else {
+        if (response.statusCode == 500) {
+          setState(() {
+            errorText = 'System under maintenance. Please try later';
+          });
+        } else {
+          setState(() {
+            errorText = 'Check your internet connection';
+          });
+        }
+        return 0;
+      }
+    } catch (error) {
+      print('Error during forgot password: $error');
+      setState(() {
+        errorText = 'An error occurred during password reset';
+      });
+      return 0;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,6 +112,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             SizedBox(
               height: 20,
             ),
+            SizedBox(
+              height: 30,
+              child: errorText.isNotEmpty
+                  ? Text(errorText,
+                      style: const TextStyle(
+                          color: Colors.red, fontWeight: FontWeight.bold))
+                  : null,
+            ),
             Row(
               children: [
                 Container(
@@ -74,6 +150,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 // prefixIcon: const Icon(Icons.email),
+                errorText: emailController.text.isEmpty && errorText != ' '
+                    ? 'Email is required'
+                    : null,
                 prefixIconColor: Colors.grey,
                 filled: true,
                 fillColor: Colors.white,
@@ -113,10 +192,11 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: primaryDarkColor),
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: ((context) => OtpReset())));
+                      forgotPassword();
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: ((context) => OtpReset())));
                     },
                     child: Text('Continue')))
           ],

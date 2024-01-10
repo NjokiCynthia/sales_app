@@ -1,10 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:petropal/constants/color_contants.dart';
 import 'package:petropal/constants/theme.dart';
 import 'package:petropal/reseller/authentication/login.dart';
+import 'package:http/http.dart' as http;
 
 class PasswordReset extends StatefulWidget {
-  const PasswordReset({Key? key}) : super(key: key);
+  final String pin;
+
+  const PasswordReset({Key? key, required this.pin}) : super(key: key);
 
   @override
   State<PasswordReset> createState() => _PasswordResetState();
@@ -19,10 +24,122 @@ class _PasswordResetState extends State<PasswordReset> {
   String? _passwordError;
   String? _confirmPasswordError;
 
+  String errorText = ' ';
+
+  Future<void> resetPassword() async {
+    // Clear existing error messages
+    setState(() {
+      _passwordError = null;
+      _confirmPasswordError = null;
+    });
+    print('I am here to now send the new password i want');
+    // Validate password and confirm password
+    _validatePassword(passwordController.text);
+    _validateConfirmPassword(confirmPasswordController.text);
+
+    if (_passwordError != null || _confirmPasswordError != null) {
+      // If there are validation errors in the password fields, display them as text
+      setState(() {
+        errorText = 'Error:\n';
+        if (_passwordError != null) {
+          errorText += '- $_passwordError\n';
+        }
+        if (_confirmPasswordError != null) {
+          errorText += '- $_confirmPasswordError';
+        }
+      });
+      return;
+    }
+    // setState(() {
+    //   errorText = '';
+    // });
+    // print('I am here to now send the new password i want');
+    // if (_passwordError != null || _confirmPasswordError != null) {
+    //   // If there are validation errors in the password fields, do not proceed
+    //   return;
+    // }
+
+    try {
+      final response = await http.post(
+        // Uri.parse(
+        //     'https://petropal.sandbox.co.ke:8040/user/reset-password-mobile'),
+        Uri.parse('https://petropal.africa:8050/user/reset-password-mobile'),
+        body: {
+          'code': widget.pin,
+          'new_password': confirmPasswordController.text,
+        },
+      );
+      print('Here is my password and text and pin .....');
+      print(widget.pin);
+      print(confirmPasswordController.text);
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        print(responseData);
+
+        final status = responseData['status'];
+        final message = responseData['message'];
+
+        if (status == 'success') {
+          final result = responseData['result'] as List;
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                backgroundColor: Colors.white,
+                title: Text(
+                  'Password Reset Success',
+                  style: TextStyle(
+                      color: primaryDarkColor, fontWeight: FontWeight.bold),
+                ),
+                content: Text(
+                  'Password reset successfully. Please proceed to Login',
+                  style: TextStyle(color: Colors.black),
+                ),
+                actions: <Widget>[
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryDarkColor),
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: ((context) => Login())));
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          setState(() {
+            errorText = message;
+          });
+        }
+      } else {
+        if (response.statusCode == 500) {
+          setState(() {
+            errorText = 'System under maintenance. Please try later';
+          });
+        } else {
+          setState(() {
+            errorText = 'Check your internet connection';
+          });
+        }
+      }
+    } catch (error) {
+      print('Error during password reset: $error');
+      setState(() {
+        errorText = 'An error occurred during password reset';
+      });
+    }
+  }
+
   void _validatePassword(String value) {
     if (value.isEmpty) {
       setState(() {
         _passwordError = 'Password cannot be empty';
+        errorText = '';
       });
     } else {
       setState(() {
@@ -35,10 +152,12 @@ class _PasswordResetState extends State<PasswordReset> {
     if (value.isEmpty) {
       setState(() {
         _confirmPasswordError = 'Confirm password cannot be empty';
+        errorText = '';
       });
     } else if (value != passwordController.text) {
       setState(() {
         _confirmPasswordError = 'Passwords do not match';
+        errorText = '';
       });
     } else {
       setState(() {
@@ -47,29 +166,29 @@ class _PasswordResetState extends State<PasswordReset> {
     }
   }
 
-  void _resetPassword() {
-    if (passwordController.text.isEmpty) {
-      setState(() {
-        _passwordError = 'Password cannot be empty';
-      });
-    }
+  // void _resetPassword() {
+  //   if (passwordController.text.isEmpty) {
+  //     setState(() {
+  //       _passwordError = 'Password cannot be empty';
+  //     });
+  //   }
 
-    if (confirmPasswordController.text.isEmpty) {
-      setState(() {
-        _confirmPasswordError = 'Confirm password cannot be empty';
-      });
-    }
+  //   if (confirmPasswordController.text.isEmpty) {
+  //     setState(() {
+  //       _confirmPasswordError = 'Confirm password cannot be empty';
+  //     });
+  //   }
 
-    if (_passwordError == null &&
-        _confirmPasswordError == null &&
-        passwordController.text.isNotEmpty &&
-        confirmPasswordController.text.isNotEmpty) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: ((context) => Login())),
-      );
-    }
-  }
+  //   if (_passwordError == null &&
+  //       _confirmPasswordError == null &&
+  //       passwordController.text.isNotEmpty &&
+  //       confirmPasswordController.text.isNotEmpty) {
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(builder: ((context) => Login())),
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +221,14 @@ class _PasswordResetState extends State<PasswordReset> {
             ),
             SizedBox(
               height: 20,
+            ),
+            SizedBox(
+              height: 30,
+              child: errorText.isNotEmpty
+                  ? Text(errorText,
+                      style: const TextStyle(
+                          color: Colors.red, fontWeight: FontWeight.bold))
+                  : null,
             ),
             Row(
               children: [
@@ -140,7 +267,10 @@ class _PasswordResetState extends State<PasswordReset> {
                 hintText: 'Password',
                 hintStyle: TextStyle(color: Colors.grey[500]),
                 labelStyle: TextStyle(color: Colors.grey[500]),
-                errorText: _passwordError,
+                errorText: passwordController.text.isEmpty && errorText != ' '
+                    ? 'Password is required'
+                    : null,
+                //errorText: _passwordError,
                 border: OutlineInputBorder(
                   borderSide: BorderSide(
                     color: primaryDarkColor.withOpacity(0.1),
@@ -215,7 +345,11 @@ class _PasswordResetState extends State<PasswordReset> {
                 hintText: 'Confirm password',
                 hintStyle: TextStyle(color: Colors.grey[500]),
                 labelStyle: TextStyle(color: Colors.grey[500]),
-                errorText: _confirmPasswordError,
+                errorText:
+                    confirmPasswordController.text.isEmpty && errorText != ' '
+                        ? 'Password is required'
+                        : null,
+                //_confirmPasswordError,
                 border: OutlineInputBorder(
                   borderSide: BorderSide(
                     color: primaryDarkColor.withOpacity(0.1),
@@ -260,7 +394,10 @@ class _PasswordResetState extends State<PasswordReset> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primaryDarkColor,
                 ),
-                onPressed: _resetPassword,
+                onPressed: () {
+                  resetPassword();
+                },
+                // _resetPassword,
                 child: Text('Reset Password'),
               ),
             ),
