@@ -154,7 +154,9 @@ class _ResellerHomeState extends State<ResellerHome> {
           allAveragePrices.add(productAverages);
         });
 
-        return productAverages.isNotEmpty ? productAverages[0] : Average(); //set day to fetch average price
+        return productAverages.isNotEmpty
+            ? productAverages[0]
+            : Average(); //set day to fetch average price
       } else {
         print('No or invalid averages found in the response');
         return Average();
@@ -996,7 +998,8 @@ String formatDoubleAmountAsKES(double? amount) {
   if (amount == null) {
     return 'KES 0.00';
   }
-  final currencyFormat = NumberFormat.currency(locale: 'en_KES', symbol: 'KES');
+  final currencyFormat =
+      NumberFormat.currency(locale: 'en_KES', symbol: 'KES ');
   final double amountDouble = amount.toDouble(); // Convert int to double
   return currencyFormat.format(amountDouble);
 }
