@@ -154,7 +154,7 @@ class _ResellerHomeState extends State<ResellerHome> {
           allAveragePrices.add(productAverages);
         });
 
-        return productAverages.isNotEmpty ? productAverages[0] : Average();
+        return productAverages.isNotEmpty ? productAverages[0] : Average(); //set day to fetch average price
       } else {
         print('No or invalid averages found in the response');
         return Average();
@@ -211,7 +211,7 @@ class _ResellerHomeState extends State<ResellerHome> {
           });
         }
       } else {
-        print('No or invalid pproduct categories found in the response');
+        print('No or invalid product categories found in the response');
         // Handle the case when 'status' is not 1 or 'cartProductsListing' is null
       }
     } catch (error) {
@@ -476,69 +476,67 @@ class _ResellerHomeState extends State<ResellerHome> {
             border: Border.all(color: (Colors.grey[100])!)),
         duration: const Duration(seconds: 2),
         width: double.infinity,
-        child: Expanded(
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: const Color.fromRGBO(238, 229, 255, 1.0),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: const Padding(
-                    padding: EdgeInsets.all(4),
-                    child: Text(
-                      "Best price!!",
-                      style: TextStyle(color: Color.fromRGBO(137, 80, 252, 1)),
-                    ),
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                decoration: BoxDecoration(
+                    color: const Color.fromRGBO(238, 229, 255, 1.0),
+                    borderRadius: BorderRadius.circular(10)),
+                child: const Padding(
+                  padding: EdgeInsets.all(4),
+                  child: Text(
+                    "Best price!!",
+                    style: TextStyle(color: Color.fromRGBO(137, 80, 252, 1)),
                   ),
                 ),
               ),
-              ListTile(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        price.dealer ?? '',
-                        style: bodyGrey,
-                      ),
-                      Text(
-                        price.depot!,
-                        style: greyT,
-                      ),
-                    ],
-                  ),
-                  subtitle: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            price.product!,
-                            style: greyT,
+            ),
+            ListTile(
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      price.dealer ?? '',
+                      style: bodyGrey,
+                    ),
+                    Text(
+                      price.depot!,
+                      style: greyT,
+                    ),
+                  ],
+                ),
+                subtitle: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          price.product!,
+                          style: greyT,
+                        ),
+                        Text(
+                          formatDoubleAmountAsKES(price.sellingPrice),
+                          //'KES 200',
+                          style: bodyGrey,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: primaryDarkColor.withOpacity(0.1),
+                            shape: BoxShape.circle,
                           ),
-                          Text(
-                            formatDoubleAmountAsKES(price.sellingPrice),
-                            //'KES 200',
-                            style: bodyGrey,
+                          padding: const EdgeInsets.all(4),
+                          child: const Icon(
+                            Icons.shopping_cart,
+                            color: primaryDarkColor,
                           ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: primaryDarkColor.withOpacity(0.1),
-                              shape: BoxShape.circle,
-                            ),
-                            padding: const EdgeInsets.all(4),
-                            child: const Icon(
-                              Icons.shopping_cart,
-                              color: primaryDarkColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  )),
-            ],
-          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
+          ],
         ),
       ),
     );
@@ -614,6 +612,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                                       (BuildContext context, int index) {
                                     ProductCategories product =
                                         productCategory[index];
+
                                     return Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -650,7 +649,7 @@ class _ResellerHomeState extends State<ResellerHome> {
                                                           formatDoubleAmountAsKES(
                                                               averagePrices[
                                                                           index]
-                                                                      .averageSellingPrice
+                                                                      .totalAverageSellingPrice
                                                                       ?.toDouble() ??
                                                                   0),
                                                           style: m_title,
