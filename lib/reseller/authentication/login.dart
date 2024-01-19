@@ -257,7 +257,7 @@ class _LoginState extends State<Login> {
                     const Center(
                         child: Text(
                       "Don't have an account yet?",
-                      style: TextStyle(color: primaryDarkColor, fontSize: 16),
+                      style: TextStyle(color: Colors.black, fontSize: 16),
                     )),
                     const SizedBox(
                       height: 20,

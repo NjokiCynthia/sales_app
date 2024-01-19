@@ -242,11 +242,10 @@ class _ProfileSetUpState extends State<ProfileSetUp>
     try {
       final formData = FormData.fromMap({
         'kra_certificate_number': kraController.text,
-        'epra_license_number': licenseController.text,
-        'epra_license_expiry_date':
-            DateFormat('yyyy-MM-dd').format(selectedDate.toLocal()),
+        // 'epra_license_number': licenseController.text,
+        // 'epra_license_expiry_date':
+        //     DateFormat('yyyy-MM-dd').format(selectedDate.toLocal()),
 
-        //'epra_license_expiry_date': selectedDate.toLocal().toString(),
         'certificate_of_incorporation_number': certController.text,
         'email': emailController.text,
         'phone': numberController.text,
@@ -267,14 +266,14 @@ class _ProfileSetUpState extends State<ProfileSetUp>
         ));
       }
 
-      if (selectedFiles != null && selectedFiles!.isNotEmpty) {
-        final file = selectedFiles![0];
-        formData.files.add(MapEntry(
-          'epra_license_photo',
-          await MultipartFile.fromFile(file.path.toString(),
-              filename: file.name),
-        ));
-      }
+      // if (selectedFiles != null && selectedFiles!.isNotEmpty) {
+      //   final file = selectedFiles![0];
+      //   formData.files.add(MapEntry(
+      //     'epra_license_photo',
+      //     await MultipartFile.fromFile(file.path.toString(),
+      //         filename: file.name),
+      //   ));
+      // }
 
       if (selectedCertificateOfIncorporationDocument != null) {
         formData.files.add(MapEntry(
@@ -771,117 +770,117 @@ class _ProfileSetUpState extends State<ProfileSetUp>
             //     ),
             //   ),
             // ),
-            const SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              onChanged: (text) {
-                //validateOrganisationInputs();
-              },
-              keyboardType: TextInputType.text,
-              //obscureText: true,
+            // const SizedBox(
+            //   height: 10,
+            // ),
+            // TextFormField(
+            //   onChanged: (text) {
+            //     //validateOrganisationInputs();
+            //   },
+            //   keyboardType: TextInputType.text,
+            //   //obscureText: true,
 
-              style: bodyText,
-              controller: licenseController,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                labelText: 'EPRA License Number',
-                labelStyle: TextStyle(color: Colors.grey[500]),
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Colors.grey,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.grey.shade300,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Colors.grey,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            TextFormField(
-              controller: licensedate,
-              style: bodyText,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                labelText: 'Select expriry Date',
-                suffixIcon: IconButton(
-                  icon: const Icon(
-                    Icons.calendar_today,
-                    color: primaryDarkColor,
-                  ),
-                  onPressed: () {
-                    _selectDate(context);
-                  },
-                ),
-                labelStyle: TextStyle(color: Colors.grey[500]),
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Colors.grey,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.grey.shade300,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Colors.grey,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              readOnly: true,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Column(children: [
-              GestureDetector(
-                onTap: openFilePicker,
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Upload EPRA license',
-                      style: bodyText,
-                    ),
-                  ),
-                ),
-              ),
-              if (selectedDocumentTitle != null)
-                Text(
-                  '$selectedDocumentTitle',
-                  style: bodyText,
-                ),
-            ]),
+            //   style: bodyText,
+            //   controller: licenseController,
+            //   decoration: InputDecoration(
+            //     filled: true,
+            //     fillColor: Colors.white,
+            //     labelText: 'EPRA License Number',
+            //     labelStyle: TextStyle(color: Colors.grey[500]),
+            //     border: OutlineInputBorder(
+            //       borderSide: const BorderSide(
+            //         color: Colors.grey,
+            //         width: 1.0,
+            //       ),
+            //       borderRadius: BorderRadius.circular(8.0),
+            //     ),
+            //     enabledBorder: OutlineInputBorder(
+            //       borderSide: BorderSide(
+            //         color: Colors.grey.shade300,
+            //         width: 1.0,
+            //       ),
+            //       borderRadius: BorderRadius.circular(8.0),
+            //     ),
+            //     focusedBorder: OutlineInputBorder(
+            //       borderSide: const BorderSide(
+            //         color: Colors.grey,
+            //         width: 1.0,
+            //       ),
+            //       borderRadius: BorderRadius.circular(8.0),
+            //     ),
+            //   ),
+            // ),
+            // const SizedBox(
+            //   height: 10,
+            // ),
+            // TextFormField(
+            //   controller: licensedate,
+            //   style: bodyText,
+            //   decoration: InputDecoration(
+            //     filled: true,
+            //     fillColor: Colors.white,
+            //     labelText: 'Select expriry Date',
+            //     suffixIcon: IconButton(
+            //       icon: const Icon(
+            //         Icons.calendar_today,
+            //         color: primaryDarkColor,
+            //       ),
+            //       onPressed: () {
+            //         _selectDate(context);
+            //       },
+            //     ),
+            //     labelStyle: TextStyle(color: Colors.grey[500]),
+            //     border: OutlineInputBorder(
+            //       borderSide: const BorderSide(
+            //         color: Colors.grey,
+            //         width: 1.0,
+            //       ),
+            //       borderRadius: BorderRadius.circular(8.0),
+            //     ),
+            //     enabledBorder: OutlineInputBorder(
+            //       borderSide: BorderSide(
+            //         color: Colors.grey.shade300,
+            //         width: 1.0,
+            //       ),
+            //       borderRadius: BorderRadius.circular(8.0),
+            //     ),
+            //     focusedBorder: OutlineInputBorder(
+            //       borderSide: const BorderSide(
+            //         color: Colors.grey,
+            //         width: 1.0,
+            //       ),
+            //       borderRadius: BorderRadius.circular(8.0),
+            //     ),
+            //   ),
+            //   readOnly: true,
+            // ),
+            // const SizedBox(
+            //   height: 10,
+            // ),
+            // Column(children: [
+            //   GestureDetector(
+            //     onTap: openFilePicker,
+            //     child: Container(
+            //       width: double.infinity,
+            //       padding: const EdgeInsets.all(10),
+            //       decoration: BoxDecoration(
+            //         border: Border.all(color: Colors.grey),
+            //         borderRadius: BorderRadius.circular(10),
+            //       ),
+            //       child: Center(
+            //         child: Text(
+            //           'Upload EPRA license',
+            //           style: bodyText,
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            //   if (selectedDocumentTitle != null)
+            //     Text(
+            //       '$selectedDocumentTitle',
+            //       style: bodyText,
+            //     ),
+            // ]),
             const SizedBox(
               height: 10,
             ),
